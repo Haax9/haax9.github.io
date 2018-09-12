@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.48" />
+
+    
+    
+    
+
+<title>Les dangers de la réutilisation de mots de passe • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Les dangers de la réutilisation de mots de passe"/>
+<meta name="twitter:description" content="Vous l’avez surement entendu et vu des dizaines de fois, mais les questions tournant autour des mots de passe sur Internet sont plus que jamais d’une importance capitale pour vos données et votre vie privée. A l’heure actuelle, Internet est utilisé pour (presque) tout et par (presque) tout le monde, allant du simple site de recettes de cuisine à votre compte bancaire, en passant par les réseaux sociaux, les sites de e-commerce ou encore vos adresses e-mails. Cela fait un paquet de sites, de comptes différents, et par extension, de mots de passe.
+
+"/>
+
+<meta property="og:title" content="Les dangers de la réutilisation de mots de passe" />
+<meta property="og:description" content="Vous l’avez surement entendu et vu des dizaines de fois, mais les questions tournant autour des mots de passe sur Internet sont plus que jamais d’une importance capitale pour vos données et votre vie privée. A l’heure actuelle, Internet est utilisé pour (presque) tout et par (presque) tout le monde, allant du simple site de recettes de cuisine à votre compte bancaire, en passant par les réseaux sociaux, les sites de e-commerce ou encore vos adresses e-mails. Cela fait un paquet de sites, de comptes différents, et par extension, de mots de passe.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax.gitlab.io/articles/dangers-reutilisation-mots-de-passe/" /><meta property="article:published_time" content="2017-12-17T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-12-17T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personnal Blog" />
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      <a href="https://haax.gitlab.io">
+      
+      
+      
+      <div class="author-image">
+        <img src="https://haax.gitlab.ioimg/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+      </div>
+      
+    </a>
+      <p class="site__description">
+        <a href="https://haax.gitlab.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+</section>
+
+    </p>
+    <p class="copyright">
+      &copy; 2018 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Les dangers de la réutilisation de mots de passe</h1>
+     
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Dec 17, 2017
+    
+    
+    
+      
+      
+          in
+          
+          
+              <a class="badge badge-category" href="/categories/articles">ARTICLES</a>
+              •
+          
+              <a class="badge badge-category" href="/categories/posts">POSTS</a>
+              
+          
+      
+    
+    
+    
+      
+      
+          <br/>
+           <i class="fas fa-tags"></i>
+          
+          <a class="badge badge-tag" href="/tags/sensibilisation">sensibilisation</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/vie-priv%C3%A9e">vie privée</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/credmap">credmap</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/password-reuse">password reuse</a>
+          
+      
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 14 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Vous l’avez surement entendu et vu des dizaines de fois, mais les questions tournant autour des mots de passe sur Internet sont plus que jamais d’une importance capitale pour vos données et votre vie privée. A l’heure actuelle, Internet est utilisé pour (presque) tout et par (presque) tout le monde, allant du simple site de recettes de cuisine à votre compte bancaire, en passant par les réseaux sociaux, les sites de e-commerce ou encore vos adresses e-mails. Cela fait un paquet de sites, de comptes différents, et par extension, de mots de passe.</p>
+
+<p></p>
+
+<p>Cet article ne traitera pas de la complexité de ces derniers bien qu’il soit important d’être sensibilisé sur le sujet. Des tonnes de ressources et d’articles très intéressants sont disponibles sur Internet. Non, cet article va traiter de l’importance d’utiliser des mots de passe différents. Pour illustrer cela, je vous ferai une petite démonstration de l’utilisation d’un outil permettant à une personne mal intentionnée d’exploiter le “password re-use” ou réutilisation de mots de passe. Enfin, quelques solutions accessibles à tous seront présentées.</p>
+
+<h1 id="le-danger">Le danger !</h1>
+
+<p>On ne cessera jamais de le dire, utiliser le même mot de passe sur plusieurs services, ce n’est pas une bonne idée.. Plus que ça, c’est dangereux pour vous.</p>
+
+<p>La raison semble plutôt logique. Si une personne obtient un accès à un compte, d’une manière ou d’une autre, l’ensemble des données en ligne et des comptes utilisant ce mot de passe sont compromis.</p>
+
+<p>Or, il n’est pas aussi difficile que vous le croyez de récupérer un mot de passe.. Plusieurs outils et techniques s’avèrent être relativement efficaces, en fonction de la cible.</p>
+
+<p>Qui plus est, il n’est pas rare que de grandes entreprises se fassent voler leurs bases de données, contenant les informations des utilisateurs. Ces dernières sont ensuite revendues ou publiées en libre accès sur Internet, offrant à n’importe qui la possibilité d’avoir les identifiants et mots de passe de connexion des utilisateurs. Voici quelques chiffres qui seront peut être plus parlant.</p>
+
+<ul>
+<li>Dropbox (2012) – 68 648 009 comptes volés</li>
+<li>Dailymotion (2016) – 85,2 Millions de comptes volés</li>
+<li>LinkedIn (2012/2016) – 164 Millions de comptes volés</li>
+<li>Sony (PlayStation Network) en 2011 – 77 Millions de comptes volés, incluant les données bancaires des utilisateurs</li>
+<li>OVH Kimsufi en 2017 (la même base de donnée a été volée deux ans plus tôt) – 969 084 comptes volés</li>
+<li>Adobe (2013) – 153 Millions de comptes volés</li>
+</ul>
+
+<p>Ce genre de fuite arrive régulièrement. Elles ne sont pas forcément aussi importantes donc ne font pas forcément autant parler d’elles, mais il est possible, et même probable, si vous utilisez beaucoup de services, qu’un de vos comptes se soit déjà retrouvé dans une fuite de données.</p>
+
+<p>Il est à noter que les mots de passe volés sont souvent “hashés”. Cela signifie qu’ils ne sont pas stockés en clair dans la base de données. Il existe plusieurs méthodes de hashage, les rendant plus ou moins facile à cracker. Cependant, une fois que les données ont fuité, ce n’est qu’une question de temps avant que les mots de passe ne soient crackés !</p>
+
+<p>Il existe différents sites permettant de tester si votre addresse e-mail a déjà fuité, il suffit de rentrer l’adresse e-mail que vous voulez tester, et le site la compare avec celles contenues dans les fuites de données dont il dispose. <a href="https://haveibeenpwned.com/">https://haveibeenpwned.com/</a> est un bon site pour cela, surtout qu’il recense l’ensemble des plus importantes..</p>
+
+<p><strong>[Mise à jour Décembre 2017]</strong> – Une compilation de plusieurs dizaines de fuites d’identifiants à été rendue publique ce mois-ci. La majorité des informations contenues dans cette compilation provient de fuites déjà connues, à l’exception de quelques nouvelles. L’archive de 40 Go contient 1.4 Milliards d’adresses mail et de mots de passe et est livrée avec un petit script permettant de rechercher une adresse mail en quelques secondes, ce qui en fait l’une des plus grosses sources disponibles à l’heure actuelle. J’ai personnellement téléchargé le fichier et j’ai fouillé un petit peu dedans. Même s’il comprend un certain nombre de faux positifs, on retrouve des choses étonnantes. À titre d’exemple, une de mes anciennes adresses mail se retrouve 4 fois dedans, avec des mots de passe que j’ai effectivement utilisé. Si vous souhaitez tester une ou plusieurs de vos adresses, mais que télécharger la fuite de données vous fait peur, n’hésitez pas à me contacter par mail ou via Twitter.</p>
+
+<p>Je vous laisse imaginer l’impact que cela peut avoir sur vous si un de vos comptes est compromis suite à une fuite de données et que vous utilisez le même mot de passe partout.. 😉</p>
+
+<p>Tout compte fait, plutôt que d’imaginer, pourquoi ne pas montrer un cas concrêt, afin de réellement prendre conscience des choses.. ?</p>
+
+<h1 id="démonstration-cas-pratique-découverte-de-credmap">Démonstration &amp; Cas pratique - Découverte de credmap</h1>
+
+<p>Ces explications sont à la fois destinées aux personnes extérieures au domaine souhaitant voir ce qu’il est possible de faire, pourquoi cela est dangereux, apprendre et aux personnes intéressées par le côté technique voulant découvrir l’outil que je vais présenter.</p>
+
+<p>NOTE : Il n’est pas nécessaire de comprendre la totalité de la démonstration technique ci dessous pour comprendre le fonctionnement de l’outil ainsi que l’enjeu qui se cache derrière. Des explications textuelles sont détaillées pour chaque image ou partie technique.</p>
+
+<p>Il existe des tas d’outils permettant d’effectuer différentes actions en lien avec les mots de passe. Je vais aujourd’hui vous parler de Credmap. Il s’agit d’un outil développé par LightOS (Roberto Salgado) et disponible en libre accès via un dépôt Github. Credmap est un “credential mapper”, ce qui signifie qu’il va permettre d’avoir une vue globale sur des credentials (i.e un couple identifiant/mot de passe). Comme le dit l’auteur, l’outil a été créé dans le but de sensibiliser aux dangers de la réutilisation de mot de passe.</p>
+
+<p>Le fonctionnement basique de l’outil est le suivant. On lui fournit en entrée un identifiant et/ou une adresse e-mail ainsi qu’un mot de passe, puis selon les paramètres définis, les sites visés etc. il va tenter une connexion aux différents sites avec ces identifiants. Le fonctionnement est simple mais il permet d’automatiser la tâche et ainsi avoir des résultats rapides et en grands nombres.</p>
+
+<p>Pour cette démonstration, j’ai volontairement créé des comptes sur Twitter, Spotify, Github et Laposte en utilisant les informations suivantes :</p>
+
+<ul>
+<li>Nom d’utilisateur : anona17</li>
+<li>Adresse e-mail : anona17@gmx.fr</li>
+<li>Mot de passe : Anona1337</li>
+</ul>
+
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_1.png" alt="pass_reuse_1.png"/></center></p>
+
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_2.png" alt="pass_reuse_2.png"/></center></p>
+
+<p>Bien ! Nous avons nos comptes de test. Allons maintenant télécharger <a href="https://github.com/lightos/credmap" target="blank">Credmap</a> via le dépôt GitHub officiel. Credmap est un outil écrit en langage Python. Je vous passe les détails techniques du fonctionnement de Python concernant les programmes. On va tout simplement taper “./credmap.py -h” afin d’afficher l’aide (on exécute le programme avec ./credmap.py et on demande l’aide avec -h ou –help).</p>
+
+<pre><code>$ ./credmap.py -h
+               . .IIIII             .II
+  I123456IIII. I  II  .    II..IIIIIIIIIIIIIIIIIIII
+ .  .IIIIII  II             IIIIIIHUNTER2IIIII  I.
+    .IIIII.III I        IIIIIIIIIIIIIIIIIIIIIII
+   .IILOVEII           II  .IIIII IIIIIIIIIIII. I
+    IIIIII             IIII I  IISECRETIIIIIII I
+    .II               IIIIIIIIIIIII  IIIIIIIII
+       I.           .IIIABC123IIII    I   II  I
+         .IIII        IIIIIIIIIIII     .       I
+          IIIII.          IIIIII           . I.
+          IIGODIII         IIIII             ..I  II .
+           IIIIII          IIII...             IIII
+            IIII           III. I            IISEXII
+            III             I                I  III
+            II                                   I   .
+             I                                        
+
+credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
+
+Usage: credmap.py --email EMAIL | --user USER | --load LIST [options]
+
+Options:
+  -h/--help             show this help message and exit
+  -v/--verbose          display extra output information
+  -u/--username=USER..  set the username to test with
+  -p/--password=PASS..  set the password to test with
+  -e/--email=EMAIL      set an email to test with
+  -l/--load=LOAD_FILE   load list of credentials in format USER:PASSWORD
+  -f/--format=CRED_F..  format to use when reading from file (e.g. u|e:p)
+  -x/--exclude=EXCLUDE  exclude sites from testing
+  -o/--only=ONLY        test only listed sites
+  -s/--safe-urls        only test sites that use HTTPS
+  -i/--ignore-proxy     ignore system default HTTP proxy
+  --proxy               set proxy (e.g. &quot;socks5://192.168.1.2:9050&quot;)
+  --list                list available sites to test with
+  --update              update from the official git repository
+
+Examples:
+./credmap.py --username janedoe --email janedoe@email.com
+./credmap.py -u johndoe -e johndoe@email.com --exclude &quot;github.com, live.com&quot;
+./credmap.py -u johndoe -p abc123 -vvv --only &quot;linkedin.com, facebook.com&quot;
+./credmap.py -e janedoe@example.com --verbose --proxy &quot;https://127.0.0.1:8080&quot;
+./credmap.py --load creds.txt --format &quot;e.u.p&quot;
+./credmap.py -l creds.txt -f &quot;u|e:p&quot;
+./credmap.py -l creds.txt
+./credmap.py --list
+</code></pre>
+
+<p>Bien, on voit qu’il faut donc renseigner un nom d’utilisateur et/ou un e-mail, un mot de passe ainsi qu’une liste de sites internet à tester. Il est possible d’utiliser d’autres options, mais elles ne seront pas abordées aujourd’hui. Afin de voir la liste des sites internet disponibles en test, on peut utiliser l’option “–list”.</p>
+
+<pre><code>$ ./credmap.py --list
+               . .IIIII             .II
+  I123456IIII. I  II  .    II..IIIIIIIIIIIIIIIIIIII
+ .  .IIIIII  II             IIIIIIHUNTER2IIIII  I.
+    .IIIII.III I        IIIIIIIIIIIIIIIIIIIIIII
+   .IILOVEII           II  .IIIII IIIIIIIIIIII. I
+    IIIIII             IIII I  IISECRETIIIIIII I
+    .II               IIIIIIIIIIIII  IIIIIIIII
+       I.           .IIIABC123IIII    I   II  I
+         .IIII        IIIIIIIIIIII     .       I
+          IIIII.          IIIIII           . I.
+          IIGODIII         IIIII             ..I  II .
+           IIIIII          IIII...             IIII
+            IIII           III. I            IISEXII
+            III             I                I  III
+            II                                   I   .
+             I                                        
+
+credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
+
+- en.wikipedia.org
+- amazon.com
+- trakt.tv
+- instagram.com
+- netflix.com
+- facebook.com
+- spotify.com
+- wunderlist.com
+- github.com
+- laposte.net
+- bitbucket.org
+- airbnb.com
+- live.com
+- imgur.com
+- twitter.com
+- reddit.com
+- stackoverflow.com
+- pastebin.com
+- yahoo.com
+- linkedin.com
+- zoho.com
+- groupon.com
+- pinterest.com
+- digitalocean.com
+- soundcloud.com
+- foursquare.com
+- ebay.com
+- scribd.com
+- yelp.com
+- vimeo.com
+</code></pre>
+
+<p>NOTE : Le site laposte.net n’est pas dans cette liste par défaut, nous reviendrons dessus plus tard.</p>
+
+<p>Maintenant que nous savons comment fonctionne l’outil, essayons de l’utiliser. Imaginons que votre nom d’utilisateur/mot de passe ait fuité sur un des nombreux sites sur lesquels vous êtes inscrit.. Il est donc disponible dans la nature.. Quelqu’un récupère donc ces informations : nom d’utilisateur (anona17), adresse e-mail (anona17@gmx.fr) et mot de passe (Anona1337).</p>
+
+<p>On va donc tenter d’utiliser Credmap sur différents sites, afin de voir ce qu’il se passe..</p>
+
+<pre><code>$ ./credmap.py -u anona17 -e anona17@gmx.fr -p Anona1337 --only &quot;twitter.com, github.com, spotify.com, reddit.com&quot;
+               . .IIIII             .II
+  I123456IIII. I  II  .    II..IIIIIIIIIIIIIIIIIIII
+ .  .IIIIII  II             IIIIIIHUNTER2IIIII  I.
+    .IIIII.III I        IIIIIIIIIIIIIIIIIIIIIII
+   .IILOVEII           II  .IIIII IIIIIIIIIIII. I
+    IIIIII             IIII I  IISECRETIIIIIII I
+    .II               IIIIIIIIIIIII  IIIIIIIII
+       I.           .IIIABC123IIII    I   II  I
+         .IIII        IIIIIIIIIIII     .       I
+          IIIII.          IIIIII           . I.
+          IIGODIII         IIIII             ..I  II .
+           IIIIII          IIII...             IIII
+            IIII           III. I            IISEXII
+            III             I                I  III
+            II                                   I   .
+             I                                        
+
+credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
+
+[i] Loaded 4 sites to test.
+[i] Starting tests at: &quot;09:55:38&quot;
+
+[*] Testing &quot;Spotify&quot;...
+[+] Credentials worked! Successfully logged in.
+
+[*] Testing &quot;Github&quot;...
+[+] Credentials worked! Successfully logged in.
+
+[*] Testing &quot;Twitter&quot;...
+[+] Credentials worked! Successfully logged in.
+
+[*] Testing &quot;Reddit&quot;...
+
+[+] Succesfully logged into 3/4 websites..
+[+] An overall success rate of %75.
+
+[+] The provided credentials worked on the following websites: Spotify, Github, Twitter
+
+[i] Finished tests at: &quot;09:55:42&quot;
+</code></pre>
+
+<p>Bingo ! On voit que sur les sites “Spotify”, “Github” et “Twitter”, le couple identifiant/mot de passe a fonctionné ! Concrètement, cela veut dire que vous venez de donner ces 3 comptes à l’attaquant. Il peut maintenant se connecter avec les mêmes identifiants, puisque l’outil lui a révélé qu’ils étaient valides. On remarque aussi que pour le site “Reddit”, ces derniers n’ont pas fonctionné. C’est tout à fait normal car nous n’avons pas créé de compte sur le site. On peut aller plus loin en se mettant à la place de l’attaquant. En voyant qu’un utilisateur a utilisé plusieurs fois le même mot de passe sur différents services, on peut se douter que ces mêmes identifiants sont utilisés ailleurs, et aller chercher manuellement d’autres sources.</p>
+
+<p>Autre spécificité de l’outil, la possibilité d’ajouter soi-même les sites que l’on veut tester. En effet, la liste des sites est accessible dans le répertoire “websites” et chaque site correspond à un fichier XML. Voici par exemple le contenu du fichier “spotify.com.xml”.</p>
+
+<pre><code class="language-xml">&lt;properties&gt;
+    &lt;name value=&quot;Spotify&quot; /&gt;
+    &lt;description value=&quot;Online music streaming service.&quot; /&gt;
+    &lt;login_url value=&quot;https://accounts.spotify.com/api/login&quot; /&gt;
+    &lt;invalid_http_status value=&quot;400&quot; msg=&quot;Probably invalid credentials...&quot; /&gt;
+    &lt;valid_password value=&quot;{&quot;displayName&quot;:&quot;&quot; /&gt;
+    &lt;invalid_password value=&quot;{&quot;error&quot;:&quot;errorInvalidCredentials&quot;}&quot; /&gt;
+    &lt;headers value=&quot;Referer=https://accounts.spotify.com/en-US/login&quot; /&gt;
+    &lt;cookies value=&quot;__bon=MHwwfC0zMDc2NTg4NzR8LTEyOTIxNjcyNzA4fDF8MXwxfDE=&quot; /&gt;
+    &lt;username_or_email value=&quot;both&quot; /&gt;
+    &lt;login_parameter value=&quot;username&quot; /&gt;
+    &lt;password_parameter value=&quot;password&quot; /&gt;
+    &lt;csrf_token_name value=&quot;csrf_token&quot; /&gt;
+    &lt;csrf_url value=&quot;https://accounts.spotify.com/en-US/login&quot; /&gt;
+    &lt;csrf_setcookie value=&quot;csrf_token=(?P&lt;token&gt;[^\s]+)&quot; /&gt;
+    &lt;data value=&quot;remember=false&amp;username=&amp;password=&amp;csrf_token=&quot; /&gt;
+&lt;/properties&gt;
+</code></pre>
+
+<p>Le détail de chaque champ est disponible dans la documentation de l’outil sur le dépôt GitHub. Ainsi il est possible de rajouter soi-même les sites que l’on veut.. Comme par exemple, Laposte.</p>
+
+<pre><code class="language-xml">&lt;properties&gt;
+    &lt;name value=&quot;Laposte.net&quot; /&gt;
+    &lt;description value=&quot;Laposte.net is a french mail provider&quot; /&gt;
+    &lt;login_url value=&quot;https://m.laposte.net/api/v1/auth/&quot; /&gt;
+    &lt;valid_password value=&quot;Réception&quot; /&gt;
+    &lt;invalid_http_status value=&quot;401&quot; msg=&quot;expected&quot; /&gt;
+    &lt;invalid_password value=&quot;Erreur de saisie du login ou du mot de passe.&quot; /&gt;
+    &lt;invalid_account value=&quot;Erreur de saisie du login ou du mot de passe.&quot; /&gt;
+    &lt;valid_response_header value=&quot;MLPN_AUTH_TOKEN=&quot;/&gt;
+    &lt;headers value=&quot;content-type=application/json\nReferer=https://m.laposte.net/login&quot; /&gt;
+    &lt;username_or_email value=&quot;username&quot; /&gt;
+    &lt;login_parameter value=&quot;login&quot; type=&quot;json&quot;/&gt;
+    &lt;password_parameter value=&quot;password&quot; type=&quot;json&quot;/&gt;
+    &lt;data value=&quot;{&quot;login&quot;:&quot;&quot;,&quot;password&quot;:&quot;&quot;}&quot; /&gt;
+&lt;/properties&gt;
+</code></pre>
+
+<p>Essayons maintenant avec les identifiants du compte créé auparavant.</p>
+
+<pre><code>$ ./credmap.py -u anona17 -e anona17@gmx.fr -p Anona1337 --only &quot;laposte.net&quot;               . .IIIII             .II
+  I123456IIII. I  II  .    II..IIIIIIIIIIIIIIIIIIII
+ .  .IIIIII  II             IIIIIIHUNTER2IIIII  I.
+    .IIIII.III I        IIIIIIIIIIIIIIIIIIIIIII
+   .IILOVEII           II  .IIIII IIIIIIIIIIII. I
+    IIIIII             IIII I  IISECRETIIIIIII I
+    .II               IIIIIIIIIIIII  IIIIIIIII
+       I.           .IIIABC123IIII    I   II  I
+         .IIII        IIIIIIIIIIII     .       I
+          IIIII.          IIIIII           . I.
+          IIGODIII         IIIII             ..I  II .
+           IIIIII          IIII...             IIII
+            IIII           III. I            IISEXII
+            III             I                I  III
+            II                                   I   .
+             I                                        
+
+credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
+
+[i] Loaded 1 site to test.
+[i] Starting tests at: &quot;10:25:08&quot;
+
+[*] Testing &quot;Laposte.net&quot;...
+[+] Credentials worked! Successfully logged in.
+
+
+[+] Succesfully logged into 1/1 websites..
+[+] An overall success rate of %100.
+
+[+] The provided credentials worked on the following website: Laposte.net
+
+[i] Finished tests at: &quot;10:25:08&quot;
+</code></pre>
+
+<p>Et bim ! Voilà comment ajouter un site web à notre arm..outils et le rendre encore plus puissant/dangereux.. 😉</p>
+
+<p>Voilà comment partir d’une fuite d’informations sur un site (ce qui n’est absolument pas votre faute) à un vol complet de plusieurs de vos comptes (et là pour le coup, c’est de votre faute !).</p>
+
+<h1 id="les-solutions">Les solutions</h1>
+
+<p>Malheureusement, ces “vulnérabilités” sont purement humaines.. C’est ce qui les rend si dangeureuses pour vous. Cela n’est pas dû à une vulnérabilité dans le site que vous utilisez, mais bien lié à votre comportement sur le web. Cela dit, il est très simple de parer ce genre d’attaque. Plusieurs choses sont à avoir en tête. L’une des règles les plus importantes est <strong>l’unicité : votre mot de passe doit être unique sur chaque service/site.</strong></p>
+
+<p><strong>[Mise à jour Décembre 2017]</strong> – Par la suite, plusieurs recommandations sont à prendre en compte. Jusqu’à récemment, la règle était de choisir des mots de passe <strong>complexes</strong>. Il est pour cela possible de se référer aux recommandations de l’ANSSI (Agence Nationale de la Sécurité des Systèmes d’Information) sur la sécurité des mots de passe. Mais depuis peu, les recommandations du NIST (National Institute of Standards and Technology) ont changé et se tournent vers l’utilisation de “<strong>passphrase</strong>” plutôt que de mots de passes complexes. L’idée est la suivante : Un mot de passe complexe est difficile à mémoriser pour un humain et peut-être plus simple à deviner pour une machine, tandis qu’une passphrase est bien plus simple à mémoriser et peut-être plus difficile à deviner. Pour mieux comprendre ces recommandations, rien de tel qu’une illustration !</p>
+
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_3.png" alt="pass_reuse_3.png"/></center></p>
+
+<p>Je vais néanmoins rajouter une petite chose. Si vous ne vous sentez pas à l’aise avec le fait de retenir plusieurs mots de passe ou même une méthodologie mentale afin de vous souvenir de vos mots de passe, il existe d’autres solutions !</p>
+
+<p>En effet, on dispose de ce qu’on appelle des “Passwords Manager”. Ces logiciels, tels que <a href="https://www.keepassx.org/" target="blank">KeepassX</a> ou <a href="http://keepass.info/download.html" target="blank">Keepass2</a> vous permettent d’enregistrer vos mots de passe dans une base de données stockée sur votre ordinateur. Pour y accéder, il suffit de se souvenir d’un seul mot de passe, celui que vous aurez défini afin de dévérouiller le fichier. Plutôt pratique ! Attention cependant, si vous l’oubliez, il sera difficile de pouvoir retrouver vos identifiants.. Mais il n’y en a qu’un, et c’est bien mieux que de noter tous vos mots de passe sur des petits papiers répandus sur votre bureau.. 😉</p>
+
+<p>Pour plus d’informations sur ces logiciels, voici un petit tutoriel expliquant comment mettre en place Keepass sur son ordinateur : <a href="https://craym.eu/tutoriels/utilitaires/keepass.html">https://craym.eu/tutoriels/utilitaires/keepass.html</a></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Nous avons vu en quoi il est dangereux d’utiliser un mot de passe identique sur plusieurs services et qu’il existe bien plus de fuites de données qu’on le croît.</p>
+
+<p>S’en est suivi une présentation d’un des outils présents sur le web afin d’exploiter la réutilisation de mots de passe, ainsi qu’une démonstration d’un cas réel de vol de comptes.</p>
+
+<p>Enfin, nous avons abordé le sujet des solutions existantes pour se protéger de ce type d’attaque, mais surtout pour apprendre les bonnes pratiques en termes de protection de vos comptes.</p>
+
+<p>Cela nécessite effectivement un petit travail afin de faire des recherches, d’apprendre, et de faire le nécessaire, mais posez vous ces questions : Tenez vous à vos comptes, à votre identité numérique ? Et demandez vous sur combien de services vous utilisez ce mot passe ? Qu’est ce qu’un attaquant peut vous prendre s’il obtient d’une façon ou d’un autre ce fameux sésame ? Je suis sûr que les réponses poussent à la prise de conscience et à la réaction !</p>
+
+<p>Ah, dernière chose, ne croyez pas que cela n’arrive qu’aux autres.. Comme nous l’avons vu, vous n’êtes pas responsables de la fuite des données, et c’est plusieurs milliers voire millions de comptes qui fuitent régulièrement.</p>
+
+<p>Vous êtes donc maintenant sensibilisés sur les risques de l’utilisation d’un mot de passe identique et vous n’avez plus d’excuse pour ne pas mettre à jour les vôtres, et ainsi vous protéger ! 🙂</p>
+
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_4.jpg" alt="pass_reuse_4"/></center></p>
+
+<p>NOTE : Le développeur de Credmap est actuellement en train de travailler sur une nouvelle version du logiciel, permettant à priori d’automatiser certaines tâches. À l’heure actuelle, credmap est encore parfaitement fonctionnel ! Restez à l’écoute afin d’en savoir plus si cela vous intéresse.</p>
+
+<p>Si vous avez des questions, n’hésitez pas à me contacter via <a href="https://twitter.com/Haaxmax" target="blank">Twitter</a> ou en laissant un commentaire sur cet article ;).</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    
+    <a href="/articles/bonnes-pratiques-install-wordpress/" class="post--navigation-next">
+      <span class="navigation-tittle">Bonnes pratiques de sécurité pour les installations Wordpress</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
