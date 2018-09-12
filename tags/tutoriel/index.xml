@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tutoriel on Haax - Personal Blog</title>
-    <link>https://haax.gitlab.io/tags/tutoriel/</link>
+    <link>https://haaxmax.github.io/tags/tutoriel/</link>
     <description>Recent content in Tutoriel on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 31 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://haax.gitlab.io/tags/tutoriel/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haaxmax.github.io/tags/tutoriel/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Bonnes pratiques de sécurité pour les installations Wordpress</title>
-      <link>https://haax.gitlab.io/articles/bonnes-pratiques-install-wordpress/</link>
+      <link>https://haaxmax.github.io/articles/bonnes-pratiques-install-wordpress/</link>
       <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haax.gitlab.io/articles/bonnes-pratiques-install-wordpress/</guid>
+      <guid>https://haaxmax.github.io/articles/bonnes-pratiques-install-wordpress/</guid>
       <description>&lt;p&gt;Si vous souhaitez monter votre propre site web mais que vous n’êtes pas expert dans le domaine, vous avez sûrement dû voir passer le mot “Wordpress”. Il s’agit d’un CMS (Content Management System, ou Système de Gestion de Contenu) permettant de faciliter la création d’un site web. En gros, il facilite la création puis la gestion en fournissant une interface prête à l’emploi. Il n’y a plus qu’à personnaliser votre site et écrire vos articles ! Pas besoin d’écrire du code (même s’il est possible d’aller fouiller et modifier manuellement) !&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
