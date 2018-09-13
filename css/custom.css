@@ -38,6 +38,10 @@
   color: #e97c61;
 }
 
+.site__description {
+ text-align: center;
+}
+
 .site__description a{
  color: #7F7F7F;
 }
