@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bbox on Haax - Personal Blog</title>
+    <link>https://haaxmax.github.io/tags/bbox/</link>
+    <description>Recent content in Bbox on Haax - Personal Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://haaxmax.github.io/tags/bbox/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Box &#34;connectées&#34; et vie privée - Le sommet de l&#39;Iceberg</title>
+      <link>https://haaxmax.github.io/articles/box-connectees-et-vie-privee/</link>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/articles/box-connectees-et-vie-privee/</guid>
+      <description>&lt;p&gt;Billet un peu plus léger cette fois ci, nous allons parler des box connectées et plus particulièrement des Bbox Miami. En effet, ayant une de ces box à disposition, je me suis demandé ce qu&amp;rsquo;il en était d&amp;rsquo;un point de vue vie privée et ce qu&amp;rsquo;un utilisateur basique et un peu curieux pouvait faire au niveau des paramètres. Nous verrons donc ici qu&amp;rsquo;un certain nombre de paramètres par défaut sont activés et qu&amp;rsquo;il est possible d&amp;rsquo;agir dessus. Je précise qu&amp;rsquo;aucune box n&amp;rsquo;a été maltraitée dans le cadre de ces expérimentations :D.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -70,7 +70,7 @@
       
       
       <div class="author-image">
-        <img src="/img/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
       </div>
       
     </a>
@@ -217,7 +217,7 @@
 
 <p>Cet article ne traitera pas de la complexité de ces derniers bien qu’il soit important d’être sensibilisé sur le sujet. Des tonnes de ressources et d’articles très intéressants sont disponibles sur Internet. Non, cet article va traiter de l’importance d’utiliser des mots de passe différents. Pour illustrer cela, je vous ferai une petite démonstration de l’utilisation d’un outil permettant à une personne mal intentionnée d’exploiter le “password re-use” ou réutilisation de mots de passe. Enfin, quelques solutions accessibles à tous seront présentées.</p>
 
-<h1 id="le-danger">Le danger !</h1>
+<h2 id="le-danger">Le danger !</h2>
 
 <p>On ne cessera jamais de le dire, utiliser le même mot de passe sur plusieurs services, ce n’est pas une bonne idée.. Plus que ça, c’est dangereux pour vous.</p>
 
@@ -248,7 +248,7 @@
 
 <p>Tout compte fait, plutôt que d’imaginer, pourquoi ne pas montrer un cas concrêt, afin de réellement prendre conscience des choses.. ?</p>
 
-<h1 id="démonstration-cas-pratique-découverte-de-credmap">Démonstration &amp; Cas pratique - Découverte de credmap</h1>
+<h2 id="démonstration-cas-pratique-découverte-de-credmap">Démonstration &amp; Cas pratique - Découverte de credmap</h2>
 
 <p>Ces explications sont à la fois destinées aux personnes extérieures au domaine souhaitant voir ce qu’il est possible de faire, pourquoi cela est dangereux, apprendre et aux personnes intéressées par le côté technique voulant découvrir l’outil que je vais présenter.</p>
 
@@ -266,9 +266,9 @@
 <li>Mot de passe : Anona1337</li>
 </ul>
 
-<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_1.png" alt="pass_reuse_1.png"/></center></p>
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_1.png" alt="pass_reuse_1.png" class="imgSize"/></center></p>
 
-<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_2.png" alt="pass_reuse_2.png"/></center></p>
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_2.png" alt="pass_reuse_2.png" class="imgSize"/></center></p>
 
 <p>Bien ! Nous avons nos comptes de test. Allons maintenant télécharger <a href="https://github.com/lightos/credmap" target="blank">Credmap</a> via le dépôt GitHub officiel. Credmap est un outil écrit en langage Python. Je vous passe les détails techniques du fonctionnement de Python concernant les programmes. On va tout simplement taper “./credmap.py -h” afin d’afficher l’aide (on exécute le programme avec ./credmap.py et on demande l’aide avec -h ou –help).</p>
 
@@ -505,13 +505,13 @@ credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
 
 <p>Voilà comment partir d’une fuite d’informations sur un site (ce qui n’est absolument pas votre faute) à un vol complet de plusieurs de vos comptes (et là pour le coup, c’est de votre faute !).</p>
 
-<h1 id="les-solutions">Les solutions</h1>
+<h2 id="les-solutions">Les solutions</h2>
 
 <p>Malheureusement, ces “vulnérabilités” sont purement humaines.. C’est ce qui les rend si dangeureuses pour vous. Cela n’est pas dû à une vulnérabilité dans le site que vous utilisez, mais bien lié à votre comportement sur le web. Cela dit, il est très simple de parer ce genre d’attaque. Plusieurs choses sont à avoir en tête. L’une des règles les plus importantes est <strong>l’unicité : votre mot de passe doit être unique sur chaque service/site.</strong></p>
 
 <p><strong>[Mise à jour Décembre 2017]</strong> – Par la suite, plusieurs recommandations sont à prendre en compte. Jusqu’à récemment, la règle était de choisir des mots de passe <strong>complexes</strong>. Il est pour cela possible de se référer aux recommandations de l’ANSSI (Agence Nationale de la Sécurité des Systèmes d’Information) sur la sécurité des mots de passe. Mais depuis peu, les recommandations du NIST (National Institute of Standards and Technology) ont changé et se tournent vers l’utilisation de “<strong>passphrase</strong>” plutôt que de mots de passes complexes. L’idée est la suivante : Un mot de passe complexe est difficile à mémoriser pour un humain et peut-être plus simple à deviner pour une machine, tandis qu’une passphrase est bien plus simple à mémoriser et peut-être plus difficile à deviner. Pour mieux comprendre ces recommandations, rien de tel qu’une illustration !</p>
 
-<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_3.png" alt="pass_reuse_3.png"/></center></p>
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_3.png" alt="pass_reuse_3.png" class="imgSize"/></center></p>
 
 <p>Je vais néanmoins rajouter une petite chose. Si vous ne vous sentez pas à l’aise avec le fait de retenir plusieurs mots de passe ou même une méthodologie mentale afin de vous souvenir de vos mots de passe, il existe d’autres solutions !</p>
 
@@ -519,7 +519,7 @@ credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
 
 <p>Pour plus d’informations sur ces logiciels, voici un petit tutoriel expliquant comment mettre en place Keepass sur son ordinateur : <a href="https://craym.eu/tutoriels/utilitaires/keepass.html">https://craym.eu/tutoriels/utilitaires/keepass.html</a></p>
 
-<h1 id="conclusion">Conclusion</h1>
+<h2 id="conclusion">Conclusion</h2>
 
 <p>Nous avons vu en quoi il est dangereux d’utiliser un mot de passe identique sur plusieurs services et qu’il existe bien plus de fuites de données qu’on le croît.</p>
 
@@ -533,7 +533,7 @@ credmap v0.1-c4cd03d (https://github.com/lightos/credmap/)
 
 <p>Vous êtes donc maintenant sensibilisés sur les risques de l’utilisation d’un mot de passe identique et vous n’avez plus d’excuse pour ne pas mettre à jour les vôtres, et ainsi vous protéger ! 🙂</p>
 
-<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_4.jpg" alt="pass_reuse_4"/></center></p>
+<p><center><img src="/img/articles/dangers-reutilisation-mots-de-passe/pass_reuse_4.jpg" alt="pass_reuse_4" class="imgSize"/></center></p>
 
 <p>NOTE : Le développeur de Credmap est actuellement en train de travailler sur une nouvelle version du logiciel, permettant à priori d’automatiser certaines tâches. À l’heure actuelle, credmap est encore parfaitement fonctionnel ! Restez à l’écoute afin d’en savoir plus si cela vous intéresse.</p>
 

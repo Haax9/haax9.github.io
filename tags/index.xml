@@ -6,19 +6,10 @@
     <description>Recent content in Tags on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Nov 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>2017</title>
-      <link>https://haaxmax.github.io/tags/2017/</link>
-      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/tags/2017/</guid>
-      <description></description>
-    </item>
     
     <item>
       <title>Audio</title>
@@ -26,6 +17,15 @@
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/audio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bbox</title>
+      <link>https://haaxmax.github.io/tags/bbox/</link>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/tags/bbox/</guid>
       <description></description>
     </item>
     
@@ -39,11 +39,11 @@
     </item>
     
     <item>
-      <title>Bonnes Pratique</title>
-      <link>https://haaxmax.github.io/tags/bonnes-pratique/</link>
+      <title>Bonnes Pratiques</title>
+      <link>https://haaxmax.github.io/tags/bonnes-pratiques/</link>
       <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/tags/bonnes-pratique/</guid>
+      <guid>https://haaxmax.github.io/tags/bonnes-pratiques/</guid>
       <description></description>
     </item>
     
@@ -53,6 +53,15 @@
       <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/boot2root/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Challenge</title>
+      <link>https://haaxmax.github.io/tags/challenge/</link>
+      <pubDate>Thu, 30 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/tags/challenge/</guid>
       <description></description>
     </item>
     
@@ -80,15 +89,6 @@
       <pubDate>Thu, 30 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/ecw/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Htaccess</title>
-      <link>https://haaxmax.github.io/tags/htaccess/</link>
-      <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/tags/htaccess/</guid>
       <description></description>
     </item>
     
@@ -131,18 +131,18 @@
     <item>
       <title>Sensibilisation</title>
       <link>https://haaxmax.github.io/tags/sensibilisation/</link>
-      <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/sensibilisation/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Steganographie</title>
-      <link>https://haaxmax.github.io/tags/steganographie/</link>
+      <title>Stéganographie</title>
+      <link>https://haaxmax.github.io/tags/st%C3%A9ganographie/</link>
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/tags/steganographie/</guid>
+      <guid>https://haaxmax.github.io/tags/st%C3%A9ganographie/</guid>
       <description></description>
     </item>
     
@@ -158,7 +158,7 @@
     <item>
       <title>Sécurité</title>
       <link>https://haaxmax.github.io/tags/s%C3%A9curit%C3%A9/</link>
-      <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/s%C3%A9curit%C3%A9/</guid>
       <description></description>
@@ -174,15 +174,6 @@
     </item>
     
     <item>
-      <title>Tutoriel</title>
-      <link>https://haaxmax.github.io/tags/tutoriel/</link>
-      <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/tags/tutoriel/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Union</title>
       <link>https://haaxmax.github.io/tags/union/</link>
       <pubDate>Thu, 23 Nov 2017 00:00:00 +0000</pubDate>
@@ -194,7 +185,7 @@
     <item>
       <title>Vie Privée</title>
       <link>https://haaxmax.github.io/tags/vie-priv%C3%A9e/</link>
-      <pubDate>Sun, 17 Dec 2017 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/vie-priv%C3%A9e/</guid>
       <description></description>
@@ -212,7 +203,7 @@
     <item>
       <title>Wordpress</title>
       <link>https://haaxmax.github.io/tags/wordpress/</link>
-      <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/tags/wordpress/</guid>
       <description></description>

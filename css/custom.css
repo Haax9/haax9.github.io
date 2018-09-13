@@ -125,9 +125,10 @@ a {
   line-height: 1.6em;
 }
 
-.img {
-  max-width: 90%;
+.imgSize {
+  max-width: 80%;
 }
+
 
 /* Code */
 pre {

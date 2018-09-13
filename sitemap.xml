@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haaxmax.github.io/articles/box-connectees-et-vie-privee/</loc>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/articles/bonnes-pratiques-install-wordpress/</loc>
     <lastmod>2018-03-31T00:00:00+00:00</lastmod>
   </url>
@@ -38,20 +43,14 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/tags/2017/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://haaxmax.github.io/articles/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://haaxmax.github.io/categories/articles/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -62,13 +61,19 @@
   </url>
   
   <url>
+    <loc>https://haaxmax.github.io/tags/bbox/</loc>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/tags/blind/</loc>
     <lastmod>2017-11-30T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/tags/bonnes-pratique/</loc>
+    <loc>https://haaxmax.github.io/tags/bonnes-pratiques/</loc>
     <lastmod>2018-03-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -81,7 +86,13 @@
   
   <url>
     <loc>https://haaxmax.github.io/categories/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/tags/challenge/</loc>
+    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -105,13 +116,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/tags/htaccess/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -129,7 +134,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/categories/posts/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -147,12 +152,12 @@
   
   <url>
     <loc>https://haaxmax.github.io/tags/sensibilisation/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/tags/steganographie/</loc>
+    <loc>https://haaxmax.github.io/tags/st%C3%A9ganographie/</loc>
     <lastmod>2017-11-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -165,25 +170,19 @@
   
   <url>
     <loc>https://haaxmax.github.io/tags/s%C3%A9curit%C3%A9/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://haaxmax.github.io/tags/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
+    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://haaxmax.github.io/tags/tamuctf/</loc>
     <lastmod>2017-11-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/tags/tutoriel/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -195,7 +194,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/tags/vie-priv%C3%A9e/</loc>
-    <lastmod>2017-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -219,7 +218,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/tags/wordpress/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
+    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

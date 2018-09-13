@@ -17,16 +17,16 @@
     
     
 
-<title>TamuCTF 2017 - Steganographie - Musical Bits • Haax - Personal Blog</title>
+<title>TamuCTF 2017 - Stéganographie - Musical Bits • Haax - Personal Blog</title>
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="TamuCTF 2017 - Steganographie - Musical Bits"/>
+<meta name="twitter:title" content="TamuCTF 2017 - Stéganographie - Musical Bits"/>
 <meta name="twitter:description" content="Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &ldquo;Musical Bits&rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de @Iptior, afin de résoudre ce challenge. C&rsquo;est parti !
 
 "/>
 
-<meta property="og:title" content="TamuCTF 2017 - Steganographie - Musical Bits" />
+<meta property="og:title" content="TamuCTF 2017 - Stéganographie - Musical Bits" />
 <meta property="og:description" content="Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &ldquo;Musical Bits&rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de @Iptior, afin de résoudre ce challenge. C&rsquo;est parti !
 
 " />
@@ -70,7 +70,7 @@
       
       
       <div class="author-image">
-        <img src="/img/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
       </div>
       
     </a>
@@ -160,7 +160,7 @@
             
     <article>
   <header>
-    <h1>TamuCTF 2017 - Steganographie - Musical Bits</h1>
+    <h1>TamuCTF 2017 - Stéganographie - Musical Bits</h1>
      
     
 <div class="post__meta">
@@ -193,7 +193,10 @@
           <a class="badge badge-tag" href="/tags/ctf">ctf</a>
            
       
-          <a class="badge badge-tag" href="/tags/steganographie">steganographie</a>
+          <a class="badge badge-tag" href="/tags/challenge">challenge</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/st%C3%A9ganographie">stéganographie</a>
            
       
           <a class="badge badge-tag" href="/tags/tamuctf">tamuctf</a>
@@ -218,7 +221,7 @@
 
 <p></p>
 
-<h1 id="découverte">Découverte</h1>
+<h2 id="découverte">Découverte</h2>
 
 <p>Le challenge commence avec un texte disant qu&rsquo;un hacker dispose d&rsquo;un son étrange&hellip; Rien à tirer de ceci. On télécharge donc le fichier donné et on utilise la commande <strong>file</strong> afin de récupérer des informations sur ce dernier.</p>
 
@@ -230,7 +233,7 @@ magical_bits: RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono
 
 <p>On cherche ensuite à savoir de quoi est composé le son, donc on ouvre le fichier avec Audacity. Après avoir pas mal zoomé et passé la partie &ldquo;Introduction&rdquo; du son, on remarque que des séquences se répètent de nombreuses fois. En voici un extrait.</p>
 
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_1.png" alt="musical_bits_1"/></center></p>
+<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_1.png" alt="musical_bits_1" class="imgSize"/></center></p>
 
 <p>On remarque la présence de paquets de 8 signaux, et on pense directement à des octets. En effet, on voit 3 signaux différents. 2 quasi-identiques, et un troisième, plus long. On suppose la signification suivante :
 <ul>
@@ -246,17 +249,17 @@ Suivant cette logique, on peut tester notre raisonnement en commençant à la ma
 
 <p>Hmmmm&hellip; Après quelques recherches, on se rend compte qu&rsquo;il s&rsquo;agit en réalité d&rsquo;un début d&rsquo;en-tête JPEG ! On peut maintenant être sûrs d&rsquo;avoir la bonne méthode et qu&rsquo;il faut extraire ces données pour former une image JPEG.</p>
 
-<h1 id="extraction-première-tentative">Extraction - Première tentative</h1>
+<h2 id="extraction-première-tentative">Extraction - Première tentative</h2>
 
 <p>J&rsquo;ai tout d&rsquo;abord cherché sur Internet des outils existant et permettant d&rsquo;extraire automatiquement ce type de données ou un moyen de l&rsquo;extraire avec Python. Mais à court d&rsquo;idées, j&rsquo;ai finalement décidé d&rsquo;exporter le son complet en format &ldquo;raw&rdquo;.</p>
 
 <p>Après avoir supprimé l&rsquo;introduction, nous disposons d&rsquo;un fichier brut exploitable. À l&rsquo;aide de <strong>hexedit</strong>, on peut afficher le contenu du fichier.</p>
 
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_2.png" alt="musical_bits_2"/></center></p>
+<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_2.png" alt="musical_bits_2" class="imgSize"/></center></p>
 
 <p>Si on défile un peu, on peut remarquer que les données ressemblent souvent à celles de l&rsquo;image ci dessus. De plus, on distingue deux formes différentes.</p>
 
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_3.png" alt="musical_bits_3"/></center></p>
+<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_3.png" alt="musical_bits_3" class="imgSize"/></center></p>
 
 <p>Cela pourrait être nos &ldquo;0&rdquo; et &ldquo;1&rdquo; trouvés précédemment. Encore une fois, on défile manuellement afin de voir si les formes correspondent. Et&hellip; Oui ! On retrouve nos données. On dispose maintenant d&rsquo;un moyen d&rsquo;extraire nos bits.</p>
 
@@ -264,7 +267,7 @@ Suivant cette logique, on peut tester notre raisonnement en commençant à la ma
 
 <p>Nous avons essayé un bon nombre de patrons et extrait beaucoup de bits, mais nous avions toujours un problème&hellip; Plusieurs mauvais bits. Étant donné que ce n&rsquo;était pas la bonne solution, les scripts ne seront pas montrés dans cette partie.</p>
 
-<h1 id="extraction-seconde-tentative">Extraction - Seconde tentative</h1>
+<h2 id="extraction-seconde-tentative">Extraction - Seconde tentative</h2>
 
 <p>Et c&rsquo;est le moment où [TWITTER IPTIOR] rentre en jeu&hellip; :)</p>
 
@@ -314,7 +317,7 @@ data
 %2%v$
 #=$r$b$
 &quot;2!? H
-&lt; B \ \ b - 1 A A c # ` . ^ . W ( O s D b q c , 5 H C ... ':*p,..v/L0 ,}++* 'a&amp;L%Y$ !u!&gt;!
+&lt; B \ \ b - 1 A A c ## ` . ^ . W ( O s D b q c , 5 H C ... ':*p,..v/L0 ,}++* 'a&amp;L%Y$ !u!&gt;!
 %2%v$
 #=$r$b$
 &quot;2!? H
@@ -376,7 +379,7 @@ outBin+=&quot;1&quot;
 print(outBin[1:])
 </code></pre>
 
-<h1 id="convertion">Convertion</h1>
+<h2 id="convertion">Convertion</h2>
 
 <p>À l&rsquo;heure actuelle, on dispose d&rsquo;une chaine binaire que nous a donné le script précédent. Mais, ayant vu un en-tête JPEG, on pense qu&rsquo;il faut trouver une image. Il faut donc convertir le tout !</p>
 
@@ -400,11 +403,11 @@ outHex += str(hex(number)[2:])
 print(outHex)
 </code></pre>
 
-<h1 id="récupération-du-flag">Récupération du flag</h1>
+<h2 id="récupération-du-flag">Récupération du flag</h2>
 
 <p>On essaie ensuite d&rsquo;ouvrir l&rsquo;image générée avec le script.</p>
 
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_4.jpg" alt="musical_bits_4"/></center></p>
+<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_4.jpg" alt="musical_bits_4 class="imgSize""/></center></p>
 
 <p>Voilà le flag !! :)</p>
   </div>

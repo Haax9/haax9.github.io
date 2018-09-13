@@ -70,7 +70,7 @@
       
       
       <div class="author-image">
-        <img src="/img/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
       </div>
       
     </a>
@@ -196,6 +196,9 @@
           <a class="badge badge-tag" href="/tags/ctf">ctf</a>
            
       
+          <a class="badge badge-tag" href="/tags/challenge">challenge</a>
+           
+      
           <a class="badge badge-tag" href="/tags/union">union</a>
            
       
@@ -220,13 +223,13 @@
 
 <p>Du 06/10 au 22/10 2017, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 29 novembre 2017 lors de la conférence de l’European Cyber Week à Rennes.</p>
 
-<h1 id="découverte">Découverte</h1>
+<h2 id="découverte">Découverte</h2>
 
 <p>Le challenge commence par l’arrivée sur une page présentant le “Hall of fame” du CTF de 2016, avec un champ permettant de filtrer selon le nom. On pense directement à tenter une injection.</p>
 
-<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_1.png" alt="hall_of_fame_1"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_1.png" alt="hall_of_fame_1" class="imgSize"/></center></p>
 
-<h1 id="injection-sql">Injection SQL</h1>
+<h2 id="injection-sql">Injection SQL</h2>
 
 <p>On commence par tester si le champ est vulnérable aux injections SQL.</p>
 
@@ -249,29 +252,29 @@ pseudo=' order by 7#
 <pre><code>pseudo=' union select 1,2,3,4,5,6#
 </code></pre>
 
-<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_2.png" alt="hall_of_fame_2"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_2.png" alt="hall_of_fame_2" class="imgSize"/></center></p>
 
 <p>Parfait ! On sait maintenant que les colonnes 3,4 et 5 sont vulnérables. Il faudra donc injecter dans ces champs afin d’afficher les informations contenues dans la base de données.</p>
 
-<h1 id="exfiltration-de-données">Exfiltration de données</h1>
+<h2 id="exfiltration-de-données">Exfiltration de données</h2>
 
 <p>On commence maintenant à rechercher des informations dans la base de données. La première chose à faire est de trouver le nom de la table utilisée.</p>
 
 <pre><code>pseudo=' union select 1,2,3,table_name,5,6 from information_schema.tables where table_schema=database()#
 </code></pre>
 
-<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_3.png" alt="hall_of_fame_3"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_3.png" alt="hall_of_fame_3" class="imgSize"/></center></p>
 
 <p>On va ensuite pouvoir lister les colonnes de la table, toujours selon le même principe.</p>
 
-<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_4.png" alt="hall_of_fame_4"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_4.png" alt="hall_of_fame_4" class="imgSize"/></center></p>
 
 <p>Great ! Une colonne “password”… Intéressant, allons voir ce que cela contient ! La requête utilisée ici est encore plus simple puisqu’il suffit simplement de demander le contenu de la colonne password.</p>
 
 <pre><code>pseudo=' union select 1,2,3,password,5,6 from users#
 </code></pre>
 
-<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_5.png" alt="hall_of_fame_5"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_5.png" alt="hall_of_fame_5" class="imgSize"/></center></p>
 
 <p>Bon.. Il est très probable que le flag soit un de ces passwords.. Mais comment savoir lequel prendre ?
 Deux solutions ici :</p>
@@ -289,15 +292,15 @@ Deux solutions ici :</p>
 <pre><code>pseudo=' union select 1,2,3,concat(comment,password),5,6 from users#
 </code></pre>
 
-<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_6.png" alt="hall_of_fame_6"/></center></p>
+<p><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_6.png" alt="hall_of_fame_6" class="imgSize"/></center></p>
 
-<h1 id="récupération-du-flag">Récupération du Flag</h1>
+<h2 id="récupération-du-flag">Récupération du Flag</h2>
 
 <p>Un seul commentaire.. Qui fait en plus référence à la création de challenges CTF. Il semble bien que nous ayons trouvé le flag ! 😉</p>
 
 <p>Après validation, il s’agit bien du flag !</p>
 
-<h1 id="références">Références</h1>
+<h2 id="références">Références</h2>
 
 <ul>
 <li><a href="http://www.securityidiots.com/Web-Pentest/SQL-Injection/Basic-Union-Based-SQL-Injection.html" target="blank">Basic Union Based SQL Injection</a></li>
@@ -309,7 +312,7 @@ Deux solutions ici :</p>
     
     <a href="/writeups/tamuctf-2017/stegano-musical-bits/" class="post--navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
-      <span class="navigation-tittle">TamuCTF 2017 - Steganographie - Musical Bits</span>
+      <span class="navigation-tittle">TamuCTF 2017 - Stéganographie - Musical Bits</span>
     </a>
     
     

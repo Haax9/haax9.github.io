@@ -70,7 +70,7 @@
       
       
       <div class="author-image">
-        <img src="/img/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
       </div>
       
     </a>
@@ -199,10 +199,10 @@
           <a class="badge badge-tag" href="/tags/sudo">sudo</a>
            
       
-          <a class="badge badge-tag" href="/tags/2017">2017</a>
+          <a class="badge badge-tag" href="/tags/boot2root">boot2root</a>
            
       
-          <a class="badge badge-tag" href="/tags/boot2root">boot2root</a>
+          <a class="badge badge-tag" href="/tags/ctf">ctf</a>
           
       
     
@@ -233,7 +233,7 @@ rtt min/avg/max/mdev = 0.265/0.326/0.438/0.079 ms
 
 <p>Et&hellip; C&rsquo;est parti !</p>
 
-<h1 id="découverte">Découverte</h1>
+<h2 id="découverte">Découverte</h2>
 
 <p>La première chose qui nous intéresse est de savoir ce qui tourne sur la machine distante, et surtout ce à quoi nous pouvons accéder. On commence donc par réaliser un scan de ports à l’aide de nmap.</p>
 
@@ -269,11 +269,11 @@ Nmap done: 1 IP address (1 host up) scanned in 21.15 seconds
 
 <p>Étant donné qu’il y a souvent un grand nombre de possibilités en passant par le serveur web d’un système, c’est sur le port 80 (HTTP) que nous allons démarrer nos investigations. Allons voir ce qui est accessible si on rentre l’adresse IP dans un navigateur web.</p>
 
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_1.png" alt="quaoar_1.png"/></center></p>
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_1.png" alt="quaoar_1.png" class="imgSize"/></center></p>
 
 <p>Le scan nmap a révélé un accès au fichier robots.txt, allons voir quelles informations nous pouvons récupérer.</p>
 
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_2.png" alt="quaoar_2.png"/></center></p>
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_2.png" alt="quaoar_2.png" class="imgSize"/></center></p>
 
 <p>Hmm hmm… Il semble que nous sommes face à un site WordPress ! L’outil WPScan s’avère être très utile dans ce genre de situation, afin de rechercher la version de WordPress utilisée, d’éventuelles vulnérabilités et également tenter d’énumérer les utilisateurs.</p>
 
@@ -337,19 +337,19 @@ _______________________________________________________________
 
 <p>Une version dépassée.. Plusieurs vulnérabilités ! Nous verrons plus tard si l’une d’entre elle peut être exploitée, mais pour le moment, le plus intéressant est de voir que l’utilisateur “admin” est toujours utilisé !</p>
 
-<h1 id="accès-web-et-shell">Accès Web et Shell</h1>
+<h2 id="accès-web-et-shell">Accès Web et Shell</h2>
 
 <p>Sait-on jamais, essayons de se connecter à /wp-admin/ en utilisant les credentials admin/admin.</p>
 
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_3.png" alt="quaoar_3.png"/></center></p>
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_3.png" alt="quaoar_3.png" class="imgSize"/></center></p>
 
 <p>Ça fonctionne ! Pas certain de si c’est bien ou triste… Peu importe ! WPscan n’a pas trouvé de plugin. Allons voir manuellement si des plugins sont installés.</p>
 
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_4.png" alt="quaoar_4.png"/></center></p>
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_4.png" alt="quaoar_4.png" class="imgSize"/></center></p>
 
 <p>“Mail Masta” version 1.0… Après une rapide recherche sur Google, on remarque que ce plugin, dans cette version, souffre de plusieurs vulnérabilités critiques, comme une Local File Inclusion (LFI) ou encore une Injection SQL. On tente d’exploiter cette LFI et de récupérer le contenu du fichier /etc/passwd.</p>
 
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_5.png" alt="quaoar_5.png"/></center></p>
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_5.png" alt="quaoar_5.png" class="imgSize"/></center></p>
 
 <p>Bien, on dispose maintenant de la liste des utilisateurs du système cible. Un bon nombre de ces utilisateurs sont des utilisateurs communs pour des systèmes comme celui ci, mais les derniers sont souvent intéressants. On a par exemple un utilisateur “wpadmin”. Si on pense de la même manière que précédemment, l’administrateur du site WordPress a utilisé le mot de passe par défaut pour son site web, pourquoi changerait-il son mot de passe sur la machine ?</p>
 
@@ -397,7 +397,7 @@ $ cat flag.txt
 2bafe61f03117ac66a73c3c514de796e
 </code></pre>
 
-<h1 id="rooting-time">Rooting time !</h1>
+<h2 id="rooting-time">Rooting time !</h2>
 
 <p>Nous sommes maintenant connectés à la machine cible et on peut commencer à récolter des informations précises sur le système. Quelle est la version du Système d’Exploitation ? Qu’est ce qui tourne sur la machine ?</p>
 
@@ -468,7 +468,7 @@ define('WP_SITEURL','/wordpress/');
 wpadmin
 $ su root
 Password:
-root@Quaoar:/home/wpadmin# whoami
+root@Quaoar:/home/wpadmin## whoami
 root
 root@Quaoar:/home/wpadmin#
 </code></pre>
@@ -477,7 +477,7 @@ root@Quaoar:/home/wpadmin#
 
 <p>On a maintenant le second et dernier flag !</p>
 
-<h1 id="conclusion-un-dernier-mot">Conclusion - Un dernier mot</h1>
+<h2 id="conclusion-un-dernier-mot">Conclusion - Un dernier mot</h2>
 
 <p>Même si cette machine virtuelle n’était pas difficile à rooter et même si la partie technique n’a pas été très complexe, Quaoar nous apprend de bonnes choses… Des erreurs toujours faites dans le monde réel… Alors, par pitié, <strong>N’UTILISEZ PAS DE MOT DE PASSE PAR DÉFAUT ET CHANGEZ LE !</strong> 😉</p>
 
