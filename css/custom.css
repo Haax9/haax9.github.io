@@ -133,6 +133,29 @@ a {
   max-width: 80%;
 }
 
+.logoFlag {
+  float: left;
+  margin: auto;
+  margin-right: 0.3em;
+  width: 1.2em;
+}
+
+.langSection {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+}
+
+.langSection a:hover {
+  color: #A8A8A8;
+}
+
+.langLink {
+  font-size: 0.9em;
+  margin-bottom: 0.25em;
+}
+
 
 /* Code */
 pre {

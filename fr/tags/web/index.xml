@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web on Haax - Personal Blog</title>
+    <link>https://haaxmax.github.io/fr/tags/web/</link>
+    <description>Recent content in Web on Haax - Personal Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 30 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://haaxmax.github.io/fr/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ECW 2017 - Web - Path Through</title>
+      <link>https://haaxmax.github.io/fr/writeups/ecw-2017/web-path-through/</link>
+      <pubDate>Thu, 30 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/writeups/ecw-2017/web-path-through/</guid>
+      <description>&lt;p&gt;L’ECW 2017 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thalès. Path Through est challenge web basé sur les injections SQL en aveugle (blind).&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ECW 2017 - Web - Hall of Fame</title>
+      <link>https://haaxmax.github.io/fr/writeups/ecw-2017/web-hall-of-fame/</link>
+      <pubDate>Thu, 23 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/writeups/ecw-2017/web-hall-of-fame/</guid>
+      <description>&lt;p&gt;L’ECW 2017 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thalès. Hall of Fame est un challenge web basé sur les injections SQL en UNION.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

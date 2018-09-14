@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="">
+    
+  <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.48" />
+
+    
+
+<title>Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Haax - Personal Blog"/>
+<meta name="twitter:description" content="Infosec articles &amp; CTF Writeups"/>
+
+<meta property="og:title" content="Haax - Personal Blog" />
+<meta property="og:description" content="Infosec articles &amp; CTF Writeups" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://haaxmax.github.io/en/" />
+<meta property="og:updated_time" content="2018-09-13T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+<link href="https://haaxmax.github.io/en/index.xml" rel="alternate" type="application/rss+xml" title="Haax - Personal Blog" />
+<link href="https://haaxmax.github.io/en/index.xml" rel="feed" type="application/rss+xml" title="Haax - Personal Blog" />
+
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      <a href="/en/">
+      
+      
+      
+      <div class="author-image">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+      </div>
+      
+    </a>
+      <p class="site__description">
+        <a href="/en/">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2018 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+  <div class="post-list">
+    
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/articles/internet-box-privacy/">Android Internet Box and Privacy - The iceberg summit</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 6 min read -
+          Sep 13, 2018
+        </span>
+        
+        <p>A little lighter post this time, dealing with connected internet boxes, and specifically the Miami Bboxes (which is a French ISP). Indeed, having one of these boxes, I wondered what I could find from a privacy point of view and what a basic and curious user could do with parameters. We will therefore see here that a certain number of default parameters are activated and that it is possible to act on them. I should point out that no box was mistreated in the context of these experiments : D.</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/articles/internet-box-privacy/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/articles/best-security-practice-wordpress-installation/">Best security practices for WordPress installations</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 11 min read -
+          Mar 31, 2018
+        </span>
+        
+        <p>If you want to set up your own website but you are not an expert, you may have seen the word &ldquo;Wordpress&rdquo; spread. It is a CMS (Content Management System) to help in the the creation of a website. Basically, it facilitates creation and management by providing a ready-to-use interface. Now all you have to do is customize your site and write your articles! No need to write code (even if it is possible to search and modify manually) !</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/articles/best-security-practice-wordpress-installation/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/articles/password-reuse-threat/">The password reuse threat</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 12 min read -
+          Dec 17, 2017
+        </span>
+        
+        <p>I&rsquo;m sure you&rsquo;ve already heard it thousand times, but questions about passwords on Internet are more than ever critical for your privacy and personal data. Nowadays, Internet is used for (almost) everything and by (almost) everyone, from the simple cooking website to your bank account, through social networks, marketing websites or even your mailboxes. It makes a lot of websites, account, and so, passwords.</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/articles/password-reuse-threat/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/writeups/ecw-2017/web-path-through/">ECW 2017 - Web - Path Through</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 3 min read -
+          Nov 30, 2017
+        </span>
+        
+        <p>The ECW 2017 is a French Jeopardy challenge organized by the &ldquo;Pôle d&rsquo;Excellence Cyber&rdquo; in partnership with the &ldquo;Région Bretagne&rdquo;, Airbus and Thalès. Path Through is a web challenge based on blind SQL Injection.</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/writeups/ecw-2017/web-path-through/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/writeups/ecw-2017/web-hall-of-fame/">ECW 2017 - Web - Hall of Fame</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 3 min read -
+          Nov 23, 2017
+        </span>
+        
+        <p>The ECW 2017 is a French Jeopardy challenge organized by the “Pôle d’Excellence Cyber” in partnership with the “Région Bretagne”, Airbus and Thalès. Hall of Fame is a web challenge based on Union SQL Injection.</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/writeups/ecw-2017/web-hall-of-fame/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/walkthroughs/quaoar-virtual-machine/">Quaoar Virtual Machine - Walkthrough</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 8 min read -
+          Nov 20, 2017
+        </span>
+        
+        <p>&ldquo;Quaoar&rdquo; is a &ldquo;Boot2Root&rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub.</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/walkthroughs/quaoar-virtual-machine/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+    
+      <div class="post-list__item">
+        <span class="item__title--big">
+          <a href="/en/writeups/tamuctf-2017/stegano-musical-bits/">TamuCTF 2017 - Steganography - Musical Bits</a>
+        </span>
+        <span class="item__date">
+          <i class="fas fa-clock"></i> 5 min read -
+          Nov 12, 2017
+        </span>
+        
+        <p>The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &ldquo;Musical Bits&rdquo; challenge which is a Steganography challenge. <a href="https://twitter.com/Haaxmax" target="\_blank" rel="noopener">I</a> worked with <a href="https://twitter.com/ErwanFily" target="\_blank" rel="noopener">Iptior</a> on this one and it tooks severals hours of pain before success! Let&rsquo;s go!</p>
+
+<p></p>
+        
+        
+        <div class="read-more-link">
+            <a href="/en/writeups/tamuctf-2017/stegano-musical-bits/">Read More…</a>
+        </div>
+        
+        </div>
+        
+     
+  </div>
+
+        </div>
+        
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    </body>
+</html>

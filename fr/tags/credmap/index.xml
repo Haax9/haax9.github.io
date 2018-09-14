@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Credmap on Haax - Personal Blog</title>
+    <link>https://haaxmax.github.io/fr/tags/credmap/</link>
+    <description>Recent content in Credmap on Haax - Personal Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 17 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://haaxmax.github.io/fr/tags/credmap/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Les dangers de la réutilisation de mots de passe</title>
+      <link>https://haaxmax.github.io/fr/articles/dangers-reutilisation-mots-de-passe/</link>
+      <pubDate>Sun, 17 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/articles/dangers-reutilisation-mots-de-passe/</guid>
+      <description>&lt;p&gt;Vous l’avez surement entendu et vu des dizaines de fois, mais les questions tournant autour des mots de passe sur Internet sont plus que jamais d’une importance capitale pour vos données et votre vie privée. A l’heure actuelle, Internet est utilisé pour (presque) tout et par (presque) tout le monde, allant du simple site de recettes de cuisine à votre compte bancaire, en passant par les réseaux sociaux, les sites de e-commerce ou encore vos adresses e-mails. Cela fait un paquet de sites, de comptes différents, et par extension, de mots de passe.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

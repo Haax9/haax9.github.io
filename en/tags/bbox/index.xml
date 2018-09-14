@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bbox on Haax - Personal Blog</title>
+    <link>https://haaxmax.github.io/en/tags/bbox/</link>
+    <description>Recent content in Bbox on Haax - Personal Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://haaxmax.github.io/en/tags/bbox/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android Internet Box and Privacy - The iceberg summit</title>
+      <link>https://haaxmax.github.io/en/articles/internet-box-privacy/</link>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/en/articles/internet-box-privacy/</guid>
+      <description>&lt;p&gt;A little lighter post this time, dealing with connected internet boxes, and specifically the Miami Bboxes (which is a French ISP). Indeed, having one of these boxes, I wondered what I could find from a privacy point of view and what a basic and curious user could do with parameters. We will therefore see here that a certain number of default parameters are activated and that it is possible to act on them. I should point out that no box was mistreated in the context of these experiments : D.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Wordpress on Haax - Personal Blog</title>
+    <link>https://haaxmax.github.io/en/tags/wordpress/</link>
+    <description>Recent content in Wordpress on Haax - Personal Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://haaxmax.github.io/en/tags/wordpress/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Quaoar Virtual Machine - Walkthrough</title>
+      <link>https://haaxmax.github.io/en/walkthroughs/quaoar-virtual-machine/</link>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/en/walkthroughs/quaoar-virtual-machine/</guid>
+      <description>&lt;p&gt;&amp;ldquo;Quaoar&amp;rdquo; is a &amp;ldquo;Boot2Root&amp;rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
