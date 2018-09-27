@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haaxmax.github.io/en/articles/web-containers-privacy/</loc>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/articles/conteneurs-web-et-vie-privee/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/articles/web-containers-privacy/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/en/articles/internet-box-privacy/</loc>
     <lastmod>2018-09-13T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -124,7 +139,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/articles/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -140,7 +155,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/articles/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -172,7 +187,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/tags/awareness/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -226,7 +241,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -305,6 +320,22 @@
   </url>
   
   <url>
+    <loc>https://haaxmax.github.io/en/tags/firefox/</loc>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/tags/firefox/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/tags/firefox/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/en/tags/good-practices/</loc>
     <lastmod>2018-03-31T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -312,7 +343,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -344,7 +375,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/posts/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -360,7 +391,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/tags/privacy/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

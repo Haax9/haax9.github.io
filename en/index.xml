@@ -5,10 +5,20 @@
     <link>https://haaxmax.github.io/en/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/en/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Web containers - Deny website data share</title>
+      <link>https://haaxmax.github.io/en/articles/web-containers-privacy/</link>
+      <pubDate>Thu, 27 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/en/articles/web-containers-privacy/</guid>
+      <description>If you regularly use an Internet browser and you know a little bit about Web technology, you generally know what data is retrieved by the different websites that you visit. If not, just know that each visited website stores information about you through different mechanisms (cookies in particular) which can for example identify you so you no longer have to enter your credentials.
+However, this is only a small part of the data that publishers recover.</description>
+    </item>
     
     <item>
       <title>Android Internet Box and Privacy - The iceberg summit</title>

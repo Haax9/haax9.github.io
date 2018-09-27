@@ -5,10 +5,21 @@
     <link>https://haaxmax.github.io/fr/tags/sensibilisation/</link>
     <description>Recent content in Sensibilisation on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/fr/tags/sensibilisation/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Les conteneurs web - Stop data sharing between websites</title>
+      <link>https://haaxmax.github.io/fr/articles/conteneurs-web-et-vie-privee/</link>
+      <pubDate>Thu, 27 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/articles/conteneurs-web-et-vie-privee/</guid>
+      <description>&lt;p&gt;Si vous utilisez régulièrement un navigateur Internet et que vous connaissez un tant soit peu le domaine du web, vous savez d&amp;rsquo;une manière générale quelles données sont récupérées par les différents sites visités. Si non, sachez que chaque site visité stocke des informations sur vous par l&amp;rsquo;intermédiaire de différents mécanismes (cookies notamment) ce qui peut par exemple permettre de vous identifier et ainsi ne plus avoir à taper vos identifiants.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Box &#34;connectées&#34; et vie privée - Le sommet de l&#39;Iceberg</title>
