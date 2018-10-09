@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.49" />
+
+    
+    
+    
+
+<title>Windows 10 &amp; GPO - Durcissement contre la fuite de données • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windows 10 &amp; GPO - Durcissement contre la fuite de données"/>
+<meta name="twitter:description" content="Depuis la sortie du système d&rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&rsquo;ouvrir les yeux et de prendre conscience des choses.
+
+"/>
+
+<meta property="og:title" content="Windows 10 &amp; GPO - Durcissement contre la fuite de données" />
+<meta property="og:description" content="Depuis la sortie du système d&rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&rsquo;ouvrir les yeux et de prendre conscience des choses.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/fr/articles/durcissement-windows-gpo/" /><meta property="article:published_time" content="2018-10-04T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-04T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      </div>
+    <p class="copyright">
+      &copy; 2018 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Windows 10 &amp; GPO - Durcissement contre la fuite de données</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Oct 4, 2018
+    
+    
+    
+      
+      
+          in
+          
+          
+              <a class="badge badge-category" href="/categories/articles">ARTICLES</a>
+              •
+          
+              <a class="badge badge-category" href="/categories/posts">POSTS</a>
+              
+          
+      
+    
+    
+    
+      
+      
+          <br/>
+           <i class="fas fa-tags"></i>
+          
+          <a class="badge badge-tag" href="/tags/sensibilisation">sensibilisation</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/vie-priv%C3%A9e">vie privée</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/gpo">gpo</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/windows">windows</a>
+           
+      
+          <a class="badge badge-tag" href="/tags/applications">applications</a>
+          
+      
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 10 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Depuis la sortie du système d&rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&rsquo;ouvrir les yeux et de prendre conscience des choses.</p>
+
+<p></p>
+
+<p>Néanmoins, il est possible via différentes petites manipulations et configurations de limiter les données personnelles recueillies par Microsoft. Cela peut notamment passer par l&rsquo;utilisation des Group Policy Objetcs, que nous allons découvrir dans cet article. Je vous donnerai quelques exemples afin que vous puissez vous même vous faire une idée de leur utilisation. J&rsquo;en profite pour placer un mot au sujet de <a href="https://www.ssi.gouv.fr/" target="\_blank">l&rsquo;ANSSI (Agence Nationale de la Sécurité des Systèmes d&rsquo;Information)</a> qui publie régulièrement des guides de bonnes pratique au sujet de l&rsquo;hygiène numérique. Les configurations abordées dans cet article sont d&rsquo;ailleurs tirées de leur guide &ldquo;Préoccupations relatives au respect de la vie privée et à la confidentialité des données sous Windows 10&rdquo; et ont été compilées par <a href="https://twitter.com/Gouz0u" target="\_blank">@Gouzou</a>, je le remercie pour l&rsquo;aide apportée !</p>
+
+<p>[Note préliminaire 1] Cet article sera mis à jour (plus ou moins) régulièrement afin d&rsquo;ajouter ou retirer certains paramètres intéressants.</p>
+
+<p>[Note préliminaire 2] L&rsquo;édition des GPO n&rsquo;est possible qu&rsquo;avec une version Pro, Enterprise ou Intégrale de Windows 7, 8.1 ou 10. Néanmoins il semble possible d&rsquo;installer l&rsquo;éditeur sur des versions plus classiques (Home). Ne l&rsquo;ayant pas testé, je ne peux affirmer ou non cela.</p>
+
+<h2 id="les-gpo-group-policy-objects">Les GPO (Group Policy Objects)</h2>
+
+<h3 id="qu-est-ce-que-c-est">Qu&rsquo;est ce que c&rsquo;est ?</h3>
+
+<p>Les Group Policy Objects (GPO) ou Stratégies de Groupe sont des fonctions de gestion centralisée des machines sous Windows. Elles sont notamment utilisées dans le cadre des réseaux d&rsquo;entreprise composés de parc informatiques. Leur utilisation permet de déployer des paramètres facilement sur l&rsquo;ensemble du parc ou encore de configurer certains paramètres réseaux, de sécurité etc. Il en existe plusieurs centaines, permettant d&rsquo;administrer un grand nombre de choses.</p>
+
+<p>Même si ce système est majoritairement utilisé dans le cadre de parc informatiques, il existe une version locales aux ordinateurs, permettant à chaque administrateur de définir des paramètres pour sa machine, on parle alors de stratégies locales.</p>
+
+<p>Dans le cadre d&rsquo;une entreprise, il est possible de mettre en place à la fois des stratégies locales (pour votre PC uniquement) et des stratégies de groupe (pour l&rsquo;ensemble du parc informatique). Néanmoins, si différents paramètres rentrent en conflit, la stratégie de groupe prendra la priorité et sera appliqué, au détriment du paramétrage local.</p>
+
+<p>Dans le cas d&rsquo;un PC personnel, pas de soucis à se faire et c&rsquo;est d&rsquo;ailleurs ce qui est recherché dans cet article. Je n&rsquo;entrerai pas plus en détails sur les GPO car cela pourrait rapidement devenir complexe et le but n&rsquo;est pas d&rsquo;aller en profondeur là dessus.</p>
+
+<h3 id="comment-ça-marche">Comment ça marche ?</h3>
+
+<p>Concrètement, l&rsquo;ensemble des GPO se gèrent au même endroit, dans l&rsquo;éditeur de stratégies de groupe. Un nombre conséquent de paramètres sont disponibles et il suffit de choisir une des valeurs proposées ou d&rsquo;entrer la valeur choisie quand cela est possible. Par exemple, pour le paramètre &ldquo;Comptes : Status du compte Invité&rdquo; il est possible soit d&rsquo;activer ce compte, soit de le désactiver. Ci-dessous une capture d&rsquo;écran illustrant à quoi ressemble l&rsquo;éditeur.</p>
+
+<p><center><img src="/img/articles/durcissement-windows-gpo/gpo_1.PNG" alt="gpo_1.PNG" class="imgSize"/></center></p>
+
+<p>Au sein d&rsquo;un parc informatique d&rsquo;entreprise, les stratégies de groupe se gèrent au niveau des contrôleurs de domaine Active Directory. Il s&rsquo;agit des serveurs du parc.</p>
+
+<h3 id="et-sur-mon-ordinateur">Et sur mon ordinateur ?</h3>
+
+<p>Comme dit précédemment, il existe une version locale de l&rsquo;éditeur de stratégies. On parle ici de l&rsquo;éditeur de stratégies locales. Il ressemble en tous points à l&rsquo;éditeur de GPO des serveurs Windows, mais les paramètres définis sont seulement appliqués sur l&rsquo;ordinateur en question. Plutôt pratique quand on veut simplement protéger son PC personnel !</p>
+
+<p>Afin de trouver l&rsquo;éditeur, deux façons :</p>
+
+<ul>
+<li>Utiliser la barre de recherche de Windows et taper &ldquo;Group Policy&rdquo; ou &ldquo;Stratégies de Groupe&rdquo;. Il est nécessaire d&rsquo;exécuter le programme en tant qu&rsquo;administrateur (clic droit dessus puis &ldquo;exécuter en tant qu&rsquo;administrateur&rdquo;) ;</li>
+<li>Utiliser l&rsquo;application Windows permettant de lancer un programme. Pour cela, utilisez les touches &ldquo;Windows&rdquo; (la touche avec l&rsquo;icône de Windows) + &ldquo;R&rdquo; puis entrez &ldquo;gpedit.msc&rdquo;.</li>
+</ul>
+
+<p><center><img src="/img/articles/durcissement-windows-gpo/gpo_2.PNG" alt="gpo_2.PNG" class="imgSize"/></center></p>
+
+<p>Une fois cela exécuté, on se retrouve avec le même éditeur. Et on peut commencer à fouiller :).</p>
+
+<p><center><img src="/img/articles/durcissement-windows-gpo/gpo_3.PNG" alt="gpo_3.PNG" class="imgSize"/></center></p>
+
+<h2 id="mise-en-application-modification-des-gpo">Mise en application - Modification des GPO</h2>
+
+<p>Conformément aux documents de l&rsquo;ANSSI et aux paramètres que <a href="https://twitter.com/Gouz0u" target="\_blank">@Gouzou</a> a extrait de leur documents, on trouve plusieurs catégories de paramètres qu&rsquo;il est intéressant de regarder à des fins de protection personnelle.
+Il est cependant à noter que tout n&rsquo;est pas à prendre au pied de la lettre. En effet, les recommandations présentées ici permettent de vous guider dans la configuration de votre système mais c&rsquo;est à vous de définir ce que vous voulez protéger. Je vous invite fortement à lire le descriptif de chaque paramètre afin de savoir sur quoi cela porte.</p>
+
+<h3 id="notion-de-chemin">Notion de chemin</h3>
+
+<p>Dans la suite de l&rsquo;article, chaque paramètre sera accessible via un &ldquo;chemin&rdquo;. Par exemple :</p>
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Collecte de données et versions d'évaluation Preview
+</code></pre>
+
+<p>Cela correspond aux différentes catégories et sous-catégories visibles dans l&rsquo;éditeur.</p>
+
+<p><center><img src="/img/articles/durcissement-windows-gpo/gpo_4.PNG" alt="gpo_4.PNG" class="imgSize"/></center></p>
+
+<p>Une fois arrivé sur un paramètre, il suffit de cliquer dessus pour ensuite choisir si on souhaite l&rsquo;activer, le désactiver et y ajouter d&rsquo;éventuelles options.</p>
+
+<h3 id="télémétrie-recherche-et-outils-intégrés">Télémétrie, Recherche et Outils intégrés</h3>
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Collecte de données et versions d'évaluation Preview
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Autoriser la télémétrie</td>
+<td>Activé</td>
+<td>0 (Désactivé) ou 1 (De base)</td>
+</tr>
+
+<tr>
+<td>Ne pas afficher les notifications de commentaire</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Basculer le contrôle utilisateur sur les Builds Insider</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Antivirus Windows Defender/MAPS
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Configurer une valeur de remplacement &hellip; MAPS</td>
+<td>Désactivé</td>
+<td>0 (Désactivé) ou 1 (De base)</td>
+</tr>
+
+<tr>
+<td>Envoyer des exemples de fichier lorsqu&rsquo;une analyse supplémentaire est nécessaire</td>
+<td>Activé</td>
+<td>Ne jamais envoyer</td>
+</tr>
+
+<tr>
+<td>Rejoindre Microsoft MAPS</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Rechercher
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Autoriser Cortana</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Autoriser Cortana au-dessus de l&rsquo;écran de vérouillage</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Autoriser l&rsquo;indexation des fichiers chiffrés</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Ne pas autoriser la recherche web</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Définir quelles informations sont partagées dans Search</td>
+<td>Activé</td>
+<td>Informations anonymes</td>
+</tr>
+
+<tr>
+<td>Ne pas effectuer des recherches sur le Web ou afficher des résultats Web dans Search</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Autoriser la recherche dans le Cloud</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Autoriser la page Cortana dans OOBE sur un compte AAD</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="expérience-utilisateur">Expérience Utilisateur</h3>
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Localiser mon appareil
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Activer/Désactiver l&rsquo;option localiser mon appareil</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Rapport d'erreur Windows
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Désactiver rapport d&rsquo;erreurs Windows</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Envoyer automatiquement des images mémoire &hellip; d&rsquo;exploitation</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Ne pas envoyer de données additionnelles</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Panneau de configuration/Options régionales et linguistiques
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Autoriser la personnalisation de la saisie</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Panneau de configuration/Options régionales et linguistiques/Personnalisation de l'écriture manuscrite
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Désactiver l&rsquo;apprentissage automatique</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Système/Gestion de la communication Internet/Paramètres de communication Internet
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Désactiver le contenu &ldquo;Le saviez vous ?&rdquo; dans le centre d&rsquo;aide</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver le partage des données de personnalisation de l&rsquo;écriture manuscrite</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver le programme d&rsquo;amélioration de l&rsquo;expérience utilisateur Windows</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver le signalement d&rsquo;erreurs de la reconnaissance de l&rsquo;écriture manuscrite</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver l&rsquo;accès au Windows Store</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver le rapport d&rsquo;erreurs Windows</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Contenu Cloud
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Désactiver les expériences consommateur de Microsoft</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Ne pas afficher les conseils de Windows</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="applications-universelles">Applications universelles</h3>
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Confidentialité de l'application
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Permettre aux applications Windows d&rsquo;accéder à [&hellip;tout&hellip;]</td>
+<td>Activé</td>
+<td>Ne jamais autoriser</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Windows Store
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Afficher uniquement le magasin privé dans le Microsoft Store</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver l&rsquo;application Store</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Désactiver toutes les applications depuis le Microsoft Store</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Système/Profils utilisateur
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Désactiver l&rsquo;ID de publicité</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Ne pas ouvrir de session pour les utilisateurs avec des profils temporaires</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Paramètres Windows/Paramètres de sécurité/Stratégies Locales/Options de sécurité
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Comptes : Bloquer les comptes Microsoft</td>
+<td>Activé</td>
+<td>Les utilisateurs ne peuvent pas ajouter ni se connecter avec un compte Microsoft</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/OneDrive
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Empêcher l&rsquo;utilisation de OneDrive pour le stockage de fichiers</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Saisie de texte
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Améliorer la reconnaissance de l&rsquo;écriture manuscrite et de la saisie</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Windows Defender Application Guard
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Activer Windows Defender Application Guard en mode Entreprise</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Installation poussée
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Désactiver le service d&rsquo;installation poussée</td>
+<td>Activé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Stratégies de système d'exploitation
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Active le flux d&rsquo;activité</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Autoriser la publication des activités de l&rsquo;utilisateur</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>Autoriser le chargement des activités utilisateur</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Enregistrement et diffusion de jeux Windows
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Etat</th>
+<th>Options</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Active ou désactive Enregistrement et diffusion de jeux Windows</td>
+<td>Désactivé</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="petit-bonus-mener-la-vie-dure-aux-applications-microsoft-installées-par-défaut">Petit bonus - Mener la vie dure aux applications Microsoft installées par défaut</h2>
+
+<p>Vous avez surement dû déjà y faire face, lorsque vous achetez un nouvel ordinateur, un certain nombre d&rsquo;applications sont installées par défaut. Même si certaines sont utiles, il n&rsquo;est pas rare qu&rsquo;on ait envie d&rsquo;en supprimer quelques unes. Cependant, Windows ne nous laisse pas faire si facilement ! En effet, l&rsquo;option &ldquo;désinstaller&rdquo; n&rsquo;est pas proposée&hellip;</p>
+
+<p>Mais il est quand même possible d&rsquo;en supprimer certaines ! Malheureusement, il ne sera pas possible de toutes les désinstaller (Cortana, par exemple). Encore une fois, c&rsquo;est à vous de juger ce qu&rsquo;il sera bon de garder ou pas :).</p>
+
+<p>Les quelques lignes à venir pourraient faire peur aux moins bidouilleurs d&rsquo;entre vous. Néanmoins pas de panique, ne partez pas à la moindre ligne de code, tout est expliqué !</p>
+
+<p>On va commencer par ouvrir un interpréteur Powershell. Grossièrement, il s&rsquo;agit d&rsquo;un terminal dans lequel nous pouvons entrer des commandes. Recherchez le programme &ldquo;Powershell&rdquo; et lancez le en tant qu&rsquo;administrateur (clic droit &gt; Exécuter en tant qu&rsquo;administrateur). Un terminal bleu, comme celui ci, devrait apparaître.</p>
+
+<p><center><img src="/img/articles/durcissement-windows-gpo/gpo_5.PNG" alt="gpo_5.PNG" class="imgSize"/></center></p>
+
+<p>Par la suite, 3 commandes vont être nécessaires.</p>
+
+<p>Premièrement, on va lister les applications installées. Cela se fait à l&rsquo;aide de la commande suivante. Cette dernière va lister les applications et afficher un grand nombre d&rsquo;informations à leur sujet.</p>
+
+<pre><code>Get-AppxPackage
+</code></pre>
+
+<p>Pour des raisons de lisibilité, nous aimerions simplement lister les applications et n&rsquo;afficher que leur nom complet. On peut le faire avec la commande ci-dessous.</p>
+
+<pre><code>Get-AppxPackage | Select Name, PackageFullName
+</code></pre>
+
+<p>Ensuite, il suffit de dire à l&rsquo;ordinateur de récupérer une application puis on ajoute une seconde commande &ldquo;Remove-AppxPackage&rdquo; afin de lui dire de supprimer l&rsquo;application.</p>
+
+<pre><code>Get-AppxPackage -allusers *3dbuilder* | Remove-AppxPackage
+</code></pre>
+
+<p>Description de la commande :</p>
+
+<ul>
+<li><strong>GetAppxPackage</strong> = Liste les applications installées ;</li>
+<li><strong>-allusers</strong> = Indique que la commande va porter sur tous les utilisateur de l&rsquo;ordinateur ;</li>
+<li><strong>*zunevideo*</strong> = Nom de l&rsquo;application. On utilise deux &ldquo;*&rdquo; pour indiquer qu&rsquo;on cherche simplement l&rsquo;expression entre les deux symboles dans le résultat de la liste afin de sélectionner la bonne application. Dans notre cas, on va désinstaller toutes les applications contenant &ldquo;zunevideo&rdquo; dans leur nom ;</li>
+<li><strong>|</strong> = Permet de lier la première commande à une seconde ;</li>
+<li><strong>Remove-AppxPackage</strong> = Indique que l&rsquo;on souhaite supprimer l&rsquo;application sélectionnée.</li>
+</ul>
+
+<p>Il est ainsi possible de supprimer beaucoup d&rsquo;applications. Je vous invite à consulter <a href="https://www.askvg.com/guide-how-to-remove-all-built-in-apps-in-windows-10/" target="\_blank">ce lien</a> afin d&rsquo;avoir de plus amples informations et une liste des applications qu&rsquo;il est possible de supprimer.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>En conclusion de cet article, je rappelerai que beaucoup de choses sont possibles afin de personnaliser son ordinateur et limiter les fuites d&rsquo;information, mais qu&rsquo;il ne faut pas forcément tout prendre au pied de la lettre. En effet, plus que d&rsquo;appliquer des recommandations (même celles de cet article), il est important de s&rsquo;informer et d&rsquo;essayer de comprendre au moins le fontionnement global. Chaque personne ou entreprise a des besoins différents en termes de sécurité et de confidentialité, ce qui laisse une multitude de configurations possibles. A vous de trouver le juste milieu qu&rsquo;il vous faut !</p>
+
+<p>Comme toujours, si vous avez la moindre question, n&rsquo;hésitez pas à me contacter par <a href="mailto:haax@mdamail.ch">e-mail</a> ou via <a href="https://twitter.com/Haaxmax" target="\_blank">Twitter</a> ! ;)</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/articles/conteneurs-web-et-vie-privee/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Les conteneurs web - Endiguer le partage de données entre les sites web</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
