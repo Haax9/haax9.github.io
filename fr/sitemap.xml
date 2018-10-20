@@ -153,22 +153,6 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/fr/tags/applications/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/applications/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/applications/"
-                />
-  </url>
-  
-  <url>
     <loc>https://haaxmax.github.io/fr/articles/</loc>
     <lastmod>2018-10-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -201,76 +185,6 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/fr/tags/audio/</loc>
-    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/audio/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/audio/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/bbox/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/bbox/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/bbox/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/blind/</loc>
-    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/blind/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/blind/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/bonnes-pratiques/</loc>
-    <lastmod>2018-03-31T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/boot2root/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/boot2root/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/boot2root/"
-                />
-  </url>
-  
-  <url>
     <loc>https://haaxmax.github.io/fr/categories/</loc>
     <lastmod>2018-10-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -283,102 +197,6 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haaxmax.github.io/fr/categories/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/challenge/</loc>
-    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/challenge/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/challenge/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/credmap/</loc>
-    <lastmod>2017-12-17T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/credmap/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/credmap/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/ctf/</loc>
-    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/ctf/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/ctf/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/ecw/</loc>
-    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/ecw/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/ecw/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/firefox/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/firefox/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/firefox/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/gpo/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/gpo/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/gpo/"
                 />
   </url>
   
@@ -399,28 +217,6 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/fr/tags/injection-sql/</loc>
-    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/password-reuse/</loc>
-    <lastmod>2017-12-17T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/password-reuse/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/password-reuse/"
-                />
-  </url>
-  
-  <url>
     <loc>https://haaxmax.github.io/fr/categories/posts/</loc>
     <lastmod>2018-10-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -437,64 +233,7 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/fr/tags/python/</loc>
-    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/python/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/python/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/r%C3%A9aliste/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/sensibilisation/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/st%C3%A9ganographie/</loc>
-    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/sudo/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/sudo/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/sudo/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/s%C3%A9curit%C3%A9/</loc>
-    <lastmod>2018-09-13T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://haaxmax.github.io/fr/tags/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -506,44 +245,6 @@
                 hreflang="fr"
                 href="https://haaxmax.github.io/fr/tags/"
                 />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/tamuctf/</loc>
-    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/tamuctf/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/tamuctf/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/union/</loc>
-    <lastmod>2017-11-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/union/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/union/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/vie-priv%C3%A9e/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -575,54 +276,6 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haaxmax.github.io/fr/walkthroughs/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/web/</loc>
-    <lastmod>2017-11-30T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/web/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/web/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/windows/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/windows/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/windows/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/tags/wordpress/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/wordpress/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/wordpress/"
                 />
   </url>
   
