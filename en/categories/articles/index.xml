@@ -5,7 +5,7 @@
     <link>https://haaxmax.github.io/en/categories/articles/</link>
     <description>Recent content in Articles on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Thu, 18 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/en/categories/articles/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,7 +13,7 @@
     <item>
       <title>Windows 10 &amp; GPO - Hardening against personal data leak</title>
       <link>https://haaxmax.github.io/en/articles/durcissement-windows-gpo/</link>
-      <pubDate>Thu, 18 Oct 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/en/articles/durcissement-windows-gpo/</guid>
       <description>&lt;p&gt;Since the release of the Windows 10 operating system, many questions about user privacy have been raised. Indeed, even if our data were already collected before, Microsoft has opened their communication on the data collection with Windows 10. It allows mani people to open their eyes and become aware of things happenin.&lt;/p&gt;
