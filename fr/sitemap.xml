@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haaxmax.github.io/fr/articles/durcissement-windows-gpo/</loc>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/articles/durcissement-windows-gpo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/articles/durcissement-windows-gpo/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/fr/articles/conteneurs-web-et-vie-privee/</loc>
     <lastmod>2018-09-27T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -138,8 +153,24 @@
   </url>
   
   <url>
+    <loc>https://haaxmax.github.io/fr/tags/applications/</loc>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/tags/applications/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/tags/applications/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/fr/articles/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -155,7 +186,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/categories/articles/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -241,7 +272,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/categories/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -336,8 +367,24 @@
   </url>
   
   <url>
+    <loc>https://haaxmax.github.io/fr/tags/gpo/</loc>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/tags/gpo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/tags/gpo/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/fr/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -375,7 +422,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/categories/posts/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -413,7 +460,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/tags/sensibilisation/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -447,7 +494,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/tags/</loc>
-    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -495,7 +542,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/tags/vie-priv%C3%A9e/</loc>
-    <lastmod>2018-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -544,6 +591,22 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haaxmax.github.io/fr/tags/web/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/fr/tags/windows/</loc>
+    <lastmod>2018-10-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/tags/windows/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/tags/windows/"
                 />
   </url>
   

@@ -5,10 +5,21 @@
     <link>https://haaxmax.github.io/fr/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Thu, 27 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 10 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/fr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Windows 10 &amp; GPO - Durcissement contre la fuite de données</title>
+      <link>https://haaxmax.github.io/fr/articles/durcissement-windows-gpo/</link>
+      <pubDate>Wed, 10 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/articles/durcissement-windows-gpo/</guid>
+      <description>&lt;p&gt;Depuis la sortie du système d&amp;rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&amp;rsquo;ouvrir les yeux et de prendre conscience des choses.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Les conteneurs web - Endiguer le partage de données entre les sites web</title>
