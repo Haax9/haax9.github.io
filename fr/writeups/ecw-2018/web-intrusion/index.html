@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.49.2" />
+
+    
+    
+    
+
+<title>ECW 2018 - Web - Intrusion (5 challenges) • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ECW 2018 - Web - Intrusion (5 challenges)"/>
+<meta name="twitter:description" content="L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. Intrusion est un scénario web en 4 challenges (&#43;1 extra-challenge) se voulant réaliste. Il tourne principalement autour de Ruby on Rails et de la manipulation de cookies afin de passer administrateur sur le site de production.
+
+"/>
+
+<meta property="og:title" content="ECW 2018 - Web - Intrusion (5 challenges)" />
+<meta property="og:description" content="L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. Intrusion est un scénario web en 4 challenges (&#43;1 extra-challenge) se voulant réaliste. Il tourne principalement autour de Ruby on Rails et de la manipulation de cookies afin de passer administrateur sur le site de production.
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/fr/writeups/ecw-2018/web-intrusion/" /><meta property="article:published_time" content="2018-10-21T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-21T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/writeups/ecw-2018/web-intrusion/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/writeups/ecw-2018/web-intrusion/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2018 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>ECW 2018 - Web - Intrusion (5 challenges)</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Oct 21, 2018
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 11 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. Intrusion est un scénario web en 4 challenges (+1 extra-challenge) se voulant réaliste. Il tourne principalement autour de Ruby on Rails et de la manipulation de cookies afin de passer administrateur sur le site de production.</p>
+
+<p></p>
+
+<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <a href="https://www.european-cyber-week.eu/" target=\_blank>l’European Cyber Week</a> à Rennes.</p>
+
+<p>Challenge particulièrement intéressant sur plusieurs points. Il m&rsquo;a permis d&rsquo;apprendre plusieurs petits tricks. Qui plus est, j&rsquo;ai passé énormément de temps dessus. Let&rsquo;s go !</p>
+
+<p>Table des matières :</p>
+
+<ul>
+<li><a href="#intrusion-1">Intrusion 1</a>
+
+<ul>
+<li><a href="#d-couverte---recherche-d-informations">Découverte &amp; Recherche d&rsquo;informations</a></li>
+<li><a href="#domaine-de-d-veloppement---flag-1">Domaine de développement &amp; Flag 1</a></li>
+</ul></li>
+<li><a href="#intrusion-2">Intrusion 2</a>
+
+<ul>
+<li><a href="#manipulation-des-requ-tes-http">Manipulation des requêtes HTTP</a></li>
+<li><a href="#obtention-d-une-web-console---cve-2015-3224">Obtention d&rsquo;une web console - CVE-2015-3224</a></li>
+<li><a href="#fouille---flag-2">Fouille &amp; Flag 2</a></li>
+</ul></li>
+<li><a href="#intrusion-hint">Intrusion hint</a>
+
+<ul>
+<li><a href="#d-couverte---identification">Découverte &amp; Identification</a></li>
+<li><a href="#exploitation---r-sultats">Exploitation &amp; Résultats</a></li>
+</ul></li>
+<li><a href="#intrusion-3">Intrusion 3</a>
+
+<ul>
+<li><a href="#d-chiffrement-des-cookies">Déchiffrement des cookies</a></li>
+<li><a href="#forge-et-connexion-au-domaine-de-d-veloppement">Forge et connexion au domaine de développement</a></li>
+<li><a href="#r-cup-ration-du-flag-3">Récupération du Flag 3</a></li>
+</ul></li>
+<li><a href="#intrusion-4">Intrusion 4</a>
+
+<ul>
+<li><a href="#forge-d-un-cookie-pour-le-domaine-de-production">Forge d&rsquo;un cookie pour le domaine de production</a></li>
+<li><a href="#connexion---flag-4">Connexion &amp; Flag 4</a></li>
+</ul></li>
+<li><a href="#conclusion---retex">Conclusion &amp; RETEX</a></li>
+</ul>
+
+<h2 id="intrusion-1">Intrusion 1</h2>
+
+<h3 id="découverte-recherche-d-informations">Découverte &amp; Recherche d&rsquo;informations</h3>
+
+<p>Le challenge débute avec l&rsquo;énoncé suivant et le site web d&rsquo;une société.</p>
+
+<pre><code>Cette startup est prometteuse!
+Ils proposent de collecter de nombreux identifiants dans un seul endroit...
+Peut-on s'introduire dans leur system?
+</code></pre>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_1.png" alt="ECW2018_intrusion_1" class="imgSize"/></center></p>
+
+<p>Une page d&rsquo;authentification et une page &ldquo;Work in Progress&rdquo; sont disponibles. Quelques tests sur le formulaire d&rsquo;authentification ne révèlent pas de vulnérabilités à ce niveau. Qui plus, l&rsquo;indication &ldquo;support us with cookies :)&rdquo; de la page indique clairement que le challenge va tourner autour des cookies.</p>
+
+<p>Après quelques recherches on inspecte les fichiers qui sont utilisés au chargement du site web.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_2.png" alt="ECW2018_intrusion_2" class="imgSize"/></center></p>
+
+<h3 id="domaine-de-développement-flag-1">Domaine de développement &amp; Flag 1</h3>
+
+<p>Rien d&rsquo;anormal&hellip; Sauf dans le fichier &ldquo;thor.css&rdquo; où un paragraphe semble avoir été rajouté manuellement.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_3.png" alt="ECW2018_intrusion_3" class="imgSize"/></center></p>
+
+<p>Un nouveau sous-domaine ! Il semblerait s&rsquo;agir du domaine de développement de l&rsquo;application.. Peut être des vulnérabilités à exploiter ?</p>
+
+<p>On file sur le sous-domaine et en observant les headers&hellip;</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_4.png" alt="ECW2018_intrusion_4" class="imgSize"/></center></p>
+
+<p>Premier flag : check !</p>
+
+<hr />
+
+<h2 id="intrusion-2">Intrusion 2</h2>
+
+<pre><code>Comme ça vous êtes arrivé dans un lieu inattendu?
+Continuez de creuser!
+</code></pre>
+
+<h3 id="manipulation-des-requêtes-http">Manipulation des requêtes HTTP</h3>
+
+<p>Nous sommes maintenant sur le domaine de développement et il faut trouver quoi faire. Une bonne première chose peut être de regarder de quoi les requêtes HTTP ont l&rsquo;air et s&rsquo;il est possible de les bidouiller un peu.
+Après quelques tentatives, on remarque un comportement étrange lorsqu&rsquo;on modifie la méthode HTTP utilisée.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_5.png" alt="ECW2018_intrusion_5" class="imgSize"/></center></p>
+
+<p>Ainsi, en utilisant la méthode &ldquo;OPTIONS&rdquo; on fait apparaître une étrange page d&rsquo;erreur, très verbeuse&hellip; On a par exemple accès à notre cookie déchiffré et à certaines variables côté serveur.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_6.png" alt="ECW2018_intrusion_6" class="imgSize"/></center></p>
+
+<h3 id="obtention-d-une-web-console-cve-2015-3224">Obtention d&rsquo;une web console - CVE-2015-3224</h3>
+
+<p>Ok, de nouvelles informations.. Que peut on en tirer ?
+Une chose doit nous sauter aux yeux (bon, dans la vraie vie, cela m&rsquo;a pris un peu de temps avant de le remarquer&hellip;) et il s&rsquo;agit de la ligne :<br />
+<code>HTTP_X_FORWARDED_FOR: &quot;176.187.238.160, 10.1.10.0, 127.0.0.1&quot;</code><br />
+Avec ça, il devrait être possible de spoofer une IP interne et ainsi se faire passer pour une machine interne au réseau !</p>
+
+<p>On intercepte donc une nouvelle requête à laquelle on ajoute un header <code>X-Forwarded-For: 127.0.0.1</code> et magie&hellip;</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_7.png" alt="ECW2018_intrusion_7" class="imgSize"/></center></p>
+
+<p>Une console web ! Cela pourrait s&rsquo;avérer utile, car il s&rsquo;agit d&rsquo;une console qui va nous permettre d&rsquo;exécuter des commandes côté serveur. J&rsquo;ai appris après-coup qu&rsquo;il s&rsquo;agit d&rsquo;une vulnérabilité connue, la CVE-2015-3224.</p>
+
+<p>Bien ! Cependant, il a été nécessaire de modifier manuellement la requête afin d&rsquo;obtenir cette console. Pour des soucis de confort, on aimerait que toutes les requêtes soient modifiées avec le header précédemment utilisé. Pas de soucis ! On configure Burp en spécifiant le scope (web150_dev.challenge-ecw.fr) et en lui disant de rajouter un header pour chaque requête.
+Une fois cela fait, on peut tester le bon fonctionnement du dispositif.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_8.png" alt="ECW2018_intrusion_8" class="imgSize"/></center></p>
+
+<p>Parfait ! On passe à la suite</p>
+
+<h3 id="fouille-flag-2">Fouille &amp; Flag 2</h3>
+
+<p>On dispose maintenant d&rsquo;un accès au serveur, via une sorte de shell. Que peut on faire ?
+Après quelques recherches au sujet de la console Rails, on découvre un moyen de lister le contenu d&rsquo;un répertoire :</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_9.png" alt="ECW2018_intrusion_9" class="imgSize"/></center></p>
+
+<p>Il faut maintenant fouiller le serveur à la recherche d&rsquo;informations intéressantes..
+A force de parcourir les répertoires on tombe sur un fichier &ldquo;web_console.rb&rdquo; situé dans un des répertoires de configuration. Il s&rsquo;agirait du point de départ logique étant donné que nous sommes dans cette console.
+Il est également possible de lire le contenu d&rsquo;un fichier de la manière suivante.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_10.png" alt="ECW2018_intrusion_10" class="imgSize"/></center></p>
+
+<p>Beaucoup d&rsquo;informations contenues là dedans, notamment une longue chaine en hexadécimal.
+Une fois décodée&hellip;</p>
+
+<pre><code>466c616732203d20274543577b35393438343632323131643030633963656334363866643139346537366335667d27 ==&gt; &quot;Flag2 = 'ECW{5948462211d00c9cec468fd194e76c5f}'&quot;&quot;
+</code></pre>
+
+<p>Second flag : check !</p>
+
+<hr />
+
+<h2 id="intrusion-hint">Intrusion hint</h2>
+
+<h3 id="découverte-identification">Découverte &amp; Identification</h3>
+
+<p>Ce challenge a été rajouté en cours de route, afin d&rsquo;aider les participants à avancer dans le scénario. A priori totalement décorrélé de l&rsquo;environnement du scénario, on tombe sur une page unique présentant une boîte de dialogue ainsi que certains inscriptions relativement claires.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_11.png" alt="ECW2018_intrusion_11" class="imgSize"/></center></p>
+
+<p>Il semble que nous soyions face à une injection SQL, étant donné les indications. On teste le comportement de l&rsquo;application avec des données légitimes.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_12.png" alt="ECW2018_intrusion_12" class="imgSize"/></center></p>
+
+<p>Les indications semblent orienter vers une Injection SQL utilisant la clause LIKE. En supposant que la requête utilisée par l&rsquo;application soit de la forme :</p>
+
+<pre><code>SELECT &lt;hint&gt; from &lt;table&gt; where &lt;message&gt; LIKE &quot;&lt;entree utilisateur&quot;;
+</code></pre>
+
+<p>On peut tenter d&rsquo;injecter le caractère <code>%</code> dans la requête. Si injection il y a, l&rsquo;application devrait nous répondre avec le nombre de lignes à récupérer.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_13.png" alt="ECW2018_intrusion_13" class="imgSize"/></center></p>
+
+<h3 id="exploitation-résultats">Exploitation &amp; Résultats</h3>
+
+<p>On a donc un POC fonctionnel. Afin de tester et encore une fois, en supposant qu&rsquo;un flag de la forme &ldquo;ECW{xxx}&rdquo; soit caché, on peut tenter l&rsquo;injection suivante <code>E%</code>.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_14.png" alt="ECW2018_intrusion_14" class="imgSize"/></center></p>
+
+<p>Parfait ! De cette façon, il va être possibilité d&rsquo;énumérer en aveugle l&rsquo;ensemble des indices cachés, en se basant sur le message retourné à l&rsquo;utilisateur.</p>
+
+<p>Exemple :</p>
+
+<pre><code>E%   ==&gt; &quot;1 hint found in database&quot;
+EC%  ==&gt; &quot;1 hint found in database&quot;
+ECA% ==&gt; &quot;O hint found in database&quot;
+ECW% ==&gt; &quot;1 hint found in database&quot;
+</code></pre>
+
+<p>Ci-dessous, un script permettant de semi-automatiser le processus. En effet, il n&rsquo;est pas rare d&rsquo;avoir une requête qui ne passe pas. Etant donné que mon script ne gère pas les erreurs, il est nécessaire de le relancer en ajoutant manuellement les morceaux déjà récupérés.</p>
+
+<pre><code class="language-python">import requests
+import string
+import sys
+
+# Request needed informations
+BASE_URL = &quot;https://web150-hint.challenge-ecw.fr/search&quot;
+DATA = {
+    'request': '',
+}
+
+# Static variables
+FALSE_KEYWORD = &quot;0 hint found in database&quot;
+VULNERABLE_PARAM = &quot;request=&quot;
+INJECTION_USED = &quot;request=E%&quot;
+
+# Password variables
+result = &quot;&quot;
+tmpResult = &quot;&quot;
+charset =  string.printable.replace(&quot;%&quot;, &quot;&quot;).replace(&quot;i&quot;, &quot;&quot;)
+#charset = string.ascii_letters + string.digits + &quot;.://{}&quot;
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;\n##########################&quot;)
+    print(&quot;##    ECW 2018 - SQLi   ##&quot;)
+    print(&quot;############################\n&quot;)
+
+    print(&quot;[+] URL injected : %s&quot; % BASE_URL)
+    print(&quot;[+] Vulnerable parameter : %s&quot; % VULNERABLE_PARAM)
+    print(&quot;[+] Injection used : %s&quot; % INJECTION_USED)
+
+    print(&quot;\n[+] Starting bruteforce\n&quot;)
+
+
+    for firstLetter in charset:
+        result = &quot;&quot;
+        DATA['request'] = firstLetter + &quot;%&quot;
+        req = requests.post(BASE_URL, data=DATA)
+        if FALSE_KEYWORD not in req.text:
+            #result += firstLetter
+            result = &quot;&quot;
+            #print(&quot;FOUND ONE ! letter : %c&quot; % firstLetter)
+            for i in range(0,100):
+                for letter in charset:
+                    DATA['request'] = result + letter + &quot;%&quot;
+                    req = requests.post(BASE_URL, data=DATA)
+                    if FALSE_KEYWORD not in req.text:
+                        result += letter
+                        print(&quot;result : %s&quot; % result)
+                        break;
+</code></pre>
+
+<p>Et voici maintenant un exemple de récupération d&rsquo;un des indices.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_15.png" alt="ECW2018_intrusion_15" class="imgSize"/></center></p>
+
+<p>Une fois l&rsquo;ensemble des éléments ressortis, on obtient cela :</p>
+
+<pre><code>http://manpages.ubuntu.com/manpages/cosmic/en/man1/systemctl.1.html
+https://gist.github.com/mbyczkowski/34fb691b4d7a100c32148705f244d028
+/home/web200/smart_stuff/config/initializers/web_console.rb
+/home/web200/smart_stuff/config/secrets.yml
+ECW{ebbbb414c38020906fd34bdd49ceea36}
+</code></pre>
+
+<p>Flag intermédiaire : check !</p>
+
+<hr />
+
+<h2 id="intrusion-3">Intrusion 3</h2>
+
+<pre><code>Certaines fois privesc no signifie pas être root...
+Ce flag est un point de passage vers la prochaine étape (ECW{&lt;md5&gt;})
+</code></pre>
+
+<h3 id="déchiffrement-des-cookies">Déchiffrement des cookies</h3>
+
+<p>Dans l&rsquo;ordre, j&rsquo;ai d&rsquo;abord récupéré le lien vers le gist de Github. Ce dernier nous présente un morceau de code permettant de déchiffrer certains cookies en Ruby. Peut être est-ce le même système utilisé dans notre cas ?</p>
+
+<pre><code class="language-ruby">require 'cgi'
+require 'json'
+require 'active_support'
+
+def verify_and_decrypt_session_cookie(cookie, secret_key_base)
+  cookie = CGI::unescape(cookie)
+  salt         = 'encrypted cookie'
+  signed_salt  = 'signed encrypted cookie'
+  key_generator = ActiveSupport::KeyGenerator.new(secret_key_base, iterations: 1000)
+  secret = key_generator.generate_key(salt)[0, ActiveSupport::MessageEncryptor.key_len]
+  sign_secret = key_generator.generate_key(signed_salt)
+  encryptor = ActiveSupport::MessageEncryptor.new(secret, sign_secret, serializer: JSON)
+  encryptor.decrypt_and_verify(cookie)
+end
+</code></pre>
+
+<p>En se basant sur cette hypothèse, plusieurs éléments sont nécessaires, à savoir :</p>
+
+<ul>
+<li>Le sel de chiffrement ;</li>
+<li>Le sel de signature ;</li>
+<li>La clé permettant de chiffrer/déchiffrer le cookie.</li>
+</ul>
+
+<p>Il faut donc trouver ces éléments. Pour cela, on repart dans une phase de recherche sur les fichiers du serveur, en commençant par le second fichier récupéré en indice : <code>/home/web200/smart_stuff/config/secrets.yml</code></p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_16.png" alt="ECW2018_intrusion_16" class="imgSize"/></center></p>
+
+<p>Bien ! Il semble que nous ayons trouvé des clés de chiffrement. Une pour le domaine de dev, et une pour autre chose (utile ?). Il nous manque donc les sels.
+A force de recherche, on tombe sur un fichier intéressant.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_17.png" alt="ECW2018_intrusion_17" class="imgSize"/></center></p>
+
+<p>Deux variables <code>encrypted_cookie_salt='ECW-secret-salt'</code> et <code>encrypted_signed_cookie_salt='ECW-signature-secret-salt'</code> peuvent être ressorties. Parfait ! Nous avons tout ce dont nous avons besoin pour déchiffrer notre cookie.
+Après de nombreux essais, tests et tentatives afin de déchiffrer un cookie en local (via le second script donné), je me suis plutôt tourné vers un traitement directement depuis la console web. Il s&rsquo;avère que cela passe très bien avec le premier script donné.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_18.png" alt="ECW2018_intrusion_18" class="imgSize"/></center></p>
+
+<p>Il est également à noter que le script nous retourne par défaut des données formatées en JSON. Or, dans notre cas, il s&rsquo;agit de Marshal. Il m&rsquo;a fallu un peu de temps avant de trouver pourquoi le cookie était mal déchiffré et surtout pour trouver ce qu&rsquo;était du Marshal&hellip;</p>
+
+<h3 id="forge-et-connexion-au-domaine-de-développement">Forge et connexion au domaine de développement</h3>
+
+<p>On sait maintenant de quoi est fait le cookie. On peut y apercevoir un objet &ldquo;User&rdquo; ne contenant que des champs &ldquo;nil&rdquo; (=null). Logique étant donné que nous n&rsquo;avons pas d&rsquo;utilisateur. Mais&hellip; Serait il possible d&rsquo;en usurper un, avec des fausses informations ?</p>
+
+<p>Connaissant les différents éléments utilisés afin de déchiffrer le cookie, nous devrions être en mesure de pouvoir le chiffrer à nouveau.</p>
+
+<p>La modification de l&rsquo;objet User se fait de la façon suivante :</p>
+
+<pre><code>cookie['user']['password'] = &quot;YouLostTheGame&quot;
+</code></pre>
+
+<p>De cette façon, on peut modifier tous les champs nécessaires.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_19.png" alt="ECW2018_intrusion_19" class="imgSize"/></center></p>
+
+<p>Une fois le cookie forgé, on peut tenter de modifier son propre cookie de session en interceptant une requête avec Burp. Résultat&hellip;</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_20.png" alt="ECW2018_intrusion_20" class="imgSize"/></center></p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_21.png" alt="ECW2018_intrusion_21" class="imgSize"/></center></p>
+
+<p>Connecté en admin sur le domaine de développement ! POC fonctionnel :)</p>
+
+<h3 id="récupération-du-flag-3">Récupération du Flag 3</h3>
+
+<p>On sait maintenant comment déchiffrer un cookie, le modifier puis le chiffrer à nouveau afin de l&rsquo;utiliser pour se connecter. Mais nous n&rsquo;avons toujours pas d&rsquo;information sur la localisation du flag 3&hellip;</p>
+
+<p>On sait néanmoins que le but du challenge est de se connecter au domaine de production et l&rsquo;énoncé du challenge 3 indique que le flag est placé sur un point de passage vers le dernier challenge. A partir de là, on se doute qu&rsquo;il faut retrouver la clé de chiffrement du domaine de production.</p>
+
+<p>Un indice n&rsquo;a pas encore été utilisé.. Il s&rsquo;agit de la page de manuel de &ldquo;systemctl&rdquo;. Peu de chances de pouvoir utiliser directement l&rsquo;utilitaire au travers de notre console web. Cependant, il est possible que certaines configurations soient stockés dans des fichiers. Après quelques recherche sur systemctl, on apprend que des &ldquo;units&rdquo; peuvent être créées pour systemd. Ces &ldquo;units&rdquo; se comportent selon des directives écrites dans un fichier de configuration, situé dans le répertoire <code>/etc/systemd/system/</code>. Et si nous allions faire un tour de ce côté ?</p>
+
+<p>[NOTE] Je ne l&rsquo;avais pas vu car je n&rsquo;avais pas débloqué ce challenge avant de faire le hint, mais il s&rsquo;avère que des indications sur l&rsquo;utilisation de systemd sont également trouvables, notamment dans le fichier <code>web_console.rb</code></p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_22.png" alt="ECW2018_intrusion_22" class="imgSize"/></center></p>
+
+<p>On y trouve deux fichiers <code>rails-dev.service</code> et <code>rails-prd.service</code>. Rien de bien intéressant côté dev, cependant, du côté du fichier de configuration de la production&hellip;</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_23.png" alt="ECW2018_intrusion_23" class="imgSize"/></center></p>
+
+<p>La clé de la production ! Qui fait également office de flag pour le 3e challenge.</p>
+
+<p>Troisième flag : check !</p>
+
+<hr />
+
+<h2 id="intrusion-4">Intrusion 4</h2>
+
+<pre><code>Le dernier Flag, vous devriez savoir où il est caché désormais!
+Mais l'attraper est plus facile à dire qu'à faire ;)
+</code></pre>
+
+<h3 id="forge-d-un-cookie-pour-le-domaine-de-production">Forge d&rsquo;un cookie pour le domaine de production</h3>
+
+<p>Disposant maintenant de tous les éléments nécessaires. On commence par déchiffer le cookie que l&rsquo;on récupère sur le domaine de production. Cookie qui semble d&rsquo;ailleurs bien plus court que les précédents.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_24.png" alt="ECW2018_intrusion_24" class="imgSize"/></center></p>
+
+<p>Pas d&rsquo;utilisateur pour ce cookie.. Mais qu&rsquo;est ce qui nous empêche d&rsquo;en ajouter un ?
+On reproduit la même procédure que pour le cookie de développement en modifiant simplement la clé de chiffrement par <code>secret_key_base = &quot;A_cookie_of_course&quot;</code> et une fois le cookie forgé, on tente de l&rsquo;injecter en interceptant une requête.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_25.png" alt="ECW2018_intrusion_25" class="imgSize"/></center></p>
+
+<h3 id="connexion-flag-4">Connexion &amp; Flag 4</h3>
+
+<p>Résultat du nouveau cookie&hellip;</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_26.png" alt="ECW2018_intrusion_26" class="imgSize"/></center></p>
+
+<p>Nous sommes connectés en administrateur sur le domaine de production ! Il suffit maintenant de chercher le dernier flag :).
+La page <code>/admin/console</code> est inaccessible et redirige vers l&rsquo;accueil. Cependant, en fouillant dans les fichiers de l&rsquo;application, on trouve un <code>/admin</code>.</p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_27.png" alt="ECW2018_intrusion_27" class="imgSize"/></center></p>
+
+<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_28.png" alt="ECW2018_intrusion_28" class="imgSize"/></center></p>
+
+<p>Flag 4 : check !!
+(Pour une raison que j&rsquo;ignore, le flag n&rsquo;était plus présent lorsque j&rsquo;ai refait le challenge pour prendre des screenshots ¯\_(ツ)_/¯).</p>
+
+<h2 id="conclusion-retex">Conclusion &amp; RETEX</h2>
+
+<p>Un challenge plutôt intéressant et agréable dans son ensemble malgré quelques points négatifs, la position des flags. En effet, ces derniers étaient placés à des endroits qui nécessitaient peut être un peu de chance ou de guessing. Néanmoins, j&rsquo;ai pesonnellement passé énormément de temps sur ce scénario et appris pas mal de petites choses ! GG aux organisateurs et à tous les participants !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/writeups/ecw-2018/web-troll-jsp/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">ECW 2018 - Web - Troll.JSP</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
