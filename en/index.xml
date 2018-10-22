@@ -11,23 +11,23 @@
     
     
     <item>
+      <title>ECW 2018 - Web - Intrusion (5 challenges)</title>
+      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</link>
+      <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</guid>
+      <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (+1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>ECW 2018 - Web - Troll.JSP</title>
       <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &amp;ldquo;Troll.JSP&amp;rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>ECW 2018 - Web - Intrusion (5 challenges)</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</link>
-      <pubDate>Sat, 20 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</guid>
-      <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (+1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website.&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>

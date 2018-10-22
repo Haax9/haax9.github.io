@@ -11,20 +11,9 @@
     
     
     <item>
-      <title>ECW 2018 - Web - Troll.JSP</title>
-      <link>https://haaxmax.github.io/fr/writeups/ecw-2018/web-troll-jsp/</link>
-      <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/fr/writeups/ecw-2018/web-troll-jsp/</guid>
-      <description>&lt;p&gt;L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. &amp;ldquo;Troll.JSP&amp;rdquo; est un challenge basé sur l&amp;rsquo;exploitation de la CVE-2017-5638 (Apache Struts) afin de changer la valeur d&amp;rsquo;une variable de session.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
       <title>ECW 2018 - Web - Intrusion (5 challenges)</title>
       <link>https://haaxmax.github.io/fr/writeups/ecw-2018/web-intrusion/</link>
-      <pubDate>Sat, 20 Oct 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/writeups/ecw-2018/web-intrusion/</guid>
       <description>&lt;p&gt;L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. Intrusion est un scénario web en 4 challenges (+1 extra-challenge) se voulant réaliste. Il tourne principalement autour de Ruby on Rails et de la manipulation de cookies afin de passer administrateur sur le site de production.&lt;/p&gt;
@@ -39,6 +28,17 @@
       
       <guid>https://haaxmax.github.io/fr/writeups/ecw-2018/web-sysia/</guid>
       <description>&lt;p&gt;L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. SysIA est un challenge basé sur l&amp;rsquo;exploitation d&amp;rsquo;une LFI (Local File Inclusion) puis l&amp;rsquo;utilisation du bash_history et de l&amp;rsquo;utilitaire updatedb afin de trouver le flag.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ECW 2018 - Web - Troll.JSP</title>
+      <link>https://haaxmax.github.io/fr/writeups/ecw-2018/web-troll-jsp/</link>
+      <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/writeups/ecw-2018/web-troll-jsp/</guid>
+      <description>&lt;p&gt;L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. &amp;ldquo;Troll.JSP&amp;rdquo; est un challenge basé sur l&amp;rsquo;exploitation de la CVE-2017-5638 (Apache Struts) afin de changer la valeur d&amp;rsquo;une variable de session.&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>
