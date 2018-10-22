@@ -204,41 +204,41 @@
 <li><a href="#intrusion-1">Intrusion 1</a>
 
 <ul>
-<li><a href="#d-couverte---recherche-d-informations">Découverte &amp; Recherche d&rsquo;informations</a></li>
-<li><a href="#domaine-de-d-veloppement---flag-1">Domaine de développement &amp; Flag 1</a></li>
+<li><a href="#découverte-et-recherche-d-informations">Découverte et Recherche d&rsquo;informations</a></li>
+<li><a href="#domaine-de-développement-et-flag-1">Domaine de développement et Flag 1</a></li>
 </ul></li>
 <li><a href="#intrusion-2">Intrusion 2</a>
 
 <ul>
-<li><a href="#manipulation-des-requ-tes-http">Manipulation des requêtes HTTP</a></li>
-<li><a href="#obtention-d-une-web-console---cve-2015-3224">Obtention d&rsquo;une web console - CVE-2015-3224</a></li>
-<li><a href="#fouille---flag-2">Fouille &amp; Flag 2</a></li>
+<li><a href="#manipulation-des-requêtes-http">Manipulation des requêtes HTTP</a></li>
+<li><a href="#obtention-d-une-web-console-cve-2015-3224">Obtention d&rsquo;une web console (CVE-2015-3224)</a></li>
+<li><a href="#fouille-et-flag-2">Fouille et Flag 2</a></li>
 </ul></li>
 <li><a href="#intrusion-hint">Intrusion hint</a>
 
 <ul>
-<li><a href="#d-couverte---identification">Découverte &amp; Identification</a></li>
-<li><a href="#exploitation---r-sultats">Exploitation &amp; Résultats</a></li>
+<li><a href="#découverte-et-identification">Découverte et Identification</a></li>
+<li><a href="#exploitation-et-résultats">Exploitation et Résultats</a></li>
 </ul></li>
 <li><a href="#intrusion-3">Intrusion 3</a>
 
 <ul>
-<li><a href="#d-chiffrement-des-cookies">Déchiffrement des cookies</a></li>
-<li><a href="#forge-et-connexion-au-domaine-de-d-veloppement">Forge et connexion au domaine de développement</a></li>
-<li><a href="#r-cup-ration-du-flag-3">Récupération du Flag 3</a></li>
+<li><a href="#déchiffrement-des-cookies">Déchiffrement des cookies</a></li>
+<li><a href="#forge-et-connexion-au-domaine-de-développement">Forge et connexion au domaine de développement</a></li>
+<li><a href="#récupération-du-flag-3">Récupération du Flag 3</a></li>
 </ul></li>
 <li><a href="#intrusion-4">Intrusion 4</a>
 
 <ul>
 <li><a href="#forge-d-un-cookie-pour-le-domaine-de-production">Forge d&rsquo;un cookie pour le domaine de production</a></li>
-<li><a href="#connexion---flag-4">Connexion &amp; Flag 4</a></li>
+<li><a href="#connexion-et-flag-4">Connexion et Flag 4</a></li>
 </ul></li>
-<li><a href="#conclusion---retex">Conclusion &amp; RETEX</a></li>
+<li><a href="#conclusion-et-retex">Conclusion et RETEX</a></li>
 </ul>
 
 <h2 id="intrusion-1">Intrusion 1</h2>
 
-<h3 id="découverte-recherche-d-informations">Découverte &amp; Recherche d&rsquo;informations</h3>
+<h3 id="découverte-et-recherche-d-informations">Découverte et Recherche d&rsquo;informations</h3>
 
 <p>Le challenge débute avec l&rsquo;énoncé suivant et le site web d&rsquo;une société.</p>
 
@@ -255,7 +255,7 @@ Peut-on s'introduire dans leur system?
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_2.png" alt="ECW2018_intrusion_2" class="imgSize"/></center></p>
 
-<h3 id="domaine-de-développement-flag-1">Domaine de développement &amp; Flag 1</h3>
+<h3 id="domaine-de-développement-et-flag-1">Domaine de développement et Flag 1</h3>
 
 <p>Rien d&rsquo;anormal&hellip; Sauf dans le fichier &ldquo;thor.css&rdquo; où un paragraphe semble avoir été rajouté manuellement.</p>
 
@@ -288,7 +288,7 @@ Après quelques tentatives, on remarque un comportement étrange lorsqu&rsquo;on
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_6.png" alt="ECW2018_intrusion_6" class="imgSize"/></center></p>
 
-<h3 id="obtention-d-une-web-console-cve-2015-3224">Obtention d&rsquo;une web console - CVE-2015-3224</h3>
+<h3 id="obtention-d-une-web-console-cve-2015-3224">Obtention d&rsquo;une web console (CVE-2015-3224)</h3>
 
 <p>Ok, de nouvelles informations.. Que peut on en tirer ?
 Une chose doit nous sauter aux yeux (bon, dans la vraie vie, cela m&rsquo;a pris un peu de temps avant de le remarquer&hellip;) et il s&rsquo;agit de la ligne :<br />
@@ -308,7 +308,7 @@ Une fois cela fait, on peut tester le bon fonctionnement du dispositif.</p>
 
 <p>Parfait ! On passe à la suite</p>
 
-<h3 id="fouille-flag-2">Fouille &amp; Flag 2</h3>
+<h3 id="fouille-et-flag-2">Fouille et Flag 2</h3>
 
 <p>On dispose maintenant d&rsquo;un accès au serveur, via une sorte de shell. Que peut on faire ?
 Après quelques recherches au sujet de la console Rails, on découvre un moyen de lister le contenu d&rsquo;un répertoire :</p>
@@ -333,7 +333,7 @@ Une fois décodée&hellip;</p>
 
 <h2 id="intrusion-hint">Intrusion hint</h2>
 
-<h3 id="découverte-identification">Découverte &amp; Identification</h3>
+<h3 id="découverte-et-identification">Découverte et Identification</h3>
 
 <p>Ce challenge a été rajouté en cours de route, afin d&rsquo;aider les participants à avancer dans le scénario. A priori totalement décorrélé de l&rsquo;environnement du scénario, on tombe sur une page unique présentant une boîte de dialogue ainsi que certains inscriptions relativement claires.</p>
 
@@ -352,7 +352,7 @@ Une fois décodée&hellip;</p>
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_13.png" alt="ECW2018_intrusion_13" class="imgSize"/></center></p>
 
-<h3 id="exploitation-résultats">Exploitation &amp; Résultats</h3>
+<h3 id="exploitation-et-résultats">Exploitation et Résultats</h3>
 
 <p>On a donc un POC fonctionnel. Afin de tester et encore une fois, en supposant qu&rsquo;un flag de la forme &ldquo;ECW{xxx}&rdquo; soit caché, on peut tenter l&rsquo;injection suivante <code>E%</code>.</p>
 
@@ -550,7 +550,7 @@ On reproduit la même procédure que pour le cookie de développement en modifia
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_25.png" alt="ECW2018_intrusion_25" class="imgSize"/></center></p>
 
-<h3 id="connexion-flag-4">Connexion &amp; Flag 4</h3>
+<h3 id="connexion-et-flag-4">Connexion et Flag 4</h3>
 
 <p>Résultat du nouveau cookie&hellip;</p>
 
@@ -566,7 +566,7 @@ La page <code>/admin/console</code> est inaccessible et redirige vers l&rsquo;ac
 <p>Flag 4 : check !!
 (Pour une raison que j&rsquo;ignore, le flag n&rsquo;était plus présent lorsque j&rsquo;ai refait le challenge pour prendre des screenshots ¯_(ツ)_/¯).</p>
 
-<h2 id="conclusion-retex">Conclusion &amp; RETEX</h2>
+<h2 id="conclusion-et-retex">Conclusion et RETEX</h2>
 
 <p>Un challenge plutôt intéressant et agréable dans son ensemble malgré quelques points négatifs, la position des flags. En effet, ces derniers étaient placés à des endroits qui nécessitaient peut être un peu de chance ou de guessing. Néanmoins, j&rsquo;ai pesonnellement passé énormément de temps sur ce scénario et appris pas mal de petites choses ! GG aux organisateurs et à tous les participants !</p>
   </div>

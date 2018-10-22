@@ -205,20 +205,20 @@
 
 <ul>
 <li><a href="#discovery-and-information-gathering">Discovery and Information Gathering</a></li>
-<li><a href="#development-domain---flag-1">Development domain &amp; Flag 1</a></li>
+<li><a href="#development-domain-and-flag-1">Development domain an Flag 1</a></li>
 </ul></li>
 <li><a href="#intrusion-2">Intrusion 2</a>
 
 <ul>
 <li><a href="#http-request-manipulation">HTTP request manipulation</a></li>
-<li><a href="#getting-a-web-console---cve-2015-3224">Getting a web console - CVE-2015-3224</a></li>
-<li><a href="#search---flag-2">Search &amp; Flag 2</a></li>
+<li><a href="#getting-a-web-console-cve-2015-3224">Getting a web console (CVE-2015-3224)</a></li>
+<li><a href="#search-and-flag-2">Search and Flag 2</a></li>
 </ul></li>
 <li><a href="#intrusion-hint">Intrusion hint</a>
 
 <ul>
 <li><a href="#discorery-and-identification">Discorery and Identification</a></li>
-<li><a href="#exploitation---results">Exploitation &amp; Results</a></li>
+<li><a href="#exploitation-and-results">Exploitation and Results</a></li>
 </ul></li>
 <li><a href="#intrusion-3">Intrusion 3</a>
 
@@ -231,9 +231,9 @@
 
 <ul>
 <li><a href="#crafting-a-cookie-for-production-domain">Crafting a cookie for production domain</a></li>
-<li><a href="#connection---flag-4">Connection &amp; Flag 4</a></li>
+<li><a href="#connection-and-flag-4">Connection and Flag 4</a></li>
 </ul></li>
-<li><a href="#conclusion---feedback">Conclusion &amp; Feedback</a></li>
+<li><a href="#conclusion-and-feedback">Conclusion and Feedback</a></li>
 </ul>
 
 <h2 id="intrusion-1">Intrusion 1</h2>
@@ -255,7 +255,7 @@ Peut-on s'introduire dans leur system?
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_2.png" alt="ECW2018_intrusion_2" class="imgSize"/></center></p>
 
-<h3 id="development-domain-flag-1">Development domain &amp; Flag 1</h3>
+<h3 id="development-domain-and-flag-1">Development domain and Flag 1</h3>
 
 <p>Nothing unusual&hellip;. Except in the file &ldquo;thor.css&rdquo; where a paragraph seems to have been added manually.</p>
 
@@ -288,7 +288,7 @@ After a few attempts, you notice a strange behavior when you change the HTTP met
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_6.png" alt="ECW2018_intrusion_6" class="imgSize"/></center></p>
 
-<h3 id="getting-a-web-console-cve-2015-3224">Getting a web console - CVE-2015-3224</h3>
+<h3 id="getting-a-web-console-cve-2015-3224">Getting a web console (CVE-2015-3224)</h3>
 
 <p>Okay, new information&hellip; What can we get out of it?
 One thing must be obvious to us (well, in real life, it took me some time to notice it&hellip;) and it&rsquo;s the line :<br />
@@ -308,7 +308,7 @@ Once this is done, we can test the well behavior of the system.</p>
 
 <p>Perfect ! Let&rsquo;s continue.</p>
 
-<h3 id="search-flag-2">Search &amp; Flag 2</h3>
+<h3 id="search-and-flag-2">Search and Flag 2</h3>
 
 <p>We now have access to the server, through a kind of shell. What can we do with it?
 After some research about the Rails console, we discover a way to list the content of a directory:</p>
@@ -352,7 +352,7 @@ Once decoded&hellip;.</p>
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_13.png" alt="ECW2018_intrusion_13" class="imgSize"/></center></p>
 
-<h3 id="exploitation-results">Exploitation &amp; Results</h3>
+<h3 id="exploitation-and-results">Exploitation and Results</h3>
 
 <p>So we have a functional POC. In order to test, assuming that a flag of the form &ldquo;ECW{xxx}&rdquo; is hidden, we can try the following injection <code>E%</code>.</p>
 
@@ -550,7 +550,7 @@ The same procedure as the development cookie is reproduced by simply changing th
 
 <p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_25.png" alt="ECW2018_intrusion_25" class="imgSize"/></center></p>
 
-<h3 id="connection-flag-4">Connection &amp; Flag 4</h3>
+<h3 id="connection-and-flag-4">Connection and Flag 4</h3>
 
 <p>New cookie results&hellip;</p>
 
@@ -566,7 +566,7 @@ The <code>/admin/console</code> page is unavailable and redirects to the home pa
 <p>Flag 4 : check !!
 (For some reason, the flag was no longer present when I did the challenge again to take screenshots ¯_(ツ)_/¯).</p>
 
-<h2 id="conclusion-feedback">Conclusion &amp; Feedback</h2>
+<h2 id="conclusion-and-feedback">Conclusion and Feedback</h2>
 
 <p>A rather interesting and pleasant challenge, despite some negative points, the position of the flags. Indeed, these ones were located in places that may have required a little luck or guessing. Nevertheless, I personally spent a lot of time on this scenario and learned a lot of little things! Congratz&rsquo; to the organizers and all participants!</p>
   </div>
