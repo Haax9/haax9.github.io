@@ -595,7 +595,7 @@ Ce challenge est simple mais il permet de montrer le point d&rsquo;entrée vers 
 
 <p>Une jolie liste de fichiers ! Il est possible de les télécharger en y accédant directement dans un navigateur. Quelques fichiers inutiles mais également 3 archives ZIP. La seule intéressante pour ce challenge est l&rsquo;archive &ldquo;recup.zip&rdquo; protégée par un mot de passe. Let&rsquo;s bruteforce !</p>
 
-<pre><code class="language-bash">$ crackzip -u -D -p rockyou.txt recup.zip
+<pre><code class="language-bash">$ fcrackzip -u -D -p rockyou.txt recup.zip
 </code></pre>
 
 <p>Assez rapidement, le mot de passe &ldquo;hackerman&rdquo; est trouvé. On peut décompresser l&rsquo;archive et ainsi récupérer le flag IMTLD{F1nd_Y0uR_W4y} dans un fichier &ldquo;password.txt&rdquo;.</p>
