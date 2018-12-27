@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.49.2" />
+<meta name="generator" content="Hugo 0.53" />
 
     
     
@@ -22,14 +22,10 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="ECW 2018 - Web - Troll.JSP"/>
-<meta name="twitter:description" content="ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.
-
-"/>
+<meta name="twitter:description" content="ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag."/>
 
 <meta property="og:title" content="ECW 2018 - Web - Troll.JSP" />
-<meta property="og:description" content="ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.
-
-" />
+<meta property="og:description" content="ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/" /><meta property="article:published_time" content="2018-10-21T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2018-10-21T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
@@ -192,8 +188,6 @@
   <div class="post">
     <p>ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.</p>
 
-<p></p>
-
 <p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <a href="https://www.european-cyber-week.eu/" target=\_blank>European Cyber Week</a> conference in Rennes.</p>
 
 <h2 id="discovery">Discovery</h2>
@@ -210,8 +204,9 @@
 
 <p>First thing, we just go chek sources and we can see a &ldquo;debug.jsp&rdquo; file.</p>
 
-<pre><code>https://web125-trolljsp.challenge-ecw.fr/debug.jsp
-</code></pre>
+<p>​<code>
+https://web125-trolljsp.challenge-ecw.fr/debug.jsp
+​</code></p>
 
 <p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_3.png" alt="ECW2018_troll_3" class="imgSize"/></center></p>
 
@@ -223,8 +218,9 @@
 Some research on &ldquo;.swp&rdquo; extensions lead us to believe that an important swap file for the challenge is available.
 Some tests are therefore performed and quite quickly we find the file <strong>&rdquo;.flag.jsp.swp&rdquo;</strong>.</p>
 
-<pre><code>https://web125-trolljsp.challenge-ecw.fr/.flag.jsp.swp
-</code></pre>
+<p>​<code>
+https://web125-trolljsp.challenge-ecw.fr/.flag.jsp.swp
+​</code></p>
 
 <p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_5.png" alt="ECW2018_troll_5" class="imgSize" width="60%"/></center></p>
 
@@ -265,8 +261,9 @@ So we have a guideline ! A way must be found to modify the value of <strong>sess
 <p>This vulnerability allows in theory to execute commands directly on the server.
 The malicious payload used in many examples on the Internet is :</p>
 
-<pre><code>Content-Type: %{(#_='multipart/form-data').(#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(@java.lang.Runtime@getRuntime().exec('curl localhost:8000'))}
-</code></pre>
+<p>​<code>
+Content-Type: %{(#_='multipart/form-data').(#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(@java.lang.Runtime@getRuntime().exec('curl localhost:8000'))}
+​</code></p>
 
 <p>Some tests have shown that this type of payload does not work on the server. Indeed, it seems that we are facing a <strong>WAF (Web Application Firewall)</strong> that will prevent the request from being processed if it detects special elements (parentheses or dots, for example).</p>
 
@@ -276,8 +273,9 @@ The malicious payload used in many examples on the Internet is :</p>
 
 <p>Some additional research and tests allow us to build this payload :</p>
 
-<pre><code>Content-Type: %{#session[&quot;flag&quot;]=&quot;multipart/form-data&quot;}
-</code></pre>
+<p>​<code>
+Content-Type: %{#session[&quot;flag&quot;]=&quot;multipart/form-data&quot;}
+​</code></p>
 
 <p>In this way, we satisfy the server side condition, indicating that the &ldquo;multipart/form-data&rdquo; string must be present and we satisfy the application side condition saying that the session.flag value must not be null. In addition, no prohibited characters are used, so the firewall is not triggered.</p>
 
@@ -293,8 +291,11 @@ The malicious payload used in many examples on the Internet is :</p>
 
 <ul>
 <li><a href="https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2" target="\_blank">Will it pwn CVE-2017-5638 RCE in Apache Struts 2</a></li>
-<li><a href="https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/" target="\_blank">12 questions pour mieux comprendre la dernière faille Struts</a></li>
+<li><a href="https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/" target="\_blank">12 questions pour mieux comprendre la dernière faille Struts</a>
+```</li>
 </ul>
+
+<p>```</p>
   </div>
   
 

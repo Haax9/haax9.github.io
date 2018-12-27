@@ -16,9 +16,7 @@
       <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/articles/durcissement-windows-gpo/</guid>
-      <description>&lt;p&gt;Depuis la sortie du système d&amp;rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&amp;rsquo;ouvrir les yeux et de prendre conscience des choses.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;Depuis la sortie du système d&amp;rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&amp;rsquo;ouvrir les yeux et de prendre conscience des choses.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -27,9 +25,7 @@
       <pubDate>Thu, 27 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/articles/conteneurs-web-et-vie-privee/</guid>
-      <description>&lt;p&gt;Si vous utilisez régulièrement un navigateur Internet et que vous connaissez un tant soit peu le domaine du web, vous savez d&amp;rsquo;une manière générale quelles données sont récupérées par les différents sites visités. Si non, sachez que chaque site visité stocke des informations sur vous par l&amp;rsquo;intermédiaire de différents mécanismes (cookies notamment) ce qui peut par exemple permettre de vous identifier et ainsi ne plus avoir à taper vos identifiants.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;Si vous utilisez régulièrement un navigateur Internet et que vous connaissez un tant soit peu le domaine du web, vous savez d&amp;rsquo;une manière générale quelles données sont récupérées par les différents sites visités. Si non, sachez que chaque site visité stocke des informations sur vous par l&amp;rsquo;intermédiaire de différents mécanismes (cookies notamment) ce qui peut par exemple permettre de vous identifier et ainsi ne plus avoir à taper vos identifiants.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -38,9 +34,7 @@
       <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/articles/box-connectees-et-vie-privee/</guid>
-      <description>&lt;p&gt;Billet un peu plus léger cette fois ci, nous allons parler des box connectées et plus particulièrement des Bbox Miami. En effet, ayant une de ces box à disposition, je me suis demandé ce qu&amp;rsquo;il en était d&amp;rsquo;un point de vue vie privée et ce qu&amp;rsquo;un utilisateur basique et un peu curieux pouvait faire au niveau des paramètres. Nous verrons donc ici qu&amp;rsquo;un certain nombre de paramètres par défaut sont activés et qu&amp;rsquo;il est possible d&amp;rsquo;agir dessus. Je précise qu&amp;rsquo;aucune box n&amp;rsquo;a été maltraitée dans le cadre de ces expérimentations :D.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;Billet un peu plus léger cette fois ci, nous allons parler des box connectées et plus particulièrement des Bbox Miami. En effet, ayant une de ces box à disposition, je me suis demandé ce qu&amp;rsquo;il en était d&amp;rsquo;un point de vue vie privée et ce qu&amp;rsquo;un utilisateur basique et un peu curieux pouvait faire au niveau des paramètres. Nous verrons donc ici qu&amp;rsquo;un certain nombre de paramètres par défaut sont activés et qu&amp;rsquo;il est possible d&amp;rsquo;agir dessus. Je précise qu&amp;rsquo;aucune box n&amp;rsquo;a été maltraitée dans le cadre de ces expérimentations :D.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -49,9 +43,7 @@
       <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/articles/bonnes-pratiques-install-wordpress/</guid>
-      <description>&lt;p&gt;Si vous souhaitez monter votre propre site web mais que vous n’êtes pas expert dans le domaine, vous avez sûrement dû voir passer le mot “Wordpress”. Il s’agit d’un CMS (Content Management System, ou Système de Gestion de Contenu) permettant de faciliter la création d’un site web. En gros, il facilite la création puis la gestion en fournissant une interface prête à l’emploi. Il n’y a plus qu’à personnaliser votre site et écrire vos articles ! Pas besoin d’écrire du code (même s’il est possible d’aller fouiller et modifier manuellement) !&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;Si vous souhaitez monter votre propre site web mais que vous n’êtes pas expert dans le domaine, vous avez sûrement dû voir passer le mot “Wordpress”. Il s’agit d’un CMS (Content Management System, ou Système de Gestion de Contenu) permettant de faciliter la création d’un site web. En gros, il facilite la création puis la gestion en fournissant une interface prête à l’emploi. Il n’y a plus qu’à personnaliser votre site et écrire vos articles ! Pas besoin d’écrire du code (même s’il est possible d’aller fouiller et modifier manuellement) !&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -60,9 +52,7 @@
       <pubDate>Sun, 17 Dec 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/articles/dangers-reutilisation-mots-de-passe/</guid>
-      <description>&lt;p&gt;Vous l’avez surement entendu et vu des dizaines de fois, mais les questions tournant autour des mots de passe sur Internet sont plus que jamais d’une importance capitale pour vos données et votre vie privée. A l’heure actuelle, Internet est utilisé pour (presque) tout et par (presque) tout le monde, allant du simple site de recettes de cuisine à votre compte bancaire, en passant par les réseaux sociaux, les sites de e-commerce ou encore vos adresses e-mails. Cela fait un paquet de sites, de comptes différents, et par extension, de mots de passe.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+      <description>&lt;p&gt;Vous l’avez surement entendu et vu des dizaines de fois, mais les questions tournant autour des mots de passe sur Internet sont plus que jamais d’une importance capitale pour vos données et votre vie privée. A l’heure actuelle, Internet est utilisé pour (presque) tout et par (presque) tout le monde, allant du simple site de recettes de cuisine à votre compte bancaire, en passant par les réseaux sociaux, les sites de e-commerce ou encore vos adresses e-mails. Cela fait un paquet de sites, de comptes différents, et par extension, de mots de passe.&lt;/p&gt;</description>
     </item>
     
   </channel>
