@@ -201,13 +201,13 @@
 <li><a href="#connexion-au-réseau-interne">Connexion au réseau interne</a></li>
 <li><a href="#découverte-des-machines">Découverte des machines</a></li>
 </ul></li>
-<li><a href="#challenge-1---point-d'entrée-sur-le-domaine">Challenge 1 - Point d&rsquo;entrée sur le domaine</a>
+<li><a href="#challenge-1-point-d'entrée-sur-le-domaine">Challenge 1 - Point d&rsquo;entrée sur le domaine</a>
 
 <ul>
-<li><a href="#récupération-du-hash-netntlmv2-d'un-compte-utilisateur">Récupération du hash NetNTLMv2 d&rsquo;un compte utilisateur</a></li>
+<li><a href="#récupération-du-hash-netntlmv2-utilisateur">Récupération du hash NetNTLMv2 utilisateur</a></li>
 <li><a href="#cassage-du-hash-et-premier-flag">Cassage du hash et premier flag</a></li>
 </ul></li>
-<li><a href="#challenge-2---compromission-de-la-machine-cliente">Challenge 2 - Compromission de la machine cliente</a>
+<li><a href="#challenge-2-compromission-de-la-machine-cliente">Challenge 2 - Compromission de la machine cliente</a>
 
 <ul>
 <li><a href="#reconnaissance">Reconnaissance</a></li>
@@ -215,14 +215,14 @@
 <li><a href="#exploitation-de-la-vulnérabilité-ms14-025">Exploitation de la vulnérabilité MS14-025</a></li>
 <li><a href="#fouille-et-récupération-du-second-flag">Fouille et récupération du second flag</a></li>
 </ul></li>
-<li><a href="#challenge-3---contrôle-du-domaine">Challenge 3 - Contrôle du domaine</a>
+<li><a href="#challenge-3-contrôle-du-domaine">Challenge 3 - Contrôle du domaine</a>
 
 <ul>
 <li><a href="#récupération-du-dump-lsass">Récupération du dump LSASS</a></li>
 <li><a href="#analyse-de-la-mémoire-lsass">Analyse de la mémoire LSASS</a></li>
 <li><a href="#connexion-au-dc-et-récupération-du-troisième-flag">Connexion au DC et récupération du troisième flag</a></li>
 </ul></li>
-<li><a href="#challenge-4---métadonnées-de-réplication">Challenge 4 - Métadonnées de réplication</a>
+<li><a href="#challenge-4-métadonnées-de-réplication">Challenge 4 - Métadonnées de réplication</a>
 
 <ul>
 <li><a href="#activation-de-rdp">Activation de RDP</a></li>
@@ -440,7 +440,7 @@ IP ID Sequence Generation: Incremental
 
 <p><br/></p>
 
-<h3 id="récupération-du-hash-netntlmv2-d-un-compte-utilisateur">Récupération du hash NetNTLMv2 d&rsquo;un compte utilisateur</h3>
+<h3 id="récupération-du-hash-netntlmv2-utilisateur">Récupération du hash NetNTLMv2 utilisateur</h3>
 
 <p>Dans le cadre d&rsquo;un SI d&rsquo;entreprise, il n&rsquo;est pas rare que les ordinateurs du domaine recherchent des ressources diverses et variées sur le réseau. Cependant, si un client ne parvient pas à trouver une ressource en particulier, si cela n&rsquo;a pas été désactivé, il a envoyer successivement des requêtes LLMNR puis NBT-NS afin de demander aux machines voisines si elles ne connaissent pas la ressource.</p>
 
