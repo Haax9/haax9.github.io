@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haaxmax.github.io/en/writeups/norzhctf-2019/game-of-pwn-norzh/</loc>
+    <lastmod>2019-02-01T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/writeups/norzhctf-2019/game-of-pwn-norzh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/writeups/norzhctf-2019/game-of-pwn-norzh/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</loc>
     <lastmod>2018-12-27T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -262,7 +277,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/</loc>
-    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -278,7 +293,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/posts/</loc>
-    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -341,7 +356,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/writeups/</loc>
-    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -357,7 +372,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/writeups/</loc>
-    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
