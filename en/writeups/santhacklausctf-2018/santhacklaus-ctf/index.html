@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.54.0" />
+<meta name="generator" content="Hugo 0.55.6" />
 
     
     
@@ -680,7 +680,7 @@ DONE      Drink water, regularly
   &lt;IMG SRC=&quot;img/jcvd3.gif&quot;&gt;
   &lt;IMG SRC=&quot;img/jcvd4.gif&quot;&gt;
   &lt;p class=&quot;tm-about-description&quot;&gt;
-	Congratz ! Here is the flag IMTLD{ID04L0t0f1s0m3tr1cs}
+    Congratz ! Here is the flag IMTLD{ID04L0t0f1s0m3tr1cs}
 &lt;/BODY&gt;
 &lt;/HTML&gt;
 </code></pre>
@@ -806,10 +806,10 @@ data = rdpcap(pcap_file)
 output = &quot;&quot;
 
 for i in range(0, len(data)):
-	if data[i].getlayer(IP).dst == &quot;192.168.1.33&quot;:
-		payload = data[i].load.decode(&quot;utf-8&quot;)
-		print(payload)
-		output += payload
+    if data[i].getlayer(IP).dst == &quot;192.168.1.33&quot;:
+        payload = data[i].load.decode(&quot;utf-8&quot;)
+        print(payload)
+        output += payload
 
 output_file = open(&quot;result.b64&quot;, &quot;w&quot;)
 output_file.write(output)
@@ -1067,74 +1067,74 @@ Flag : IMTLD{Y0uAr34H4ck3rH4rry}
 
 <pre><code>(gdb) disas main
 Dump of assembler code for function main:
-   0x0000000000001155 &lt;+0&gt;:	push   rbp
-   0x0000000000001156 &lt;+1&gt;:	mov    rbp,rsp
-   0x0000000000001159 &lt;+4&gt;:	push   rbx
-   0x000000000000115a &lt;+5&gt;:	sub    rsp,0x78
-   0x000000000000115e &lt;+9&gt;:	mov    DWORD PTR [rbp-0x74],edi
-   0x0000000000001161 &lt;+12&gt;:	mov    QWORD PTR [rbp-0x80],rsi
-   0x0000000000001165 &lt;+16&gt;:	mov    rax,QWORD PTR [rbp-0x80]
-   0x0000000000001169 &lt;+20&gt;:	mov    rax,QWORD PTR [rax+0x8]
-   0x000000000000116d &lt;+24&gt;:	mov    QWORD PTR [rbp-0x38],rax
-   0x0000000000001171 &lt;+28&gt;:	mov    BYTE PTR [rbp-0x50],0xb6
-   0x0000000000001175 &lt;+32&gt;:	mov    BYTE PTR [rbp-0x4f],0xa9
-   0x0000000000001179 &lt;+36&gt;:	mov    BYTE PTR [rbp-0x4e],0xc2
-   0x000000000000117d &lt;+40&gt;:	mov    BYTE PTR [rbp-0x4d],0xcd
-   0x0000000000001181 &lt;+44&gt;:	mov    BYTE PTR [rbp-0x4c],0x8d
-   0x0000000000001185 &lt;+48&gt;:	mov    BYTE PTR [rbp-0x4b],0x99
-   0x0000000000001189 &lt;+52&gt;:	mov    BYTE PTR [rbp-0x4a],0xc0
-   0x000000000000118d &lt;+56&gt;:	mov    BYTE PTR [rbp-0x49],0xaa
-   0x0000000000001191 &lt;+60&gt;:	mov    BYTE PTR [rbp-0x48],0xab
-   0x0000000000001195 &lt;+64&gt;:	mov    BYTE PTR [rbp-0x47],0xb9
-   0x0000000000001199 &lt;+68&gt;:	mov    BYTE PTR [rbp-0x46],0xa9
-   0x000000000000119d &lt;+72&gt;:	mov    BYTE PTR [rbp-0x45],0xc6
-   0x00000000000011a1 &lt;+76&gt;:	mov    BYTE PTR [rbp-0x44],0x9f
-   0x00000000000011a5 &lt;+80&gt;:	mov    BYTE PTR [rbp-0x43],0xbb
-   0x00000000000011a9 &lt;+84&gt;:	mov    BYTE PTR [rbp-0x42],0xca
-   0x00000000000011ad &lt;+88&gt;:	mov    BYTE PTR [rbp-0x41],0xcc
-   0x00000000000011b1 &lt;+92&gt;:	mov    BYTE PTR [rbp-0x40],0x0
-   0x00000000000011b5 &lt;+96&gt;:	mov    BYTE PTR [rbp-0x70],0x9e
-   0x00000000000011b9 &lt;+100&gt;:	mov    BYTE PTR [rbp-0x6f],0xa2
-   0x00000000000011bd &lt;+104&gt;:	mov    BYTE PTR [rbp-0x6e],0xa9
-   0x00000000000011c1 &lt;+108&gt;:	mov    BYTE PTR [rbp-0x6d],0xa1
-   0x00000000000011c5 &lt;+112&gt;:	mov    BYTE PTR [rbp-0x6c],0x99
-   0x00000000000011c9 &lt;+116&gt;:	mov    BYTE PTR [rbp-0x6b],0xd0
-   0x00000000000011cd &lt;+120&gt;:	mov    BYTE PTR [rbp-0x6a],0xa9
-   0x00000000000011d1 &lt;+124&gt;:	mov    BYTE PTR [rbp-0x69],0xbd
-   0x00000000000011d5 &lt;+128&gt;:	mov    BYTE PTR [rbp-0x68],0x86
-   0x00000000000011d9 &lt;+132&gt;:	mov    BYTE PTR [rbp-0x67],0xc8
-   0x00000000000011dd &lt;+136&gt;:	mov    BYTE PTR [rbp-0x66],0x86
-   0x00000000000011e1 &lt;+140&gt;:	mov    BYTE PTR [rbp-0x65],0xc8
-   0x00000000000011e5 &lt;+144&gt;:	mov    BYTE PTR [rbp-0x64],0xa3
-   0x00000000000011e9 &lt;+148&gt;:	mov    BYTE PTR [rbp-0x63],0x85
-   0x00000000000011ed &lt;+152&gt;:	mov    BYTE PTR [rbp-0x62],0xc9
-   0x00000000000011f1 &lt;+156&gt;:	mov    BYTE PTR [rbp-0x61],0x98
-   0x00000000000011f5 &lt;+160&gt;:	mov    BYTE PTR [rbp-0x60],0xbd
-   0x00000000000011f9 &lt;+164&gt;:	mov    BYTE PTR [rbp-0x5f],0x88
-   0x00000000000011fd &lt;+168&gt;:	mov    BYTE PTR [rbp-0x5e],0x89
-   0x0000000000001201 &lt;+172&gt;:	mov    BYTE PTR [rbp-0x5d],0xc9
-   0x0000000000001205 &lt;+176&gt;:	mov    BYTE PTR [rbp-0x5c],0x86
-   0x0000000000001209 &lt;+180&gt;:	mov    BYTE PTR [rbp-0x5b],0xc3
-   0x000000000000120d &lt;+184&gt;:	mov    BYTE PTR [rbp-0x5a],0xbc
-   0x0000000000001211 &lt;+188&gt;:	mov    BYTE PTR [rbp-0x59],0xd2
-   0x0000000000001215 &lt;+192&gt;:	mov    BYTE PTR [rbp-0x58],0x0
-   0x0000000000001219 &lt;+196&gt;:	mov    DWORD PTR [rbp-0x14],0x0
-   0x0000000000001220 &lt;+203&gt;:	cmp    DWORD PTR [rbp-0x74],0x2
+   0x0000000000001155 &lt;+0&gt;: push   rbp
+   0x0000000000001156 &lt;+1&gt;: mov    rbp,rsp
+   0x0000000000001159 &lt;+4&gt;: push   rbx
+   0x000000000000115a &lt;+5&gt;: sub    rsp,0x78
+   0x000000000000115e &lt;+9&gt;: mov    DWORD PTR [rbp-0x74],edi
+   0x0000000000001161 &lt;+12&gt;:    mov    QWORD PTR [rbp-0x80],rsi
+   0x0000000000001165 &lt;+16&gt;:    mov    rax,QWORD PTR [rbp-0x80]
+   0x0000000000001169 &lt;+20&gt;:    mov    rax,QWORD PTR [rax+0x8]
+   0x000000000000116d &lt;+24&gt;:    mov    QWORD PTR [rbp-0x38],rax
+   0x0000000000001171 &lt;+28&gt;:    mov    BYTE PTR [rbp-0x50],0xb6
+   0x0000000000001175 &lt;+32&gt;:    mov    BYTE PTR [rbp-0x4f],0xa9
+   0x0000000000001179 &lt;+36&gt;:    mov    BYTE PTR [rbp-0x4e],0xc2
+   0x000000000000117d &lt;+40&gt;:    mov    BYTE PTR [rbp-0x4d],0xcd
+   0x0000000000001181 &lt;+44&gt;:    mov    BYTE PTR [rbp-0x4c],0x8d
+   0x0000000000001185 &lt;+48&gt;:    mov    BYTE PTR [rbp-0x4b],0x99
+   0x0000000000001189 &lt;+52&gt;:    mov    BYTE PTR [rbp-0x4a],0xc0
+   0x000000000000118d &lt;+56&gt;:    mov    BYTE PTR [rbp-0x49],0xaa
+   0x0000000000001191 &lt;+60&gt;:    mov    BYTE PTR [rbp-0x48],0xab
+   0x0000000000001195 &lt;+64&gt;:    mov    BYTE PTR [rbp-0x47],0xb9
+   0x0000000000001199 &lt;+68&gt;:    mov    BYTE PTR [rbp-0x46],0xa9
+   0x000000000000119d &lt;+72&gt;:    mov    BYTE PTR [rbp-0x45],0xc6
+   0x00000000000011a1 &lt;+76&gt;:    mov    BYTE PTR [rbp-0x44],0x9f
+   0x00000000000011a5 &lt;+80&gt;:    mov    BYTE PTR [rbp-0x43],0xbb
+   0x00000000000011a9 &lt;+84&gt;:    mov    BYTE PTR [rbp-0x42],0xca
+   0x00000000000011ad &lt;+88&gt;:    mov    BYTE PTR [rbp-0x41],0xcc
+   0x00000000000011b1 &lt;+92&gt;:    mov    BYTE PTR [rbp-0x40],0x0
+   0x00000000000011b5 &lt;+96&gt;:    mov    BYTE PTR [rbp-0x70],0x9e
+   0x00000000000011b9 &lt;+100&gt;:   mov    BYTE PTR [rbp-0x6f],0xa2
+   0x00000000000011bd &lt;+104&gt;:   mov    BYTE PTR [rbp-0x6e],0xa9
+   0x00000000000011c1 &lt;+108&gt;:   mov    BYTE PTR [rbp-0x6d],0xa1
+   0x00000000000011c5 &lt;+112&gt;:   mov    BYTE PTR [rbp-0x6c],0x99
+   0x00000000000011c9 &lt;+116&gt;:   mov    BYTE PTR [rbp-0x6b],0xd0
+   0x00000000000011cd &lt;+120&gt;:   mov    BYTE PTR [rbp-0x6a],0xa9
+   0x00000000000011d1 &lt;+124&gt;:   mov    BYTE PTR [rbp-0x69],0xbd
+   0x00000000000011d5 &lt;+128&gt;:   mov    BYTE PTR [rbp-0x68],0x86
+   0x00000000000011d9 &lt;+132&gt;:   mov    BYTE PTR [rbp-0x67],0xc8
+   0x00000000000011dd &lt;+136&gt;:   mov    BYTE PTR [rbp-0x66],0x86
+   0x00000000000011e1 &lt;+140&gt;:   mov    BYTE PTR [rbp-0x65],0xc8
+   0x00000000000011e5 &lt;+144&gt;:   mov    BYTE PTR [rbp-0x64],0xa3
+   0x00000000000011e9 &lt;+148&gt;:   mov    BYTE PTR [rbp-0x63],0x85
+   0x00000000000011ed &lt;+152&gt;:   mov    BYTE PTR [rbp-0x62],0xc9
+   0x00000000000011f1 &lt;+156&gt;:   mov    BYTE PTR [rbp-0x61],0x98
+   0x00000000000011f5 &lt;+160&gt;:   mov    BYTE PTR [rbp-0x60],0xbd
+   0x00000000000011f9 &lt;+164&gt;:   mov    BYTE PTR [rbp-0x5f],0x88
+   0x00000000000011fd &lt;+168&gt;:   mov    BYTE PTR [rbp-0x5e],0x89
+   0x0000000000001201 &lt;+172&gt;:   mov    BYTE PTR [rbp-0x5d],0xc9
+   0x0000000000001205 &lt;+176&gt;:   mov    BYTE PTR [rbp-0x5c],0x86
+   0x0000000000001209 &lt;+180&gt;:   mov    BYTE PTR [rbp-0x5b],0xc3
+   0x000000000000120d &lt;+184&gt;:   mov    BYTE PTR [rbp-0x5a],0xbc
+   0x0000000000001211 &lt;+188&gt;:   mov    BYTE PTR [rbp-0x59],0xd2
+   0x0000000000001215 &lt;+192&gt;:   mov    BYTE PTR [rbp-0x58],0x0
+   0x0000000000001219 &lt;+196&gt;:   mov    DWORD PTR [rbp-0x14],0x0
+   0x0000000000001220 &lt;+203&gt;:   cmp    DWORD PTR [rbp-0x74],0x2
 
 </code></pre>
 
 <p>Par la suite, on trouve dans le code du programme un boucle qui va réaliser une opération sur chacun des caractères du mot de passe. En effet, pour chaque caractère, le programme va ajouter la valeur <code>0x55</code>. Il s&rsquo;agit en réalité d&rsquo;une fonction de chiffrement, utilisant une substitution mono-alphabétique (un ROT).</p>
 
-<pre><code>0x0000000000001246 &lt;+241&gt;:	mov    rax,QWORD PTR [rbp-0x20]
-   0x000000000000124a &lt;+245&gt;:	lea    rdx,[rax+0x1]
-   0x000000000000124e &lt;+249&gt;:	mov    QWORD PTR [rbp-0x20],rdx
-   0x0000000000001252 &lt;+253&gt;:	movzx  edx,BYTE PTR [rax]
-   0x0000000000001255 &lt;+256&gt;:	add    edx,0x55
-   0x0000000000001258 &lt;+259&gt;:	mov    BYTE PTR [rax],dl
-   0x000000000000125a &lt;+261&gt;:	mov    rax,QWORD PTR [rbp-0x20]
-   0x000000000000125e &lt;+265&gt;:	movzx  eax,BYTE PTR [rax]
-   0x0000000000001261 &lt;+268&gt;:	test   al,al
-   0x0000000000001263 &lt;+270&gt;:	jne    0x1246 &lt;main+241&gt;
+<pre><code>0x0000000000001246 &lt;+241&gt;:  mov    rax,QWORD PTR [rbp-0x20]
+   0x000000000000124a &lt;+245&gt;:   lea    rdx,[rax+0x1]
+   0x000000000000124e &lt;+249&gt;:   mov    QWORD PTR [rbp-0x20],rdx
+   0x0000000000001252 &lt;+253&gt;:   movzx  edx,BYTE PTR [rax]
+   0x0000000000001255 &lt;+256&gt;:   add    edx,0x55
+   0x0000000000001258 &lt;+259&gt;:   mov    BYTE PTR [rax],dl
+   0x000000000000125a &lt;+261&gt;:   mov    rax,QWORD PTR [rbp-0x20]
+   0x000000000000125e &lt;+265&gt;:   movzx  eax,BYTE PTR [rax]
+   0x0000000000001261 &lt;+268&gt;:   test   al,al
+   0x0000000000001263 &lt;+270&gt;:   jne    0x1246 &lt;main+241&gt;
 
 </code></pre>
 
@@ -1300,11 +1300,6 @@ wrote extracted data to &quot;flag.txt&quot;.
       <span class="navigation-tittle">ECW 2018 - Web - Intrusion (5 challenges)</span>
     </a>
     
-    
-    <a href="/en/writeups/norzhctf-2019/game-of-pwn-norzh/" class="post--navigation-next">
-      <span class="navigation-tittle">NorzhCTF 2019 - Windows AD - Game of Pwn</span>
-      <i aria-hidden="true" class="fa fa-chevron-right"></i>
-    </a>
     
 </div>
 

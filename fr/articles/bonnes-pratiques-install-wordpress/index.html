@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.54.0" />
+<meta name="generator" content="Hugo 0.55.6" />
 
     
     
@@ -277,9 +277,9 @@ satisfy all
 <p>Une solution facile à mettre en œuvre est de <strong>rediriger</strong> vers la page d’accueil chaque utilisateur qui tente d’énumérer. Les redirections peuvent être faites par des règles placées dans le fichier <strong>.htaccess</strong> de votre site internet. Les règles suivantes correspondent à ce besoin :</p>
 
 <pre><code>##Avoid users enumeration and redirect to index
-RewriteCond	%{REQUEST_URI}	!^/wp-admin [NC]
-RewriteCond	%{QUERY_STRING}	author=\d
-RewriteRule	(.*)		$1? [L,R=301]
+RewriteCond %{REQUEST_URI}  !^/wp-admin [NC]
+RewriteCond %{QUERY_STRING} author=\d
+RewriteRule (.*)        $1? [L,R=301]
 
 ##Redirect /author/
 RedirectMatch 301 ^/author/ https://haax.fr/?

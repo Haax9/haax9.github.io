@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.54.0" />
+<meta name="generator" content="Hugo 0.55.6" />
 
     
     
@@ -275,9 +275,9 @@ satisfy all
 <p>An easy solution is to redirect every user who tries to list to the home page. Redirections can be made by rules placed in the <strong>.htaccess</strong> file of your website. The following rules correspond to this need:</p>
 
 <pre><code>##Avoid users enumeration and redirect to index
-RewriteCond	%{REQUEST_URI}	!^/wp-admin [NC]
-RewriteCond	%{QUERY_STRING}	author=\d
-RewriteRule	(.*)		$1? [L,R=301]
+RewriteCond %{REQUEST_URI}  !^/wp-admin [NC]
+RewriteCond %{QUERY_STRING} author=\d
+RewriteRule (.*)        $1? [L,R=301]
 
 ##Redirect /author/
 RedirectMatch 301 ^/author/ https://haax.fr/?

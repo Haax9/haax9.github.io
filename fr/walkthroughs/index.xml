@@ -12,10 +12,10 @@
     
     <item>
       <title>Quaoar Virtual Machine - Walkthrough</title>
-      <link>https://haaxmax.github.io/fr/walkthroughs/quaoar-virtual-machine/</link>
+      <link>https://haaxmax.github.io/fr/walkthroughs/vulnhub/quaoar-virtual-machine/</link>
       <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/fr/walkthroughs/quaoar-virtual-machine/</guid>
+      <guid>https://haaxmax.github.io/fr/walkthroughs/vulnhub/quaoar-virtual-machine/</guid>
       <description>&lt;p&gt;“Quaoar” est une machine virtuelle de type “Boot2Root” créée pour le HackFest 2016.  Ce type d’exercice vise à améliorer ses compétences en sécurité informatique. Il suffit de lancer la Machine Virtuelle, puis trouver un moyen depuis l’extérieur de passer root sur le système ! Cette VM est en libre accès sur Vulnhub.&lt;/p&gt;</description>
     </item>
     

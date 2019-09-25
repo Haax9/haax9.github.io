@@ -3,21 +3,6 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://haaxmax.github.io/en/writeups/norzhctf-2019/game-of-pwn-norzh/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/writeups/norzhctf-2019/game-of-pwn-norzh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/writeups/norzhctf-2019/game-of-pwn-norzh/"
-                />
-  </url>
-  
-  <url>
     <loc>https://haaxmax.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</loc>
     <lastmod>2018-12-27T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -183,17 +168,17 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/en/walkthroughs/quaoar-virtual-machine/</loc>
+    <loc>https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</loc>
     <lastmod>2017-11-20T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
-                href="https://haaxmax.github.io/fr/walkthroughs/quaoar-virtual-machine/"
+                href="https://haaxmax.github.io/fr/walkthroughs/vulnhub/quaoar-virtual-machine/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://haaxmax.github.io/en/walkthroughs/quaoar-virtual-machine/"
+                href="https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/"
                 />
   </url>
   
@@ -213,33 +198,82 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/en/about/</loc>
-    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/about/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/about/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/en/articles/</loc>
-    <lastmod>2018-10-19T00:00:00+00:00</lastmod>
+    <loc>https://haaxmax.github.io/en/categories/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
-                href="https://haaxmax.github.io/fr/articles/"
+                href="https://haaxmax.github.io/fr/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://haaxmax.github.io/en/articles/"
+                href="https://haaxmax.github.io/en/categories/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/en/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/en/categories/posts/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/categories/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/categories/posts/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/en/categories/writeups/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/categories/writeups/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/categories/writeups/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/en/writeups/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/writeups/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/writeups/"
                 />
   </url>
   
@@ -260,65 +294,18 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/en/categories/</loc>
+    <loc>https://haaxmax.github.io/en/articles/</loc>
     <lastmod>2018-10-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
-                href="https://haaxmax.github.io/fr/categories/"
+                href="https://haaxmax.github.io/fr/articles/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://haaxmax.github.io/en/categories/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/en/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/en/categories/posts/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/categories/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/categories/posts/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/en/tags/</loc>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/tags/"
+                href="https://haaxmax.github.io/en/articles/"
                 />
   </url>
   
@@ -355,34 +342,32 @@
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/en/writeups/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
-    <priority>0</priority>
+    <loc>https://haaxmax.github.io/en/about/</loc>
+    <lastmod>2017-11-12T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
-                href="https://haaxmax.github.io/fr/writeups/"
+                href="https://haaxmax.github.io/fr/about/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://haaxmax.github.io/en/writeups/"
+                href="https://haaxmax.github.io/en/about/"
                 />
   </url>
   
   <url>
-    <loc>https://haaxmax.github.io/en/categories/writeups/</loc>
-    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
+    <loc>https://haaxmax.github.io/en/tags/</loc>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
-                href="https://haaxmax.github.io/fr/categories/writeups/"
+                href="https://haaxmax.github.io/fr/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://haaxmax.github.io/en/categories/writeups/"
+                href="https://haaxmax.github.io/en/tags/"
                 />
   </url>
   

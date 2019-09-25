@@ -5,10 +5,28 @@
     <link>https://haaxmax.github.io/fr/categories/</link>
     <description>Recent content in Categories on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/fr/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Posts</title>
+      <link>https://haaxmax.github.io/fr/categories/posts/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/categories/posts/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Writeups</title>
+      <link>https://haaxmax.github.io/fr/categories/writeups/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/categories/writeups/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Articles</title>
@@ -20,29 +38,11 @@
     </item>
     
     <item>
-      <title>Posts</title>
-      <link>https://haaxmax.github.io/fr/categories/posts/</link>
-      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/fr/categories/posts/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Walkthrough</title>
       <link>https://haaxmax.github.io/fr/categories/walkthrough/</link>
       <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/categories/walkthrough/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Writeups</title>
-      <link>https://haaxmax.github.io/fr/categories/writeups/</link>
-      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://haaxmax.github.io/fr/categories/writeups/</guid>
       <description></description>
     </item>
     
