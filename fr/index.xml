@@ -5,18 +5,18 @@
     <link>https://haaxmax.github.io/fr/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 03 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/fr/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>NorzhCTF 2019 - Windows AD - Game of Pwn</title>
+      <title>NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn</title>
       <link>https://haaxmax.github.io/fr/writeups/norzhctf-2019/game-of-pwn-norzh/</link>
-      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://haaxmax.github.io/fr/writeups/norzhctf-2019/game-of-pwn-norzh/</guid>
-      <description>&lt;p&gt;Le NorzhCTF, organisé en marge du FIC 2019, m&amp;rsquo;a donné l&amp;rsquo;occasion de concevoir, en collaboration avec &lt;a href=&#34;https://twitter.com/AzrakelK&#34; target=&#34;blank&#34;&gt;@AzrakelK (L0n3w0lf)&lt;/a&gt;, le scénario d&amp;rsquo;attaque en relation avec un domaine Active Directory. Cet article traite de ce challenge et présente notre solution.&lt;/p&gt;</description>
+      <description>&lt;p&gt;Le NorzhCTF, organisé en marge du FIC 2019, m&amp;rsquo;a donné l&amp;rsquo;occasion de concevoir, en collaboration avec &lt;a href=&#34;https://twitter.com/AzrakelK&#34; target=&#34;blank&#34;&gt;@AzrakelK (L0n3w0lf)&lt;/a&gt;, le scénario d&amp;rsquo;attaque en relation avec un domaine Active Directory. Cet article traite de ce challenge et présente notre solution. Le challenge a également été rejoué dans le cadre du RedHackCTF 2019, sous le même nom.&lt;/p&gt;</description>
     </item>
     
     <item>
