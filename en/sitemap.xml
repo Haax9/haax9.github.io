@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haaxmax.github.io/en/walkthroughs/hackthebox/haystack/</loc>
+    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/walkthroughs/hackthebox/haystack/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/walkthroughs/hackthebox/haystack/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</loc>
     <lastmod>2019-10-29T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -214,7 +229,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/</loc>
-    <lastmod>2019-10-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -230,7 +245,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/</loc>
-    <lastmod>2019-10-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -246,7 +261,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/en/categories/posts/</loc>
-    <lastmod>2019-10-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -261,8 +276,24 @@
   </url>
   
   <url>
+    <loc>https://haaxmax.github.io/en/walkthroughs/</loc>
+    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/walkthroughs/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/walkthroughs/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/en/categories/writeups/</loc>
-    <lastmod>2019-10-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -337,22 +368,6 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://haaxmax.github.io/en/categories/walkthrough/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/en/walkthroughs/</loc>
-    <lastmod>2017-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/walkthroughs/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/walkthroughs/"
                 />
   </url>
   

