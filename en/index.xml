@@ -5,10 +5,19 @@
     <link>https://haaxmax.github.io/en/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 09 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 02 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/en/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>NorzhCTF 2020 - OSINT - Familly Business</title>
+      <link>https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/</link>
+      <pubDate>Sun, 02 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/</guid>
+      <description>&lt;p&gt;New year, new NorzhCTF edition, organized next to the FIC 2020. As I am no longer student at ENSIBS, I had the opportunity to participate in the event. This post deals with the solution of &amp;ldquo;Familly Business&amp;rdquo;, an OSINT/SOCMINT challenge divided in 2 parts.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Hack The Box - Jarvis</title>

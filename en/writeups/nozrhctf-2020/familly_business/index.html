@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>NorzhCTF 2020 - OSINT - Familly Business • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="NorzhCTF 2020 - OSINT - Familly Business"/>
+<meta name="twitter:description" content="New year, new NorzhCTF edition, organized next to the FIC 2020. As I am no longer student at ENSIBS, I had the opportunity to participate in the event. This post deals with the solution of &ldquo;Familly Business&rdquo;, an OSINT/SOCMINT challenge divided in 2 parts."/>
+
+<meta property="og:title" content="NorzhCTF 2020 - OSINT - Familly Business" />
+<meta property="og:description" content="New year, new NorzhCTF edition, organized next to the FIC 2020. As I am no longer student at ENSIBS, I had the opportunity to participate in the event. This post deals with the solution of &ldquo;Familly Business&rdquo;, an OSINT/SOCMINT challenge divided in 2 parts." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/" />
+<meta property="article:published_time" content="2020-02-02T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-02T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io/en">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/writeups/nozrhctf-2020/familly_business/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/writeups/nozrhctf-2020/familly_business/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2020 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>NorzhCTF 2020 - OSINT - Familly Business</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Feb 2, 2020
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 7 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>New year, new NorzhCTF edition, organized next to the FIC 2020. As I am no longer student at ENSIBS, I had the opportunity to participate in the event. This post deals with the solution of &ldquo;Familly Business&rdquo;, an OSINT/SOCMINT challenge divided in 2 parts.</p>
+
+<p>The challenge is mainly around social media but also deals with a slightly more technical part. Before starting, I have to say that some part are not really OSINT as long as 2 intrusions are necessary.</p>
+
+<h2 id="index">Index</h2>
+
+<ul>
+<li><a href="#index">Index</a></li>
+<li><a href="#initial-statement">Initial statement</a></li>
+<li><a href="#familly-business-1">Familly Business 1</a></li>
+<li><a href="#familly-business-2">Familly Business 2</a></li>
+<li><a href="#feedback-and-last-word--">Feedback and last word !</a></li>
+</ul>
+
+<h2 id="initial-statement">Initial statement</h2>
+
+<pre><code>We have doubts that Mr. Lukas DUMMAS, the former CISO of Norzh Nuclea, sold protected company information to a family member and representative of a foreign power. We ask you to investigate!
+The first flag will be on a server owned by Lukas. The second will be in the files exchanged with the foreign power.
+</code></pre>
+
+<h2 id="familly-business-1">Familly Business 1</h2>
+
+<p>We know that the first flag is supposed to be on a Mr.DUMMAS&rsquo;s server. Little bit unclear.. But ok, let&rsquo;s go !</p>
+
+<p>Having very vew informations about the target, my first reflex was googling the name. Simple request allows us to retrieve a <a href="https://es.linkedin.com/in/lukas-dummas/en" target="blank">LinkedIn</a> profile.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Linkedin_1.PNG" alt="Profil LinkedIn" class="imgSize"/></center></p>
+
+<p>This allows us to learn more about the life of Lukas DUMMAS, but also puts a potential face on this identity. On the other hand, we can also retrieve an e-mail address belonging to him. Right now, it is not possible to know we will have to use it or no.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Linkedin_2.PNG" alt="Adresse e-mail LinkedIn" class="imgSize"/></center></p>
+
+<p>After some research on other Google&rsquo;s results (for example, the Apollo.io link), we start using Google Dorks in order to filter results. The first one, quite simple, already give interesting results.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Google_Dorks.PNG" alt="Google Dorks" class="imgSize"/></center></p>
+
+<p>Using this, we can get one <a href="https://bigsta.net/account/luk_dummas/" target="blank">Instagram</a> account, which seems to be owned by M.DUMMAS. Profile analysis reveals two interesting things :</p>
+
+<ul>
+<li>A username ;</li>
+<li>A woman picture, in a post stating that this is Lukas&rsquo;s sister-in-law (usefull later!)</li>
+</ul>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Instagram_1.PNG" alt="Profil Instagram" class="imgSize"/></center></p>
+
+<p>A simple Google query with the username bring a <a href="https://twitter.com/luk_dummas" target="blank">Twitter profile/a&gt;. Same username, visual elements linked to a spanish people&hellip; It seems that this profile is also owned by the target.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_1.PNG" alt="Profil Twitter" class="imgSize"/></center></p>
+
+<p>A quick account analysis reveals an <a href="https://twitter.com/luk_dummas/status/1152897108464361472" target="blank">interesting tweet</a>, to the OVH company and containing network logs. If we look as the screenshot, we can see a bunch of IP addresses. Keeping in mind that M.DUMMAS is a former CISO, these elements could lead us to his server.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_2.PNG" alt="Tweet logs" class="imgSize"/></center></p>
+
+<p>So, we extract all the potential IP addresses and using tools like Shodan, we can start investigation. Nothing interesting until this one : <a href="https://www.shodan.io/host/51.91.251.53" target="blank">51.91.251.53</a></p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Shodan.PNG" alt="Shodan" class="imgSize"/></center></p>
+
+<p>Indeed, it seems that this one correspond to a server hosted by OVH. Furthermore, 4 potentials ports are opened, and especially the 80 and 443 (HTTP and HTTPS)</p>
+
+<p>Let&rsquo;s check if any application web is responding on the server. We first get a &ldquo;Let&rsquo;s Encrypt&rdquo; SSL certificate. It&rsquo;s quite good as long as in the case of personnal websites, you can often see that kind of certificate because it&rsquo;s easy to deploy and affordable. Then, the user is redirected to the <a href="https://wordpress.ldummas.website/" target="blank">Lukas&rsquo;s Wordpress</a> website.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Wordpress_1.PNG" alt="Site Wordpress" class="imgSize"/></center></p>
+
+<p>A suspicious message warns users :</p>
+
+<pre><code>&quot;And do not digging into the “secrets” folder, it you are not allowed&quot;
+</code></pre>
+
+<p>Thus, we try to access resources like &ldquo;/secrets&rdquo;, no results. From there, my personnal experience is telling me to do content discovery by fuzzing the application. But that&rsquo;s only after some tries, and some time, we realize that the solution was way more simple&hellip;</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Wordpress_2.PNG" alt="Flag 1" class="imgSize"/></center></p>
+
+<p>A simple query and we grab the first flag !
+<br/></p>
+
+<h2 id="familly-business-2">Familly Business 2</h2>
+
+<p>For the second challenge, the initial statement tells that the flag is inside &ldquo;shared files with the foreign country&rdquo;.</p>
+
+<p>Alright.
+Looking at the statement, we start to investigate on the target familly member. We previously identified &ldquo;Maria Gutorova&rdquo; who seems to be the target&rsquo;s sister-in-law. Through the first Instagram account, the target is telling that his sister-in-law should have more Twitter followers, and he gives a username (<a href="https://twitter.com/gutorova_maria" target="blank">link</a>).</p>
+
+<p>Note : The account is also existing on Instagram, but is owned by a real person&hellip; Which cost me some minutes of false positive during the challenge :(</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Instagram_1.PNG" alt="Profil Instagram" class="imgSize"/></center></p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_3.PNG" alt="Profil Twitter" class="imgSize"/></center></p>
+
+<p>From then, some time has passed before getting another good element. Indeed, we lack some new informations. No problem, we can go back to already known things and analyze everything. First, we go back to the initial target Twitter&rsquo;s account.</p>
+
+<p>After some investigation, we face 2 interesting tweets (<a href="https://twitter.com/luk_dummas/status/1154080401465458688?s=20" target="blank">here</a> and <a href="https://twitter.com/luk_dummas/status/1155152323997577218?s=20" target="blank">here</a>).</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_4.PNG" alt="Tweet" class="imgSize"/></center></p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_5.PNG" alt="Tweet" class="imgSize"/></center></p>
+
+<p>The first leads to a ranking of the most used passwords, followed by a message from Lukas explaining that 290,000 people are using the same password as his sister-in-law. The second tweet states that Maria would have updated her password but that, knowing her, she would only have added her year of birth.</p>
+
+<p>Ok, even if it&rsquo;s out of a purely OSINT context, the instructions are pretty clear : we need to find the password for Maria&rsquo;s Twitter account.</p>
+
+<p>If we stick to the ranking, the password used by 290,000 people is: FQRG7CS493</p>
+
+<p>There&rsquo;s still an unknown part, Maria&rsquo;s date of birth.
+Her Twitter account indicates a birth on &ldquo;November 28th&rdquo;, but the year is not displayed&hellip;</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_6.PNG" alt="Tweet" class="imgSize"/></center></p>
+
+<p>This is where you will find a little trick from Twitter that allows you to set the amount of information displayed to different types of users. Thus, for an average person, with or without an account, only the day and month of birth will be displayed. On the other hand, if you follow the account, then the complete date will be displayed. Using a lambda account, we can retrieve the year of birth of this second target, 1980.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_7.PNG" alt="Tweet" class="imgSize"/></center></p>
+
+<p>We don&rsquo;t have Maria&rsquo;s e-mail address but Twitter allows user to log in with their username. We can then rebuild the password (FQRG7CS4931980) and log in !</p>
+
+<p>Then, we go straight forward to the DM (Direct Messages). We can find a conversation between Maria and Lukas, telling that some &ldquo;informations&rdquo; are stored on the Luka&rsquo;s private server. Moreover, a password is sent.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_8.PNG" alt="Messages privés Twitter" class="imgSize"/></center></p>
+
+<p>Bakc to what we previously saw, we only found one server owned by Lukas (51.91.251.53). Remember, 4 ports were open, with 4 potentials service&hellip; And one FTP server !</p>
+
+<p>One of the most common mistakes on this kind of server is to let the anonymous log in active. Alright, we fire up FileZilla and we can try this.</p>
+
+<p><center><img src="/img/writeups/norzhctf-2020/FB_Filezilla.PNG" alt="FileZilla" class="imgSize"/></center></p>
+
+<p>B00m ! It works ! We have now access to dozens of files. In order to be sure to have everything, we dump the entire server locally, for offline analysis.</p>
+
+<p>We realize quite quickly that ZIP files are encrypted. So, we need the password to read them. Maybe could it be the password sent by Lukas to Maria on their Twitter conversation ?</p>
+
+<p>A quick bash loop shows that only one archive can be decrypted using the given password</p>
+
+<pre><code class="language-bash">$ for i in {0..100}; do unzip -P 'BSG7,6xD?pt!37h' secret_folder.$i.zip; done
+unzip:  cannot find or open secret_folder.0.zip, secret_folder.0.zip.zip or secret_folder.0.zip.ZIP.
+[...]
+Archive:  secret_folder.81.zip
+   skipping: secret_file.81          incorrect password
+Archive:  secret_folder.82.zip
+  inflating: secret_file.82          
+Archive:  secret_folder.83.zip
+   skipping: secret_file.83          incorrect password
+[...]
+</code></pre>
+
+<p>We then get a 193Mo ASCII file, displaying thousands of the same string. Let&rsquo;s base64 decode this, and get the second flag !</p>
+
+<pre><code class="language-bash">$ echo &quot;RU5TSUJTe28waEJ1dEhvV2QxZF95b3VGaW5kbTN9&quot; | base64 -d
+ENSIBS{o0hButHoWd1d_youFindm3}%
+</code></pre>
+
+<h2 id="feedback-and-last-word">Feedback and last word !</h2>
+
+<p>Globally funny challenge. Thanks to the creator as well as the NorzhCTF staff for the event !</p>
+
+<p>This write-up is written in a logical order. However, during the event, I found some elements before others and I couldn&rsquo;t directly use them. For example, I found the anonymous FTP server long time before the necessary password for the ZIP archive.</p>
+
+<p>Even if some initial statement elements were not clear (&ldquo;on a server&rdquo;, &ldquo;inside files exchanged&rdquo;) I liked the challenge and the global investigation.</p>
+
+<p>o/</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

@@ -5,10 +5,19 @@
     <link>https://haaxmax.github.io/fr/categories/walkthrough/</link>
     <description>Recent content in Walkthrough on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 09 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/fr/categories/walkthrough/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hack The Box - Haystack</title>
+      <link>https://haaxmax.github.io/fr/walkthroughs/hackthebox/haystack/</link>
+      <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/fr/walkthroughs/hackthebox/haystack/</guid>
+      <description>&lt;p&gt;Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&amp;rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&amp;rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&amp;rsquo;exploitation d&amp;rsquo;un Logstash mal configuré permet d&amp;rsquo;élever ses privilèges.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Quaoar Virtual Machine - Walkthrough</title>

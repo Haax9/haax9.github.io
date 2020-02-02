@@ -154,7 +154,7 @@
       <a rel="alternate" href="/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2019 Haax.
+      &copy; 2020 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -455,7 +455,8 @@ IP ID Sequence Generation: Incremental
 [SMBv2] NTLMv2-SSP Hash     : dmervault::NORZH:b36fe00d35fbe870:CD538CF0935600E8C065F9CA4830B677:0101000000000000C0653150DE09D201D3C9ADFEC5AEFA66000000000200080053004D004200330001001E00570049004E002D00500052004800340039003200520051004100460056000400140053004D00420033002E006C006F00630061006C0003003400570049004E002D00500052004800340039003200520051004100460056002E0053004D00420033002E006C006F00630061006C000500140053004D00420033002E006C006F00630061006C0007000800C0653150DE09D201060004000200000008003000300000000000000000000000002000009811A9EAB1FE9DADCBB5D03032B97801110DF0BCCD0C7A06D494CFEBD85161180A001000000000000000000000000000000000000900180063006900660073002F00540048003300470034004D004500000000000000000000000000
 </code></pre>
 
-<p>Un compte utilisateur du domaine est donc trouvé avec cette technique ! L&rsquo;utilisateur <strong>dmervault</strong>. Cependant, même s&rsquo;il existe des attaques de type &ldquo;Pass the Hash&rdquo;, le mot de passe en clair est bien souvent nécessaire.</p>
+<p>Un compte utilisateur du domaine est donc trouvé avec cette technique ! L&rsquo;utilisateur <strong>dmervault</strong>.<br/>
+Cependant, même s&rsquo;il existe des attaques de type &ldquo;Pass the Hash&rdquo; pour certains hash (typiquement, NTLM), ce n&rsquo;est pas le cas des hashs NTLMv2, ainsi le mot de passe en clair est nécessaire.</p>
 
 <p><br/></p>
 
@@ -1066,6 +1067,11 @@ SMB         10.34.67.4      445    DC01             ============================
       <span class="navigation-tittle">Santhacklaus CTF 2018 - Solved Challenges</span>
     </a>
     
+    
+    <a href="/fr/writeups/nozrhctf-2020/familly_business/" class="post--navigation-next">
+      <span class="navigation-tittle">NorzhCTF 2020 - OSINT - Familly Business</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
     
 </div>
 
