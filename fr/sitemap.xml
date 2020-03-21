@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haaxmax.github.io/fr/walkthroughs/hackthebox/forest/</loc>
+    <lastmod>2020-03-21T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/walkthroughs/hackthebox/forest/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haaxmax.github.io/fr/writeups/nozrhctf-2020/familly_business/</loc>
     <lastmod>2020-02-02T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -259,7 +274,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/categories/</loc>
-    <lastmod>2020-02-02T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -275,7 +290,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/</loc>
-    <lastmod>2020-02-02T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -291,7 +306,7 @@
   
   <url>
     <loc>https://haaxmax.github.io/fr/categories/posts/</loc>
-    <lastmod>2020-02-02T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -302,6 +317,38 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haaxmax.github.io/fr/categories/posts/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/fr/categories/walkthrough/</loc>
+    <lastmod>2020-03-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/categories/walkthrough/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/categories/walkthrough/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haaxmax.github.io/fr/walkthroughs/</loc>
+    <lastmod>2020-03-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haaxmax.github.io/en/walkthroughs/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haaxmax.github.io/fr/walkthroughs/"
                 />
   </url>
   
@@ -334,38 +381,6 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haaxmax.github.io/fr/writeups/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/categories/walkthrough/</loc>
-    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/categories/walkthrough/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/categories/walkthrough/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haaxmax.github.io/fr/walkthroughs/</loc>
-    <lastmod>2019-11-09T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haaxmax.github.io/en/walkthroughs/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haaxmax.github.io/fr/walkthroughs/"
                 />
   </url>
   

@@ -5,10 +5,19 @@
     <link>https://haaxmax.github.io/en/categories/walkthrough/</link>
     <description>Recent content in Walkthrough on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 09 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haaxmax.github.io/en/categories/walkthrough/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hack The Box - Forest</title>
+      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/</link>
+      <pubDate>Sat, 21 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/</guid>
+      <description>&lt;p&gt;Forest is a Windows machine considered as easy/medium and Active Directory oriented. An anonymous access allows you to list domain accounts and identify a service account. This one is vulnerable to an ASREP Roasting attack, providing user access through WinRM. The privilege escalation is achieved through the exploitation of the &amp;ldquo;PrivExchange&amp;rdquo; vulnerability.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Hack The Box - Jarvis</title>
