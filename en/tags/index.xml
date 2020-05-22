@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Haax - Personal Blog</title>
-    <link>https://haaxmax.github.io/en/tags/</link>
+    <link>https://haax9.github.io/en/tags/</link>
     <description>Recent content in Tags on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     
-	<atom:link href="https://haaxmax.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haax9.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

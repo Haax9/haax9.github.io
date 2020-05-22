@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Walkthrough on Haax - Personal Blog</title>
-    <link>https://haaxmax.github.io/en/categories/walkthrough/</link>
+    <link>https://haax9.github.io/en/categories/walkthrough/</link>
     <description>Recent content in Walkthrough on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sat, 21 Mar 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://haaxmax.github.io/en/categories/walkthrough/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haax9.github.io/en/categories/walkthrough/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hack The Box - Forest</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/</link>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/forest/</link>
       <pubDate>Sat, 21 Mar 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/forest/</guid>
       <description>&lt;p&gt;Forest is a Windows machine considered as easy/medium and Active Directory oriented. An anonymous access allows you to list domain accounts and identify a service account. This one is vulnerable to an ASREP Roasting attack, providing user access through WinRM. The privilege escalation is achieved through the exploitation of the &amp;ldquo;PrivExchange&amp;rdquo; vulnerability.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Hack The Box - Jarvis</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/jarvis/</link>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/jarvis/</link>
       <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/jarvis/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/jarvis/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
 
 &lt;p&gt;Jarvis est une machine Linux catégorisée comme facile/moyenne. L&amp;rsquo;exploitation d&amp;rsquo;un injection SQL sur le site web permet de récupérer un accès limité. Une première phase d&amp;rsquo;escalade de privilège est réalisée grâce à une injection de commande dans un script. Enfin, la compromission de la machine peut être faite grâce à un binaire SUID (systemctl) en construisant un service.&lt;/p&gt;</description>
@@ -32,10 +32,10 @@
     
     <item>
       <title>Hack The Box - Haystack</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/haystack/</link>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/haystack/</link>
       <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/haystack/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/haystack/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
 
 &lt;p&gt;Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&amp;rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&amp;rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&amp;rsquo;exploitation d&amp;rsquo;un Logstash mal configuré permet d&amp;rsquo;élever ses privilèges.&lt;/p&gt;</description>
@@ -43,10 +43,10 @@
     
     <item>
       <title>Quaoar Virtual Machine - Walkthrough</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</link>
+      <link>https://haax9.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</link>
       <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</guid>
       <description>&lt;p&gt;&amp;ldquo;Quaoar&amp;rdquo; is a &amp;ldquo;Boot2Root&amp;rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub.&lt;/p&gt;</description>
     </item>
     

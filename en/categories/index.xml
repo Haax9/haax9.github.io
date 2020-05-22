@@ -2,47 +2,47 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Haax - Personal Blog</title>
-    <link>https://haaxmax.github.io/en/categories/</link>
+    <link>https://haax9.github.io/en/categories/</link>
     <description>Recent content in Categories on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sat, 21 Mar 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://haaxmax.github.io/en/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haax9.github.io/en/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Posts</title>
-      <link>https://haaxmax.github.io/en/categories/posts/</link>
+      <link>https://haax9.github.io/en/categories/posts/</link>
       <pubDate>Sat, 21 Mar 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/categories/posts/</guid>
+      <guid>https://haax9.github.io/en/categories/posts/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Walkthrough</title>
-      <link>https://haaxmax.github.io/en/categories/walkthrough/</link>
+      <link>https://haax9.github.io/en/categories/walkthrough/</link>
       <pubDate>Sat, 21 Mar 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/categories/walkthrough/</guid>
+      <guid>https://haax9.github.io/en/categories/walkthrough/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Writeups</title>
-      <link>https://haaxmax.github.io/en/categories/writeups/</link>
+      <link>https://haax9.github.io/en/categories/writeups/</link>
       <pubDate>Sun, 02 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/categories/writeups/</guid>
+      <guid>https://haax9.github.io/en/categories/writeups/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Articles</title>
-      <link>https://haaxmax.github.io/en/categories/articles/</link>
+      <link>https://haax9.github.io/en/categories/articles/</link>
       <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/categories/articles/</guid>
+      <guid>https://haax9.github.io/en/categories/articles/</guid>
       <description></description>
     </item>
     

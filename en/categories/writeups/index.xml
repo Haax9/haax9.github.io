@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Writeups on Haax - Personal Blog</title>
-    <link>https://haaxmax.github.io/en/categories/writeups/</link>
+    <link>https://haax9.github.io/en/categories/writeups/</link>
     <description>Recent content in Writeups on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sun, 02 Feb 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://haaxmax.github.io/en/categories/writeups/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haax9.github.io/en/categories/writeups/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>NorzhCTF 2020 - OSINT - Familly Business</title>
-      <link>https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/</link>
+      <link>https://haax9.github.io/en/writeups/nozrhctf-2020/familly_business/</link>
       <pubDate>Sun, 02 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/</guid>
+      <guid>https://haax9.github.io/en/writeups/nozrhctf-2020/familly_business/</guid>
       <description>&lt;p&gt;New year, new NorzhCTF edition, organized next to the FIC 2020. As I am no longer student at ENSIBS, I had the opportunity to participate in the event. This post deals with the solution of &amp;ldquo;Familly Business&amp;rdquo;, an OSINT/SOCMINT challenge divided in 2 parts.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn</title>
-      <link>https://haaxmax.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</link>
+      <link>https://haax9.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</link>
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</guid>
+      <guid>https://haax9.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</guid>
       <description>&lt;p&gt;The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with &lt;a href=&#34;https://twitter.com/AzrakelK&#34; target=&#34;blank&#34;&gt;@AzrakelK (L0n3w0lf)&lt;/a&gt;, the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Santhacklaus CTF 2018 - Solved Challenges</title>
-      <link>https://haaxmax.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</link>
+      <link>https://haax9.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</link>
       <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</guid>
+      <guid>https://haax9.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
 
 &lt;p&gt;Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&amp;rsquo;IMT Lille Douai &lt;a href=&#34;https://twitter.com/_nwodtuhs&#34; target=&#34;blank&#34;&gt;@_nwodtuhs&lt;/a&gt; &lt;a href=&#34;https://twitter.com/m3lsius&#34; target=&#34;blank&#34;&gt;@m3lsius&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Ch3n4p4N&#34; target=&#34;blank&#34;&gt;@Ch3n4p4N&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Th4cho&#34; target=&#34;blank&#34;&gt;@Deldel&lt;/a&gt;. Cet article traite des différents challenges que j&amp;rsquo;ai réussi et eu le temps de faire.&lt;/p&gt;</description>
@@ -41,55 +41,55 @@
     
     <item>
       <title>ECW 2018 - Web - Intrusion (5 challenges)</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2018/web-intrusion/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2018/web-intrusion/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (+1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2018 - Web - Troll.JSP</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2018/web-troll-jsp/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2018/web-troll-jsp/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &amp;ldquo;Troll.JSP&amp;rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2018 - Web - SysIA</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-sysia/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2018/web-sysia/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-sysia/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2018/web-sysia/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. SysIA is a challenge based on a LFI (Local File Inclusion) exploitation using the bash_history and the updatedb tool to find the flag.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2017 - Web - Path Through</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2017/web-path-through/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2017/web-path-through/</link>
       <pubDate>Thu, 30 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2017/web-path-through/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2017/web-path-through/</guid>
       <description>&lt;p&gt;The ECW 2017 is a French Jeopardy challenge organized by the &amp;ldquo;Pôle d&amp;rsquo;Excellence Cyber&amp;rdquo; in partnership with the &amp;ldquo;Région Bretagne&amp;rdquo;, Airbus and Thalès. Path Through is a web challenge based on blind SQL Injection.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2017 - Web - Hall of Fame</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2017/web-hall-of-fame/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2017/web-hall-of-fame/</link>
       <pubDate>Thu, 23 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2017/web-hall-of-fame/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2017/web-hall-of-fame/</guid>
       <description>&lt;p&gt;The ECW 2017 is a French Jeopardy challenge organized by the “Pôle d’Excellence Cyber” in partnership with the “Région Bretagne”, Airbus and Thalès. Hall of Fame is a web challenge based on Union SQL Injection.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>TamuCTF 2017 - Steganography - Musical Bits</title>
-      <link>https://haaxmax.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</link>
+      <link>https://haax9.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</link>
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</guid>
+      <guid>https://haax9.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</guid>
       <description>&lt;p&gt;The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &amp;ldquo;Musical Bits&amp;rdquo; challenge which is a Steganography challenge. &lt;a href=&#34;https://twitter.com/Haaxmax&#34; target=&#34;\_blank&#34; rel=&#34;noopener&#34;&gt;I&lt;/a&gt; worked with &lt;a href=&#34;https://twitter.com/ErwanFily&#34; target=&#34;\_blank&#34; rel=&#34;noopener&#34;&gt;Iptior&lt;/a&gt; on this one and it tooks severals hours of pain before success! Let&amp;rsquo;s go!&lt;/p&gt;</description>
     </item>
     

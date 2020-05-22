@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Haax - Personal Blog</title>
-    <link>https://haaxmax.github.io/en/</link>
+    <link>https://haax9.github.io/en/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sat, 21 Mar 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://haaxmax.github.io/en/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haax9.github.io/en/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hack The Box - Forest</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/</link>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/forest/</link>
       <pubDate>Sat, 21 Mar 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/forest/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/forest/</guid>
       <description>&lt;p&gt;Forest is a Windows machine considered as easy/medium and Active Directory oriented. An anonymous access allows you to list domain accounts and identify a service account. This one is vulnerable to an ASREP Roasting attack, providing user access through WinRM. The privilege escalation is achieved through the exploitation of the &amp;ldquo;PrivExchange&amp;rdquo; vulnerability.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>NorzhCTF 2020 - OSINT - Familly Business</title>
-      <link>https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/</link>
+      <link>https://haax9.github.io/en/writeups/nozrhctf-2020/familly_business/</link>
       <pubDate>Sun, 02 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/nozrhctf-2020/familly_business/</guid>
+      <guid>https://haax9.github.io/en/writeups/nozrhctf-2020/familly_business/</guid>
       <description>&lt;p&gt;New year, new NorzhCTF edition, organized next to the FIC 2020. As I am no longer student at ENSIBS, I had the opportunity to participate in the event. This post deals with the solution of &amp;ldquo;Familly Business&amp;rdquo;, an OSINT/SOCMINT challenge divided in 2 parts.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Hack The Box - Jarvis</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/jarvis/</link>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/jarvis/</link>
       <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/jarvis/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/jarvis/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
 
 &lt;p&gt;Jarvis est une machine Linux catégorisée comme facile/moyenne. L&amp;rsquo;exploitation d&amp;rsquo;un injection SQL sur le site web permet de récupérer un accès limité. Une première phase d&amp;rsquo;escalade de privilège est réalisée grâce à une injection de commande dans un script. Enfin, la compromission de la machine peut être faite grâce à un binaire SUID (systemctl) en construisant un service.&lt;/p&gt;</description>
@@ -41,10 +41,10 @@
     
     <item>
       <title>Hack The Box - Haystack</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/hackthebox/haystack/</link>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/haystack/</link>
       <pubDate>Sat, 09 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/hackthebox/haystack/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/haystack/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
 
 &lt;p&gt;Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&amp;rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&amp;rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&amp;rsquo;exploitation d&amp;rsquo;un Logstash mal configuré permet d&amp;rsquo;élever ses privilèges.&lt;/p&gt;</description>
@@ -52,19 +52,19 @@
     
     <item>
       <title>NorzhCTF 2019 &amp; RedHackCTF 2019 - Windows AD - Game of Pwn</title>
-      <link>https://haaxmax.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</link>
+      <link>https://haax9.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</link>
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</guid>
+      <guid>https://haax9.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</guid>
       <description>&lt;p&gt;The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with &lt;a href=&#34;https://twitter.com/AzrakelK&#34; target=&#34;blank&#34;&gt;@AzrakelK (L0n3w0lf)&lt;/a&gt;, the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Santhacklaus CTF 2018 - Solved Challenges</title>
-      <link>https://haaxmax.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</link>
+      <link>https://haax9.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</link>
       <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</guid>
+      <guid>https://haax9.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
 
 &lt;p&gt;Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&amp;rsquo;IMT Lille Douai &lt;a href=&#34;https://twitter.com/_nwodtuhs&#34; target=&#34;blank&#34;&gt;@_nwodtuhs&lt;/a&gt; &lt;a href=&#34;https://twitter.com/m3lsius&#34; target=&#34;blank&#34;&gt;@m3lsius&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Ch3n4p4N&#34; target=&#34;blank&#34;&gt;@Ch3n4p4N&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Th4cho&#34; target=&#34;blank&#34;&gt;@Deldel&lt;/a&gt;. Cet article traite des différents challenges que j&amp;rsquo;ai réussi et eu le temps de faire.&lt;/p&gt;</description>
@@ -72,119 +72,119 @@
     
     <item>
       <title>ECW 2018 - Web - Intrusion (5 challenges)</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2018/web-intrusion/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-intrusion/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2018/web-intrusion/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (+1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2018 - Web - Troll.JSP</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2018/web-troll-jsp/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-troll-jsp/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2018/web-troll-jsp/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &amp;ldquo;Troll.JSP&amp;rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2018 - Web - SysIA</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2018/web-sysia/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2018/web-sysia/</link>
       <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2018/web-sysia/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2018/web-sysia/</guid>
       <description>&lt;p&gt;ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&amp;rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. SysIA is a challenge based on a LFI (Local File Inclusion) exploitation using the bash_history and the updatedb tool to find the flag.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Windows 10 &amp; GPO - Hardening against personal data leak</title>
-      <link>https://haaxmax.github.io/en/articles/durcissement-windows-gpo/</link>
+      <link>https://haax9.github.io/en/articles/durcissement-windows-gpo/</link>
       <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/articles/durcissement-windows-gpo/</guid>
+      <guid>https://haax9.github.io/en/articles/durcissement-windows-gpo/</guid>
       <description>&lt;p&gt;Since the release of the Windows 10 operating system, many questions about user privacy have been raised. Indeed, even if our data were already collected before, Microsoft has opened their communication on the data collection with Windows 10. It allows mani people to open their eyes and become aware of things happenin.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Web containers - Stop data sharing between websites</title>
-      <link>https://haaxmax.github.io/en/articles/web-containers-privacy/</link>
+      <link>https://haax9.github.io/en/articles/web-containers-privacy/</link>
       <pubDate>Thu, 27 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/articles/web-containers-privacy/</guid>
+      <guid>https://haax9.github.io/en/articles/web-containers-privacy/</guid>
       <description>If you regularly use an Internet browser and you know a little bit about Web technology, you generally know what data is retrieved by the different websites that you visit. If not, just know that each visited website stores information about you through different mechanisms (cookies in particular) which can for example identify you so you no longer have to enter your credentials.
 However, this is only a small part of the data that publishers recover.</description>
     </item>
     
     <item>
       <title>Android Internet Box and Privacy - The iceberg summit</title>
-      <link>https://haaxmax.github.io/en/articles/internet-box-privacy/</link>
+      <link>https://haax9.github.io/en/articles/internet-box-privacy/</link>
       <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/articles/internet-box-privacy/</guid>
+      <guid>https://haax9.github.io/en/articles/internet-box-privacy/</guid>
       <description>&lt;p&gt;A little lighter post this time, dealing with connected internet boxes, and specifically the Miami Bboxes (which is a French ISP). Indeed, having one of these boxes, I wondered what I could find from a privacy point of view and what a basic and curious user could do with parameters. We will therefore see here that a certain number of default parameters are activated and that it is possible to act on them. I should point out that no box was mistreated in the context of these experiments : D.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Best security practices for WordPress installations</title>
-      <link>https://haaxmax.github.io/en/articles/best-security-practice-wordpress-installation/</link>
+      <link>https://haax9.github.io/en/articles/best-security-practice-wordpress-installation/</link>
       <pubDate>Sat, 31 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/articles/best-security-practice-wordpress-installation/</guid>
+      <guid>https://haax9.github.io/en/articles/best-security-practice-wordpress-installation/</guid>
       <description>&lt;p&gt;If you want to set up your own website but you are not an expert, you may have seen the word &amp;ldquo;Wordpress&amp;rdquo; spread. It is a CMS (Content Management System) to help in the the creation of a website. Basically, it facilitates creation and management by providing a ready-to-use interface. Now all you have to do is customize your site and write your articles! No need to write code (even if it is possible to search and modify manually) !&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>The password reuse threat</title>
-      <link>https://haaxmax.github.io/en/articles/password-reuse-threat/</link>
+      <link>https://haax9.github.io/en/articles/password-reuse-threat/</link>
       <pubDate>Sun, 17 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/articles/password-reuse-threat/</guid>
+      <guid>https://haax9.github.io/en/articles/password-reuse-threat/</guid>
       <description>&lt;p&gt;I&amp;rsquo;m sure you&amp;rsquo;ve already heard it thousand times, but questions about passwords on Internet are more than ever critical for your privacy and personal data. Nowadays, Internet is used for (almost) everything and by (almost) everyone, from the simple cooking website to your bank account, through social networks, marketing websites or even your mailboxes. It makes a lot of websites, account, and so, passwords.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2017 - Web - Path Through</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2017/web-path-through/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2017/web-path-through/</link>
       <pubDate>Thu, 30 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2017/web-path-through/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2017/web-path-through/</guid>
       <description>&lt;p&gt;The ECW 2017 is a French Jeopardy challenge organized by the &amp;ldquo;Pôle d&amp;rsquo;Excellence Cyber&amp;rdquo; in partnership with the &amp;ldquo;Région Bretagne&amp;rdquo;, Airbus and Thalès. Path Through is a web challenge based on blind SQL Injection.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>ECW 2017 - Web - Hall of Fame</title>
-      <link>https://haaxmax.github.io/en/writeups/ecw-2017/web-hall-of-fame/</link>
+      <link>https://haax9.github.io/en/writeups/ecw-2017/web-hall-of-fame/</link>
       <pubDate>Thu, 23 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/ecw-2017/web-hall-of-fame/</guid>
+      <guid>https://haax9.github.io/en/writeups/ecw-2017/web-hall-of-fame/</guid>
       <description>&lt;p&gt;The ECW 2017 is a French Jeopardy challenge organized by the “Pôle d’Excellence Cyber” in partnership with the “Région Bretagne”, Airbus and Thalès. Hall of Fame is a web challenge based on Union SQL Injection.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Quaoar Virtual Machine - Walkthrough</title>
-      <link>https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</link>
+      <link>https://haax9.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</link>
       <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</guid>
+      <guid>https://haax9.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/</guid>
       <description>&lt;p&gt;&amp;ldquo;Quaoar&amp;rdquo; is a &amp;ldquo;Boot2Root&amp;rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>TamuCTF 2017 - Steganography - Musical Bits</title>
-      <link>https://haaxmax.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</link>
+      <link>https://haax9.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</link>
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</guid>
+      <guid>https://haax9.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</guid>
       <description>&lt;p&gt;The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &amp;ldquo;Musical Bits&amp;rdquo; challenge which is a Steganography challenge. &lt;a href=&#34;https://twitter.com/Haaxmax&#34; target=&#34;\_blank&#34; rel=&#34;noopener&#34;&gt;I&lt;/a&gt; worked with &lt;a href=&#34;https://twitter.com/ErwanFily&#34; target=&#34;\_blank&#34; rel=&#34;noopener&#34;&gt;Iptior&lt;/a&gt; on this one and it tooks severals hours of pain before success! Let&amp;rsquo;s go!&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>About haax.fr</title>
-      <link>https://haaxmax.github.io/en/about/</link>
+      <link>https://haax9.github.io/en/about/</link>
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://haaxmax.github.io/en/about/</guid>
+      <guid>https://haax9.github.io/en/about/</guid>
       <description>This is a personal website used to publish different things. You can find some CTF (Capture The Flag) write-ups, Virtual Machines walkthroughs or articles about privacy. It can be for people who knows a little bit the InfoSec field but, most of time, they will be for neophytes who want to learn things. I&amp;rsquo;ll try to write everyhting in both French and English (you can switch language in the sidebar panel).</description>
     </item>
     
