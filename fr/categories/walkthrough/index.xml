@@ -20,6 +20,15 @@
     </item>
     
     <item>
+      <title>Hack The Box - Resolute</title>
+      <link>https://haax9.github.io/fr/walkthroughs/hackthebox/resolute/</link>
+      <pubDate>Sat, 06 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/walkthroughs/hackthebox/resolute/</guid>
+      <description>&lt;p&gt;Resolute est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&amp;rsquo;énumérer les comptes du domaine et ainsi identifier un mot de passe par défaut. L&amp;rsquo;obtention d&amp;rsquo;un shell via WinRM permet par la suite d&amp;rsquo;énumérer les propriétés du domaine et de trouver un mot de passe pour un utilisateur membre du groupe local &amp;ldquo;DnsAdmins&amp;rdquo;. L&amp;rsquo;escalade de privilège est réalisée au travers d&amp;rsquo;un DLL hijacking.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Hack The Box - Forest</title>
       <link>https://haax9.github.io/fr/walkthroughs/hackthebox/forest/</link>
       <pubDate>Sat, 21 Mar 2020 00:00:00 +0000</pubDate>

