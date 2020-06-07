@@ -282,8 +282,7 @@ Nmap done: 1 IP address (1 host up) scanned in 1012.52 seconds
            Raw packets sent: 30720 (1.357MB) | Rcvd: 663 (31.066KB)
 </code></pre>
 
-<p>Le scan révèle la présence d&rsquo;un port 445, classique, mais également le port 4386, qui semble être un service de &ldquo;Reporting&rdquo;.
-<br/></p>
+<p>Le scan révèle la présence d&rsquo;un port 445, classique, mais également le port 4386, qui semble être un service de &ldquo;Reporting&rdquo;.</p>
 
 <h2 id="accès-smb-anonyme-et-récupération-d-un-compte-temporaire">Accès SMB anonyme et récupération d&rsquo;un compte temporaire</h2>
 
@@ -399,8 +398,6 @@ smb: \&gt; ls
   IT                                  D        0  Thu Aug  8 12:59:25 2019
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="énumération-et-récupération-du-projet-vb">Énumération et récupération du projet VB</h2>
 
 <p>Ici commence une nouvelle phase d&rsquo;énumération. En effet, l&rsquo;ensemble des éléments non accessibles auparavant doivent être analysés, à la recherche de nouvelles informations.
@@ -505,8 +502,6 @@ getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\ConfigFile.vb of size 772 as 
 ...
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="déchiffrement-et-shell-utilisateur">Déchiffrement et shell utilisateur</h2>
 
 <p>Ayant maintenant le code source du projet VB, le but est d&rsquo;identifier les parties du codes permettant de réaliser le chiffrement/dechiffrement des mots de passe. Je ne vais pas rentrer dans les détails du code, mais une fonction <code>Decrypt</code> est identifiable assez facilement.</p>
@@ -607,8 +602,6 @@ smb: \C.Smith\&gt; ls
         10485247 blocks of size 4096. 6545509 blocks available
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="récupération-du-mot-de-passe-de-debug">Récupération du mot de passe de DEBUG</h2>
 
 <p>Nouvel accès = nouvelle phase d&rsquo;énumération.
@@ -652,8 +645,6 @@ getting file \C.smith\HQK Reporting\Debug Mode Password.txt:Password:$Data of si
 $ cat Debug\ Mode\ Password.txt:Password:\$Data 
 WBQ201953D8w 
 </code></pre>
-
-<p><br/></p>
 
 <h2 id="manipulation-du-service-de-reporting">Manipulation du service de Reporting</h2>
 
@@ -775,8 +766,6 @@ BaseOu=OU=WBQ Users,OU=Production,DC=nest,DC=local
 User=Administrator
 Password=yyEq0Uvvhq2uQOcWG8peLoeRQehqip/fKdeG/kjEVb4=
 </code></pre>
-
-<p><br/></p>
 
 <h2 id="déchiffrement-et-escalade-de-privilège">Déchiffrement et escalade de privilège</h2>
 

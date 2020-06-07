@@ -282,8 +282,7 @@ Nmap done: 1 IP address (1 host up) scanned in 1012.52 seconds
            Raw packets sent: 30720 (1.357MB) | Rcvd: 663 (31.066KB)
 </code></pre>
 
-<p>The scan is revealing that 2 ports are open. The classical 445 but also the 4386 which seems to be a &ldquo;Reporting&rdquo; service.
-<br/></p>
+<p>The scan is revealing that 2 ports are open. The classical 445 but also the 4386 which seems to be a &ldquo;Reporting&rdquo; service.</p>
 
 <h2 id="anonymous-smb-access-and-temporary-account">Anonymous SMB access and temporary account</h2>
 
@@ -399,8 +398,6 @@ smb: \&gt; ls
   IT                                  D        0  Thu Aug  8 12:59:25 2019
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="enumeration-and-gathering-vb-project">Enumeration and gathering VB project</h2>
 
 <p>Here begins a new enumeration phase. Indeed, all the elements that were not previously accessible have to be analyzed, looking for new information.
@@ -505,8 +502,6 @@ getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\ConfigFile.vb of size 772 as 
 ...
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="decryption-and-user-shell">Decryption and user shell</h2>
 
 <p>Having now the source code of the VB project, the goal is to identify the parts of the code allowing to perform the encryption/decryption of passwords. I won&rsquo;t go into the details of the code, but a <code>Decrypt</code> function can be identified quite easily.</p>
@@ -607,8 +602,6 @@ smb: \C.Smith\&gt; ls
         10485247 blocks of size 4096. 6545509 blocks available
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="getting-the-debug-password">Getting the DEBUG password</h2>
 
 <p>New access = new enumeration phase.
@@ -652,8 +645,6 @@ getting file \C.smith\HQK Reporting\Debug Mode Password.txt:Password:$Data of si
 $ cat Debug\ Mode\ Password.txt:Password:\$Data 
 WBQ201953D8w 
 </code></pre>
-
-<p><br/></p>
 
 <h2 id="playing-with-the-reporting-service">Playing with the reporting service</h2>
 
@@ -775,8 +766,6 @@ BaseOu=OU=WBQ Users,OU=Production,DC=nest,DC=local
 User=Administrator
 Password=yyEq0Uvvhq2uQOcWG8peLoeRQehqip/fKdeG/kjEVb4=
 </code></pre>
-
-<p><br/></p>
 
 <h2 id="decryption-vol-2-and-privilege-escalation">Decryption vol.2 and privilege escalation</h2>
 
