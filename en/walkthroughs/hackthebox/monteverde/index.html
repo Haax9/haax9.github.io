@@ -412,7 +412,7 @@ Mode                LastWriteTime         Length Name
 
 <p>That way, we gather an incredible PowerShell script automating the extraction (thanks to @<em>xpn</em>!).</p>
 
-<pre><code class="language-powershell">Write-Host &quot;AD Connect Sync Credential Extract POC (@_xpn_)`n&quot;
+<pre><code class="language-bash">Write-Host &quot;AD Connect Sync Credential Extract POC (@_xpn_)`n&quot;
 
 $client = new-object System.Data.SqlClient.SqlConnection -ArgumentList &quot;Data Source=(localdb)\.\ADSync;Initial Catalog=ADSync&quot;
 $client.Open()
@@ -465,7 +465,7 @@ Write-Host (&quot;Password: &quot; + $password.Password)
 
 <p>In our case, a MSSQL instance is used. So, we will have to modify the following line.</p>
 
-<pre><code class="language-PowerShell">$client = new-object System.Data.SqlClient.SqlConnection -ArgumentList &quot;Server=LocalHost;Database=ADSync;Trusted_Connection=True;&quot;
+<pre><code class="language-bash">$client = new-object System.Data.SqlClient.SqlConnection -ArgumentList &quot;Server=LocalHost;Database=ADSync;Trusted_Connection=True;&quot;
 $client.Open()
 </code></pre>
 
