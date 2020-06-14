@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haax9.github.io/fr/walkthroughs/hackthebox/monteverde/</loc>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/walkthroughs/hackthebox/monteverde/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/walkthroughs/hackthebox/monteverde/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haax9.github.io/fr/walkthroughs/hackthebox/nest/</loc>
     <lastmod>2020-06-07T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -304,7 +319,7 @@
   
   <url>
     <loc>https://haax9.github.io/fr/categories/</loc>
-    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -320,7 +335,7 @@
   
   <url>
     <loc>https://haax9.github.io/fr/</loc>
-    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -336,7 +351,7 @@
   
   <url>
     <loc>https://haax9.github.io/fr/categories/posts/</loc>
-    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -352,7 +367,7 @@
   
   <url>
     <loc>https://haax9.github.io/fr/categories/walkthrough/</loc>
-    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -368,7 +383,7 @@
   
   <url>
     <loc>https://haax9.github.io/fr/walkthroughs/</loc>
-    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"

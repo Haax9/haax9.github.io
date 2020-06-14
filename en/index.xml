@@ -5,10 +5,19 @@
     <link>https://haax9.github.io/en/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 07 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/en/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hack The Box - Monteverde</title>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/monteverde/</link>
+      <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/monteverde/</guid>
+      <description>&lt;p&gt;Monteverde is a Windows machine considered easy/medium and Active Directory oriented. An anonymous pseudo access allows to list domain accounts and help identifying a trivial account. The analysis of a network share allows to retrieve an account member of the &amp;ldquo;Azure Admins&amp;rdquo; group. Privilege escalation is performed through the exploitation of Azure AD Connect.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Hack The Box - Nest</title>
