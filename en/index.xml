@@ -5,7 +5,7 @@
     <link>https://haax9.github.io/en/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 14 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/en/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,7 +13,7 @@
     <item>
       <title>Hack The Box - Sauna</title>
       <link>https://haax9.github.io/en/walkthroughs/hackthebox/sauna/</link>
-      <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 08 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/en/walkthroughs/hackthebox/sauna/</guid>
       <description>&lt;p&gt;Sauna is a Windows machine considered easy and Active Directory oriented. The company&amp;rsquo;s website indicates a potential list of users, allowing to perform a brute force through an ASRepRoasting attack. Getting a shell through WinRM allow to list the domain properties and find a password in the WinLogon registry keys. This user has the necessary rights (DCSync) to dump the NTDS database, which allows to connect with the NTLM hash of the administrator.&lt;/p&gt;</description>
