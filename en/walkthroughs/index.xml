@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>Hack The Box - Sauna</title>
+      <link>https://haax9.github.io/en/walkthroughs/hackthebox/sauna/</link>
+      <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/walkthroughs/hackthebox/sauna/</guid>
+      <description>&lt;p&gt;Sauna is a Windows machine considered easy and Active Directory oriented. The company&amp;rsquo;s website indicates a potential list of users, allowing to perform a brute force through an ASRepRoasting attack. Getting a shell through WinRM allow to list the domain properties and find a password in the WinLogon registry keys. This user has the necessary rights (DCSync) to dump the NTDS database, which allows to connect with the NTLM hash of the administrator.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Hack The Box - Monteverde</title>
       <link>https://haax9.github.io/en/walkthroughs/hackthebox/monteverde/</link>
       <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
