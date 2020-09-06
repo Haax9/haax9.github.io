@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haax9.github.io/en/walkthroughs/hackthebox/remote/</loc>
+    <lastmod>2020-09-06T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/walkthroughs/hackthebox/remote/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/walkthroughs/hackthebox/remote/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haax9.github.io/en/walkthroughs/hackthebox/sauna/</loc>
     <lastmod>2020-08-08T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -334,7 +349,7 @@
   
   <url>
     <loc>https://haax9.github.io/en/categories/</loc>
-    <lastmod>2020-08-08T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -350,7 +365,7 @@
   
   <url>
     <loc>https://haax9.github.io/en/</loc>
-    <lastmod>2020-08-08T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -366,7 +381,7 @@
   
   <url>
     <loc>https://haax9.github.io/en/categories/posts/</loc>
-    <lastmod>2020-08-08T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -382,7 +397,7 @@
   
   <url>
     <loc>https://haax9.github.io/en/categories/walkthrough/</loc>
-    <lastmod>2020-08-08T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -398,7 +413,7 @@
   
   <url>
     <loc>https://haax9.github.io/en/walkthroughs/</loc>
-    <lastmod>2020-08-08T00:00:00+00:00</lastmod>
+    <lastmod>2020-09-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
