@@ -267,8 +267,6 @@ Completed NSE at 15:09, 0.00s elapsed
 
 </code></pre>
 
-<p><br/></p>
-
 <h2 id="partages-nfs-et-code-source">Partages NFS et code source</h2>
 
 <p>Première piste de recherche, le service ouvert derrière le port 2049. N&rsquo;ayant jusqu&rsquo;à maintenant jamais eu à faire à ce type de services, quelques recherches se sont imposées.
@@ -337,8 +335,6 @@ S&rsquo;il s&rsquo;agit d&rsquo;un mot de passe faible, les chances de réussite
 <pre><code class="language-bash">admin@htb.local
 baconandcheese
 </code></pre>
-
-<p><br/></p>
 
 <h2 id="remote-code-execution-et-shell-utilisateur">Remote Code Execution et shell utilisateur</h2>
 
@@ -461,8 +457,7 @@ connect to [10.10.14.7] from (UNKNOWN) [10.10.10.180] 49902
 </code></pre>
 
 <p>b00m ! Un joli shell utilisateur :).
-Après énumération des utilisateur, la machine ne disposant pas d&rsquo;utilisateurs particuliers, le premier flag peut être récupéré dans le répertoire <code>C:\Users\Public</code>.
-<br/></p>
+Après énumération des utilisateur, la machine ne disposant pas d&rsquo;utilisateurs particuliers, le premier flag peut être récupéré dans le répertoire <code>C:\Users\Public</code>.</p>
 
 <h2 id="reconnaissance-et-prise-d-information">Reconnaissance et prise d&rsquo;information</h2>
 
@@ -551,8 +546,6 @@ Depuis notre reverse shell, nous sommes en mesure de télécharger directement l
    C:\Windows\System32\OpenSSH\
 [...]
 </code></pre>
-
-<p><br/></p>
 
 <h2 id="escalade-de-privilège-et-flag-administrateur">Escalade de privilège et flag administrateur</h2>
 
