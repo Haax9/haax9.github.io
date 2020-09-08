@@ -212,7 +212,7 @@ des données géographiques, géolocalisées et/ou potentiellement géolocalisab
 <p>Dimanche 30 Août 2020. Nous recevons la photo suivante sur le canal de discussion de groupe que nous utilisons régulièrement, accompagné du message &ldquo;Où la photo a-t-elle été prise. D&rsquo;où suis-je parti et vers où ? :)&rdquo;</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_1.jpg" alt="Challenge picture" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 1 : Photo originale reçue</em></p></p>
+<em class="imageCaption">Fig. 1 : Photo originale reçue</em></p>
 
 <p>À partir de cet instant, même si j&rsquo;ai quelques jours devant moi, le temps restant pour résoudre le challenge est compté. Vous comprendrez pourquoi au fil de l&rsquo;investigation.</p>
 
@@ -233,7 +233,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Passons maintenant à l&rsquo;analyse de la photo et des éléments remarquables. À première vue, à minima quatre éléments sont à noter.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_2.jpg" alt="Challenge picture 2" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 2 : Éléments remarquables à analyser</em></p></p>
+<em class="imageCaption">Fig. 2 : Éléments remarquables à analyser</em></p>
 
 <ul>
 <li><strong>Rouge</strong> : L&rsquo;ailette de l&rsquo;avion (terme officiel anglais : winglet) et plus précisément sa forme et sa couleur sont des éléments intéressants. Ils peuvent permettre d&rsquo;identifier le modèle de l&rsquo;avion ainsi que la compagnie de vol ;</li>
@@ -259,7 +259,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Côté Airbus (<a href="https://www.airbus.com/aircraft.html" target="_blank">lien</a> et <a href="https://en.wikipedia.org/wiki/Airbus#Products" target="_blank">lien</a>) je pense en premier lieu au modèle A380 mais écarte rapidement cette option car ce modèle, propulsé par quatre réacteurs, dispose de 5 rails de glissements des volets par aile. Or, notre appareil n&rsquo;en a que 4.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/AIRBUS_A380.jpg" alt="Airbus A380" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 3 : Airbus A380</em></p></p>
+<em class="imageCaption">Fig. 3 : Airbus A380</em></p>
 
 <p>Du côté de la famille des A320 (et dérivés), c&rsquo;est plus prometteur ! L&rsquo;article suivant (<a href="https://www.dataero.fr/differencier-famille-a320/" target="_blank">lien</a>) nous explique quelques différences entre les modèles et notamment vis à vis de la gamme &ldquo;NEO&rdquo;. La totalité des modèles de cette gamme possède des winglet en forme de &ldquo;sharklets&rdquo; (ailerons unique vers le haut). Notre avion n&rsquo;est donc pas un NEO.</p>
 
@@ -270,7 +270,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>De plus, le schéma ci-dessous montre une porte latérale située juste derrière l&rsquo;aile des Airbus A321, située sensiblement au même niveau que la place passagère d&rsquo;où a été prise la photo. Ainsi, cela écarte ce modèle d&rsquo;appareil.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SCHEMA_AIRBUS.png" alt="A320 family schema" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 4 : Airbus A32X Family</em></p></p>
+<em class="imageCaption">Fig. 4 : Airbus A32X Family</em></p>
 
 <p>Cette première phase de recherche nous permet donc d&rsquo;avoir une liste de modèles potentiels :</p>
 
@@ -291,22 +291,22 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>L&rsquo;outil en ligne <a href="http://suncalc.net" target="_blank">SunCalc</a> offre la possibilité de connaître la position du soleil pour un point géographique et une date donnée. Ainsi, en prenant comme point de référence Paris (départ éventuel de CDG ou Orly) pour la date donnée, on obtient le résultat suivant.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUNCALC_1.jpg" alt="Suncalc Paris" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 5 : Position du soleil le 30/08/2020 à 18:00</em></p></p>
+<em class="imageCaption">Fig. 5 : Position du soleil le 30/08/2020 à 18:00</em></p>
 
 <p>L&rsquo;ombre sur l&rsquo;aile de l&rsquo;avion indique que le soleil était situé à sa droite. L&rsquo;aligement, non parallèle, de l&rsquo;ombre avec la forme de l&rsquo;avion indique également que le soleil était situé légèrement en retrait par rapport à l&rsquo;appareil.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_1.jpg" alt="Sun position on airplane" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 6 : Projection de l&rsquo;ombre de l&rsquo;appareil</em></p></p>
+<em class="imageCaption">Fig. 6 : Projection de l&rsquo;ombre de l&rsquo;appareil</em></p>
 
 <p>D&rsquo;un autre côté, les ombres portées sur les éléménts en contrebas (montagnes et nuages) permettent de préciser la position du soleil, en retrait.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 7 : Projection de l&rsquo;ombre des montagnes et nuages</em></p></p>
+<em class="imageCaption">Fig. 7 : Projection de l&rsquo;ombre des montagnes et nuages</em></p>
 
 <p>Ayant toujours en tête un départ hypothétique depuis la France (position du soleil calculée depuis Paris) et avec l&rsquo;aide de ces éléments, il est possible de tracer grossièrement la trajectoire supposée de l&rsquo;appareil, direction Sud-Est. La ligne rouge ci-dessous correspond à la projection du soeil tandis que la flèche correspond à la trajectoire.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/PLANE_DIRECTION.jpg" alt="Plane direction" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 8 : Trajectoire potentielle de l&rsquo;appareil</em></p></p>
+<em class="imageCaption">Fig. 8 : Trajectoire potentielle de l&rsquo;appareil</em></p>
 
 <p>Ainsi, cela réduit les destinations possibles à la Méditérannée, nord de l&rsquo;Afrique ou Ouest du Moyen-Orient.</p>
 
@@ -360,15 +360,15 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>L&rsquo;excellent outil de tracking aérien <a href="https://www.flightradar24.com" target="_blank">FlightRadar24</a> propose notamment de visualiser, pour une compagnie aérienne donnée, l&rsquo;ensemble des lignes désservies. Ainsi, en affichant les routes existantes pour les 3 sociétés, il devient possible d&rsquo;éliminer <strong>Czech Airlines</strong> ainsi que <strong>Austrian Airlines</strong> qui ne proposent aucun vol partant de France et en direction du Sud-Est.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/AUSTRIAN_ROUTES.jpg" alt="Austrian Airlines routes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 9 : Voies aériennes de Austrian Airlines</em></p></p>
+<em class="imageCaption">Fig. 9 : Voies aériennes de Austrian Airlines</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/CZECH_ROUTES.jpg" alt="Czech Airlines routes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 10 : Voies aériennes de Czech Airlines</em></p></p>
+<em class="imageCaption">Fig. 10 : Voies aériennes de Czech Airlines</em></p>
 
 <p>Le réseau aérien de la compagnie Volotea semble proposer bien plus d&rsquo;itinéraires, dont certains pouvant correspondre aux recherches.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLOTEA_ROUTES.jpg" alt="Volotea routes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 10 : Voies aériennes de Volotea</em></p></p>
+<em class="imageCaption">Fig. 10 : Voies aériennes de Volotea</em></p>
 
 <p>Compte tenu des éléments recueillis et analysés, nous sommes maintenant quasiment certains que la compagnie aérienne empruntée est VOLOTEA ! Petite précision, en regardant la flotte d&rsquo;appareils en service pour cette compagnie (<a href="https://www.volotea.com/fr/a-propos-de-volotea/" target="_blank">lien</a>) on s&rsquo;aperçoit qu&rsquo;elle n&rsquo;opère qu&rsquo;avec deux types d&rsquo;avion, les Airbus A319 et les Boeing 717. On a donc également confirmation de l&rsquo;appareil utilisé, un <strong>Airbus A319</strong> !</p>
 
@@ -383,7 +383,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Ainsi, grâce à la fonction de recherche par date et horaire, on peut filtrer sur le 30/08/2020. Il faut cependant être vigilant sur le choix de l&rsquo;heure. En effet, il s&rsquo;agit d&rsquo;un format GMT (ou UTC). Étant sur un fuseau horaire UTC+2 à ce moment en France, il est nécessaire de prendre cela en compte (ajouter deux heures pour avoir l&rsquo;heure réelle).</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_SUNDAY_VOLOTEA.png" alt="Sunday Flights Volotea" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 11 : Historique des vols de la compagnie Volotea</em></p></p>
+<em class="imageCaption">Fig. 11 : Historique des vols de la compagnie Volotea</em></p>
 
 <p>D&rsquo;après les données récupérées, seuls deux vols peuvent correspondre aux caractéristiques recherchées (départ de France, probablement Nord/Ouest, en direction du Sud-Est).</p>
 
@@ -395,10 +395,10 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Il est également possible de constater l&rsquo;historique de chaque vol sur une durée de 7 jours via le service de FlightRadar24.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_NANTES.png" alt="Nantes flights" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 12 : Historique du vol V72606</em></p></p>
+<em class="imageCaption">Fig. 12 : Historique du vol V72606</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_CAEN.png" alt="Caen flights" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 13 : Historique du vol V72581</em></p></p>
+<em class="imageCaption">Fig. 13 : Historique du vol V72581</em></p>
 
 <p>Les deux vols étant cohérents en termes d&rsquo;horaire et de trajectoire, il semble difficile à première vue de les départager afin d&rsquo;identifier celui recherché. Compte tenu de la distance et des paysages légèrements différents, la dernière étape d&rsquo;analyse va permettre de lever le doute.</p>
 
@@ -409,27 +409,27 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Premièrement, si on trace la trajectoire, certes de manière un peu grossière, entre les points de départ et d&rsquo;arrivée de chaque vol, on remarque une légère différence.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/FLIGHTS_DIRECTION.jpg" alt="Nantes & Caen directions" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 14 : Trajectoire des deux vols</em></p></p>
+<em class="imageCaption">Fig. 14 : Trajectoire des deux vols</em></p>
 
 <p>Si on reprend maintenant le calcul de la position du soleil, le 30/08/2020 à 18:00 et qu&rsquo;on l&rsquo;applique sur les trajectoires potentielles des appareils, on obtient le résultat suivant.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_FLIGHTS.jpg" alt="Sun position over flights" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 15 : Position du soleil par rapport aux vols</em></p></p>
+<em class="imageCaption">Fig. 15 : Position du soleil par rapport aux vols</em></p>
 
 <p>En prenant maintenant en compte les ombres portées sur les reliefs en contrebas, exactement de la même façon que lors de la première analyse précédente et compte tenu de l&rsquo;angle que prennent ces dernières par rapport aux éléments sur lesquels elles portent (notamment visibles pour les nuages, ou la montagne encadrée en vert ci-dessous), on peut grandement supposer que le soleil, bien que donnant sur le côté droit de l&rsquo;avion, n&rsquo;est pas perpendiculaire et s&rsquo;aligne légèrement avec ce dernier.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 16 : Projection de l&rsquo;ombre des montagnes et nuages</em></p></p>
+<em class="imageCaption">Fig. 16 : Projection de l&rsquo;ombre des montagnes et nuages</em></p>
 
 <p>Ainsi, la trajectoire correspondant le plus aux caractéristiques ci-dessus serait celle entre les villes de Nantes et Bastia, soit le vol <strong>V72606</strong>.</p>
 
 <p>Cependant, une autre méthode permet de s&rsquo;en assurer, ou au contraire, de rectifier. Là encore, il s&rsquo;agit d&rsquo;informations accessibles de manière limitée dans le temps, puisqu&rsquo;elles proviennent du même ensemble que les données de vol étudiées ci-dessus. Une fois encore, le site FlightRadar24 est très utile, car il permet de retracer et visualiser, minute par minute, la position de l&rsquo;appareil pour un vol donné.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_CAEN.jpg" alt="Live replay Caen" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 17 : Rejeu du vol V72581</em></p></p>
+<em class="imageCaption">Fig. 17 : Rejeu du vol V72581</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_NANTES.jpg" alt="Live replay Nantes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 18 : Rejeu du vol V72606</em></p></p>
+<em class="imageCaption">Fig. 18 : Rejeu du vol V72606</em></p>
 
 <p>Ainsi, sur le vol V72581 entre Caen et Marseille, à 18:00 (16:00 UTC+2), l&rsquo;appareil se situait non loin de Clermont-Ferrand, au dessus de la commune de Trézioux.
 En ce qui concerne le vol V72606, entre Nantes et Bastia, l&rsquo;appareil se situait à la même heure à la frontière entre le département des Hautes Alpes et celui des Alpes de Haute Provence, proche de la commune de Upaix.</p>
@@ -437,18 +437,18 @@ En ce qui concerne le vol V72606, entre Nantes et Bastia, l&rsquo;appareil se si
 <p>À partir de là, un rapide tour d&rsquo;horizon sur les paysages de chaque zone peut être fait. L&rsquo;outil suivant offre la possibilité de combiner les vues de Google Maps (carte et satellite) et de Google Street View (<a href="http://data.mashedworld.com" target="_blank">lien</a>).</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_TREZIOUX.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 19 : Paysage proche de Trézioux</em></p></p>
+<em class="imageCaption">Fig. 19 : Paysage proche de Trézioux</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_EYGUIANS.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 20 : Paysage proche de Upaix</em></p></p>
+<em class="imageCaption">Fig. 20 : Paysage proche de Upaix</em></p>
 
 <p>D&rsquo;un autre côté, la carte proposé par FlightRadar24 est également intéressante car plus précise en ce qui concerne la visualisation des reliefs.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_CAEN.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 21 : Carte du relief proche de Trézioux</em></p></p>
+<em class="imageCaption">Fig. 21 : Carte du relief proche de Trézioux</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_NANTES.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 22 : Carte du relief proche de Upaix</em></p></p>
+<em class="imageCaption">Fig. 22 : Carte du relief proche de Upaix</em></p>
 
 <p>L&rsquo;observation des paysages montre bien que la zone géographique autour de Trézioux, où est passé le vol Caen-Marseille, est relativement plate tandis que la zone proche de Upaix, où est passé le vol Nantes-Bastia, est beaucoup plus montagneuse, notamment sur la gauche de la trajectoire de l&rsquo;appareil. Or, plusieurs reliefs montagneux peuvent être aperçus sur la photo originale, ce qui semble éliminer le vol V72581 (Caen-Marseille).</p>
 
@@ -459,7 +459,7 @@ En ce qui concerne le vol V72606, entre Nantes et Bastia, l&rsquo;appareil se si
 <p>Cette affirmation a par la suite été validée par la personne en question, qui m&rsquo;a fourni cette capture d&rsquo;écran, réalisée au moment de la prise de la photo, au travers de l&rsquo;application de mobile de la compagnie. C&rsquo;est gagné !</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/RESULT.jpg" alt="Result" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 23 : Capture d&rsquo;écran prise au même moment que la photo</em></p></p>
+<em class="imageCaption">Fig. 23 : Capture d&rsquo;écran prise au même moment que la photo</em></p>
 
 <p>Bien que n&rsquo;étant absolument pas expert dans ce domaine, j&rsquo;ai tenté au travers de ce billet à la fois d&rsquo;expliquer la méthodologie et les recherches effectuées pour arriver à ce résultat, mais également de montrer qu&rsquo;il est possible, au travers de certains outils, de mener ce type d&rsquo;investigations et qu&rsquo;en plus de ça, il s&rsquo;agit d&rsquo;un exercice relativement prenant et amusant !</p>
 

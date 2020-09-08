@@ -211,7 +211,7 @@ describes, assesses, and visually depicts physical features and geographically r
 <p>Sunday, 30th of August, 2020. We receive the following picture on the group channel we often use, quoted with the following message : &ldquo;Where did I take this picture ? Where did I takeoff and to which destination ? :)&rdquo;</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_1.jpg" alt="Challenge picture" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 1 : Original challenge picture</em></p></p>
+<em class="imageCaption">Fig. 1 : Original challenge picture</em></p>
 
 <p>From that moment, even if I have a few days ahead of me, the remaining time to solve the challenge is counted. You will understand why later.</p>
 
@@ -232,7 +232,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Let&rsquo;s now move on to the picture analysis. At first glance, at least four elements are worth checking.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_2.jpg" alt="Challenge picture 2" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 2 : Interesting elements to analyze</em></p></p>
+<em class="imageCaption">Fig. 2 : Interesting elements to analyze</em></p>
 
 <ul>
 <li><strong>Red</strong> : The aircraft winglet and especially it&rsquo;s shape and colour are interesting informations. Indeed, it can help to identify the aircraft model and the airline company ;</li>
@@ -258,7 +258,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>However, for Airbus (<a href="https://www.airbus.com/aircraft.html" target="_blank">link</a> and <a href="https://en.wikipedia.org/wiki/Airbus#Products" target="_blank">link</a>) I&rsquo;m starting with the A380 model, but quickly discard this option because this model, propelled by four engines, has 5 flap sliding rails per wing. However, our aircraft only has 4 of them.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/AIRBUS_A380.jpg" alt="Airbus A380" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 3 : Airbus A380</em></p></p>
+<em class="imageCaption">Fig. 3 : Airbus A380</em></p>
 
 <p>In the A320 family (and derivatives), it&rsquo;s more promising! The following post (<a href="https://www.dataero.fr/differencier-famille-a320/" target="_blank">link</a>) explains some of the differences between models and especially with the &ldquo;NEO&rdquo; range. All of the NEO aircrafts have &ldquo;sharklets&rdquo; winglets (one-sided upward winglet). Our aircraft is therefore not a NEO.</p>
 
@@ -269,7 +269,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Furthermore, the below picture shows a lateral door just behind the wing on the Airbus A321, located at approximately the same level as the passenger seat from which the photo was taken. So, it seems we can discard the A321</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SCHEMA_AIRBUS.png" alt="A320 family schema" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 4 : Airbus A32X Family</em></p></p>
+<em class="imageCaption">Fig. 4 : Airbus A32X Family</em></p>
 
 <p>So, these first researches allow us to build the following reduced list :</p>
 
@@ -290,22 +290,22 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>The online tool <a href="http://suncalc.net" target="_blank">Suncalc</a>) allow to search for a precize sun position over time, even for the past days. So if we take Paris as a reference for the August 30th, we have the following result.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUNCALC_1.jpg" alt="Suncalc Paris" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 5 : Sun position on the 08/30/2020, 18:00</em></p></p>
+<em class="imageCaption">Fig. 5 : Sun position on the 08/30/2020, 18:00</em></p>
 
 <p>The shadow on plane&rsquo;s wing indicates that the sun was right to it. The alignment, non-parallel, of the shadow with the shape of the plane also indicates that the sun was located slightly behind.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_1.jpg" alt="Sun position on airplane" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 6 : Plane&rsquo;s shadow on the wing</em></p></p>
+<em class="imageCaption">Fig. 6 : Plane&rsquo;s shadow on the wing</em></p>
 
 <p>In the other hand, shadows of the clouds and mountains give clues to specify the sun position, a little more behind.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 7 : Shadows on clouds and mountains</em></p></p>
+<em class="imageCaption">Fig. 7 : Shadows on clouds and mountains</em></p>
 
 <p>Still think about an hypothetical departure from France and thanks to the previous elements, we can roughly plot a supposed flying path, toward South-East. The below red line corresponds the sun projection whereas the red arrow symbolize the potentiel path.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/PLANE_DIRECTION.jpg" alt="Plane direction" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 8 : Potential plane trajectory</em></p></p>
+<em class="imageCaption">Fig. 8 : Potential plane trajectory</em></p>
 
 <p>Finally, possibible destinations are restrained to places around the Mediterranean Sea, North of Afria and West of Middle East.</p>
 
@@ -359,15 +359,15 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>The excellent flight tracking tool <a href="https://www.flightradar24.com" target="_blank">FlightRadard24</a>) gives the opportunity to visualize, for a given airline, the entire route network. Thus, by showing all route for the three airlines, we can also discard <strong>Czech Airlines</strong> and <strong>Austrian Airlines</strong> because they don&rsquo;t have any flight to South-Est from France.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/AUSTRIAN_ROUTES.jpg" alt="Austrian Airlines routes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 9 : Austrian Airlines routes</em></p></p>
+<em class="imageCaption">Fig. 9 : Austrian Airlines routes</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/CZECH_ROUTES.jpg" alt="Czech Airlines routes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 10 : Czech Airlines routes</em></p></p>
+<em class="imageCaption">Fig. 10 : Czech Airlines routes</em></p>
 
 <p>The Volotera network seems to have much more routes, including some that could fit our criteria.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLOTEA_ROUTES.jpg" alt="Volotea routes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 10 : Volotea Airlines routes</em></p></p>
+<em class="imageCaption">Fig. 10 : Volotea Airlines routes</em></p>
 
 <p>Considering gathered elements, we are now almost sure that the airline used in this flight was Volotea. Another small information, if we check their operational fleet (<a href="https://www.volotea.com/fr/a-propos-de-volotea/" target="_blank">link</a>) we can see that Volotea only use two types or aircrafts, Airbus A319 and Boeing 717. So, we can now also be sure about the aircraft, an <strong>Airbus A319</strong> !</p>
 
@@ -382,7 +382,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>So, thanks to the search function, filetered by date and time, we&rsquo;re able to only see flights for the August 30th. However, we have to be carefull regarding the time. Indeed, the website data are based on the GMT (or UTC) format. Right now, we&rsquo;re on a UTC+2 time zone, so we have to add 2 hours to get the real time.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_SUNDAY_VOLOTEA.png" alt="Sunday Flights Volotea" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 11 : Volotea flights history</em></p></p>
+<em class="imageCaption">Fig. 11 : Volotea flights history</em></p>
 
 <p>According to the gathered data, only two flights correspond to our criteria (departure from France, probably from the North/West, toward South-East).</p>
 
@@ -395,10 +395,10 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>We can also check the history for each flight for the last 7 days, through FligtRadar24.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_NANTES.png" alt="Nantes flights" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 12 : V72606 flight history</em></p></p>
+<em class="imageCaption">Fig. 12 : V72606 flight history</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_CAEN.png" alt="Caen flights" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 13 : V72581 flight history</em></p></p>
+<em class="imageCaption">Fig. 13 : V72581 flight history</em></p>
 
 <p>As seen, both of the flights are coherent in terms of date, time and route. So, it seems difficult to know which one is the good one. That&rsquo;s why the last analysis step will help us in order to identity to get the good one.</p>
 
@@ -409,44 +409,44 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <p>Firstly, if we plot the trajectory, even if it&rsquo;s kinda rough, between departures and arrivals, for each flight, a little difference can be seen.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/FLIGHTS_DIRECTION.jpg" alt="Nantes & Caen directions" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 14 : Trajectory for both flights</em></p></p>
+<em class="imageCaption">Fig. 14 : Trajectory for both flights</em></p>
 
 <p>And now, if we use again the previously identified sun calculation, on the August 30th at 18:00 and we apply it on the previous paths. We have the following map, allowing to know, approximately, where was the sun against the plane.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_FLIGHTS.jpg" alt="Sun position over flights" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 15 : Sun position for each flight</em></p></p>
+<em class="imageCaption">Fig. 15 : Sun position for each flight</em></p>
 
 <p>Now let&rsquo;s take a look, once again, at the shadows below just like we did before. If we look at the angle they have on elements they are cast (for example, clouds and mountains) we can highly suppose that the sun, while being on the right side of the plane, is not perpendicular and slightly aligns itself with the aircraft.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 16 : Cloud&rsquo;s and mountain&rsquo;s shadows</em></p></p>
+<em class="imageCaption">Fig. 16 : Cloud&rsquo;s and mountain&rsquo;s shadows</em></p>
 
 <p>So it seems that the flight number <strong>V72606</strong> between Nantes and Bastia fits better our criteria.
 However, another method can be used to be sure of that information, or at least, to rectify it. Once again, it&rsquo;s about informations available in a short period of time because they come from the same previously used dataset. FlightRadar24 is also usefull here because thanks to this, you can replay the exact path and behavior for a given flight, minute by minute.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_CAEN.jpg" alt="Live replay Caen" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 17 : V72581 flight replay</em></p></p>
+<em class="imageCaption">Fig. 17 : V72581 flight replay</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_NANTES.jpg" alt="Live replay Nantes" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 18 : V72606 flight replay</em></p></p>
+<em class="imageCaption">Fig. 18 : V72606 flight replay</em></p>
 
 <p>Alright, so if we look at the V72581 flight between Caen and Marseille around 18:00 (16:00 UTC+2), the aircraft was close to Clermont-Ferrand city, just above a town called Trézioux. If we now check the same thing for the V72606 between Nantes and Bastia, the aircraft was near the French Alps, above another town called Upaix.</p>
 
 <p>From there, we use a quick landscape overview in order to find more elements. Thanks to the following tool (<a href="http://data.mashedworld.com" target="_blank">link</a>) you can combine Google Maps (map and satellite) and Google Street View.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_TREZIOUX.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 19 : Landscape near Trézioux</em></p></p>
+<em class="imageCaption">Fig. 19 : Landscape near Trézioux</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_EYGUIANS.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 20 : Landscape near Upaix</em></p></p>
+<em class="imageCaption">Fig. 20 : Landscape near Upaix</em></p>
 
 <p>On another hand, the map used by FlightRadar24 is also interesting because relief visualisation seems to be more precise.</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_CAEN.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 21 : Relief map near Trézioux</em></p></p>
+<em class="imageCaption">Fig. 21 : Relief map near Trézioux</em></p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_NANTES.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 22 : Relief map near Upaix</em></p></p>
+<em class="imageCaption">Fig. 22 : Relief map near Upaix</em></p>
 
 <p>The landscapes observation shows that the geographical area around Trézioux, where the Caen-Marseille flight went, is kinda flat, whereas the area near Upaix, where the Nantes-Bastia flight went, is much more mountainous, especially on the left side of the aircraft&rsquo;s trajectory. As long as several mountainous reliefs can be seen on the original photo, we can discard the V72581 (Caen-Marseille) flight !</p>
 
@@ -457,7 +457,7 @@ However, another method can be used to be sure of that information, or at least,
 <p>Later on, this assertion have been validated by the involved person which gave me this screenshot, taken from the mobile application at the same moment he shot the picture. Victory !</p>
 
 <p><center><img src="/img/writeups/osint_geoint/flight-challenge/RESULT.jpg" alt="Result" class="imgSize"/></center>
-<p class="imageCaption"><em>Fig. 23 : Screenshot taken from the mobile app</em></p></p>
+<em class="imageCaption">Fig. 23 : Screenshot taken from the mobile app</em></p>
 
 <p>Although I am far from being expert in this discipline, I tried through this post to explain both the methodology and the research done to get this result, but also to show that it is possible, through some tools, to conduct this kind of investigation and that, on top of that, it&rsquo;s a fascinating and fun exercise !</p>
 
