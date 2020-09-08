@@ -5,10 +5,46 @@
     <link>https://haax9.github.io/en/categories/</link>
     <description>Recent content in Categories on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/en/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Flight</title>
+      <link>https://haax9.github.io/en/categories/flight/</link>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/categories/flight/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GEOINT</title>
+      <link>https://haax9.github.io/en/categories/geoint/</link>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/categories/geoint/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OSINT</title>
+      <link>https://haax9.github.io/en/categories/osint/</link>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/categories/osint/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Writeup</title>
+      <link>https://haax9.github.io/en/categories/writeup/</link>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/categories/writeup/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Posts</title>

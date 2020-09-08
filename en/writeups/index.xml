@@ -5,10 +5,19 @@
     <link>https://haax9.github.io/en/writeups/</link>
     <description>Recent content in Writeups on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 02 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/en/writeups/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OSINT/GEOINT - Investigating and geolocating a commercial flight</title>
+      <link>https://haax9.github.io/en/writeups/osint-geoint/osint-flight-tracking-challenge/</link>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/writeups/osint-geoint/osint-flight-tracking-challenge/</guid>
+      <description>&lt;p&gt;A few days ago, a good friend sent me a picture taken from a plane for an OSINT/GEOINT challenge. The goal was to find the flight departure, arrival, but also, where the picture was taken. The topic being rather fun and considering the variety of information and skills needed to solve the challenge, I thought it would be interesting to write about it.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>NorzhCTF 2020 - OSINT - Familly Business</title>

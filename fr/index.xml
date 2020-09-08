@@ -5,10 +5,19 @@
     <link>https://haax9.github.io/fr/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/fr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OSINT/GEOINT - Investigation et Géolocalisation d&#39;un vol commercial</title>
+      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</link>
+      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</guid>
+      <description>&lt;p&gt;Il y a de cela quelques jours, un bon ami m&amp;rsquo;a envoyé une photo, visiblement prise depuis un avion, en guise de challenge OSINT/GEOINT. Le but est ici de retrouver le point de départ du vol, l&amp;rsquo;arrivée, mais également, de manière plus ou moins précise, à quel endroit a été prise la photo. Le sujet étant plutôt fun et compte tenu de la multitude d&amp;rsquo;informations et compétences nécessaires pour résoudre le challenge, je me suis dit qu&amp;rsquo;il serait intéressant d&amp;rsquo;écrire à ce sujet.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Hack The Box - Remote</title>
