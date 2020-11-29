@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</loc>
     <lastmod>2020-09-08T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -363,8 +368,14 @@
   </url>
   
   <url>
+    <loc>https://haax9.github.io/fr/categories/adn/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://haax9.github.io/fr/categories/</loc>
-    <lastmod>2020-09-08T00:00:00+00:00</lastmod>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
     <xhtml:link
                 rel="alternate"
@@ -375,6 +386,88 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haax9.github.io/fr/categories/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/categories/dna/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/categories/osint/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/categories/osint/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/categories/osint/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/categories/phishing/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/categories/social-engineering/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/categories/writeup/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/categories/writeup/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/categories/writeup/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/writeups/</loc>
+    <lastmod>2020-11-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/writeups/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/writeups/"
                 />
   </url>
   
@@ -407,70 +500,6 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haax9.github.io/fr/categories/geoint/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haax9.github.io/fr/</loc>
-    <lastmod>2020-09-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haax9.github.io/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haax9.github.io/fr/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haax9.github.io/fr/categories/osint/</loc>
-    <lastmod>2020-09-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haax9.github.io/en/categories/osint/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haax9.github.io/fr/categories/osint/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haax9.github.io/fr/categories/writeup/</loc>
-    <lastmod>2020-09-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haax9.github.io/en/categories/writeup/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haax9.github.io/fr/categories/writeup/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haax9.github.io/fr/writeups/</loc>
-    <lastmod>2020-09-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haax9.github.io/en/writeups/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haax9.github.io/fr/writeups/"
                 />
   </url>
   
