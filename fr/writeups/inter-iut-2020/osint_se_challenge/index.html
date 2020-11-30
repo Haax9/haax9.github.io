@@ -266,7 +266,7 @@ On peut tout d&rsquo;abord lire les 2 premières lignes.</p>
 <p>On a donc ce qui semble être les données du génome d&rsquo;une personne. Si l&rsquo;on en croit l&rsquo;énoncé, il s&rsquo;agirait d&rsquo;informations à propos de notre cible. On y apprend également que ces données ont été générées par le site &ldquo;23andMe&rdquo;.
 Une simple recherche Google nous permet d&rsquo;apprendre que ce service &ldquo;propose une analyse du code génétique aux particuliers&rdquo;.</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_1.PNG" alt="OSINT_SE_1" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_1.png" alt="OSINT_SE_1" class="imgSize"/></center></p>
 
 <p>Vous avez certainement déjà entendu parler de ces services, de plus en plus démocratisés depuis quelques années. Mais il s&rsquo;avère qu&rsquo;ils peuvent être controversés ! En effet, on ne sait jamais où vont les données ;)
 Ainsi, ce type de données peut être un vecteur intéressant de recherche en sources ouvertes.</p>
@@ -282,13 +282,13 @@ Ainsi, ce type de données peut être un vecteur intéressant de recherche en so
 
 <p>Ainsi, après avoir créé un faux compte et fourni le fichier brut, on peut récupérer les traits suivants.</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_2.PNG" alt="OSINT_SE_2" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_2.png" alt="OSINT_SE_2" class="imgSize"/></center></p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_3.PNG" alt="OSINT_SE_3" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_3.png" alt="OSINT_SE_3" class="imgSize"/></center></p>
 
 <p>Plusieurs éléments sont intéressants ici et pourraient service de levier. Par exemple, notre cible semble avoir une tendance à fumer, comme le montre l&rsquo;analyse des données.</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_4.PNG" alt="OSINT_SE_4" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_4.png" alt="OSINT_SE_4" class="imgSize"/></center></p>
 
 <p>Bien que d&rsquo;autres traits pourraient être utilisés, nous avons utilisé celui-ci pour définir notre scénario.
 <br/></p>
@@ -372,7 +372,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 <p>On se rend ensuite via un navigateur web sur l&rsquo;adresse IP de notre VPS en spécifiant le port 8000 utilisé et tadaaam !</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_5.PNG" alt="OSINT_SE_5" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_5.png" alt="OSINT_SE_5" class="imgSize"/></center></p>
 
 <h4 id="test-de-fonctionnement">Test de fonctionnement</h4>
 
@@ -411,7 +411,7 @@ Là encore, nous aurions pu réserver un nom de domaine crédible et s&rsquo;en 
 <p>Quelques minutes plus tard, l&rsquo;adresse &ldquo;news.lepetitvapoteur[at]gmail.com&rdquo; voit le jour.
 Afin de cacher le lien complet vers l&rsquo;URL de notre page, qui est un peu moche car de la forme &ldquo;hxxp://111.222.333.444:8000/index.html&rdquo;, nous pouvons utiliser un URL Shortener tel que Bitly (Quitte à faire du quick&amp;dirty, autant y aller à fond!) puis on créé un petit mail aguicheur en ajoutant le logo de notre leurre (crédibilité, toussa&hellip;).</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_6.PNG" alt="OSINT_SE_6" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_6.png" alt="OSINT_SE_6" class="imgSize"/></center></p>
 
 <p>Tout est prêt !
 <br/></p>
@@ -421,13 +421,13 @@ Afin de cacher le lien complet vers l&rsquo;URL de notre page, qui est un peu mo
 <p>Le serveur est lancé et le mail est prêt, ce dernier peut donc partir, à 11h46.
 À partir de là, telle une partie de pêche, il suffit d&rsquo;attendre. À peine 2 minutes plus tard, on observe une première connexion sur le serveur, mais sans idenfiants.</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_7.PNG" alt="OSINT_SE_7" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_7.png" alt="OSINT_SE_7" class="imgSize"/></center></p>
 
 <p>Les minutes passent et toujours rien. Sentiment connu de tout auditeur/consultant ayant déjà réalisé de réelles campagnes : &ldquo;Mince.. Est-ce que le formulaire fonctionne ? Est-ce que le site n&rsquo;est pas cassé ?&rdquo;.</p>
 
 <p>Mais finalement, à 13h14, la même adresse IP revient taper notre serveur et notre victime tente de se connecter, révélant ainsi son mot de passe qui n&rsquo;est autre que le flag !</p>
 
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_SE_8.PNG" alt="OSINT_SE_8" class="imgSize"/></center></p>
+<p><center><img src="/img/writeups/inter-iut-2020/OSINT_8.png" alt="OSINT_SE_8" class="imgSize"/></center></p>
 
 <p>w00t !</p>
 
