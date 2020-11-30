@@ -5,10 +5,19 @@
     <link>https://haax9.github.io/en/categories/osint/</link>
     <description>Recent content in OSINT on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 08 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 29 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/en/categories/osint/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing)</title>
+      <link>https://haax9.github.io/en/writeups/inter-iut-2020/osint_se_challenge/</link>
+      <pubDate>Sun, 29 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/writeups/inter-iut-2020/osint_se_challenge/</guid>
+      <description>&lt;p&gt;The CTF Inter IUT is an initiative started a few years ago by the ENSIBS school. Being online and open to all this year, we decided with a small group of friends to take a look at the different challenges. This post explains the solution of the challenge &amp;ldquo;La DGSE, c&amp;rsquo;est moi&amp;rdquo; on OSINT and Social Engineering topics.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>OSINT/GEOINT - Investigating and geolocating a commercial flight</title>

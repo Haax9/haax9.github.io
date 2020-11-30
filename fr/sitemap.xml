@@ -5,6 +5,16 @@
   <url>
     <loc>https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/writeups/inter-iut-2020/osint_se_challenge/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/"
+                />
   </url>
   
   <url>
@@ -371,6 +381,16 @@
     <loc>https://haax9.github.io/fr/categories/adn/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/categories/adn/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/categories/adn/"
+                />
   </url>
   
   <url>
@@ -393,6 +413,16 @@
     <loc>https://haax9.github.io/fr/categories/dna/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/categories/dna/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/categories/dna/"
+                />
   </url>
   
   <url>
@@ -431,12 +461,32 @@
     <loc>https://haax9.github.io/fr/categories/phishing/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/categories/phishing/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/categories/phishing/"
+                />
   </url>
   
   <url>
     <loc>https://haax9.github.io/fr/categories/social-engineering/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/categories/social-engineering/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/categories/social-engineering/"
+                />
   </url>
   
   <url>
