@@ -5,7 +5,7 @@
     <link>https://haax9.github.io/fr/categories/phishing/</link>
     <description>Recent content in Phishing on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 28 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 29 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/fr/categories/phishing/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,10 +13,10 @@
     <item>
       <title>CTF InterIUT 2020 - OSINT &amp; SE (aka le pire phishing)</title>
       <link>https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/</link>
-      <pubDate>Sat, 28 Nov 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 29 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/</guid>
-      <description>&lt;p&gt;Le CTF Inter IUT est initiative de l&amp;rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&amp;rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &amp;ldquo;La DGSE, c&amp;rsquo;est moi&amp;rdquo; sur des thématiques OSINT et Social Enginerring.&lt;/p&gt;</description>
+      <description>&lt;p&gt;Le CTF Inter IUT est une initiative de l&amp;rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&amp;rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &amp;ldquo;La DGSE, c&amp;rsquo;est moi&amp;rdquo; sur des thématiques OSINT et Social Enginerring.&lt;/p&gt;</description>
     </item>
     
   </channel>
