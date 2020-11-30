@@ -133,6 +133,10 @@ a {
   max-width: 70%;
 }
 
+.imgSize2 {
+  max-width: 90%;
+}
+
 .logoFlag {
   float: left;
   margin: auto;
