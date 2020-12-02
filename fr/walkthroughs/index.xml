@@ -20,6 +20,15 @@
     </item>
     
     <item>
+      <title>Hack The Box - Cascade</title>
+      <link>https://haax9.github.io/fr/walkthroughs/hackthebox/cascade/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/walkthroughs/hackthebox/cascade/</guid>
+      <description>&lt;p&gt;Cascade est une machine Windows considérée comme facile/moyenne. Un accès RPC anonyme permet de récupérer des infos sur les utilisateurs du domaine et une recherche anonyme via LDAP permet de récupérer un mot de passe via un des attribut d&amp;rsquo;un compte. Par la suite, l&amp;rsquo;énumération des partages SMB et des fichiers accessibles révèle un fichier de configuration VNC dans lequel il est possible de récupérer un second mot de passe. Cet utilisateur ayant plus de droits, il est possible de découvrir un binaire. Ce dernier utilise un compte de service d&amp;rsquo;intérêt. Une retro-ingéniérie rapide permet de récupérer le mot de passe. L&amp;rsquo;escalade de privilège est réalisée au travers d&amp;rsquo;un compte particulier censé être supprimé.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Hack The Box - Sauna</title>
       <link>https://haax9.github.io/fr/walkthroughs/hackthebox/sauna/</link>
       <pubDate>Sat, 08 Aug 2020 00:00:00 +0000</pubDate>
