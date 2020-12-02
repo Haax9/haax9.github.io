@@ -40,7 +40,7 @@
     <item>
       <title>Hack The Box - Cascade</title>
       <link>https://haax9.github.io/en/walkthroughs/hackthebox/cascade/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 20 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/en/walkthroughs/hackthebox/cascade/</guid>
       <description>&lt;p&gt;Cascade is a Windows machine considered easy/medium. An anonymous RPC access allows domain users enumeration and an anonymous search through LDAP allows to get a password using one account attribute. Then, the enumeration of SMB shares and available files reveals a VNC configuration file, giving another password once decrypted. The target account is used as a service and it is possible to get the binary. A fast reverse engineering gives the password through decryption function. Privilege escalation is done using a particular account that is supposed to be deleted.&lt;/p&gt;</description>
