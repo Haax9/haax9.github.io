@@ -5,7 +5,7 @@
     <link>https://haax9.github.io/fr/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 29 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/fr/index.xml" rel="self" type="application/rss+xml" />
     
@@ -242,6 +242,15 @@
       
       <guid>https://haax9.github.io/fr/writeups/tamuctf-2017/stegano-musical-bits/</guid>
       <description>&lt;p&gt;Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &amp;ldquo;Musical Bits&amp;rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de &lt;a href=&#34;https://twitter.com/erwanfily&#34; target=&#34;blank&#34;&gt;@Iptior&lt;/a&gt;, afin de résoudre ce challenge. C&amp;rsquo;est parti !&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Conférences &amp; Talks</title>
+      <link>https://haax9.github.io/fr/conferences/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/conferences/</guid>
+      <description> Rump Session Hack2G2 - Online Self Fingerprinting 101  Talk vidéo [FR] : Youtube link Slides [EN] : Rump_H2G2_Online_Self_Fingerprinting_101.pdf   </description>
     </item>
     
     <item>

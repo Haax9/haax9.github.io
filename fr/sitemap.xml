@@ -393,6 +393,37 @@
   </url>
   
   <url>
+    <loc>https://haax9.github.io/fr/conferences/</loc>
+    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/conferences/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/conferences/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://haax9.github.io/fr/</loc>
+    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://haax9.github.io/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://haax9.github.io/fr/"
+                />
+  </url>
+  
+  <url>
     <loc>https://haax9.github.io/fr/categories/adn/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -437,22 +468,6 @@
                 rel="alternate"
                 hreflang="fr"
                 href="https://haax9.github.io/fr/categories/dna/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://haax9.github.io/fr/</loc>
-    <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://haax9.github.io/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://haax9.github.io/fr/"
                 />
   </url>
   
