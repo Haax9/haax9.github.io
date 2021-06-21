@@ -22,14 +22,16 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="YogoshESD-CTF - CLUDEOSINT"/>
-<meta name="twitter:description" content="Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges. 
-1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé. Un jour, une personne vient vous voir dans vos locaux car elle se fait harceler depuis plus d’un mois par un corbeau."/>
+<meta name="twitter:description" content="[NO ENGLISH VERSION - Only French is available for this post]
+Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges. 
+1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé."/>
 
 <meta property="og:title" content="YogoshESD-CTF - CLUDEOSINT" />
-<meta property="og:description" content="Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges. 
-1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé. Un jour, une personne vient vous voir dans vos locaux car elle se fait harceler depuis plus d’un mois par un corbeau." />
+<meta property="og:description" content="[NO ENGLISH VERSION - Only French is available for this post]
+Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges. 
+1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" />
+<meta property="og:url" content="https://haax9.github.io/en/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" />
 <meta property="article:published_time" content="2021-06-19T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2021-06-19T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
 
@@ -66,7 +68,7 @@
     <div class="sidebar-about">
       
       
-          <a href="https://haax9.github.io">
+          <a href="https://haax9.github.io/en">
           
           
           
@@ -88,7 +90,7 @@
 		 
 			 
 				<li>
-					<a href="/fr/articles/">
+					<a href="/en/articles/">
 						<span>Articles</span>
 					</a>
 				</li>
@@ -96,7 +98,7 @@
 		 
 			 
 				<li>
-					<a href="/fr/walkthroughs/">
+					<a href="/en/walkthroughs/">
 						<span>Walkthroughs</span>
 					</a>
 				</li>
@@ -104,7 +106,7 @@
 		 
 			 
 				<li>
-					<a href="/fr/writeups/">
+					<a href="/en/writeups/">
 						<span>Write-Ups</span>
 					</a>
 				</li>
@@ -112,16 +114,16 @@
 		 
 			 
 				<li>
-					<a href="/fr/about/">
-						<span>À Propos</span>
+					<a href="/en/about/">
+						<span>About</span>
 					</a>
 				</li>
 			 
 		 
 			 
 				<li>
-					<a href="/fr/conferences/">
-						<span>Conférences</span>
+					<a href="/en/conferences/">
+						<span>Conferences</span>
 					</a>
 				</li>
 			 
@@ -161,15 +163,15 @@
 	
 	
 	
-	&nbsp;<a href="https://haax.fr/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	&nbsp;<a href="https://haax.fr/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
 	</section>
 
     </p>
     <div class="langSection">
       
       
-      <a rel="alternate" href="/en/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" hreflang="en" lang="en" class="langLink">English</a>
-      <a rel="alternate" href="/en/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      <a rel="alternate" href="/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
       &copy; 2021 Haax.
@@ -206,6 +208,8 @@
   </header>
   <div class="post">
     
+
+<p>[NO ENGLISH VERSION - Only French is available for this post]</p>
 
 <p>Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par <a href="https://twitter.com/d0c_kali" target="_blank">DocKali</a> et <a href="https://twitter.com/madame_https" target="_blank">Madame Https</a> et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges.
 <br/></p>
@@ -828,7 +832,7 @@ Une simple recherche Google (sans oublier les guillemets afin de chercher la phr
 
 <div class="post--navigation post--navigation-single">
     
-    <a href="/fr/writeups/osint-geoint/yogoshesd-ctf-osint-global/" class="post--navigation-prev">
+    <a href="/en/writeups/osint-geoint/yogoshesd-ctf-osint-global/" class="post--navigation-prev">
       <i aria-hidden="true" class="fa fa-chevron-left"></i>
       <span class="navigation-tittle">YogoshESD-CTF - OSINT Challenges</span>
     </a>
