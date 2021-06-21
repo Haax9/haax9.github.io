@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>GEOINT on Haax - Personal Blog</title>
-    <link>https://haax9.github.io/fr/categories/geoint/</link>
-    <description>Recent content in GEOINT on Haax - Personal Blog</description>
+    <title>CTF on Haax - Personal Blog</title>
+    <link>https://haax9.github.io/fr/categories/ctf/</link>
+    <description>Recent content in CTF on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://haax9.github.io/fr/categories/geoint/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://haax9.github.io/fr/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -28,15 +28,6 @@
       <guid>https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-osint-global/</guid>
       <description>Le Yogosh-ESD CTF est un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&amp;rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!). 
 ESD Challenge (100 points) A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté une photo prise par un stagiaire.</description>
-    </item>
-    
-    <item>
-      <title>OSINT/GEOINT - Investigation et Géolocalisation d&#39;un vol commercial</title>
-      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</link>
-      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</guid>
-      <description>&lt;p&gt;Il y a de cela quelques jours, un bon ami m&amp;rsquo;a envoyé une photo, visiblement prise depuis un avion, en guise de challenge OSINT/GEOINT. Le but est ici de retrouver le point de départ du vol, l&amp;rsquo;arrivée, mais également, de manière plus ou moins précise, à quel endroit a été prise la photo. Le sujet étant plutôt fun et compte tenu de la multitude d&amp;rsquo;informations et compétences nécessaires pour résoudre le challenge, je me suis dit qu&amp;rsquo;il serait intéressant d&amp;rsquo;écrire à ce sujet.&lt;/p&gt;</description>
     </item>
     
   </channel>

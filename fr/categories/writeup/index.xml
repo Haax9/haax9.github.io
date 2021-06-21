@@ -5,10 +5,30 @@
     <link>https://haax9.github.io/fr/categories/writeup/</link>
     <description>Recent content in Writeup on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 29 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/fr/categories/writeup/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>YogoshESD-CTF - CLUDEOSINT</title>
+      <link>https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/</link>
+      <pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/</guid>
+      <description>Le challenge &amp;ldquo;CLUEDOSINT&amp;rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&amp;rsquo;investigation menée et la résolution des différents challenges. 
+1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé. Un jour, une personne vient vous voir dans vos locaux car elle se fait harceler depuis plus d’un mois par un corbeau.</description>
+    </item>
+    
+    <item>
+      <title>YogoshESD-CTF - OSINT Challenges</title>
+      <link>https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-osint-global/</link>
+      <pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-osint-global/</guid>
+      <description>Le Yogosh-ESD CTF est un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&amp;rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!). 
+ESD Challenge (100 points) A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté une photo prise par un stagiaire.</description>
+    </item>
     
     <item>
       <title>CTF InterIUT 2020 - OSINT &amp; SE (aka le pire phishing)</title>

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>YogoshESD-CTF - CLUDEOSINT • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="YogoshESD-CTF - CLUDEOSINT"/>
+<meta name="twitter:description" content="Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges. 
+1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé. Un jour, une personne vient vous voir dans vos locaux car elle se fait harceler depuis plus d’un mois par un corbeau."/>
+
+<meta property="og:title" content="YogoshESD-CTF - CLUDEOSINT" />
+<meta property="og:description" content="Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges. 
+1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé. Un jour, une personne vient vous voir dans vos locaux car elle se fait harceler depuis plus d’un mois par un corbeau." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" />
+<meta property="article:published_time" content="2021-06-19T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2021-06-19T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/conferences/">
+						<span>Conférences</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="https://cheatsheet.haax.fr">
+						<span>Cheatsheet</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haax9_" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      </div>
+    <p class="copyright">
+      &copy; 2021 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>YogoshESD-CTF - CLUDEOSINT</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Jun 19, 2021
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 21 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    
+
+<p>Le challenge &ldquo;CLUEDOSINT&rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par <a href="https://twitter.com/d0c_kali" target="_blank">DocKali</a> et <a href="https://twitter.com/madame_https" target="_blank">Madame Https</a> et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&rsquo;investigation menée et la résolution des différents challenges.
+<br/></p>
+
+<h2 id="1-cognomen-10-points">1/ Cognomen (10 points)</h2>
+
+<pre><code>Contexte: Vous êtes enquêteur privé. Un jour, une personne vient vous voir dans vos locaux
+car elle se fait harceler depuis plus d’un mois par un corbeau. Ce harcèlement se passe
+aussi bien par mail que par téléphone et sur les réseaux sociaux. Votre client vous
+indique que le corbeau ne se cantonne pas à l’attaquer lui, il s’en prend aussi à sa
+famille, à sa société et aux salariés de celle-ci.
+
+Pour débuter, voici l'alias Twitter de votre client: @eax_gwenhael. Quel est son nom de famille ?
+</code></pre>
+
+<p>Okkkk c&rsquo;est parti !
+Afin de partir sur de bonnes bases, on commence par rechercher via Twitter le profil de notre client ainsi que ses relations proches.</p>
+
+<p>On tombe rapidement sur son profil Twitter (<a href="https://twitter.com/eax_gwenhael">https://twitter.com/eax_gwenhael</a>) où l&rsquo;on apprend qu&rsquo;il est CEO pour une entreprise nommée &ldquo;CyberFate&rdquo;.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_1.jpg" alt="OSINT_img_1" class="imgSize"/></center></p>
+
+<p>Un très rapide coup d&rsquo;oeil sur son profil, ses abonnés et abonnements permet également d&rsquo;identifier plusieurs relations, notamment professionnelles :</p>
+
+<ul>
+<li>Gilliane (<a href="https://twitter.com/eax_gilliane">https://twitter.com/eax_gilliane</a>)</li>
+<li>Félicien (<a href="https://twitter.com/eax_felicien">https://twitter.com/eax_felicien</a>)</li>
+<li>Halette (<a href="https://twitter.com/eax_halette">https://twitter.com/eax_halette</a>)</li>
+<li>Amarante (<a href="https://twitter.com/eax_amarante">https://twitter.com/eax_amarante</a>)</li>
+<li>Ferragus (<a href="https://twitter.com/eax_ferragus">https://twitter.com/eax_ferragus</a>)</li>
+</ul>
+
+<p>Connaissant maintenant le nom de l&rsquo;entreprise, un pivot vers LinkedIn semble tout tracé. En réalité, même pas besoin d&rsquo;aller sur le site. En effet, une simple recherche Google est suffisante.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_2.jpg" alt="OSINT_img_2" class="imgSize"/></center></p>
+
+<p>Hello Monsieur Jouveffet !
+<br/></p>
+
+<h2 id="2-lingua-20-points">2/ Lingua (20 points)</h2>
+
+<pre><code>Contexte: Ernestine, la mère de votre client a reçu une lettre étrange lors de sa convalescence
+en maison de repos. Elle a confié cette lettre à votre client lors de sa dernière visite
+et celui-ci vous la communique aujourd’hui.
+
+Dans quelle langue cette lettre a-t-elle été rédigée ?
+</code></pre>
+
+<p>Un fichier PDF nous est donné. L&rsquo;image suivante est un extrait de son contenu (suffisant pour avancer).</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_3.jpg" alt="OSINT_img_3" class="imgSize"/></center></p>
+
+<p>Un grand nombre de traducteurs en ligne existent. Cependant, lorsqu&rsquo;il s&rsquo;agit de reconnaître une langue (à priori) peu connue, Google Translate se révèle assez performant. On recopie ainsi quelques uns des mots de la lettre afin de pouvoir identifier la langue : du Swahili</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_4.jpg" alt="OSINT_img_4" class="imgSize"/></center>
+<br/></p>
+
+<h2 id="3-canem-50-points">3/ Canem (50 points)</h2>
+
+<pre><code>Contexte: Votre client vous appelle pendant que vous êtes en planque. Vous décrochez.
+Il est totalement affolé car son chien, Romeo, s’est fait enlever. Accroché à la poignée
+la maison de votre client, le ravisseur a simplement laissé le collier du chien.
+
+Quelle est la marque du collier de Romeo ?
+</code></pre>
+
+<p>Là encore, l&rsquo;image suivante nous est donnée.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/toutou.jpg" alt="toutou.jpg" class="imgSize"/></center></p>
+
+<p>Pour cela, on peut utiliser un outil, ou plutôt une méthode, que je trouve à titre personnel réellement impressionnante de par les résultats qu&rsquo;il est possible d&rsquo;obtenir : la recherche par image.</p>
+
+<p>Plusieurs moteurs de recherche permettent de réaliser ce type de requête, mais l&rsquo;outil DupliChecker (<a href="https://www.duplichecker.com/reverse-image-search.php" target="_blank">lien</a>) est très intéressant car il permet de lancer une recherche en paralèlle sur les plus gros moteurs (notamment Google, Bing, Yandex).</p>
+
+<p>Utilisant de temps à autres ces 3 moteurs pour ce type de recherche, il s&rsquo;avère que Yandex est généralement très pertinent, et là encore, il nous le prouve. En effet, après quelques &ldquo;scrolls&rdquo; de souris, on tombe sur l&rsquo;image suivante, provenant du site marchand Amazon. Même si on ne voit pas le collier en entier, un élément essentiel permet de confirmer la marque : le logo rouge !</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_5.jpg" alt="OSINT_img_5" class="imgSize"/></center></p>
+
+<p>Pour l&rsquo;anecdote, j&rsquo;avais commencé par utiliser cette méthode mais avais fait demi tour face à la quantité d&rsquo;images rouges en tous genre (faux positifs), puis après m&rsquo;être fatigué à tenter d&rsquo;autres recherches classiques, je suis revenu à cette méthode.
+<br/></p>
+
+<h2 id="4-obses-50-points">4/ Obses (50 points)</h2>
+
+<pre><code>Contexte: Moins de 12h après le kidnapping du chien, Gwenhael reçoit un mail du ravisseur.
+Il vous transmet ce mail qui contient une demande de rançon à payer en bitcoin.
+L’adresse suivante est communiquée : 1HVVRi4KUjoSF1WGYESBk33G7GJdMvsB8o.
+
+Une adresse mail est associée à cette adresse BTC. Trouvez-la.
+</code></pre>
+
+<p>Rien de réellement complexe ici dans la compréhension ni dans la résolution.
+Il faut savoir que les cryptomonnaies et notamment le Bitcoin (BTC) peuvent être utilisés par des cybercriminels à différentes fins (demandes de rançons, blanchiement&hellip;). Ainsi, chaque porte-monnaie (wallet) est identifié par une adresse unique, permettant d&rsquo;effectuer les transactions.</p>
+
+<p>Mais la défense s&rsquo;organise ! Il existe en effet différentes communautés en ligne permettant de signaler des adresses BTC utilisées à des fins malveillantes, comme une sorte de &ldquo;liste noire&rdquo; consultable par tout le monde.</p>
+
+<p>Dans notre cas, l&rsquo;adresse est effectivement connue comme étant malveillante, et une simple recherche Google à l&rsquo;aide de cette dernière permet d&rsquo;en apprendre davantage :</p>
+
+<p><a href="https://www.bitcoinabuse.com/reports/1HVVRi4KUjoSF1WGYESBk33G7GJdMvsB8o" target="_blank">Bitcoin Abuse Database</a></p>
+
+<p>On peut notamment y lire certains commentaires mentionnant l&rsquo;adresse e-mail associée.</p>
+
+<pre><code>Email spammer claiming to know your passwords and wanting compensation for not
+posting your private details.
+Email received from Chapman@immalove.com
+Name: Dennis Hughes
+Bitcoin address given: 1HVVRi4KUjoSF1WGYESBk33G7GJdMvsB8o 
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="5-datum-100-points">5/ Datum (100 points)</h2>
+
+<pre><code>Contexte: Une relecture du mail fait apparaître que celui-ci contient une pièce jointe.
+Après l’avoir passée à l’antivirus (sait-on jamais…), vous l’ouvrez et trouvez une photo
+en gros plan du chien de votre client, couché à côté d’un journal.
+Vous souhaitez exploiter cette nouvelle piste mais la date sur le journal est illisible.
+Voilà la photo du journal.
+
+Réussirez-vous à retrouver la date à laquelle le journal a été publié ?
+</code></pre>
+
+<p>La photo suivante est récupérée. Illisible ? Really ? :(</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/journal.jpg" alt="journal.jpg" class="imgSize"/></center></p>
+
+<p>Bien que le challenge ne soit pas si compliqué, le cheminement pour le résoudre est intéressant et plutôt marrant !</p>
+
+<p>Nous sommes donc en présence du journ(SI al &ldquo;L&rsquo;anti-radical&rdquo; et on sait deux choses :</p>
+
+<ul>
+<li>Il s&rsquo;agit du numéro 53</li>
+<li>Nous en sommes à la 2nde année de parution</li>
+</ul>
+
+<p>Parfait, nous n&rsquo;avons besoin de rien d&rsquo;autre ! Il suffit de trouver la date de création (première parution) puis de calculer.</p>
+
+<p>Il existe plusieurs services répertoriant les anciens journaux et autres documents. C&rsquo;est notamment le cas de la Bibliothèque Nationale Française, qui au travers de la section &ldquo;Presse locale ancienne&rdquo; permet d&rsquo;accéder aux informations cherchées (<a href="http://presselocaleancienne.bnf.fr/ark:/12148/cb32699886g" target="_blank">lien</a>).</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/mayenne.jpg" alt="mayenne.jpg" class="imgSize"/></center></p>
+
+<p>On a donc une première parution le 19 Juin 1880 (Samedi) et l&rsquo;information qu&rsquo;il s&rsquo;agit d&rsquo;un journal hebdomadaire.</p>
+
+<p>A l&rsquo;aide d&rsquo;un calendrier des années 1880/1881 (trouvable facilement en ligne), on peut donc compter 53 semaines depuis la première parution, ce qui nous amène au 18 Juin 1881 !</p>
+
+<p>Nota Bene : On aurait également pu considérer qu&rsquo;étant le numéro 53, il suffisait d&rsquo;ajouter une année et de vérifier la date afin de trouver un samedi&hellip; Mais moins précis !
+<br/></p>
+
+<h2 id="6-arbor-100-points">6/ Arbor (100 points)</h2>
+
+<pre><code>Contexte: Votre client vous envoie un mail contenant uniquement la phrase
+« trop triste pour appeler » et des pièces jointes que vous ouvrez.
+Vous comprenez de suite pourquoi votre client ne vous a pas appelé.
+Les pièces jointes sont des photos mettant en scène son chien, mort.
+
+Pour pouvoir continuer vos recherches sur ce dossier, vous devez identifier
+la ville où la photo a été prise. Pour ménager les sensibilités, le corps du chien
+a été retiré de la photo qui vous est communiquée.
+</code></pre>
+
+<p>Là encore, on se retrouve face à une image. Plus encore que pour le challenge &ldquo;Canem&rdquo; précédent, celle ci contient des éléments distinctifs et assez peu commun. Dans ces cas là, il est généralement efficace d&rsquo;utiliser la recherche inversée par image, comme présenté précédemment.</p>
+
+<p>Une fois encore, Yandex et Bing donnent des résultats plutôt pertinents, montrant des structures très ressemblantes à celles vues sur la photo. Des indications liées à ces images mentionnent également un lieu appelé &ldquo;La forêt monumentale&rdquo;, que l&rsquo;on retrouve à plusieurs reprises.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_6.jpg" alt="OSINT_img_6" class="imgSize"/></center></p>
+
+<p>En effet, une simple recherche Google permet de confirmer cette trouvaille, ainsi que le département (76) et même la ville dans laquelle se trouve ces éléments : Houppeville.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_7.jpg" alt="OSINT_img_7" class="imgSize"/></center></p>
+
+<p><br/></p>
+
+<h2 id="7-ignis-250-points">7/ Ignis (250 points)</h2>
+
+<pre><code>Contexte: Deux jours plus tard, votre client trouve dans sa boîte aux lettres une 
+clé USB qu’il vous amène directement contenant une vidéo que vous visionnez.
+Vous constatez qu’il s’agit d’une vidéo prise lors de la crémation du chien du client,
+vidéo prise via le téléphone d’un des participants.
+
+Pouvez-vous identifier la ville dans laquelle se situe le crématorium où la vidéo a été tournée ?
+</code></pre>
+
+<p>La particularité de ce challenge est qu&rsquo;il vaut bien plus de points que les challenges précédents et même, vous le verrez, que certains challenges suivants. Cependant, il n&rsquo;est pas particulièrement difficile si on sait où chercher.</p>
+
+<p>Nous sommes face à une vidéo, apparemment prise depuis un crématorium. L&rsquo;une des solutions pourrait être de découper la vidéo image par image afin d&rsquo;extraire de potentiels éléments visuels permettant l&rsquo;identification du lieu. Cependant, très peu d&rsquo;éléments sont visibles sur la vidéo. L&rsquo;image suivante illustre ceci.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_8.jpg" alt="OSINT_img_8" class="imgSize"/></center></p>
+
+<p>Les fichiers tels que les images ou les vidéos embarquent généralement des métadonnées, qu&rsquo;il est possible de consulter assez facilement. Ces dernières peuvent correspondre à la marque de l&rsquo;appareil utilisé, les dates et heures de création du fichier&hellip; Ou encore la position GPS de l&rsquo;appareil lors de la prise de vue. L&rsquo;outil &ldquo;exiftool&rdquo; permet notamment d&rsquo;extaire l&rsquo;ensemble de ces métadonnées.</p>
+
+<pre><code>$ exiftool this_toutou_is_on_fire.mp4
+
+ExifTool Version Number         : 11.16
+File Name                       : this_toutou_is_on_fire.mp4
+Directory                       : .
+File Size                       : 3.6 MB
+File Modification Date/Time     : 2021:06:05 11:06:25+02:00
+File Access Date/Time           : 2021:06:05 11:07:02+02:00
+File Inode Change Date/Time     : 2021:06:05 11:06:25+02:00
+File Permissions                : rwxrwxrwx
+File Type                       : MP4
+File Type Extension             : mp4
+MIME Type                       : video/mp4
+Major Brand                     : MP4 v2 [ISO 14496-14]
+Minor Version                   : 0.0.0
+Compatible Brands               : mp41, isom
+Movie Header Version            : 0
+Create Date                     : 2021:06:03 13:28:47
+Modify Date                     : 2021:06:03 13:31:40
+Time Scale                      : 48000
+Duration                        : 20.91 s
+Preferred Rate                  : 1
+Preferred Volume                : 100.00%
+Preview Time                    : 0 s
+Preview Duration                : 0 s
+Poster Time                     : 0 s
+Selection Time                  : 0 s
+Selection Duration              : 0 s
+Current Time                    : 0 s
+Next Track ID                   : 3
+Track Header Version            : 0
+Track Create Date               : 2021:06:03 13:31:36
+Track Modify Date               : 2021:06:03 13:31:36
+Track ID                        : 1
+Track Duration                  : 20.90 s
+Track Layer                     : 0
+Track Volume                    : 0.00%
+Image Width                     : 1280
+Image Height                    : 720
+Graphics Mode                   : srcCopy
+Op Color                        : 0 0 0
+Compressor ID                   : avc1
+Source Image Width              : 1280
+Source Image Height             : 720
+X Resolution                    : 72
+Y Resolution                    : 72
+Compressor Name                 : AVC Coding
+Bit Depth                       : 24
+Video Frame Rate                : 30
+Matrix Structure                : 1 0 0 0 1 0 0 0 1
+Media Header Version            : 0
+Media Create Date               : 2021:06:03 13:31:36
+Media Modify Date               : 2021:06:03 13:31:36
+Media Time Scale                : 48000
+Media Duration                  : 20.91 s
+Media Language Code             : und
+Handler Type                    : Audio Track
+Handler Description             : SoundHandler
+Balance                         : 0
+Audio Format                    : mp4a
+Audio Channels                  : 2
+Audio Bits Per Sample           : 16
+Audio Sample Rate               : 48000
+XMP Toolkit                     : Image::ExifTool 12.26
+GPS Latitude                    : 48 deg 34' 30.10&quot; N
+GPS Longitude                   : 2 deg 14' 16.71&quot; E
+Movie Data Size                 : 3753991
+Movie Data Offset               : 11713
+Avg Bitrate                     : 1.44 Mbps
+GPS Latitude Ref                : North
+GPS Longitude Ref               : East
+Image Size                      : 1280x720
+Megapixels                      : 0.922
+Rotation                        : 0
+GPS Position                    : 48 deg 34' 30.10&quot; N, 2 deg 14' 16.71&quot; E
+</code></pre>
+
+<p>En effet, des coordonnées GPS semblent incluses dans les métadonnées de la vidéo.</p>
+
+<pre><code>48 deg 34' 30.10&quot; N, 2 deg 14' 16.71&quot; E
+</code></pre>
+
+<p>Cependant, ces données sont au format DMS (Degrés, Minutes, Secondes). Or, la plupart des outils utilisent le format DD (Degrés Décimaux). On va donc les convertir, à l&rsquo;aide d&rsquo;un quelconque convertisseur en ligne (exemple : <a href="https://www.gps-coordinates.net/" target="_blank">gps-coordinates.net</a>) ce qui nous donne les coordonnées suivantes.</p>
+
+<pre><code>48.5750278, 2.237975
+</code></pre>
+
+<p>Une recherche Maps plus tard, nous arrivons à l&rsquo;emplacement géographique d&rsquo;un crématorium, situé à Avrainville.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_9.jpg" alt="OSINT_img_9" class="imgSize"/></center>
+<br/></p>
+
+<h2 id="8-notare-200-points">8/ Notare (200 points)</h2>
+
+<pre><code>Contexte: En regardant les avis laissés sur ce crématorium, vous retrouvez une personne
+qui est déjà apparue dans vos investigations.Vous remarquez que cette personne a
+laissé un avis sur une autre structure située sur le vieux continent.
+
+Quel est le nom de cette structure ?
+</code></pre>
+
+<p>Ce challenge met en avant une introduction à la notion de pivot dont le but est comme son nom l&rsquo;indique, de pivoter à l&rsquo;aide d&rsquo;une nouvelle information de façon à accéder à d&rsquo;autres informations liées. Dans notre cas, on part donc des avis laissés sur le crématorium.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_10.jpg" alt="OSINT_img_10" class="imgSize"/></center></p>
+
+<p>On observe notamment un commentaire relativement récent laissé par une certaine &ldquo;Halette CYBER&rdquo;. Pour rappel, nous avions auparavant identifié Halette au travers de l&rsquo;analyse des Twitter/LinkedIn de CyberFate. A partir de là, il est possible de consulter les autres avis laissés par cette personne directement depuis son profil.</p>
+
+<p>Ainsi, on peut voir que 2 contributions ont été réalisées. La première est le commentaire posté sur le crématorium, tandis que le second concerne un magasin de vélos, nomme &ldquo;tokyobike&rdquo;, situé à Londres.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_11.jpg" alt="OSINT_img_11" class="imgSize"/></center></p>
+
+<p>Le nom de la structure attendue est donc &ldquo;tokyobike&rdquo;.
+<br/></p>
+
+<h2 id="9-advisor-150-points">9/ Advisor (150 points)</h2>
+
+<pre><code>Contexte: Gwenhael vient vous voir à votre bureau quelques jours après la crémation de son chien.
+Sous le coup de l’émotion, il n’avait pas pensé à vous dire qu'au moment où il l'a
+retrouvé, un flyer était présent sous le corps de Romeo. Sans trop savoir pourquoi,
+il l'a mis dans la poche de sa veste et l'a oublié. Il vous montre le flyer en
+question, il s'agit d'une publicité pour une agence de voyage.
+
+Retrouvez l'alias de la personne faisant partie de l'entourage de Gwenhael et ayant
+laissé un avis sur cette agence sur un site de partage touristique.
+</code></pre>
+
+<p>On nous parle maintenant d&rsquo;une agence de voyage en nous demandant de retrouver une personne ayant laissé un avis sur cette dernière. Voici le flyer en question.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/flyer.jpg" alt="flyer.jpg" class="imgSize"/></center></p>
+
+<p>Ce dernier laisse entrevoir le nom de l&rsquo;agence : France Tourisme.</p>
+
+<p>Les plateformes en ligne de tourisme peuvent être une formidable source de renseignements. Traitées tel que des réseaux sociaux, il est parfois possible d&rsquo;identifier des éléments à priori cachés ou peu importants mais permettant de lier différentes informations entre elles. La plateforme Trip Advisor en est le parfait exemple.</p>
+
+<p>La première étape est de trouver notre agence de voyages via la plateforme. Cette dernière recense en effet non seulement les destinations, mais également les agences et organismes permettant de réserver des voyages.</p>
+
+<p>Ainsi, on trouve rapidement notre cible.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_13.jpg" alt="OSINT_img_13" class="imgSize"/></center></p>
+
+<p>La suite n&rsquo;est en rien compliquée puisqu&rsquo;à la manière de Google, le site utilise des commentaires et avis utilisateurs. Ainsi, on retrouve via les avis laissés sur l&rsquo;agence un certain &ldquo;amarante_guertin&rdquo;. Il s&rsquo;agit en effet de la personne recherchée ici.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_14.jpg" alt="OSINT_img_14" class="imgSize"/></center></p>
+
+<p>Amarante, on t&rsquo;a vu !
+<br/></p>
+
+<h2 id="10-excursio-150-points">10/ Excursio (150 points)</h2>
+
+<pre><code>Contexte: Une personne proche de Gwenhael et d’Amarante (et que vous suspectez) a récemment
+voyagé dans un pays étranger. Cette personne a posté des photos de ce voyage sur un
+de ses réseaux sociaux.
+
+Quel est son alias/ID sur ce réseau ?
+</code></pre>
+
+<p>Nous avons commencé par Twitter, mais nous n&rsquo;avons pas encore réellement creusé les différents profils remontés, chose que nous allons faire ici.
+Rien de réellement complexe ici, il suffit de parcourir l&rsquo;ensemble des quelques profils identifiés.</p>
+
+<p>C&rsquo;est réalisable sans soucis à la main car les profils sont assez peu fournis. Dans le cas de profils ayant plus de vécu, des outils automatisés et dédiés seraient bienvenus.</p>
+
+<p>Dans notre cas, on tombe assez rapidement sur le <a href="https://twitter.com/eax_gilliane/status/1400939590190575618" target="_blank">tweet suivant</a> de Gilliane, accompagné d&rsquo;une photo qui semble être une chambre d&rsquo;hôtel.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_15.jpg" alt="OSINT_img_15" class="imgSize"/></center>
+<br/></p>
+
+<h2 id="11-oryza-200-points">11/ Oryza (200 points)</h2>
+
+<pre><code>Contexte: Dans quelle ville est situé l’hôtel où cette personne résidait pendant son voyage ?
+</code></pre>
+
+<p>Pourtant assez peu complexe, il s&rsquo;agit du challenge qui m&rsquo;a pris le plus de temps sur l&rsquo;ensemble de ces 15.
+Une fois encore, Trip Advisor va être notre meilleur ami pour cette investigation.</p>
+
+<p>Nous sommes donc en présence d&rsquo;une chambre d&rsquo;hôtel. Mais, sans plus d&rsquo;élements, compliqué !
+On va donc chercher à dégrossir. Pourquoi ne pas commencer par le pays ?</p>
+
+<p>Le tweet en question utilise un emoji &ldquo;Montagne&rdquo;. Bien que peu impactant pour le moment, cela peut servir. Cependant, la réelle information intéressant se trouve dans les réponses au tweet. En effet, Amarante a répondu à Gilliane avec le <a href="https://twitter.com/eax_amarante/status/1400952234255564803" target="_blank">message suivant</a>.</p>
+
+<pre><code>Oh profites-en bien, je me suis rendu dans ce pays y a pas très longtemps
+</code></pre>
+
+<p>Pivot_V2, on va donc chercher si des informations sont accessibles depuis le profil de Amarante. Une recherche rapide sur son Twitter ne donne rien de très intéressant. Mais si on fait écho aux challenges précédents, là, ça devient intéressant. En effet, on avait identifié un profil Trip Advisor appartenant à cette personne. Pourquoi ne pas aller y faire un tour ?</p>
+
+<p>S&rsquo;il est possible de voir les avis laissés par les gens sur un établissement, il est également possible de voir l&rsquo;ensemble des contributions postées par une personne. Ainsi, le profil de Amarante nous apprend que ce dernier a laissé un avis (mais ça, on le savait) et a réalisé un voyage en Tanzanie !</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_16.jpg" alt="OSINT_img_16" class="imgSize"/></center></p>
+
+<p>Si on met en lien cette information avec sa réponse au tweet de Gilliane, il est fort probable qu&rsquo;il s&rsquo;agisse du même voyage, et qu&rsquo;il soit donc question de la Tanzanie.</p>
+
+<p>Ok, on a le pays ! Maintenant, on peut noter plusieurs points :</p>
+
+<ul>
+<li>La piscine à l&rsquo;extérieur, élément remarquable, peut nous aider pour l&rsquo;identification.</li>
+<li>Le standing plutôt très correct de la chambre d&rsquo;hôtel. Là encore, cela peut aider.</li>
+<li>La forme et couleur des fenêtres.</li>
+</ul>
+
+<p>On peut notamment utiliser ces critères pour rechercher et filtrer les hôtels en Tanzanie, avec Trip Advisor.
+Au total, 167 établissements disposent d&rsquo;une piscine, parmi les lesquels :</p>
+
+<ul>
+<li>6 hôtels ***** ;</li>
+<li>30 hôtels **** ;</li>
+<li>49 hôtels *** ;</li>
+</ul>
+
+<p>Peu probable qu&rsquo;il s&rsquo;agisse d&rsquo;un hôtel 5 étoiles. Cependant, on peut inclure les 4 et 5 étoiles dans les premières recherches.
+Cela nous laisse donc une liste de 36 établissements.</p>
+
+<p>En les parcourant, on tombe sur un hôtel intéressant, notamment au niveau de ses fenêtres, ressemblantes à celles de la photo.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_17.jpg" alt="OSINT_img_17" class="imgSize"/></center></p>
+
+<p>Cette trouvaille est confirmée grâce aux autres photos de l&rsquo;établissement.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_18.jpg" alt="OSINT_img_18" class="imgSize"/></center></p>
+
+<p>Il semble donc que Gilliane soit allée à Moshi, en Tanzanie !
+<br/></p>
+
+<h2 id="12-p45t3-m3-d33ply-300-points">12/ P45T3 M3 D33PLY (300 points)</h2>
+
+<pre><code>Contexte: Ferragus, secrétaire de Gwenhael, reçoit un mail affirmant
+« Plus que trois semaines avant le hack ». Aucun autre texte, ni aucune pièce
+jointe n’accompagnent ce mail. La seule information disponible est l’adresse
+ayant envoyé le mail : a.g@cerberecyber.digital.
+
+Exploitez cette piste qui devrait vous mener dans les tréfonds du Web.
+Ressortez-en la &quot;marque&quot;.
+</code></pre>
+
+<p>Pour ce challenge, on ne rentrera pas dans les détails, car la frontière de la face sombre d&rsquo;Internet se rapproche à grands pas. Seule indication de départ, l&rsquo;adresse e-mail : &ldquo;a.g@cerberecyber.digital&rdquo;.</p>
+
+<p>On commence donc naturellement par une recherche google et on trouve seulement deux résultats.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_19.jpg" alt="OSINT_img_19" class="imgSize"/></center></p>
+
+<p>Les deux résultats répondent sous le nom de &ldquo;Stronghold Paste&rdquo;. Si on recherche quelques infos à ce sujet, via leur site :</p>
+
+<pre><code>Stronghold Paste is a dark web anonymous text sharing website.
+You can share text anonymous or save your personal text data on to this
+website like PGP keys and Important dark web onion URLs.
+People also call it a dark web Pastebin service.
+</code></pre>
+
+<p>Ainsi, l&rsquo;adresse e-mail semble avoir été utilisée dans deux &ldquo;pastes&rdquo;, référencés et indexés sur le &ldquo;clear web&rdquo;. Cependant, les services de &ldquo;paste&rdquo; comme ceux là indexent en permanence de nouvelles entrées. A l&rsquo;heure où j&rsquo;écris ces lignes, nous sommes le 17/06/2021. Or, le message semble avoir été posté le 05/06/2021.</p>
+
+<p>Heureusement pour nous, Google garde une copie des pages à un instant donné : le cache.
+Il est ainsi possible de voir la page telle qu&rsquo;elle était au 05/06/2021 et on retrouve ainsi le paste.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_20.jpg" alt="OSINT_img_20" class="imgSize"/></center></p>
+
+<p>Dans les faits, même pas besoin d&rsquo;aller jusque sur la plateforme, puisque le contenu du &ldquo;paste&rdquo; complet apparait depuis les résultats google.</p>
+
+<p>On a donc l&rsquo;adresse e-mail, ainsi qu&rsquo;une chaine, apparemment encodée.</p>
+
+<p>On peut ainsi utiliser le très bon outil Cyberchef pour tenter de récupérer le contenu de la chaine de caractères et une base64 plus tard.. (<a href="https://gchq.github.io/CyberChef/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true)&input=VjJWVWFHVlFaVzl3YkdVZ1pYTjBJR1RwWTJsazZXMWxiblFnYkdFZ2JXVnBiR3hsZFhKbElHMWhjbkYxWlM0Zw" target="_blank">lien</a> :)</p>
+
+<pre><code>WeThePeople est décidément la meilleure marque. 
+</code></pre>
+
+<p><br/></p>
+
+<h2 id="13-wh3r3-4m-1-200-points">13/ WH3R3 4M 1 ? (200 points)</h2>
+
+<pre><code>Contexte: Gwenhael vous informe que depuis que le corbeau le menace, il est devenu très prudent.
+Il a donc placé un honeypot sur le réseau de la société il et semble que
+l’ordinateur de Ferragus ait été « visité ». Une adresse MAC a été récupérée : 14:0C:76:7E:D0:A3.
+
+Dans quelle ville était situé l'attaquant ?
+</code></pre>
+
+<p>Ce challenge met en jeu la géolocalisation à partir d&rsquo;une adresse MAC. Cependant, la plupart des outils offrent la possibilité de géolocaliser à partir de deux adresses MAC différentes, ce que nous n&rsquo;avons pas.</p>
+
+<p>Sans rentrer dans les détails de fonctionnement d&rsquo;une adresse MAC, il est possible dans un premier temps d&rsquo;identifier le fournisseur derrière cette addresse (3 premiers octets).</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_21.jpg" alt="OSINT_img_21" class="imgSize"/></center></p>
+
+<p>On est donc face à une adresse provenant de chez Free, donc probablement un appareil français.</p>
+
+<p>Suite à de nouvelles recherches, j&rsquo;ai utilisé le site <a href="https://cellphonetrackers.org/gsm/map.php?var=mac&mac=140C767ED0A3" target="_blank">cellphonetrackers.org</a> qui offre la possibilité de géolocaliser des points d&rsquo;accès.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_22.jpg" alt="OSINT_img_22" class="imgSize"/></center></p>
+
+<p>L&rsquo;adresse MAC nous livrant ses secrets, il semble que l&rsquo;attaquant se trouvait à Dijon (France).
+<br/></p>
+
+<h2 id="14-4r73m-200-points">14/ 4r73M (200 points)</h2>
+
+<pre><code>Contexte: Gwenhael vous avoue avoir eu recours à des techniques de hack back qui lui
+ont permis de prendre plusieurs photos, à la fois des screenshots de l’écran mais
+aussi de ce qui était devant la webcam de l’attaquant.
+Votre client vous transmets des impressions papier de ces photos.
+
+Quel est le logiciel qu’utilisait l’attaquant au moment de l’impression d’écran ?
+</code></pre>
+
+<p>L&rsquo;image suivante nous est donnée.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/screens.jpg" alt="screens.jpg" class="imgSize"/></center></p>
+
+<p>Quelques éléments visuels que l&rsquo;ont peut déjà extraire :</p>
+
+<ul>
+<li>Bas gauche : Logo Apple</li>
+<li>Bas Gauche : Menu d&rsquo;outils, une unique colonne</li>
+<li>Bas Gauche : Menu composé de 5 onglets :
+
+<ul>
+<li>File</li>
+<li>Edit</li>
+<li>Arrange</li>
+<li>????</li>
+<li>Style</li>
+<li>Windows</li>
+</ul></li>
+<li>Haut gauche : Gestion de couleurs, &ldquo;PS..&rdquo;, &ldquo;PPD..&rdquo;</li>
+<li>Haut et bas droite : Travail sur des images, des design&hellip;</li>
+</ul>
+
+<p>Ma première supposition fut une version de &ldquo;Photoshop&rdquo;, avant de me rendre compte qu&rsquo;il s&rsquo;agissait en réalité de &ldquo;Illustrator&rdquo; ! Pas de recette secrète ici. Ne connaissant pas particulièrement l&rsquo;un ni l&rsquo;autre, j&rsquo;ai utilisé l&rsquo;historique de version de chacun des outils puis j&rsquo;ai cherché à quoi ressemblait chaque version. Autre élément pouvant servir, à minima pour orienter les recherches : le design général de l&rsquo;outil. On est en effet face à une UI qui semble assez ancienne.</p>
+
+<p>L&rsquo;historique des versions en question :</p>
+
+<ul>
+<li>Photoshop : <a href="https://fr.wikipedia.org/wiki/Adobe_Photoshop">https://fr.wikipedia.org/wiki/Adobe_Photoshop</a></li>
+<li>Ilustrator : <a href="https://fr.wikipedia.org/wiki/Adobe_Illustrator">https://fr.wikipedia.org/wiki/Adobe_Illustrator</a></li>
+</ul>
+
+<p>Je passerai les détails pour Photoshop et me concentrerai sur Illustrator.
+On peut maintenant fonctionner avec une sorte de dichotomie, afin d&rsquo;écarter petit à petit des versions.</p>
+
+<p>Commençons par le milieu avec la sortie d&rsquo;Adobe Illustrator CS en 2001. Quelques recherches sur Google montrent une interface globale plus avancée que celle présentée dans les captures ci-dessus. Le menu est plus fourni et les fenêtres semblent plus récentes.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_23.jpg" alt="OSINT_img_23" class="imgSize"/></center></p>
+
+<p>Bien, donc on est sur une version plus ancienne. On retire également les versions 2.0, 3.5 4.0 et 4.1 qui n&rsquo;existent que sur Windows (ou Solaris). Il nous reste donc les versions suivantes :</p>
+
+<ul>
+<li>1.0</li>
+<li>1.1</li>
+<li>88</li>
+<li>3.0</li>
+<li>5.0</li>
+<li>5.5</li>
+<li>6.0</li>
+<li>7.0</li>
+<li>8.0</li>
+<li>9.0</li>
+</ul>
+
+<p>De la même façon que pour CS (11.0) on va chercher a retrouver d&rsquo;anciennes captures d&rsquo;écran présentant l&rsquo;interface, pour chaque version, jusqu&rsquo;à tomber sur ce type d&rsquo;image (<a href="https://www.macintoshrepository.org/_resize.php?w=640&h=480&bg_color=333333&imgenc=ZmlsZc85XMvbWcvc2l0ZXMvbWcvZmlsZXMvc2NyZWVuc2hvdHMvaWxsdXN0cmF0b3I4OF8xLmpwZw%3D%3D" target="_blank">lien</a>).</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_12.jpg" alt="OSINT_img_12" class="imgSize"/></center></p>
+
+<p>L&rsquo;interface ressemble en tous points à nos captures ! 5 menus correspondants et une bare d&rsquo;outils équivalente. L&rsquo;attaquant utilisait donc Adobe Illustrator 88.
+<br/></p>
+
+<h2 id="15-c0d3x-400-points">15/ C0D3X (400 points)</h2>
+
+<pre><code>Contexte: En plus de la capture de l’écran de l’attaquant, le hack back a permis de prendre
+la main sur sa webcam et de prendre une série de photos. Un de ces photos est
+particulièrement utile. Elle représente l'intérieur de la chambre du corbeau.
+L'exploitation d'un élément présent sur cette photo permet de l'identifier sans
+qu'aucun doute ne soit possible, car le corbeau y fait référence sur ses réseaux sociaux.
+
+Qui est le corbeau ?
+</code></pre>
+
+<p>La dernière ligne droite de ce challenge, la conclusion de cette histoire, mais surtout une unique tentative ! C&rsquo;est en effet ce qui était donné aux participants du challenge. Si la réponse était erronée, alors le challenge était perdu à tout jamais.</p>
+
+<p>L&rsquo;énoncé indique que nous avons réussi à récupérer une image de la chambre du corbeau, qui ressemble à ceci.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/webcam.jpg" alt="webcam.jpg" class="imgSize"/></center></p>
+
+<p>Cette image comporte beaucoup d&rsquo;éléments, plus ou moins utilisables. En effet, bien qu&rsquo;on ait toute sorte d&rsquo;informations, je me suis tourné en priorité vers les éléments facilement identifiables. Dans notre cas, on voit une tonne de livres dans la bibliothèque à gauche, ainsi qu&rsquo;un gros livre posé à droite. Ce dernier est plus facilement utilisable car on arrive assez facilement à lire le nom de l&rsquo;auteur : Ken Follett.</p>
+
+<p>On pourrait chercher d&rsquo;autres éléments mais on commence par cette piste. Pas besoin d&rsquo;aller chercher bien loin, grâce à la couverture et à Google, on identifie rapidement l&rsquo;ouvrage : Le Crépuscule et l&rsquo;Aube.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_24.jpg" alt="OSINT_img_24" class="imgSize"/></center></p>
+
+<p>On nous parle d&rsquo;également d&rsquo;une référence faite par le corbeau sur ses réseaux sociaux. Jusqu&rsquo;à maintenant, nous avons exploité plusieurs réseaux, dont :</p>
+
+<ul>
+<li>Twitter</li>
+<li>LinkedIn</li>
+<li>Trip Advisor</li>
+</ul>
+
+<p>Le plus simple étant de commencer par le réseau sur lequel nous avons plusieurs profils suspects, Twitter.</p>
+
+<p>Pour rappel, les profils en question :</p>
+
+<ul>
+<li>Gilliane (<a href="https://twitter.com/eax_gilliane">https://twitter.com/eax_gilliane</a>)</li>
+<li>Félicien (<a href="https://twitter.com/eax_felicien">https://twitter.com/eax_felicien</a>)</li>
+<li>Halette (<a href="https://twitter.com/eax_halette">https://twitter.com/eax_halette</a>)</li>
+<li>Amarante (<a href="https://twitter.com/eax_amarante">https://twitter.com/eax_amarante</a>)</li>
+<li>Ferragus (<a href="https://twitter.com/eax_ferragus">https://twitter.com/eax_ferragus</a>)</li>
+</ul>
+
+<p>Un rapide coup d&rsquo;oeil sur l&rsquo;ensemble de ces profils nous amène à extraire plusieurs informations potentiellement intéressante. Mais par dessus tout, le <a href="https://twitter.com/eax_amarante/status/1400562271059853320" target="_blank">tweet suivant</a> attire l&rsquo;attention :</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_25.jpg" alt="OSINT_img_25" class="imgSize"/></center></p>
+
+<p>C&rsquo;est d&rsquo;ailleurs le seul tweet mentionnant une phrase, probablement une citation.
+Une simple recherche Google (sans oublier les guillemets afin de chercher la phrase exacte!) permet de créer un lien indéniable entre plusieurs de nos trouvailles.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-cluedosint/OSINT_26.jpg" alt="OSINT_img_26" class="imgSize"/></center></p>
+
+<p>Cette citation est tirée du livre &ldquo;Le Crépuscule et l&rsquo;Aube&rdquo; de Ken Follett&hellip; Soit c&rsquo;est une TRES grosse coïncidence (ou un mauvais tour des organisateurs), soit nous tenons notre corbeau !</p>
+
+<p>On réalise par acquis de conscience (et car nous n&rsquo;avons qu&rsquo;un essai) une passe sur le reste des comptes utilisateurs, mais aucun autre lien ne semble ressortir.</p>
+
+<p>Nous tenons donc notre corbeau : Amarante !</p>
+
+<p>\o/
+<br/></p>
+
+<h2 id="le-mot-de-la-fin">Le mot de la fin</h2>
+
+<p>L&rsquo;écriture de ce post fut laborieuse :D</p>
+
+<p>Plus sérieusement, très content d&rsquo;avoir pu participer à ce challenge ! Très bien conçu, mettant en avant une multitude de techniques et problématiques liées à l&rsquo;OSINT.</p>
+
+<p>Merci aux organisateurs, c&rsquo;est vraiment top de voir des challenges/scénarios OSINT (bien conçus!) émerger petit à petit dans l&rsquo;univers des CTF. Et vive l&rsquo;OSINT ! ;)</p>
+
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/writeups/osint-geoint/yogoshesd-ctf-osint-global/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">YogoshESD-CTF - OSINT Challenges</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
