@@ -5,10 +5,64 @@
     <link>https://haax9.github.io/fr/categories/</link>
     <description>Recent content in Categories on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Jan 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/fr/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Flight</title>
+      <link>https://haax9.github.io/fr/categories/flight/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/categories/flight/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GEOINT</title>
+      <link>https://haax9.github.io/fr/categories/geoint/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/categories/geoint/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Geolocation</title>
+      <link>https://haax9.github.io/fr/categories/geolocation/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/categories/geolocation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OSINT</title>
+      <link>https://haax9.github.io/fr/categories/osint/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/categories/osint/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Overpass</title>
+      <link>https://haax9.github.io/fr/categories/overpass/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/categories/overpass/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Writeup</title>
+      <link>https://haax9.github.io/fr/categories/writeup/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/categories/writeup/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>CTF</title>
@@ -16,33 +70,6 @@
       <pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/fr/categories/ctf/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>GEOINT</title>
-      <link>https://haax9.github.io/fr/categories/geoint/</link>
-      <pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://haax9.github.io/fr/categories/geoint/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OSINT</title>
-      <link>https://haax9.github.io/fr/categories/osint/</link>
-      <pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://haax9.github.io/fr/categories/osint/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Writeup</title>
-      <link>https://haax9.github.io/fr/categories/writeup/</link>
-      <pubDate>Sat, 19 Jun 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://haax9.github.io/fr/categories/writeup/</guid>
       <description></description>
     </item>
     
@@ -79,15 +106,6 @@
       <pubDate>Sun, 29 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/fr/categories/social-engineering/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Flight</title>
-      <link>https://haax9.github.io/fr/categories/flight/</link>
-      <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://haax9.github.io/fr/categories/flight/</guid>
       <description></description>
     </item>
     

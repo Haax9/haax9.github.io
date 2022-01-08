@@ -5,10 +5,21 @@
     <link>https://haax9.github.io/fr/</link>
     <description>Recent content on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Jan 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://haax9.github.io/fr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OSINT/GEOINT - Investigation et Geolocalisation #2 - Overpass Turbo</title>
+      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpass/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpass/</guid>
+      <description>&lt;p&gt;Il y a plus d&amp;rsquo;un an, je publiais un premier article dédié à la géolocalisation d&amp;rsquo;un vol commercial depuis une photo prise dans l&amp;rsquo;avion, à partir de différentes recherches et outils de recherche en sources ouvertes. Cependant, d&amp;rsquo;autres outils existent et sont à mon sens trop peu médiatisés, notamment via des ressources françaises. Je me suis donc dit qu&amp;rsquo;il serait intéressant d&amp;rsquo;y consacrer quelques lignes. Et puis, une nouvelle fois, tel un running gag au sein de nos groupes de discussion, une photo également prise depuis un avion nous a été envoyée. Qu&amp;rsquo;à cela ne tienne, il s&amp;rsquo;avère que le cas est parfait pour introduire ces outils.&lt;/p&gt;
+
+&lt;p&gt;Géolocalisation d&amp;rsquo;un vol depuis une photo ? On est reparti pour un tour !&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>YogoshESD-CTF - CLUDEOSINT</title>

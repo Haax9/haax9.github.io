@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Geolocation on Haax - Personal Blog</title>
+    <link>https://haax9.github.io/en/categories/geolocation/</link>
+    <description>Recent content in Geolocation on Haax - Personal Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 08 Jan 2022 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://haax9.github.io/en/categories/geolocation/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>OSINT/GEOINT - Investigation and Geolocation #2 - Overpass Turbo</title>
+      <link>https://haax9.github.io/en/writeups/osint-geoint/osint-flight-volume2-overpass/</link>
+      <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://haax9.github.io/en/writeups/osint-geoint/osint-flight-volume2-overpass/</guid>
+      <description>&lt;p&gt;More than a year ago, I published a first post dedicated to the geolocation of a commercial flight from a photo taken in the plane and based on various research and open source tools. However, other tools exist and are, in my opinion, not enough covered in media. So I thought it would be interesting to write a few lines about them. And then, once again, like a running gag in our discussion groups, a photo also taken from a plane was sent to us. It turns out that this is a perfect case to introduce these tools.&lt;/p&gt;
+
+&lt;p&gt;Geolocation of a flight from a photo? Let&amp;rsquo;s go for episode 2!&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
