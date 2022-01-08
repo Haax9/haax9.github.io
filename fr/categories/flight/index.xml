@@ -12,21 +12,21 @@
     
     <item>
       <title>OSINT/GEOINT - Investigation et Geolocalisation #2 - Overpass Turbo</title>
-      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpass/</link>
+      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpassturbo/</link>
       <pubDate>Sat, 08 Jan 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpass/</guid>
+      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpassturbo/</guid>
       <description>&lt;p&gt;Il y a plus d&amp;rsquo;un an, je publiais un premier article dédié à la géolocalisation d&amp;rsquo;un vol commercial depuis une photo prise dans l&amp;rsquo;avion, à partir de différentes recherches et outils de recherche en sources ouvertes. Cependant, d&amp;rsquo;autres outils existent et sont à mon sens trop peu médiatisés, notamment via des ressources françaises. Je me suis donc dit qu&amp;rsquo;il serait intéressant d&amp;rsquo;y consacrer quelques lignes. Et puis, une nouvelle fois, tel un running gag au sein de nos groupes de discussion, une photo également prise depuis un avion nous a été envoyée. Qu&amp;rsquo;à cela ne tienne, il s&amp;rsquo;avère que le cas est parfait pour introduire ces outils.&lt;/p&gt;
 
 &lt;p&gt;Géolocalisation d&amp;rsquo;un vol depuis une photo ? On est reparti pour un tour !&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>OSINT/GEOINT - Investigation et Géolocalisation d&#39;un vol commercial</title>
-      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</link>
+      <title>OSINT/GEOINT - Investigation et Géolocalisation #1 - Vol commercial</title>
+      <link>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/</link>
       <pubDate>Tue, 08 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-tracking-challenge/</guid>
+      <guid>https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/</guid>
       <description>&lt;p&gt;Il y a de cela quelques jours, un bon ami m&amp;rsquo;a envoyé une photo, visiblement prise depuis un avion, en guise de challenge OSINT/GEOINT. Le but est ici de retrouver le point de départ du vol, l&amp;rsquo;arrivée, mais également, de manière plus ou moins précise, à quel endroit a été prise la photo. Le sujet étant plutôt fun et compte tenu de la multitude d&amp;rsquo;informations et compétences nécessaires pour résoudre le challenge, je me suis dit qu&amp;rsquo;il serait intéressant d&amp;rsquo;écrire à ce sujet.&lt;/p&gt;</description>
     </item>
     

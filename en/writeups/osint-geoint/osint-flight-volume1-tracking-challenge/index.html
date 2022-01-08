@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>OSINT/GEOINT - Investigating and geolocating #1 - Commercial flight • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OSINT/GEOINT - Investigating and geolocating #1 - Commercial flight"/>
+<meta name="twitter:description" content="A few days ago, a good friend sent me a picture taken from a plane for an OSINT/GEOINT challenge. The goal was to find the flight departure, arrival, but also, where the picture was taken. The topic being rather fun and considering the variety of information and skills needed to solve the challenge, I thought it would be interesting to write about it."/>
+
+<meta property="og:title" content="OSINT/GEOINT - Investigating and geolocating #1 - Commercial flight" />
+<meta property="og:description" content="A few days ago, a good friend sent me a picture taken from a plane for an OSINT/GEOINT challenge. The goal was to find the flight departure, arrival, but also, where the picture was taken. The topic being rather fun and considering the variety of information and skills needed to solve the challenge, I thought it would be interesting to write about it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/en/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/" />
+<meta property="article:published_time" content="2020-09-08T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-09-08T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io/en">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/en/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/about/">
+						<span>About</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/en/conferences/">
+						<span>Conferences</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="https://cheatsheet.haax.fr">
+						<span>Cheatsheet</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haax9_" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haax.fr/en/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/fr/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/" hreflang="fr" lang="fr" class="langLink">Français</a>
+      <a rel="alternate" href="/fr/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2022 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>OSINT/GEOINT - Investigating and geolocating #1 - Commercial flight</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Sep 8, 2020
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 14 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>A few days ago, a good friend sent me a picture taken from a plane for an OSINT/GEOINT challenge. The goal was to find the flight departure, arrival, but also, where the picture was taken. The topic being rather fun and considering the variety of information and skills needed to solve the challenge, I thought it would be interesting to write about it.</p>
+
+<h2 id="prelude">Prelude</h2>
+
+<p>If you are unfamiliar with the OSINT/GEOINT terms or if you landed here just driven by curiosity, then this paragraph is for you :</p>
+
+<pre><code>OSINT stands for Open Source Intelligence and corresponds to all the public or 
+semi-public information you can gather on a given target.
+
+GEOINT (Geospatial Intelligence) is intelligence about the human activity on earth 
+derived from the exploitation and analysis of imagery and geospatial information that 
+describes, assesses, and visually depicts physical features and geographically referenced activities on the Earth.
+</code></pre>
+
+<p>The idea behind this blogpost is to talk about different topics and information gathering methods, whether geographical or physical, in order to solve a small real case of open source investigation. For the less aware of you, it also shows how you can research, investigate and identify this kind of things.</p>
+
+<h2 id="context-and-first-elements">Context and first elements</h2>
+
+<p>Sunday, 30th of August, 2020. We receive the following picture on the group channel we often use, quoted with the following message : &ldquo;Where did I take this picture ? Where did I takeoff and to which destination ? :)&rdquo;</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_1.jpg" alt="Challenge picture" class="imgSize"/></center>
+<em class="imageCaption">Fig. 1 : Original challenge picture</em></p>
+
+<p>From that moment, even if I have a few days ahead of me, the remaining time to solve the challenge is counted. You will understand why later.</p>
+
+<p>The person living in France, I made the hypothesis of a departure from a French airport. Moreover, thanks to contextual informations, I know that this person is probably located in the North/Western part of France right now.</p>
+
+<p>First thing first, even before starting on the picture, we can see that the original filename has been kept : <code>IMG_20200830_180055091_HDR.jpg</code>. The interesting information here is the fact that when a mobile phone takes a picture, it uses a <strong>timestamp</strong> to name the file. This way, it is impossible to have a duplicate. In our case, this gives us crucial information, the date and the probable time when the picture was shot : <strong>The 08/30/2020 at 18:00</strong>.</p>
+
+<p>You can also verify this information by viewing the file&rsquo;s metadata.</p>
+
+<pre><code class="language-bash">$ exiftool IMG_20200830_180055091_HDR.jpg
+[...]
+Create Date                     : 2020:08:30 18:00:59.210329
+Date/Time Original              : 2020:08:30 18:00:59.210329
+Modify Date                     : 2020:08:30 18:00:59.210329
+[...]
+</code></pre>
+
+<p>Let&rsquo;s now move on to the picture analysis. At first glance, at least four elements are worth checking.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_2.jpg" alt="Challenge picture 2" class="imgSize"/></center>
+<em class="imageCaption">Fig. 2 : Interesting elements to analyze</em></p>
+
+<ul>
+<li><strong>Red</strong> : The aircraft winglet and especially it&rsquo;s shape and colour are interesting informations. Indeed, it can help to identify the aircraft model and the airline company ;</li>
+<li><strong>Yellow</strong> : The low part of the wing flaps (If just like me, this word is new, here it is : <a href="https://www.lavionnaire.fr/CelluleHyperVolets.php" target="_blank">link</a>) can, just as the winglet, give information for aircraft identification ;</li>
+<li><strong>Green</strong> : The landscape and especially relief indicate a mountainous region. Other equivalent elements are on the picture but for clarity sake, only 2 mountains have been framed ;</li>
+<li><strong>Blue</strong> : The sun&rsquo;s shadow, as well as shadows on the reliefs below are also important visual elements because, as long as we know when the picture was shot, we can use is to find the sun position and so calculate the plane trajectory.</li>
+</ul>
+
+<p>Good ! Now that we have these informations, it&rsquo;s research time. But.. What are we looking for ?</p>
+
+<p>1/ What is the featured aircraft model ?<br />
+2/ Which company, flying in France, is using this type of aircraft ?<br />
+3/ Which direction is it heading to ?<br />
+4/ What is the flight number ?<br />
+5/ Where was the picture shot ?</p>
+
+<h2 id="aircraft-identification">Aircraft Identification</h2>
+
+<p>For this task, I based my researches on the above identified elements, but also on the fact that I know very few about the aviation world, which in this case allowed me to avoid long researches. Indeed, having only little information on the different types of aircraft used, I naturally turned myself on the two biggest (or at least the well known in Europe) companies producing aircraft : Airbus and Boeing.</p>
+
+<p>I&rsquo;m skipping some details, but for Boeing, nothing seems to correspond to what we have here.</p>
+
+<p>However, for Airbus (<a href="https://www.airbus.com/aircraft.html" target="_blank">link</a> and <a href="https://en.wikipedia.org/wiki/Airbus#Products" target="_blank">link</a>) I&rsquo;m starting with the A380 model, but quickly discard this option because this model, propelled by four engines, has 5 flap sliding rails per wing. However, our aircraft only has 4 of them.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/AIRBUS_A380.jpg" alt="Airbus A380" class="imgSize"/></center>
+<em class="imageCaption">Fig. 3 : Airbus A380</em></p>
+
+<p>In the A320 family (and derivatives), it&rsquo;s more promising! The following post (<a href="https://www.dataero.fr/differencier-famille-a320/" target="_blank">link</a>) explains some of the differences between models and especially with the &ldquo;NEO&rdquo; range. All of the NEO aircrafts have &ldquo;sharklets&rdquo; winglets (one-sided upward winglet). Our aircraft is, therefore, not a NEO.</p>
+
+<p>Then, looking to the Airbus A318, we see that only 80 aircraft have been built, and 59 are now in service. In Europe, only AirFrance and TAROM (Romanian airline) operate them. Thus, even if the characteristics may correspond, this aircraft is unlikely an A318.</p>
+
+<p>The A319 and A320 are very similar aircrafts, especially regarding wings. One of the big differences between them both is the 2 emergency doors located near the wings on the A320. Now if we take a look at the A321 model, the main difference with its two brothers is the size, larger than the two others.</p>
+
+<p>Furthermore, the below picture shows a lateral door just behind the wing on the Airbus A321, located at approximately the same level as the passenger seat from which the photo was taken. So, it seems we can discard the A321.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SCHEMA_AIRBUS.png" alt="A320 family schema" class="imgSize"/></center>
+<em class="imageCaption">Fig. 4 : Airbus A32X Family</em></p>
+
+<p>So, these first researches allow us to build the following reduced list :</p>
+
+<ul>
+<li>Airbus A319</li>
+<li>Airbus A320</li>
+<li>Other ?</li>
+</ul>
+
+<p>Having no way to be 100% sure of the aircraft model, but having this small list, we can save it in order to later correlates with other elements.</p>
+
+<h2 id="flying-path-analysis">Flying path analysis</h2>
+
+<p>In order to prepare the future research for the airline compagny, I preferred to start by the aircraft trajectory analysis, as it could allow to discard some airlines.</p>
+
+<p>It is possible to have an idea, more or less precise, of the plane&rsquo;s trajectory by using shadow left by the sun, both on the plane&rsquo;s cabin and on the mountains below. Moreover, knowing when the photo has been shot makes the search easier.</p>
+
+<p>The online tool <a href="http://suncalc.net" target="_blank">Suncalc</a> allow to search for a precise sun position over time, even for the past days. So if we take Paris as a reference for the 30th of August, we have the following result.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUNCALC_1.jpg" alt="Suncalc Paris" class="imgSize"/></center>
+<em class="imageCaption">Fig. 5 : Sun position on the 08/30/2020, 18:00</em></p>
+
+<p>The shadow on plane&rsquo;s wing indicates that the sun was right to it. The alignment, non-parallel, of the shadow with the shape of the plane also indicates that the sun was located slightly behind.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_1.jpg" alt="Sun position on airplane" class="imgSize"/></center>
+<em class="imageCaption">Fig. 6 : Plane&rsquo;s shadow on the wing</em></p>
+
+<p>In the other hand, shadows of the clouds and mountains give clues to specify the sun position, a little more behind.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
+<em class="imageCaption">Fig. 7 : Shadows on clouds and mountains</em></p>
+
+<p>Still think about an hypothetical departure from France and thanks to the previous elements, we can roughly plot a supposed flying path, toward South-East. The following red line corresponds the sun projection whereas the red arrow symbolizes the potential path.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/PLANE_DIRECTION.jpg" alt="Plane direction" class="imgSize"/></center>
+<em class="imageCaption">Fig. 8 : Potential plane trajectory</em></p>
+
+<p>Finally, possible destinations are restrained to places around the Mediterranean Sea, North of Africa and West of Middle East.</p>
+
+<h2 id="identifying-the-airline-company">Identifying the Airline Company</h2>
+
+<p>By supposing a departure from France toward South-East, researches are naturally oriented toward European airlines. So, we are looking for companies :</p>
+
+<ul>
+<li>Having A319 or A320 (or even A318) ;</li>
+<li>Flying from France, toward South-East ;</li>
+<li>Using red and white colours, especially for wings and winglets.</li>
+</ul>
+
+<p>From now on, we can take 2 paths. The first idea is to search about all airlines flying in Europe, looking for their colours and filter on this. That&rsquo;s also the thing I did when I first investigated on this case. However, after double thinking about it, another approach and methodology might be more efficient. Indeed, starting by filtering on airlines flying in France seems a better idea. Several online resources can give the type of lists we are looking for (<a href="https://en.wikipedia.org/wiki/List_of_largest_airlines_in_Europe" target="_blank">link</a>. Even if it&rsquo;s a good starting point, it doesn&rsquo;t allow to filter on France, but Skyscanner have this feature <a href="https://www.skyscanner.fr/vols-a/fr/compagnies-qui-proposent-des-vols-a-france.html" target="_blank">link</a>). We now have a list of 32 airlines to search for. Keeping in mind a departure from the West or North, we can even filter by region or by using the list of most attended airports (<a href="https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9roports_les_plus_fr%C3%A9quent%C3%A9s_en_France" target="_blank">link</a>) but it increases the risk of missing something important.</p>
+
+<p>Through Google Images, we can also quickly browse the 32 airlines and discard most of them. Finally, after a quick search, only 6 airlines correspond in terms of colours :</p>
+
+<ul>
+<li>Volotea</li>
+<li>Iberia</li>
+<li>SWISS Airlines</li>
+<li>Austrian Airlines</li>
+<li>Air Algerie</li>
+<li>Czech Airlines</li>
+</ul>
+
+<p>The fleet analysis for each of them (public informations, available on their website) reveals that any of them own A318 aircraft.? Furthermore, Air Algeria doesn&rsquo;t have A319 nor A320, so we can discard it.</p>
+
+<ul>
+<li>Volotea</li>
+<li>Iberia</li>
+<li>SWISS Airlines</li>
+<li>Austrian Airlines</li>
+<li><del>Air Algerie</del></li>
+<li>Czech Airlines</li>
+</ul>
+
+<p>After a quite deeper analysis, 2 more false positives are spotted, because of white winglets :</p>
+
+<ul>
+<li>Volotea</li>
+<li><del>Iberia</del></li>
+<li><del>SWISS Airlines</del></li>
+<li>Austrian Airlines</li>
+<li><del>Air Algerie</del></li>
+<li>Czech Airlines</li>
+</ul>
+
+<p>The three remaining airlines all have corresponding colours. But, what about their routes ?</p>
+
+<p>The excellent flight tracking tool <a href="https://www.flightradar24.com" target="_blank">FlightRadard24</a> gives the opportunity to visualize, for a given airline, the entire route network. Thus, by showing all routes for the three airlines, we can also discard <strong>Czech Airlines</strong> and <strong>Austrian Airlines</strong> because they don&rsquo;t have any flight to South-Est from France.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/AUSTRIAN_ROUTES.jpg" alt="Austrian Airlines routes" class="imgSize"/></center>
+<em class="imageCaption">Fig. 9 : Austrian Airlines routes</em></p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/CZECH_ROUTES.jpg" alt="Czech Airlines routes" class="imgSize"/></center>
+<em class="imageCaption">Fig. 10 : Czech Airlines routes</em></p>
+
+<p>The Volotea network seems to have many more routes, including some that could fit our criteria.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLOTEA_ROUTES.jpg" alt="Volotea routes" class="imgSize"/></center>
+<em class="imageCaption">Fig. 10 : Volotea Airlines routes</em></p>
+
+<p>Considering gathered elements, we are now almost sure that the airline used in this flight was Volotea. Another small information, if we check their operational fleet (<a href="https://www.volotea.com/fr/a-propos-de-volotea/" target="_blank">link</a>) we can see that Volotea only use two types or aircrafts, Airbus A319 and Boeing 717. So, we can now also be sure about the aircraft, an <strong>Airbus A319</strong> !</p>
+
+<h2 id="researching-the-right-flight">Researching the right flight</h2>
+
+<p>Did you remember, when, at the beginning of this blogpost, I&rsquo;ve mentioned the fact that we must be quick to solve problems like this one ? It&rsquo;s all about now, when researching precise informations about the flight and later, when trying to geolocate the picture.</p>
+
+<p>Indeed, several online resources index and log past flights, as well as many information about these ones (for example, the exact and real departure and arrival time). These informations are usually free, but for a short period of time, often 7 days. Indeed, even for most of the websites, it&rsquo;s possible to go further back in time, these services are usually not free and can be expensive.</p>
+
+<p>Once again, the online service <a href="https://www.flightradar24.com/" target="_blank">FlightRadar24</a> can be usefull to search flights, airport by airport. However, as long as I didn&rsquo;t know the departure and arrival airports, I chose to use another service, <a href="https://www.airportia.com" target="_blank">Airportia</a>, which offers a free flights history for a given airline.</p>
+
+<p>So, thanks to the search function, filtered by date and time, we&rsquo;re able to only see flights for the 30th of August. However, we have to be careful regarding the time. Indeed, the website data are based on the GMT (or UTC) format. Right now, we&rsquo;re on a UTC+2 time zone, so we have to add 2 hours to get the real time.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_SUNDAY_VOLOTEA.png" alt="Sunday Flights Volotea" class="imgSize"/></center>
+<em class="imageCaption">Fig. 11 : Volotea flights history</em></p>
+
+<p>According to the gathered data, only two flights correspond to our criteria (departure from France, probably from the North/West, toward South-East).</p>
+
+<ul>
+<li>The <strong>V72606</strong> flight, leaving Nantes (17:05) to Bastia, Corsica (18:55) ;</li>
+<li>The <strong>V72581</strong> flight, leaving Caen (17:15) to Marseille (18:50).</li>
+</ul>
+
+<p>We can also check the history for each flight for the last 7 days, through FligtRadar24.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_NANTES.png" alt="Nantes flights" class="imgSize"/></center>
+<em class="imageCaption">Fig. 12 : V72606 flight history</em></p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_CAEN.png" alt="Caen flights" class="imgSize"/></center>
+<em class="imageCaption">Fig. 13 : V72581 flight history</em></p>
+
+<p>As seen, both of the flights are coherent in terms of date, time and route. So, it seems difficult to know which one is the good one. That&rsquo;s why the last analysis step will help us in order to identity to get the good one.</p>
+
+<h2 id="geolocating-the-picture">Geolocating the picture</h2>
+
+<p>Great ! Considering that we don&rsquo;t have full answers but a short list, searching for the exact place where the person shot the picture could help in order to discard one flight, and reveal the good one. Two methods can be employed here.</p>
+
+<p>Firstly, if we plot the trajectory, even if it&rsquo;s kinda rough, between departures and arrivals, for each flight, a little difference can be seen.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/FLIGHTS_DIRECTION.jpg" alt="Nantes & Caen directions" class="imgSize"/></center>
+<em class="imageCaption">Fig. 14 : Trajectory for both flights</em></p>
+
+<p>And now, if we use again the previously identified sun calculation, on the 30th August at 18:00 and we apply it on the previous paths. We have the following map, allowing to know, approximately, where was the sun against the plane.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_FLIGHTS.jpg" alt="Sun position over flights" class="imgSize"/></center>
+<em class="imageCaption">Fig. 15 : Sun position for each flight</em></p>
+
+<p>Now let&rsquo;s take a look, once again, at the shadows below just like we did before. If we look at the angle they have on elements they are cast (for example, clouds and mountains) we can highly suppose that the sun, while being on the right side of the plane, is not perpendicular and slightly aligns itself with the aircraft.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
+<em class="imageCaption">Fig. 16 : Cloud&rsquo;s and mountain&rsquo;s shadows</em></p>
+
+<p>So it seems that the flight number <strong>V72606</strong> between Nantes and Bastia fits better our criteria.
+However, another method can be used to be sure of that information, or at least, to rectify it. Once again, it&rsquo;s about informations available in a short period of time because they come from the same previously used dataset. FlightRadar24 is also useful here because thanks to this, you can replay the exact path and behavior for a given flight, minute by minute.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_CAEN.jpg" alt="Live replay Caen" class="imgSize"/></center>
+<em class="imageCaption">Fig. 17 : V72581 flight replay</em></p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_NANTES.jpg" alt="Live replay Nantes" class="imgSize"/></center>
+<em class="imageCaption">Fig. 18 : V72606 flight replay</em></p>
+
+<p>Alright, so if we look at the V72581 flight between Caen and Marseille around 18:00 (16:00 UTC+2), the aircraft was close to Clermont-Ferrand city, just above a town called Trézioux. If we now check the same thing for the V72606 between Nantes and Bastia, the aircraft was near the French Alps, above another town called Upaix.</p>
+
+<p>From there, we use a quick landscape overview in order to find more elements. Thanks to the following tool (<a href="http://data.mashedworld.com" target="_blank">link</a>) you can combine Google Maps (map and satellite) and Google Street View.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_TREZIOUX.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
+<em class="imageCaption">Fig. 19 : Landscape near Trézioux</em></p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_EYGUIANS.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
+<em class="imageCaption">Fig. 20 : Landscape near Upaix</em></p>
+
+<p>On another hand, the map used by FlightRadar24 is also interesting because relief visualisation seems to be more precise.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_CAEN.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
+<em class="imageCaption">Fig. 21 : Relief map near Trézioux</em></p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_NANTES.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
+<em class="imageCaption">Fig. 22 : Relief map near Upaix</em></p>
+
+<p>The landscapes observation shows that the geographical area around Trézioux, where the Caen-Marseille flight went, is kinda flat, whereas the area near Upaix, where the Nantes-Bastia flight went, is much more mountainous, especially on the left side of the aircraft&rsquo;s trajectory. As long as several mountainous reliefs can be seen on the original photo, we can discard the V72581 (Caen-Marseille) flight !</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Finally, we can affirm, without many doubts that this person left Nantes (FRA) on the 30th of August 2020 with the flight number V72606 and was heading to Bastia (FRA). Moreover, the featured pictured was shot near Upaix, in the south of France.</p>
+
+<p>Later on, this assertion has been validated by the involved person which gave me this screenshot, taken from the mobile application at the same moment he shot the picture. Victory !</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge/RESULT.jpg" alt="Result" class="imgSize"/></center>
+<em class="imageCaption">Fig. 23 : Screenshot taken from the mobile app</em></p>
+
+<p>Although I am far from being expert in this discipline, I tried through this post to explain both the methodology and the research done to get this result, but also to show that it is possible, through some tools, to conduct this kind of investigation and that, on top of that, it&rsquo;s a fascinating and fun exercise !</p>
+
+<p>PS : It&rsquo;s also interesting to note the difference between my first solve try and the moment I write these lines. Indeed, after some time to think about it, some methodology elements have evolved and could have been used to avoid some errors during my first research. But oh, that&rsquo;s the way we learn things !</p>
+
+<h2 id="resources-tools">Resources &amp; Tools</h2>
+
+<p>Before diving in a bunch of posts, tools and other things, I highly recommend this Bellingat post about flight tracking (<a href="https://www.bellingcat.com/resources/how-tos/2019/10/15/a-beginners-guide-to-flight-tracking/" target="_blank">link</a>).</p>
+
+<ul>
+<li><p>Informations about planes/aircrafts</p>
+
+<ul>
+<li><a href="https://www.dataero.fr/reconnaitre-les-elements-exterieurs-avion/">https://www.dataero.fr/reconnaitre-les-elements-exterieurs-avion/</a></li>
+<li><a href="https://www.lavionnaire.fr/CelluleHyperVolets.php">https://www.lavionnaire.fr/CelluleHyperVolets.php</a></li>
+<li><a href="http://blogs-pedagogiques.lfmurcie.org/bugsavionstpe/2014/12/06/les-ailes/">http://blogs-pedagogiques.lfmurcie.org/bugsavionstpe/2014/12/06/les-ailes/</a></li>
+<li><a href="https://fr.wikipedia.org/wiki/Dispositif_hypersustentateur">https://fr.wikipedia.org/wiki/Dispositif_hypersustentateur</a></li>
+<li><a href="https://www.dataero.fr/differencier-famille-a320/">https://www.dataero.fr/differencier-famille-a320/</a></li>
+<li><a href="https://upload.wikimedia.org/wikipedia/commons/9/92/A32XFAMILYv1.0.jpg">https://upload.wikimedia.org/wikipedia/commons/9/92/A32XFAMILYv1.0.jpg</a></li>
+</ul></li>
+
+<li><p>Flight tracking and research tools</p>
+
+<ul>
+<li><a href="https://www.skyscanner.fr/vols-a/fr/compagnies-qui-proposent-des-vols-a-france.html">https://www.skyscanner.fr/vols-a/fr/compagnies-qui-proposent-des-vols-a-france.html</a></li>
+<li><a href="https://www.airportia.com/">https://www.airportia.com/</a></li>
+<li><a href="https://www.flightradar24.com">https://www.flightradar24.com</a></li>
+</ul></li>
+
+<li><p>Visualisation tools</p>
+
+<ul>
+<li><a href="http://data.mashedworld.com">http://data.mashedworld.com</a></li>
+<li><a href="http://suncalc.net">http://suncalc.net</a></li>
+</ul></li>
+</ul>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/en/writeups/nozrhctf-2020/familly_business/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">NorzhCTF 2020 - OSINT - Familly Business</span>
+    </a>
+    
+    
+    <a href="/en/writeups/inter-iut-2020/osint_se_challenge/" class="post--navigation-next">
+      <span class="navigation-tittle">CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing)</span>
+      <i aria-hidden="true" class="fa fa-chevron-right"></i>
+    </a>
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>

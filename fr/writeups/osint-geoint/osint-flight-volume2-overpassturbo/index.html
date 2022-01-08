@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.55.6" />
+
+    
+    
+    
+
+<title>OSINT/GEOINT - Investigation et Geolocalisation #2 - Overpass Turbo • Haax - Personal Blog</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OSINT/GEOINT - Investigation et Geolocalisation #2 - Overpass Turbo"/>
+<meta name="twitter:description" content="Il y a plus d&rsquo;un an, je publiais un premier article dédié à la géolocalisation d&rsquo;un vol commercial depuis une photo prise dans l&rsquo;avion, à partir de différentes recherches et outils de recherche en sources ouvertes. Cependant, d&rsquo;autres outils existent et sont à mon sens trop peu médiatisés, notamment via des ressources françaises. Je me suis donc dit qu&rsquo;il serait intéressant d&rsquo;y consacrer quelques lignes. Et puis, une nouvelle fois, tel un running gag au sein de nos groupes de discussion, une photo également prise depuis un avion nous a été envoyée. Qu&rsquo;à cela ne tienne, il s&rsquo;avère que le cas est parfait pour introduire ces outils.
+
+Géolocalisation d&rsquo;un vol depuis une photo ? On est reparti pour un tour !"/>
+
+<meta property="og:title" content="OSINT/GEOINT - Investigation et Geolocalisation #2 - Overpass Turbo" />
+<meta property="og:description" content="Il y a plus d&rsquo;un an, je publiais un premier article dédié à la géolocalisation d&rsquo;un vol commercial depuis une photo prise dans l&rsquo;avion, à partir de différentes recherches et outils de recherche en sources ouvertes. Cependant, d&rsquo;autres outils existent et sont à mon sens trop peu médiatisés, notamment via des ressources françaises. Je me suis donc dit qu&rsquo;il serait intéressant d&rsquo;y consacrer quelques lignes. Et puis, une nouvelle fois, tel un running gag au sein de nos groupes de discussion, une photo également prise depuis un avion nous a été envoyée. Qu&rsquo;à cela ne tienne, il s&rsquo;avère que le cas est parfait pour introduire ces outils.
+
+Géolocalisation d&rsquo;un vol depuis une photo ? On est reparti pour un tour !" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume2-overpassturbo/" />
+<meta property="article:published_time" content="2022-01-08T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2022-01-08T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+
+
+    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+
+
+
+<link rel="stylesheet" href="/css/hyde-hyde.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/print.min.css" media="print">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="/favicon.png">
+    
+
+</head>
+
+
+    <body >
+        
+<div class="sidebar">
+  <div class="container ">
+    <div class="sidebar-about">
+      
+      
+          <a href="https://haax9.github.io">
+          
+          
+          
+          <div class="author-image">
+            <img src="/img/icons/haax_logo.png" alt="Author Image" class="img--circle img--headshot element--center">
+          </div>
+          
+          </a>
+        
+      <p class="site__description">
+        <a href="https://haax9.github.io">
+         Infosec articles &amp; CTF Writeups 
+      </a>
+      </p>
+    </div>
+    <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/fr/articles/">
+						<span>Articles</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/walkthroughs/">
+						<span>Walkthroughs</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/writeups/">
+						<span>Write-Ups</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/about/">
+						<span>À Propos</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/fr/conferences/">
+						<span>Conférences</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="https://cheatsheet.haax.fr">
+						<span>Cheatsheet</span>
+					</a>
+				</li>
+			 
+		
+		</li>
+	</ul>
+</div>
+
+    <p>
+      <section class="social">
+	
+	<a href="https://twitter.com/Haax9_" target="blank"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://github.com/Haax9" target="blank"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	&nbsp;<a href="https://gitlab.com/Haax" target="blank"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+  &nbsp;<a href="https://www.root-me.org/Haax" target="blank" class="linklogo"><div class="rootme_logo logohover"></div></a>
+  
+	
+  &nbsp;<a href="http://www.aperikube.fr" target="blank" class="linklogo"><div class="aperikube_logo logohover"></div></a>
+  
+	
+	&nbsp;<a href="mailto:haax@mdamail.ch" target="blank"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	&nbsp;<a href="https://haax.fr/fr/index.xml" target="blank"><i class="fas fa-rss fa-lg" aria-hidden="true"></i></a>
+	</section>
+
+    </p>
+    <div class="langSection">
+      
+      
+      <a rel="alternate" href="/en/writeups/osint-geoint/osint-flight-volume2-overpassturbo/" hreflang="en" lang="en" class="langLink">English</a>
+      <a rel="alternate" href="/en/writeups/osint-geoint/osint-flight-volume2-overpassturbo/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
+      </div>
+    <p class="copyright">
+      &copy; 2022 Haax.
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
+      <br/>Built with
+      <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
+      
+    </p>
+  </div>
+  <div>
+  </div>
+</div>
+
+        <div class="content container">
+            
+    <article>
+  <header>
+    <h1>OSINT/GEOINT - Investigation et Geolocalisation #2 - Overpass Turbo</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Jan 8, 2022
+    
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 23 min read
+</div>
+
+
+  </header>
+  <div class="post">
+    <p>Il y a plus d&rsquo;un an, je publiais un premier article dédié à la géolocalisation d&rsquo;un vol commercial depuis une photo prise dans l&rsquo;avion, à partir de différentes recherches et outils de recherche en sources ouvertes. Cependant, d&rsquo;autres outils existent et sont à mon sens trop peu médiatisés, notamment via des ressources françaises. Je me suis donc dit qu&rsquo;il serait intéressant d&rsquo;y consacrer quelques lignes. Et puis, une nouvelle fois, tel un running gag au sein de nos groupes de discussion, une photo également prise depuis un avion nous a été envoyée. Qu&rsquo;à cela ne tienne, il s&rsquo;avère que le cas est parfait pour introduire ces outils.</p>
+
+<p>Géolocalisation d&rsquo;un vol depuis une photo ? On est reparti pour un tour !</p>
+
+<h2 id="préambule">Préambule</h2>
+
+<p>Si vous arrivez directement sur cet article depuis une source externe, je vous conseille vivement de commencer par lire mon premier article sur le sujet, disponible <a href="https://haax.fr/fr/writeups/osint-geoint/osint-flight-tracking-challenge/" target="_blank">ici</a>.</p>
+
+<p>Dans ce deuxième opus, nous allons tout d&rsquo;abord résoudre ce cas au travers de la solution &ldquo;classique&rdquo; via les outils d&rsquo;analyse et de suivi de vol. Puis dans un second temps, et c&rsquo;est tout l&rsquo;intérêt de ce post, j&rsquo;aimerai aborder un outil relativement puissant et nettement moins connu.</p>
+
+<h2 id="contexte-et-premiers-éléments">Contexte et premiers éléments</h2>
+
+<p>De la même façon que lors du premier cas traité sur ce blog, cette histoire démarre avec la photo suivante, reçue le 29/10/2021 à 11h58 nous demandant qui saurait dire où cette personne a prévu de passer son week end.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/PXL_20211029_095541933.jpg" alt="Challenge picture" class="imgSize"/></center>
+<em class="imageCaption">Fig. 1 : Photo originale reçue</em></p>
+
+<p>Le nom du fichier est &ldquo;PXL_20211029_095541933.jpg&rdquo;. Cette fois ci, pas de timestamp ! Cependant, on peut à priori valider la date de prise de la photo, qui est bien le 29/10/2021. Il est également possible de vérifier cette information au travers des métadonnées de la photo.</p>
+
+<p>En effet, par défaut, lors de l&rsquo;upload d&rsquo;une photo sur les plateformes sociales, les métadonnées sont retirées afin d&rsquo;assainir les fichiers et gagner de la place. Cependant, via Telegram (car c&rsquo;est ici que nous avons récupéré l&rsquo;image), il est possible d&rsquo;envoyer une image en tant que fichier brut, sans compression et en conservant les métadonnées.</p>
+
+<pre><code>$ exiftool PXL_20211029_095541933.jpg
+
+[...]
+Aperture                        : 1.7
+Image Size                      : 4032x3024
+Megapixels                      : 12.2
+Scale Factor To 35 mm Equivalent: 6.2
+Shutter Speed                   : 1/3906
+Create Date                     : 2021:10:29 11:55:41.933+02:00
+Date/Time Original              : 2021:10:29 11:55:41.933+02:00
+Modify Date                     : 2021:10:29 11:55:41.933+02:00
+Thumbnail Image                 : (Binary data 14521 bytes, use -b option to extract)
+Circle Of Confusion             : 0.005 mm
+Depth Of Field                  : inf (1.54 m - inf)
+Field Of View                   : 67.4 deg
+Focal Length                    : 4.4 mm (35 mm equivalent: 27.0 mm)
+Hyperfocal Distance             : 2.28 m
+Light Value                     : 14.2
+</code></pre>
+
+<p>Grâce à cela, on sait notamment que la photo a été prise à 11h55 le 29/10/2021.</p>
+
+<p>Bien. Deuxième étape, les éléments remarquables de la photo et ce qu&rsquo;on peut en tirer. Comme un air de déjà vu&hellip; Vous ne trouvez pas ?</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/PXL_20211029_095541933_SQUARED.jpg" alt="Challenge picture elements" class="imgSize"/></center>
+<em class="imageCaption">Fig. 2 : Elements remarquable de la photo</em></p>
+
+<ul>
+<li>Blanc : Premier élément à prendre en compte ici, l&rsquo;altitude ! En effet, même si cela parait évident, il s&rsquo;agit probablement de l&rsquo;information la plus importante. En effet, l&rsquo;altitude étant relativement basse, cela nous indique que la photo a été prise juste après le décollage, ou bien juste avant l&rsquo;atterrissage de l&rsquo;avion ;</li>
+<li>Rouge : Plutôt simple, la &ldquo;winglet&rdquo; de l&rsquo;aile nous donne la compagnie aérienne (Easyjet) ainsi qu&rsquo;une indication sur le modèle d&rsquo;appareil ;</li>
+<li>Jaune : Les volets hypersustentateurs sont déployés, ce qui confirme la piste d&rsquo;atterrissage (lol) ou de décollage ;</li>
+<li>Bleu : Un point d&rsquo;eau. Ou plutôt trois points d&rsquo;eau différents. Nous le verrons plus tard, c&rsquo;est typiquement le genre de point géographique remarquable dont nous avons besoin ;</li>
+<li>Vert : En arrière plan, on aperçoit un site industriel surplombé de deux grosses &ldquo;cheminées&rdquo;, ce qui ressemble très fortement à une centrale nucléaire ;</li>
+<li>On pourrait également noter d&rsquo;autres éléments intéressants, tels qu&rsquo;une route moyenne, bien qu&rsquo;ayant 4 voies, un pont, ou encore des reliefs en arrière plan.</li>
+</ul>
+
+<p>Pour la suite, deux méthodes, employant chacune certains éléments de l&rsquo;image.</p>
+
+<h2 id="méthode-1-la-classique-résolution-par-analyse-des-vols">Méthode 1 : La classique, résolution par analyse des vols</h2>
+
+<p>Si vous avez lu mon premier article sur le sujet, cela va sous sembler familier. En effet, connaissant l&rsquo;heure approximative du vol, et plus précisément de l&rsquo;atterrissage grâce à la basse altitude de l&rsquo;appareil ainsi que la compagnie opérant le vol, l&rsquo;identifiation peut se faire relativement facilement au moyen de différents outils de suivi et d&rsquo;analyse de vols.</p>
+
+<p>Je l&rsquo;avais déjà mentionné auparavant, mais les outils à suivre permettent un accès gratuit aux historiques de vols de manière limitée dans le temps. L&rsquo;accès à des données plus anciennes est également possible, mais il s&rsquo;agit généralement de services payants.</p>
+
+<p>Bien. Connaissant la date du vol et ayant une idée d&rsquo;une plage (l&rsquo;appareil devant être en vol à 11h55), commençons par regarder les vols opérés par EasyJet le 29/10/2021. L&rsquo;outil Airportia (<a href="https://www.airportia.com/" target="_blank">lien</a>) permet (parmi d&rsquo;autres) ce type de recherche. Petite précision, la personne étant française, nous allons nous concentrer sur les vols au départ de villes situées en France. A noter également, les horaires affichés sont au format UTC. Dans notre cas, il est donc nécessaire d&rsquo;y ajouter 2 heures.</p>
+
+<p>En se basant sur ces critères, deux vols correspondent. Cependant, compte tenu de l&rsquo;image et de l&rsquo;altitude, nous pouvons inclure les vols ayant théoriquement atterri quelques minutes avant l&rsquo;heure de la photo (retards potentiels, etc). Au final, 4 vols peuvent correspondre.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/CLASSIC_1.PNG" alt="Easyjet flights" class="imgSize"/></center>
+<em class="imageCaption">Fig. 3 : Vols opérés par EasyJet dans la fenêtre de temps recherchée</em></p>
+
+<p>Quatre vols à analyser, c&rsquo;est relativement peu ! Airportia permet également d&rsquo;avoir des détails plus précis sur un vol et notamment les heures réelles de départ et d&rsquo;arrivée ! Ainsi, il est possible de voir les éventuels retards. Compte tenu de l&rsquo;altitude et de l&rsquo;heure de la photo, peu de chances qu&rsquo;il s&rsquo;agisse du vol U24263 (Paris-Biarritz) étant donné que ce dernier a atteri environ 10 minutes après la prise de la photo, ce qui est tard par rapport à la position de l&rsquo;appareil sur cette dernière.</p>
+
+<p>Les autres vols peuvent correspondre. Cependant, le vol U24052 (Rennes-Lyon) attire l&rsquo;attention grâce à un détail particulier. En effet, les infos sur ce dernier révèlent que le vol du jour a été retardé et que par conséquent, l&rsquo;atterrissage a eu lieu à 11h57, soit 2 minutes après la prise de la photo !</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/CLASSIC_2.PNG" alt="Flight U24052 details" class="imgSize"/></center>
+<em class="imageCaption">Fig. 4 : Détails du vol U24052 via Airportia</em></p>
+
+<p>Ce vol semble être un bon candidat. Pour la suite, l&rsquo;outil en ligne FlightRadar24 (<a href="https://www.flightradar24.com/" target="_blank">lien</a>), également présenté dans le premier article sur le sujet, a été utilisé. Une fonctionnalité géniale proposée par le site est la possibilité de &ldquo;rejouer&rdquo; un vol une fois celui-ci arrivé. Cela permet notamment de connaître le trajet emprunté par l&rsquo;appareil, minute par minute, et d&rsquo;avoir des informations précises telles que la vitesse ou l&rsquo;altitude à un instant donné. Ainsi, en recherchant le vol cible, il est possible de le rejouer.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/CLASSIC_3.PNG" alt="Flight playback" class="imgSize"/></center>
+<em class="imageCaption">Fig. 5 : Rejeu du vol U24052 via FlightRadar24</em></p>
+
+<p>On se place à l&rsquo;heure de la prise de la photo, 11h55 (rappelez vous, 9h55 sur l&rsquo;application car nous sommes en format UTC) et on peut ainsi voir la position et l&rsquo;orientation de l&rsquo;appareil, ainsi que son altitude de 1800 pieds. Comme je n&rsquo;ai pas énormément de notion relatives à ces échelles, Google m&rsquo;indique que cela correspond à environ 550 mètres.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/CLASSIC_4.PNG" alt="Aircraft position" class="imgSize"/></center>
+<em class="imageCaption">Fig. 6 : Position de l&rsquo;appareil à 11h55</em></p>
+
+<p>Bien. Nous savons maintenant où était cet avion à 11h55. Maintenant, il ne reste qu&rsquo;à observer l&rsquo;environnement géographique proche de cette position afin de dire s&rsquo;il s&rsquo;agit de ce vol ou non. Si ce n&rsquo;est pas le cas, alors le processus d&rsquo;analyse pourra être répété aux autres vols identifiés.</p>
+
+<p>En zoomant sur la carte de FlightRadar, on peut voir la position exacte par rapport à une carte type &ldquo;Google Maps&rdquo;, représentant également les routes, chemins de fer, points d&rsquo;eau&hellip; Vous avez dit point d&rsquo;eau ?</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/CLASSIC_5.PNG" alt="Aircraft position zoom" class="imgSize"/></center>
+<em class="imageCaption">Fig. 7 : Zoom sur la position de l&rsquo;appareil</em></p>
+
+<p>L&rsquo;image montre en effet plusieurs points d&rsquo;eau proche de la position de l&rsquo;appareil, sur sa gauche, ce qui correspond à notre recherche. De plus, nous avions identifié un trait particulier par rapport à ces derniers. En effet, l&rsquo;image originale montre au moins 3 points d&rsquo;eau ayant une forme plutôt proche de ceux représentés sur la carte.</p>
+
+<p>Ayant la position exacte de l&rsquo;appareil ainsi que des points d&rsquo;eau potentiels, on peut maintenant essayer de trouver des images plus précises de la zone afin de voir si cela correspond. L&rsquo;excellent Google Earth Pro répond parfaitement à ce besoin. On se rend à la position indiquée de l&rsquo;appareil puis après une légère orientation, on obtient l&rsquo;image suivante.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/GOOGLE_EARTH.PNG" alt="Google Earth" class="imgSize"/></center>
+<em class="imageCaption">Fig. 8 : Comparaison à l&rsquo;aide de Google Earth Pro</em></p>
+
+<p>Les points d&rsquo;eau, la route, le pont, et même le site industriel en arrière plan, tout y est ! Cela confirme donc l&rsquo;aéroport d&rsquo;arrivée ainsi que le vol supposé. On peut donc affirmer que cette personne est partie de Rennes afin de passer son week-end dans la région de Lyon.</p>
+
+<p>Ok&hellip; Mais supposons maintenant que nous arrivons quelques jours plus tard et que nous n&rsquo;ayons pas envie de payer pour avoir accès aux données de vol plus anciennes, peut-on toujours répondre à cette question à partir des éléments disponibles ?</p>
+
+<h2 id="méthode-2-let-me-introduce-overpass-turbo">Méthode 2 : Let me introduce&hellip; Overpass Turbo !</h2>
+
+<p>On arrive maintenant au sujet principal de cet article ! Comme mentionné en introduction, l&rsquo;idée est de présenter rapidement un outil particulièrement utile dans l&rsquo;analyse de données géographiques et notamment quand il s&rsquo;agit de géolocaliser des éléments.</p>
+
+<p>Pour faire court, Overpass Turbo (<a href="https://overpass-turbo.eu/" target="_blank">lien</a>) est un outil d&rsquo;extraction et d&rsquo;exploration des données du réseau OpenStreetMap. Il permet de construire des requêtes, exécutées au travers de l&rsquo;API Overpass et récupérer les données sur une carte interactive.</p>
+
+<p>Histoire d&rsquo;apporter une définition rapide (merci <a href="https://fr.wikipedia.org/wiki/OpenStreetMap)" target="_blank">Wikipedia</a>), <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap</a> (OSM) est un projet collaboratif de cartographie en ligne qui vise à constituer une base de données géographiques libre du monde en utilisant le système GPS et d&rsquo;autres données libres. En gros, chaque personne peut renseigner des éléments du monde réel sur cette carte, en suivant quelques règles d&rsquo;identification, ce qui en fait une formidable base de données, comme vous allez le voir. Au passage, OpenFacto a fait il y a maintenant 2 ans un <a href="https://openfacto.fr/2019/02/10/croiser-des-donnees-sur-openstreetmap-avec-overpass-turbo/" target="_blank">super article</a> sur le sujet que je vous invite à lire également.</p>
+
+<p>Avant de rentrer dans le vif du sujet, quelques éléments nécessaires à la compréhension. Sans rentrer dans les détails, les objets recensés au sein d&rsquo;OSM et interrogeables au travers de Overpass Turbo peuvent être de trois types différents :</p>
+
+<ul>
+<li>Un noeud (node) : Ce sont les éléments de base du système OSM. Les nœuds consistent en une latitude et une longitude. En gros, un point sur la carte ;</li>
+<li>un chemin (way) : Un chemin est une interconnexion entre au moins deux nœuds caractérisant une ligne telle qu&rsquo;une rue, ou similaire ;</li>
+<li>Une relation (relation) : Un objet de type relation est une collection d’objets.</li>
+</ul>
+
+<p>Ainsi, tout élément enregistré auprès d&rsquo;Open Street Map est catégorisé par au moins une de ces propriétés (plus d&rsquo;informations <a href="https://wiki.openstreetmap.org/wiki/FR:%C3%89l%C3%A9ments" target="_blank">ici</a>)</p>
+
+<p>De plus, chaque objet est également associé à différentes propriétés (&ldquo;features&rdquo; et &ldquo;tags&rdquo;) qui permettent de le définir, mais également de le rechercher. Cette catégorisation fonctionne sous la forme de clés/valeurs. Par exemple, une route portera la clé <code>highway</code> ainsi qu&rsquo;une valeur permettant de définir son importance. Ainsi, une autoroute sera caractérisée par le couple <code>highway=motorway</code>. A l&rsquo;inverse, une route beaucoup moins importante, reliant par exemple deux villages sera représentée sous la forme <code>highway=secondary</code>.</p>
+
+<p>Enfin, il est également possible d&rsquo;ajouter des éléments supplémentaires afin de filtrer les résultats, appelés &ldquo;tags&rdquo;. Il existe une quantité astronomique de tags, propres à chaque type d&rsquo;objet dans OSM. Si on reprend l&rsquo;exemple des routes, il est par exemple possible d&rsquo;utiliser les tags <code>lanes</code> ou encore <code>maxspeed</code>.</p>
+
+<p>Le wiki d&rsquo;OpenStreetMap référence l&rsquo;ensemble des éléments existants, ainsi que les tags qui peuvent y être associés. C&rsquo;est une réelle mine d&rsquo;or, absolument indispensable pour cibler correctement les recherches : <a href="https://wiki.openstreetmap.org/wiki/Map_features" target="_blank">Map Features</a>.</p>
+
+<p>Bien ! Nous avons maintenant tous les éléments théoriques de base nous permettant de construire une requête via Overpass Turbo. Mais, à quoi ressemble une requête Overpass ?</p>
+
+<p>Pour illustrer tout ça, rien de tel qu&rsquo;un exemple simple. Imaginons que j&rsquo;utilise régulièrement le bus à Rennes et que je cherche une salle de sport. Par contre, fainéant que je suis, j&rsquo;aimerais que cette salle se situe relativement proche d&rsquo;un arrêt de bus. Eh bien en langage &ldquo;Overpass&rdquo;, ça ressemble à ça :</p>
+
+<pre><code>[out:json][timeout:800];
+
+
+(
+  node[&quot;public_transport&quot;=&quot;station&quot;]({{bbox}});
+  way[&quot;public_transport&quot;=&quot;station&quot;]({{bbox}});
+  relation[&quot;public_transport&quot;=&quot;station&quot;]({{bbox}});
+)-&gt;.bus;
+
+(
+  node(around.bus:100)[&quot;leisure&quot;=&quot;fitness_centre&quot;]({{bbox}});
+  way(around.bus:100)[&quot;leisure&quot;=&quot;fitness_centre&quot;]({{bbox}});
+  relation(around.bus:100)[&quot;leisure&quot;=&quot;fitness_centre&quot;]({{bbox}});
+)-&gt;.fitness;
+
+(.fitness;);
+
+out geom;
+</code></pre>
+
+<p>Effectivement, ce n&rsquo;est pas très &ldquo;user-friendly&rdquo;. Néanmoins, une fois les notions de base comprises, vous allez voir qu&rsquo;on s&rsquo;y retrouve. Quelques explications :</p>
+
+<ul>
+<li>L&rsquo;instruction <code>[out:json][timeout:800];</code> permet de définir le délai maximal de recherche avant expiration de la recherche ;</li>
+<li>Le premier bloc consiste à rechercher l&rsquo;ensemble des noeuds, chemins et relations correspondant à des arrêts de bus. Ces derniers peuvent être référencés avec la clé <code>public_transport</code> et la valeur <code>station</code> (Mais pas uniquement! D&rsquo;autres appelations possibles sont indiquées sur le wiki de OSM). Le résultat de cette recherche est stocké dans une variable que nous nommons <code>bus</code> ;</li>
+<li>L&rsquo;attribut <code>({{bbox}})</code> correspond à la <code>Bounding Box</code> ce qui n&rsquo;est ni plus ni moins que la zone, representée par la carte visible, dans laquelle nous souhaitons effectuer la recherche. Pour notre exemple, nous allons ainsi se placer sur Rennes de façon à englober toute la ville ;</li>
+<li>Le second bloc consiste à rechercher l&rsquo;ensemble des salles de sport, identifiées avec la clé <code>leisure</code> et la valeur <code>fitness_centre</code>. Petite subtilité cependant, on peut croiser les résultats de cette recherche avec ceux de la recherche précédente, en appelant à nouveau la variable <code>bus</code>. Ainsi, on va récupérer toutes les salles de sports, croiser ces résultats avec les stations de bus, et ne récupérer que celles à moins de 100m d&rsquo;une station, grâce à l&rsquo;instruction <code>(around.bus:100)</code>, puis on stocke le résultat dans une variable <code>fitness</code> ;</li>
+<li>Enfin, on précise que l&rsquo;on souhaite récupérer cette variable, puis afficher le résultat.</li>
+</ul>
+
+<p>Concrètement, cela nous donne le résultat suivant et 3 salles potentielles :</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_EXAMPLE.PNG" alt="Overpass query example" class="imgSize"/></center>
+<em class="imageCaption">Fig. 9 : Recherche des salles de sport à Rennes situées à moins de 100 d&rsquo;une station de bus</em></p>
+
+<p>Maintenant que nous avons vu les bases de Overpass Turbo, on s&rsquo;attaque à notre challenge ?</p>
+
+<h2 id="identification-des-éléments">Identification des éléments</h2>
+
+<p>La première chose à faire est d&rsquo;identifier les éléments sur lesquels se baser pour la recherche. Inutile de chercher à faire correspondre trop d&rsquo;éléments car cela complexifie inutilement la requête. De plus, en cas d&rsquo;absence de résultats, il sera plus difficile de savoir où cela bloque.</p>
+
+<p>Ce n&rsquo;est peut être pas la bonne méthode (honnêtement, je ne sais pas) mais la méthode avec laquelle j&rsquo;ai eu le plus de résultats, et surtout celle avec laquelle j&rsquo;ai réussi à avancer est la suivante :</p>
+
+<ul>
+<li>Démarrer &ldquo;large&rdquo; avec des requêtes plutôt générales, afin notamment de voir si la syntaxe est correcte et si on est en capacité de récupérer des résultats ;<br /></li>
+<li>Puis, progressivement rajouter de la complexité. Rajouter des éléments, rajouter des liens entre objets (distance notamment) voire modifier la zone de recherche (la fameuse <code>{{bbox}}</code>).<br /></li>
+</ul>
+
+<p>A ce sujet, quelle hypothèse de départ pourrait-on faire ?</p>
+
+<p>D&rsquo;un point de vue contextuel, on voit un site industriel qui semble être une centrale (nucléaire ? thermique ? autre ?). De plus, on sait qu&rsquo;on se trouve à proximité d&rsquo;un aéroport. De ces deux éléments peu communs, nous avons peu de chances de récupérer des centaines de résultats. Ainsi, on peut se permettre une zone de recherche de départ plutôt grande. Via leur site, Easyjet propose une carte de l&rsquo;ensemble de leurs tracés de vol, très majoritairement en Europe. C&rsquo;est noté, on prendra donc cette base, l&rsquo;Europe.</p>
+
+<p>On a donc deux éléments principaux. Cependant, il est toujours probable que l&rsquo;on trouve un peu trop de résultats pour être analysés manuellement (bien que ce soit toujours possible!). En plus, c&rsquo;est l&rsquo;occasion d&rsquo;avoir une requête un peu plus sexy/complexe, pour la démonstration. Si on reprend la photo originale, on peut rajouter plusieurs éléments annexes :</p>
+
+<ul>
+<li>Les points d&rsquo;eau ;</li>
+<li>La route ;</li>
+<li>Ce qui ressemble à un pont ;</li>
+<li>Un village au loin ;</li>
+<li>Des champs&hellip;</li>
+</ul>
+
+<p>Les éléments qui semblent sur le papier les plus pratiques et sûrs à traiter sont les points d&rsquo;eau ainsi que la route. On va donc partir là dessus, pour un total de 4 éléments à entremeler afin de construire notre requête !</p>
+
+<h2 id="construction-de-la-requête">Construction de la requête</h2>
+
+<p>Comme je le précisais tout à l&rsquo;heure, j&rsquo;aime bien dans ce genre de cas partir du général pour aller progressivement vers du spécifique. C&rsquo;est également comme cela que nous allons construire notre requête.</p>
+
+<p>Je ne l&rsquo;ai pas précisé plus tôt, mais bien entendu, il n&rsquo;y a pas qu&rsquo;une requête possible pour identifier des points géographiques&hellip; En effet, on peut utiliser différents éléments comme référence et arriver au même résultat.</p>
+
+<p>Pour ce cas là, j&rsquo;ai choisi de débuter sur la recherche autour du site industriel en émettant également l&rsquo;hypothèse qu&rsquo;il s&rsquo;agit d&rsquo;une centrale nucléaire. La recherche commence donc grace au Wiki de OSM (<a href="https://wiki.openstreetmap.org/wiki/Map_features" target="_blank">lien</a>) afin de trouver quels objets peuvent correspondre à cette recherche.</p>
+
+<p>Il se trouve qu&rsquo;une clé <code>power</code> existe, accompagné d&rsquo;une valeur <code>generator</code>, ce qui rentre complètement dans le champ de notre recherche (<a href="https://wiki.openstreetmap.org/wiki/Tag%3Apower%3Dgenerator" target="_blank">lien</a>). Mieux encore, il est possible d&rsquo;y associer un tag <code>source</code> permettant de filtrer la source d&rsquo;énergie (<a href="https://wiki.openstreetmap.org/wiki/Key:generator:source" target="_blank">lien</a>). Parmi la quinzaine de sources différentes renseignées se trouve une valeur <code>nuclear</code>. Parfait !</p>
+
+<p>En suivant la syntaxe abordée précédemment, on peut donc construire cette première requête. La syntaxe avec l&rsquo;utilisation d&rsquo;un <code>tag</code> peut être trouvée ci-dessous.</p>
+
+<p><strong>Note</strong> : Il est également possible de factoriser les recherches de noeuds, chemins et relations au sein d&rsquo;une seule instruction, en utilisant les initiales de chaque terme, ce qui donne <code>nwr</code>.</p>
+
+<pre><code>[out:json][timeout:800];
+
+
+(
+  // Source nucléaire d'énergie dans la zone de recherche
+  nwr[&quot;generator:source&quot;=&quot;nuclear&quot;]({{bbox}});
+)-&gt;.nuke;
+</code></pre>
+
+<p>On stocke le tout dans une variable <code>nuke</code>, on se place correctement sur la carte, et on exécute la requête (Selon la complexité de cette dernière et le nombre d&rsquo;éléments récupérés, cela peut prendre quelques minutes) :</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_1.PNG" alt="Overpass and nuclear plants" class="imgSize"/></center>
+<em class="imageCaption">Fig. 10 : Recherche des centrales nucléaires en Europe via Overpass Turbo</em></p>
+
+<p>Félicitations, vous avez réalisé votre première requête Overpass Turbo ! Ca fait beaucoup de résultats hein ?</p>
+
+<p>Deuxième élément important, l&rsquo;aéroport. Etant donné l&rsquo;altitude, on sait qu&rsquo;un aéroport est probablement proche de la position de l&rsquo;avion au moment de la photo. Rebelotte donc, on retourne fouiller notre wiki-bible à la recherche de paramètres permettant de taguer un aéroport.</p>
+
+<p>Assez rapidement, on tombe sur le couple de clés/valeur <code>aeroway=aerodrome</code> qui indique être un élément général pour ce type d&rsquo;infrastructure (<a href="https://wiki.openstreetmap.org/wiki/Map_features#Aeroway" target="_blank">lien</a>). Afin de lier cette nouvelle recherche à la dernière, et ainsi réduire le nombre de résultats, nous allons chercher à intégrer une notion de distance. Ainsi, nous allons sélectionner l&rsquo;ensemble des aéroports à moins de X kilomètres d&rsquo;une centrale nucléaire. Je vous conseille d&rsquo;effectuer différents tests afin de visualiser les différences de résultats. Peu d&rsquo;éléments nous permettent ici de calculer la distance précise. Ainsi, on peut se dire que 20 kilomètres est une distance satisfaisante, par rapport à la photo.</p>
+
+<p>Toujours en suivant le même modèle, on peut donc rajouter le bloc suivant à notre requête, en stockant le résultat dans une nouvelle variable <code>airport</code> qu&rsquo;on va d&rsquo;ailleurs appeler en résultats :</p>
+
+<pre><code>(
+  // Aérodrome et aéroports à moins de 20km des centrales
+  nwr(around.nuke:20000)[&quot;aeroway&quot;=&quot;aerodrome&quot;];
+)-&gt;.airport;
+</code></pre>
+
+<p>Ce qui nous donne le résultat suivant.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_2.PNG" alt="Overpass and aerodromes" class="imgSize"/></center>
+<em class="imageCaption">Fig. 10 : Aéroports/Aérodromes situés à moins de 20 km de centrales nucléaires en Europe</em></p>
+
+<p>Des résultats différents&hellip; Plus groupés.. What ?
+Eh bien oui, en changeant la requête, nous avons également changé l&rsquo;ensemble des éléments à afficher. Des centrales nucléaires européennes, nous sommes passés à l&rsquo;ensemble des infrastructure aéroportuaires (aérodromes compris!) proche de centrales. Par conséquent, si on a 4 résultats proche d&rsquo;une même centrale, alors les quatre seront récupérés.</p>
+
+<p>A partir de là, deux solutions :</p>
+
+<ul>
+<li>Modifier la requête pour ajouter un 3e élément ;</li>
+<li>Ou affiner la requête présente en travaillant les éléments déjà présents.</li>
+</ul>
+
+<p>En effet, de la même façon que pour la première requête, un tag existe sur cet objet et permet notamment de filtrer sur le type d&rsquo;infrastructure : sa taille. Il s&rsquo;agit du tag <code>type</code> (<a href="https://wiki.openstreetmap.org/wiki/Key:aerodrome:type" target="_blank">lien</a>). Dans notre cas, il semble s&rsquo;agir d&rsquo;un objet <code>international</code>. On peut donc modifier notre requête en conséquence et y ajouter le tag en question.</p>
+
+<pre><code>(
+  // Aérodrome et aéroports à moins de 20km des centrales
+  nwr(around.nuke:20000)[&quot;aeroway&quot;=&quot;aerodrome&quot;][&quot;aerodrome&quot;=&quot;international&quot;];
+)-&gt;.airport;
+</code></pre>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_3.PNG" alt="Overpass and international aerodromes" class="imgSize"/></center>
+<em class="imageCaption">Fig. 11 : Aéroports internationaux situés à moins de 20 km de centrales nucléaires en Europe</em></p>
+
+<p>Beaucoup moins de résultats ! A partir de là, on pourrait commencer à regarder manuellement parmi les 12 aéroports, mais ce serait encore potentiellement fastidieux. Nous allons plutôt voir s&rsquo;il est possible de réduire encore la liste.</p>
+
+<p>Pour cela, pourquoi ne pas ajouter les deux éléments supplémentaires identifiés ?</p>
+
+<p>Les routes étant des infrastructures plutôt communes, l&rsquo;objectif pourrait être de se référer aux points d&rsquo;eau afin de filtrer les résultats. Cependant, on veut que ces points d&rsquo;eau correspondent à certains critères précis :</p>
+
+<ul>
+<li>Ils doivent être proche d&rsquo;un aéroport (forcément) ;</li>
+<li>Ils doivent être très proche d&rsquo;une route, qu&rsquo;il reste à qualifier.</li>
+</ul>
+
+<p>Pour réaliser cela, on va pouvoir créer une sorte de première condition à respecter, avant d&rsquo;effectuer notre vraie recherche. Ainsi, on va chercher tout ce qui peut s&rsquo;apparenter à un point d&rsquo;eau à proximité de nos ensembles de résultats. Afin d&rsquo;être relativement large, on peut utiliser la clé/valeur <code>natural=water</code> (<a href="https://wiki.openstreetmap.org/wiki/Map_features#Natural" target="_blank">lien</a>). Encore une fois, je vous conseille d&rsquo;effectuer des tests pour les distances. De notre côté, compte tenu de l&rsquo;altitude de l&rsquo;avion sur la photo, on sait qu&rsquo;il est relativement proche du sol. Sans pour autant pouvoir calculer son altitude précise et ainsi sa distance de l&rsquo;aéroport, on peut considérer qu&rsquo;il ne sera pas à 10 kilomètres du point recherché&hellip; Visuellement, on peut supposer que 3km est encore relativement large. Quelques essais nous amènent à voir que les résultats diffèrent peu tout en diminuant les distances. Cependant, en dessous de 1km, peu de résultats subsistent. De ce fait, 1500 mètres semble être un bon point de départ.</p>
+
+<pre><code>(
+  // Points d'eau à moins de 1500m des aéroports précédemment identifiés
+  nwr(around.airport:1500)[&quot;natural&quot;=&quot;water&quot;];
+ )-&gt;.waterspots;
+</code></pre>
+
+<p>Puis, nous pouvons créer une seconde variable permettant de récupérer l&rsquo;ensemble des routes très proches des points d&rsquo;eau identifiés. Compte tenu de la photo et afin d&rsquo;être large, prenons une valeur de 100 mètres. Via le wiki, on peut identifier que les routes sont rangées sous la clé <code>highway</code>. La valeur permet de classer les différentes routes selon leur taille. D&rsquo;après la photo, on est sur une route à 2 voies, avec terre-plein central. Cela semble être une route importante, sans pour autant être une autoroute. La valeur la plus probable associée à ce type de route est <code>trunk</code> (<a href="https://wiki.openstreetmap.org/wiki/Map_features#Highway" target="_blank">lien</a>). Ainsi :</p>
+
+<pre><code>(
+  // routes secondaires à moins de 100m des points d'eau identifiés
+  nwr(around.waterspots:100)[&quot;highway&quot;=&quot;trunk&quot;];
+)-&gt;.road;
+</code></pre>
+
+<p>Bien. Les deux éléments sont sélectionnés et stockés dans des variables. Cependant, les routes ont été recherchés à partir des points d&rsquo;eau, et non l&rsquo;inverse. En effet, il aurait été inutile de chercher en premier lieu les routes situées à 1500 mètres d&rsquo;un aéroport&hellip; Car la recherche aurait probablement retourné des résultats pour tous les aéroports.</p>
+
+<p>Or, nous souhaitons filtrer les aéroports par rapport aux points d&rsquo;eau &ldquo;matchant&rdquo; nos critères. Pour faire cela, rien ne nous empêche de recouper les précédentes recherches entres elles, afin de ne sélectionner que les points d&rsquo;eau correspondant à la fois à la distance avec un aéroport et à la distance avec une route majeure. On peut donc reprendre nos deux éléments et les recouper l&rsquo;un par rapport à l&rsquo;autre, en cherchant par exemple dans notre ensemble de points d&rsquo;eau, ceux distant de 100m ou moins d&rsquo;une route importante.</p>
+
+<pre><code>(
+  // mise en relation des points d'eau et des routes identifiées
+  // Points d'eau correspondants
+  node.waterspots(around.road:100);
+  way.waterspots(around.road:100);
+  relation.waterspots(around.road:100);
+)-&gt;.matching_water;
+</code></pre>
+
+<p>Ce qui nous donne le résultat suivant.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_4.PNG" alt="Overpass and water spots" class="imgSize"/></center>
+<em class="imageCaption">Fig. 12 : Cette description de requête devient vraiment trop longue</em></p>
+
+<p>On a donc progressivement construit notre requête de façon à collecter :</p>
+
+<ul>
+<li>Les aéroports proches de centrales nucléaires en Europe ;</li>
+<li>L&rsquo;ensemble des points d&rsquo;eaux proche de ces aéroports, puis nous avons traité ces données afin de restreindre le nombre de résultats (grâce à la route).</li>
+</ul>
+
+<p>Il ne nous reste plus qu&rsquo;à recouper ces deux ensembles de données afin de voir quels aéroports correspondent ! Pour cela, on va donc rechercher dans notre notre ensemble d&rsquo;aéroports, ceux proches de points d&rsquo;eau contenus dans le deuxième ensemble de données.</p>
+
+<pre><code>(
+  // Recherche dans l'ensemble des aéroports identifiés
+  // Ceux proches de moins de 1500m des points d'eau trouvés
+  node.airport(around.matching_water:1500);
+  way.airport(around.matching_water:1500);
+  relation.airport(around.matching_water:1500);
+)-&gt;.matching_airports;
+</code></pre>
+
+<p>Ca semble pas mal non ?</p>
+
+<h2 id="requête-finale-et-résultat">Requête finale et résultat</h2>
+
+<p>En mettant bout à bout l&rsquo;ensemble des éléments présentés ci-dessus afin de construire une unique requête de recherche, on obtient quelque chose comme ça, avec quelques commentaires :</p>
+
+<pre><code>[out:json][timeout:800];
+// gather results
+(
+  // Sources nucléaire d'énergie
+  nwr[&quot;generator:source&quot;=&quot;nuclear&quot;]({{bbox}});
+)-&gt;.nuke;
+
+(
+  // Aérodrome et aéroports à moins de 20km des centrales
+  nwr(around.nuke:20000)[&quot;aeroway&quot;=&quot;aerodrome&quot;][&quot;aerodrome&quot;=&quot;international&quot;];
+)-&gt;.airport;
+
+(
+  // Ensemble des points d'eau (étangs, bassin...) proche des aéroports
+  nwr(around.airport:1500)[&quot;natural&quot;=&quot;water&quot;];
+ )-&gt;.waterspots;
+
+(
+  // Récupération des routes à moins de 100 mètres de ces points d'eau
+  nwr(around.waterspots:100)[&quot;highway&quot;=&quot;trunk&quot;];
+)-&gt;.road;
+
+(
+  // Filtre sur les points d'eau par rapport aux routes proches collectées
+  node.waterspots(around.road:100);
+  way.waterspots(around.road:100);
+  relation.waterspots(around.road:100);
+)-&gt;.matching_water;
+
+(
+  // Recoupement des aéroports avec les points d'eau correspondant aux critères
+  node.airport(around.matching_water:1500);
+  way.airport(around.matching_water:1500);
+  relation.airport(around.matching_water:1500);
+)-&gt;.matching_airports;
+
+(.matching_airports;);
+
+out geom;   
+</code></pre>
+
+<p>Toujours centré sur l&rsquo;Europe, la requête peut être exécutée, et après quelques minutes de recherche (pour ma part) :</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_5.PNG" alt="Overpass and final request" class="imgSize"/></center>
+<em class="imageCaption">Fig. 13 : Aéroports correspondants à l&rsquo;ensemble des critères</em></p>
+
+<p>Alors, oui, visuellement et à l&rsquo;échelle de l&rsquo;Europe, les mêmes zones sont identifiées. Au total, 7 zones potentielles (ce qui est quand même bien mieux que nos premiers résultats!) :</p>
+
+<ul>
+<li>Paris, France</li>
+<li>Lyon, France</li>
+<li>Milan, Italie</li>
+<li>Sofia, Bulgarie</li>
+<li>Munich, Allemagne</li>
+<li>Prague, République Tchèque</li>
+<li>Saint-Petersbourg, Russie</li>
+</ul>
+
+<p>Pour la suite, plusieurs méthodes afin d&rsquo;affiner les résultats. On peut par exemple recouper la liste des 7 aéroports avec la liste de ceux desservis par Easyjet (<a href="https://www.easyjet.com/en/routemap" target="_blank">lien</a>), ce qui permet d&rsquo;éliminer l&rsquo;aéroport de Saint-Petersbourg. On peut également se baser sur le relief présent sur la photo, nous permettant par exemple d&rsquo;écarter des aéroports comme Paris, Munich ou encore Prague, ce qui nous laisse une liste de 3 zones à vérifier manuellement :</p>
+
+<ul>
+<li>Lyon, France</li>
+<li>Milan, Italie</li>
+<li>Sofia, Bulgarie</li>
+</ul>
+
+<p>Pour finir, une nouvelle utilisation de Overpass Turbo peut être faite en ciblant l&rsquo;une après l&rsquo;autre les 3 zones identifiées. La zone de recherche étant beaucoup plus petite, la requête est quasi instantanée. L&rsquo;image ci-dessous illustre ceci avec l&rsquo;aéroport de Lyon.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_6.PNG" alt="Overpass and final request" class="imgSize"/></center>
+<em class="imageCaption">Fig. 14 : Zoom sur l&rsquo;aéroport de Lyon</em></p>
+
+<p>De la même manière, on peut modifier la requête pour afficher les différents points d&rsquo;eau identifiés auparavant. C&rsquo;est ainsi qu&rsquo;on peut récupérer différents points d&rsquo;eau identifiés au nord de l&rsquo;aéroport.</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/OVERPASS_SEARCH_7.PNG" alt="Overpass and final request" class="imgSize"/></center>
+<em class="imageCaption">Fig. 15 : Recherche des points d&rsquo;eau proche de l&rsquo;aéroport de Lyon</em></p>
+
+<p>A ce stade, vous l&rsquo;avez compris, on va pouvoir réaliser la même vérification que pour la première méthode à l&rsquo;aide d&rsquo;outils comme Google Earth, pour ainsi valider la géolocalisation du lieu comme étant l&rsquo;aéroport de Lyon !</p>
+
+<p><center><img src="/img/writeups/osint_geoint/flight-challenge-overpass/GOOGLE_EARTH.PNG" alt="Google Earth" class="imgSize"/></center>
+<em class="imageCaption">Fig. 16 : Comparaison à l&rsquo;aide de Google Earth Pro</em></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Si on repart sur la question initiale, qui n&rsquo;était en réalité qu&rsquo;un prétexte pour parler de Overpass Turbo, alors on peut dire que cette personne a passé son week-end à Lyon ! Nous avons ainsi vu deux méthodes pouvant être utilisées pour aider à investiguer sur ces thématiques, chacune ayant leurs avantages, inconvénients, et applications propres !</p>
+
+<p>En effet, bien qu&rsquo;il ne soit pas possible uniquement à partir de Overpass Turbo de retrouver par exemple l&rsquo;aéroport de départ, l&rsquo;outil n&rsquo;est bien entendu pas limité au domaine de l&rsquo;aviation, loin de là. Si le sujet vous intéresse, je vous invite fortement à vous documenter plus en détails sur les données collectées et accessibles via Open Street Map ainsi que sur l&rsquo;utilisation plus poussée de Overpass Turbo, car l&rsquo;outil est vraiment puissant et peut être utilisé dans bien des cas.</p>
+
+<p>Je ne l&rsquo;ai pas dit en introduction, mais il va de soit que je suis loin d&rsquo;être expert sur l&rsquo;outil ou plus généralement sur les thèmatiques liées à OpenStreetMap, mais c&rsquo;était l&rsquo;occasion d&rsquo;en parler. En attendant, j&rsquo;espère que la lecture de ce post vous aura appris des choses, ou vous aura au moins diverti ;-).</p>
+
+<h2 id="ressources-et-outils">Ressources et outils</h2>
+
+<p>Différentes ressources ont été données tout au long de l&rsquo;article. Vous les retrouverez également rassemblées ci-dessous, ainsi qu&rsquo;un ensemble d&rsquo;autres liens forts intéressants relatifs au sujet, si vous souhaitez approfondir l&rsquo;utilisation des outils.</p>
+
+<ul>
+<li><p>Bases de connaissances liées à Overpass Turbo et Open Street Map</p>
+
+<ul>
+<li>Overpass Turbo (<a href="https://overpass-turbo.eu/" target="_blank">lien</a>)</li>
+<li>Wiki Open Street Map (<a href="https://wiki.openstreetmap.org" target="_blank">lien</a>)</li>
+<li>Map Features Open Street Map (<a href="https://wiki.openstreetmap.org/wiki/Map_features" target="_blank">lien</a>)</li>
+<li>Moteur de recherche par &ldquo;tags (<a href="https://tagfinder.herokuapp.com/" target="_blank">lien</a>)</li>
+<li>Documentation annexe Overpass Turbo (<a href="https://dev.overpass-api.de/overpass-doc/en/criteria/per_tag.html" target="_blank">lien</a>)</li>
+<li>Exercices et tutoriels pour pratiquer Overpass Turbo (<a href="https://osmlab.github.io/learnoverpass//en/" target="_blank">lien</a>)</li>
+<li>Overpass Turbo Tutorial (<a href="https://github.com/datadesk/overpass-turbo-tutorial" target="_blank">lien</a>)</li>
+</ul></li>
+
+<li><p>Autres articles en lien avec Overpass Turbo</p>
+
+<ul>
+<li>Geo locating photo’s with OSM overpass API (<a href="https://bearhunt38.medium.com/geo-locating-photos-with-osm-overpass-api-10ed35b95f11" target="_blank">lien</a>)</li>
+<li>Getting Started With Overpass Turbo – Part 1 (<a href="https://nixintel.info/osint-tools/getting-started-with-overpass-turbo-part-1/" target="_blank">lien</a>)</li>
+<li>Getting Started With Overpass Turbo – Part 2 (<a href="https://nixintel.info/osint-tools/getting-started-with-overpass-turbo-part-2/" target="_blank">lien</a>)</li>
+<li>Croiser des données sur OpenStreetMap avec Overpass-Turbo (<a href="https://openfacto.fr/2019/02/10/croiser-des-donnees-sur-openstreetmap-avec-overpass-turbo/" target="_blank">lien</a>)</li>
+<li>Thread sur la collecte d&rsquo;infrastructures militaires (<a href="https://twitter.com/COUPSURE/status/1477706395889852416" target="_blank">lien</a>)</li>
+</ul></li>
+
+<li><p>Outils de suivi de vol</p>
+
+<ul>
+<li>Airportia (<a href="https://www.airportia.com/" target="_blank">lien</a>)</li>
+<li>FlightRadar24 (<a href="https://www.flightradar24.com/" target="_blank">lien</a>)</li>
+</ul></li>
+</ul>
+  </div>
+  
+
+<div class="post--navigation post--navigation-single">
+    
+    <a href="/fr/writeups/osint-geoint/yogoshesd-ctf-cluedosint/" class="post--navigation-prev">
+      <i aria-hidden="true" class="fa fa-chevron-left"></i>
+      <span class="navigation-tittle">YogoshESD-CTF - CLUDEOSINT</span>
+    </a>
+    
+    
+</div>
+
+
+  
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-126182747-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
+  integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy"
+  crossorigin="anonymous">
+</script>
+
+
+    
+        
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        <script type="text/javascript">
+            hljs.configure({languages: []});
+            hljs.initHighlightingOnLoad();
+        </script>
+        
+        
+
+
+
+    
+
+
+
+    </body>
+</html>
