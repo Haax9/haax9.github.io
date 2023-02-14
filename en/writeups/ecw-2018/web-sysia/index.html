@@ -204,7 +204,7 @@
   </header>
   <div class="post">
     <p>ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. SysIA is a challenge based on a LFI (Local File Inclusion) exploitation using the bash_history and the updatedb tool to find the flag.</p>
-<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <!-- raw HTML omitted -->the European Cyber Week<!-- raw HTML omitted --> conference in Rennes.</p>
+<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <a href="https://www.european-cyber-week.eu/" target=\_blank>the European Cyber Week</a> conference in Rennes.</p>
 <h2 id="discovery">Discovery</h2>
 <p>The challenge starts with the following statement:</p>
 <pre><code>Our young sysadmin IA still does some human errors.
@@ -212,40 +212,40 @@ I guess it still has to learn before production.
 But we can't afford to delay it another time !
 </code></pre><p>A first information is also given by organizers: &ldquo;An easy good old PHP challenge;)&rdquo; allows us to close some possibilities right now.</p>
 <p>So we land on a website talking about &ldquo;deep learning&rdquo;.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_1.png" alt="ECW2018_sysia_1" class="imgSize"/></center>
 <p>After some navigation on different pages, which seem to be only vitrine pages, I checked the &ldquo;robots.txt&rdquo; file and found something suspicious&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_2.png" alt="ECW2018_sysia_2" class="imgSize"/></center>
 <p>Ok, let&rsquo;s go to the non-indexed page. Here is it :</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_3.png" alt="ECW2018_sysia_3" class="imgSize"/></center>
 <p>The experience and indications left by organizers show us a way&hellip; It smells like LFI !</p>
 <h2 id="lfi---exploitation">LFI - Exploitation</h2>
 <p>Like any good POC, we will try to prove the presence of a Local File Inclusion (LFI) vulnerability by displaying the contents of the &ldquo;/etc/passwd&rdquo; file which is normally readable.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../etc/passwd
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_4.png" alt="ECW2018_sysia_4" class="imgSize"/></center>
 <p>Bingo! We have a nice LFI. Now&hellip;. What are we looking for? It is possible to read some files on the server, so we will try to get as much information as possible.
 After a few tests, we&rsquo;re going to check the file containing the history of commands executed by the user, the &ldquo;bash_history&rdquo; file, which can contain valuable information.
 As long as we are in a docker, we&rsquo;re going to go look the file for the root user.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../root/bash_history
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_5.png" alt="ECW2018_sysia_5" class="imgSize"/></center>
 <p>In order to be able to read the file content, we go directly to the page sources. After a quick look at the file content, we notice the presence of a sequence of 3 interesting commands:</p>
 <ul>
 <li>locate flag.txt</li>
 <li>updatedb</li>
 <li>locate flag.txt</li>
 </ul>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_6.png" alt="ECW2018_sysia_6" class="imgSize"/></center>
 <p>A little thing I didn&rsquo;t know, the &ldquo;updatedb&rdquo; tool allows you to update the known paths database used by locate. Thus, after some research, we learn that the content of this database is stored in the file &ldquo;/var/lib/mlocate/mlocate.db&rdquo;. Therefore&hellip; We should find the path to the flag.txt file. In order to avoid manual search, we will search directly for the &ldquo;ECW&rdquo; string.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../var/lib/mlocate/mlocate.db
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_7.png" alt="ECW2018_sysia_7" class="imgSize"/></center>
 <p>Bingo, we have a path !</p>
 <h2 id="getting-the-flag">Getting the flag</h2>
 <p>We can directly read the content of the flag.txt file through our LFI, and then get the flag of the challenge.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../var/www/ECW/solution/web/lfi/flag.txt
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_8.png" alt="ECW2018_sysia_8" class="imgSize"/></center>
 <p>In the end, a fairly simple challenge presenting a LFI without any restrictions but having the advantage of integrating a slightly more realistic exploitation. Cool one! :)</p>
 <h2 id="references">References</h2>
 <ul>
-<li><!-- raw HTML omitted -->Where is updatedb database located ?<!-- raw HTML omitted --></li>
+<li><a href="https://serverfault.com/questions/454127/where-is-the-updatedb-database-located" target="blank">Where is updatedb database located ?</a></li>
 </ul>
   </div>
   

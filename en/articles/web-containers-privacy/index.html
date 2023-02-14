@@ -206,29 +206,29 @@ However, this is only a small part of the data that publishers recover." />
   </header>
   <div class="post">
     <p>If you regularly use an Internet browser and you know a little bit about Web technology, you generally know what data is retrieved by the different websites that you visit. If not, just know that each visited website stores information about you through different mechanisms (cookies in particular) which can for example identify you so you no longer have to enter your credentials.</p>
-<!-- raw HTML omitted -->
+<!-- more -->
 <p>However, this is only a small part of the data that publishers recover. These data can then be used for various purposes, including commercials. But don&rsquo;t worry about it! It is not mandatory and there are simple ways to add a protective layer. For example, web containers.</p>
 <h2 id="basics">Basics</h2>
 <h3 id="cookies">Cookies</h3>
 <p>Unless you&rsquo;ve never been on the Internet, you&rsquo;ve heard about these famous &ldquo;cookies&rdquo;. But what is behind that word?
 Cookies are small files put at a specific location on your computer by the different websites you visit. They are put on the disk where your browser can read them. They are used to identify you when you visit a website. Thus, thanks to your cookie, the site in question recognizes you and can automatically connect you or give a personalized user experience.
 However, these cookies can also be used for other purposes, so they can record your browsing preferences and your experience on a particular site. Once retrieved by the publisher in question, nothing prevents him from using this data for statistical, commercial or advertising purposes to precisely target you.</p>
-<p>Although it is possible to disable them completely, some sites will no longer work without cookies. It is therefore up to you to decide whether or not you want to use them. A first configuration layer can be done through your Internet browser (<!-- raw HTML omitted -->Préférences Firefox<!-- raw HTML omitted -->).</p>
-<p>With the general awareness and hardened laws regarding privacy and personal data (example of the <!-- raw HTML omitted -->RGPD<!-- raw HTML omitted -->) a large number of websites now ask users for their consent, this may include cookies and how they use them. Below, an example with the streaming website <!-- raw HTML omitted -->twitch.tv<!-- raw HTML omitted -->. Thus, each user can choose whether or not to consent (sometimes it is only a warning, and non-consent is not possible).</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<p>Although it is possible to disable them completely, some sites will no longer work without cookies. It is therefore up to you to decide whether or not you want to use them. A first configuration layer can be done through your Internet browser (<a href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences" target="\_blank">Préférences Firefox</a>).</p>
+<p>With the general awareness and hardened laws regarding privacy and personal data (example of the <a href="https://www.numerama.com/politique/329191-rgpd-tout-savoir-sur-le-reglement-sur-la-protection-des-donnees-si-vous-etes-un-internaute.html" target="\_blank">RGPD</a>) a large number of websites now ask users for their consent, this may include cookies and how they use them. Below, an example with the streaming website <a href="https://www.twitch.tv/" target="\_blank">twitch.tv</a>. Thus, each user can choose whether or not to consent (sometimes it is only a warning, and non-consent is not possible).</p>
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_1.png" alt="web_containers_1.png" class="imgSize"/></center>
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_2.png" alt="web_containers_2.png" class="imgSize"/></center>
 <p>Below, a second example, for the Topito site. You can see that it is possible to configure which data will be retrieved by the site.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_3.png" alt="web_containers_3.png" class="imgSize"/></center>
 <h3 id="containers--contexts">Containers &amp; Contexts</h3>
-<p>If you are familiar with the computer world, the term &ldquo;containers&rdquo; must mean something to you (<!-- raw HTML omitted -->Docker<!-- raw HTML omitted -->, <!-- raw HTML omitted -->LXC<!-- raw HTML omitted -->,&hellip;). If not, no problem! A container, in general, is a kind of logical &ldquo;box&rdquo; in which a process is enclosed and isolated it does not communicate, or in a controlled way, with the rest of the system. In the case of system containers, they are used to isolate applications.</p>
-<p>This principle can be applied to Internet browsing and is no more complex! The aim here will be to isolate navigation on different websites so that they do not communicate with each other and thus cannot exchange data. This requires the use of <!-- raw HTML omitted -->contexts<!-- raw HTML omitted -->.</p>
-<p>Contexts apply to navigation tabs, we call them contextual tabs. They are classic tabs, but with one important difference: the websites you browse only have access to a limited portion of the storage in your browser. That means that your website preferences, saved sessions and tracking data for advertising will not be imported into the new context. Similarly, no navigation data performed in the new context will affect your saved sessions or track data left in your other contexts (see <!-- raw HTML omitted -->Contextual tabs<!-- raw HTML omitted -->).</p>
+<p>If you are familiar with the computer world, the term &ldquo;containers&rdquo; must mean something to you (<a href="https://en.wikipedia.org/wiki/Docker_(software)" target="\_blank">Docker</a>, <a href="https://linuxcontainers.org" target="\_blank">LXC</a>,&hellip;). If not, no problem! A container, in general, is a kind of logical &ldquo;box&rdquo; in which a process is enclosed and isolated it does not communicate, or in a controlled way, with the rest of the system. In the case of system containers, they are used to isolate applications.</p>
+<p>This principle can be applied to Internet browsing and is no more complex! The aim here will be to isolate navigation on different websites so that they do not communicate with each other and thus cannot exchange data. This requires the use of <strong>contexts</strong>.</p>
+<p>Contexts apply to navigation tabs, we call them contextual tabs. They are classic tabs, but with one important difference: the websites you browse only have access to a limited portion of the storage in your browser. That means that your website preferences, saved sessions and tracking data for advertising will not be imported into the new context. Similarly, no navigation data performed in the new context will affect your saved sessions or track data left in your other contexts (see <a href="https://support.mozilla.org/en-US/kb/containers" target="\_blank">Contextual tabs</a>).</p>
 <p>Another practical feature of web containers is that they offer the possibility of connecting to the same application with different accounts. Let&rsquo;s take the example of Gmail. If you have multiple context tabs, you can connect to two different Google accounts at the same time, one in each context.</p>
 <h2 id="practical-case---firefox-multi-account-container">Practical case - Firefox Multi-Account Container</h2>
 <p>Firefox Multi-Account Container is an add-on module for Firefox, developed by the Mozilla Foundation to containerize navigation tabs. I have chosen to talk about this add-on module because it is probably the most widely used and easy to use.</p>
-<p>A page dedicated to web containers and this add-on module allows you to understand in detail how it works. It is rather detailed and relatively easy to understand (<!-- raw HTML omitted -->Firefox Multi Account Container<!-- raw HTML omitted -->).</p>
+<p>A page dedicated to web containers and this add-on module allows you to understand in detail how it works. It is rather detailed and relatively easy to understand (<a href="https://support.mozilla.org/en-US/kb/containers" target="\_blank">Firefox Multi Account Container</a>).</p>
 <h3 id="how-does-it-work-">How does it work ?</h3>
-<p>The first thing to do is to install the add-on module from <!-- raw HTML omitted -->Firefox manager<!-- raw HTML omitted -->.</p>
+<p>The first thing to do is to install the add-on module from <a href="https://addons.mozilla.org/fr/firefox/addon/multi-account-containers/" target="\_blank">Firefox manager</a>.</p>
 <p>Once this is done, you have two ways to use it.</p>
 <ul>
 <li>You can choose to open contextual tabs (containers) and navigate freely. In this way, resources will be isolated between each container.</li>
@@ -237,43 +237,43 @@ However, these cookies can also be used for other purposes, so they can record y
 <p>A good thing to do first can be to define your different containers. It is up to you to decide how you want to segment your navigation. For example, you can define a container for your social networks, or even a container for each social network. Be aware that social networks are very fond of your data, it allows them to sell them to advertisers or other companies who will then use them to target you. Isolating these networks is therefore a good thing.</p>
 <p>You can also segment your online purchases with the rest of your browsing, in order to limit risks. For the rest, it&rsquo;s up to you.</p>
 <p>The creation of a container cab be done via the addon, accessible directly in the Firefox navigation bar.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_4.png" alt="web_containers_4.png" class="imgSize"/></center>
 <p>Then simply click on the &ldquo;+&rdquo; icon. You can choose a name, color and icon for your container.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_5.png" alt="web_containers_5.png" class="imgSize"/></center>
 <p>Once the containers have been created, simply click on the add-on module icon to see them appear.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_6.png" alt="web_containers_6.png" class="imgSize"/></center>
 <p>In order to open a new container, you can click on the desired one in the list presented. A new tab should appear. You can know which container you are in with a small visual information located both in the title of the tab (container color) and in the address bar. In the example below, we can see that I am in the &ldquo;Social Networks&rdquo; container.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_7.png" alt="web_containers_7.png" class="imgSize"/></center>
 <h3 id="open-websites-in-containers">Open websites in containers</h3>
 <p>Now that you know how to navigate using containers, maybe you would like to avoid having to manually open a new context tab each time? Indeed, it would be more practical to define which containers should open websites. Good news, it&rsquo;s possible.</p>
 <p>To do this, you must first open the desired website in the container to which you want to assign it.
 Let&rsquo;s take the example of Github.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_8.png" alt="web_containers_8.png" class="imgSize"/></center>
 <p>Then in the addon, we haveto specify that we want this website to be opened all the time in the same container.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_9.png" alt="web_containers_9.png" class="imgSize"/></center>
 <p>Finally, the next time the website is opened, it will be in the chosen container. Don&rsquo;t forget to check the &ldquo;Remember my choice&rdquo; box for future visits.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_10.png" alt="web_containers_10.png" class="imgSize"/></center>
 <h2 id="other-solutions">Other solutions</h2>
 <h3 id="facebook-container">Facebook Container</h3>
 <p>This is an add-on module to specifically isolate Facebook in a separate container. It is possible to use the add-on module in conjunction with Firefox Multi-Account Container. If you don&rsquo;t want to bother setting up several containers, this can be a minimal viable solution, even if it&rsquo;s limited to Facebook.</p>
 <p>The use of this add-on module is noticed, in the same way as for Firefox Multi-Account Container, by the appearance of a mark in the address bar.</p>
-<!-- raw HTML omitted -->
-<p>You can download the add-on module on the Mozilla website(<!-- raw HTML omitted -->link<!-- raw HTML omitted -->).</p>
+<center><img src="/img/articles/conteneurs-web-et-vie-privee/web_containers_11.png" alt="web_containers_11.png" class="imgSize"/></center>
+<p>You can download the add-on module on the Mozilla website(<a href="https://addons.mozilla.org/fr/firefox/addon/facebook-container/?src=search" target="\_blank">link</a>).</p>
 <h3 id="unsafe-container">Unsafe Container</h3>
-<p>Module developed by <!-- raw HTML omitted -->@Creased<!-- raw HTML omitted -->, to provide an additional layer to the previously seen addon. It allows you to add an &ldquo;unsafe&rdquo; container by default so that all visited websites are automatically added to a container.
+<p>Module developed by <a href="https://twitter.com/Creased_" target="\_blank">@Creased</a>, to provide an additional layer to the previously seen addon. It allows you to add an &ldquo;unsafe&rdquo; container by default so that all visited websites are automatically added to a container.
 Indeed, by default, tabs without context (i.e. when no container is assigned to the tab) are considered as classic tabs and therefore share all their resources.</p>
 <p>This modification to a default context not only isolates browsing sessions from the default browsing context (used in particular for accessing browser configuration data, downloading files, etc.), but also adds a visual aspect to non-isolated tabs.</p>
 <p>It is interesting to note that after the installation of the module, cookies and other existing data are not deleted. Thus, cookies already stored in the browser will still be shared. To correct this, it is necessary to manually delete your cookies, in order to start from a healthy base. This can be done via the Firefox settings.</p>
-<p>The add-on module can be downloaded on the following <!-- raw HTML omitted -->page<!-- raw HTML omitted -->.</p>
+<p>The add-on module can be downloaded on the following <a href="https://addons.mozilla.org/fr/firefox/addon/unsafe-container/" target="\_blank">page</a>.</p>
 <h3 id="context-plus">Context Plus</h3>
 <p>This add-on module  also allows you to add additional functionalities to our containers. Now that we have different tools to isolate our tabs and create separate contexts, it would be interesting to be able to move a tab from one context to another. Unfortunately, the add-on module seen above does not allow this.</p>
-<p>In order to overcome this problem, we can use the module <!-- raw HTML omitted -->Context Plus<!-- raw HTML omitted -->. Once installed, the context change is done simply by right-clicking on the tab and selecting a new container under &ldquo;Move to Context&rdquo;.</p>
+<p>In order to overcome this problem, we can use the module <a href="https://addons.mozilla.org/fr/firefox/addon/context-plus/" target="\_blank">Context Plus</a>. Once installed, the context change is done simply by right-clicking on the tab and selecting a new container under &ldquo;Move to Context&rdquo;.</p>
 <p>Again, an important fact to note. When changing the context for a tab, cookies are not moved, which means that you will have to re-authenticate yourself on the application.</p>
-<p>The add-on module can be downloaded on the following <!-- raw HTML omitted -->page<!-- raw HTML omitted -->.</p>
+<p>The add-on module can be downloaded on the following <a href="https://addons.mozilla.org/fr/firefox/addon/context-plus/" target="\_blank">page</a>.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>I only talked very briefly on the notion of cookies, which is broader than that and is also important. Feel free to check it out because it is one of the most interesting engines for a publisher to track down its users.</p>
 <p>Nevertheless, solutions such as web containers exist and allow both to add a visual aspect to the contextual tabs and also to limit the unwanted information shared between websites.</p>
-<p>If you have any questions about the subject, or about the add-on module itself, feel free to contact me on <!-- raw HTML omitted -->Twitter<!-- raw HTML omitted -->.</p>
+<p>If you have any questions about the subject, or about the add-on module itself, feel free to contact me on <a href="https://twitter.com/Haax9_" target="\_blank">Twitter</a>.</p>
 
   </div>
   

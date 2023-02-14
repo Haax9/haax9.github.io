@@ -204,7 +204,7 @@
   </header>
   <div class="post">
     <p>ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (+1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website.</p>
-<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <!-- raw HTML omitted -->the European Cyber Week<!-- raw HTML omitted --> conference in Rennes.</p>
+<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <a href="https://www.european-cyber-week.eu/" target=\_blank>the European Cyber Week</a> conference in Rennes.</p>
 <p>A very interesting challenge on several points. It allowed me to learn several tricks. Furthermore, I spent a lot of time on it. Let&rsquo;s go !</p>
 <p>Table of Content :</p>
 <ul>
@@ -248,16 +248,16 @@
 <pre><code>Cette startup est prometteuse!
 Ils proposent de collecter de nombreux identifiants dans un seul endroit...
 Peut-on s'introduire dans leur system?
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_1.png" alt="ECW2018_intrusion_1" class="imgSize"/></center>
 <p>An authentication page and a &ldquo;Work in Progress&rdquo; page are available. Some tests on the authentication form do not reveal vulnerabilities at this level. Moreover, the indication &ldquo;support us with cookies:)&rdquo; on the page clearly indicates that the challenge will be around cookies.</p>
 <p>After some research we inspect the files that are used when loading the website.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_2.png" alt="ECW2018_intrusion_2" class="imgSize"/></center>
 <h3 id="development-domain-and-flag-1">Development domain and Flag 1</h3>
 <p>Nothing unusual&hellip;. Except in the file &ldquo;thor.css&rdquo; where a paragraph seems to have been added manually.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_3.png" alt="ECW2018_intrusion_3" class="imgSize"/></center>
 <p>A new sub-domain! It seems to be the application development website&hellip; Maybe vulnerabilities to exploit?</p>
 <p>We go to the sub-domain and look at the headers&hellip;.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_4.png" alt="ECW2018_intrusion_4" class="imgSize"/></center>
 <p>First flag : check !</p>
 <hr>
 <h2 id="intrusion-2">Intrusion 2</h2>
@@ -266,29 +266,29 @@ Continuez de creuser!
 </code></pre><h3 id="http-request-manipulation">HTTP request manipulation</h3>
 <p>We are now on the development domain and we have to find out what to do. A good first thing may be to look at HTTP requests and see if it is possible to modify them.
 After a few attempts, you notice a strange behavior when you change the HTTP method used.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_5.png" alt="ECW2018_intrusion_5" class="imgSize"/></center>
 <p>Thus, using the &ldquo;OPTIONS&rdquo; method, a strange error page appears, very verbose&hellip; For example, we have access to our decrypted cookie and some server-side variables.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_6.png" alt="ECW2018_intrusion_6" class="imgSize"/></center>
 <h3 id="getting-a-web-console-cve-2015-3224">Getting a web console (CVE-2015-3224)</h3>
 <p>Okay, new information&hellip; What can we get out of it?
 One thing must be obvious to us (well, in real life, it took me some time to notice it&hellip;) and it&rsquo;s the line :<br>
 <code>HTTP_X_FORWARDED_FOR: &quot;176.187.238.160, 10.1.10.0, 127.0.0.1&quot;</code><br>
 With this, it should be possible to spoof an internal IP and pretend to be an internal network machine!</p>
 <p>We intercept a new request in which we add a header <code>X-Forwarded-For: 127.0.0.0.1</code> and magic&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_7.png" alt="ECW2018_intrusion_7" class="imgSize"/></center>
 <p>A web console ! This could be useful, a console that will allow us to execute commands on the server. I learned afterwards that this is a known vulnerability, the CVE-2015-3224.</p>
 <p>Good ! However, it was necessary to manually modify the request in order to obtain this console. For practical reasons, we would like all requests to be modified with the header previously used. No worries ! We configure Burp by specifying the scope (web150_dev.challenge-ecw.fr) and telling it to add a header for each request.
 Once this is done, we can test the well behavior of the system.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_8.png" alt="ECW2018_intrusion_8" class="imgSize"/></center>
 <p>Perfect ! Let&rsquo;s continue.</p>
 <h3 id="search-and-flag-2">Search and Flag 2</h3>
 <p>We now have access to the server, through a kind of shell. What can we do with it?
 After some research about the Rails console, we discover a way to list the content of a directory:</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_9.png" alt="ECW2018_intrusion_9" class="imgSize"/></center>
 <p>Now we have to search the server for interesting information&hellip;
 After browsing the directories, you come across a &ldquo;web_console.rb&rdquo; file located in one of the configuration directories. This would be the logical starting point given that we are in this console.
 It is also possible to read the contents of a file.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_10.png" alt="ECW2018_intrusion_10" class="imgSize"/></center>
 <p>A lot of information contained in there, including a long hexadecimal string.
 Once decoded&hellip;.</p>
 <pre><code>466c616732203d20274543577b35393438343632323131643030633963656334363866643139346537366335667d27 ==&gt; &quot;Flag2 = 'ECW{5948462211d00c9cec468fd194e76c5f}'&quot;&quot;
@@ -297,16 +297,16 @@ Once decoded&hellip;.</p>
 <h2 id="intrusion-hint">Intrusion hint</h2>
 <h3 id="discorery-and-identification">Discorery and Identification</h3>
 <p>This challenge has been added during the CTF challenge in order to help people. Totally uncorrelated to the scenario environment, we come across a single page with a dialog box.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_11.png" alt="ECW2018_intrusion_11" class="imgSize"/></center>
 <p>It seems that we are facing an SQL injection, given the indications. The application&rsquo;s behavior is tested with correct data.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_12.png" alt="ECW2018_intrusion_12" class="imgSize"/></center>
 <p>The indications seem to point towards a SQL Injection using the LIKE condition. Assuming that the query used by the application is of the form :</p>
 <pre><code>SELECT &lt;hint&gt; from &lt;table&gt; where &lt;message&gt; LIKE &quot;&lt;entree utilisateur&quot;;
 </code></pre><p>An attempt can be made to inject the <code>%</code> character into the query. If there is an injection, the application should answer us with the retrieved lines number.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_13.png" alt="ECW2018_intrusion_13" class="imgSize"/></center>
 <h3 id="exploitation-and-results">Exploitation and Results</h3>
 <p>So we have a functional POC. In order to test, assuming that a flag of the form &ldquo;ECW{xxx}&rdquo; is hidden, we can try the following injection <code>E%</code>.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_14.png" alt="ECW2018_intrusion_14" class="imgSize"/></center>
 <p>Perfect ! Using that, it will be possible to list all hidden hints through a blind injection, based on the message returned to the user.</p>
 <p>Example :</p>
 <pre><code>E%   ==&gt; &quot;1 hint found in database&quot;
@@ -364,7 +364,7 @@ charset <span style="color:#f92672">=</span>  string<span style="color:#f92672">
                         <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;result : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> result)
                         <span style="color:#66d9ef">break</span>;
 </code></pre></div><p>And here is an example of how to recover one hint.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_15.png" alt="ECW2018_intrusion_15" class="imgSize"/></center>
 <p>Once all elements have been extracted, we obtain this:</p>
 <pre><code>http://manpages.ubuntu.com/manpages/cosmic/en/man1/systemctl.1.html
 https://gist.github.com/mbyczkowski/34fb691b4d7a100c32148705f244d028
@@ -399,13 +399,13 @@ require <span style="color:#e6db74">&#39;active_support&#39;</span>
 <li>The key to encrypt/decrypt the cookie.</li>
 </ul>
 <p>We must therefore find these elements. To do this, we start again a research phase on the server, starting with the second file recovered in hints : <code>/home/web200/smart_stuff/config/secrets.yml</code></p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_16.png" alt="ECW2018_intrusion_16" class="imgSize"/></center>
 <p>Good ! It seems we have found some encryption keys. One for the dev domain, and one for something else (useful?). So we are missing salts.
 After a lot of research, we come across an interesting file.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_17.png" alt="ECW2018_intrusion_17" class="imgSize"/></center>
 <p>Two variables <code>encrypted_cookie_salt='ECW-secret-salt'</code> and <code>encrypted_signed_cookie_salt='ECW-signature-secret-salt'</code> are used. Perfect ! We have everything we need to decrypt our cookie.
 After many tests and attempts to decrypt a cookie locally (through the second script), I tried to process them directly in the web console. It turns out that it works very well with the first script given.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_18.png" alt="ECW2018_intrusion_18" class="imgSize"/></center>
 <p>It should also be noted that the script returns by default data formatted in JSON. In our case, however, it is Marshal. It took me some time to find out why the cookie was misread and especially to find out what the Marshal was&hellip;</p>
 <h3 id="crafting-and-connexion-to-dev-domain">Crafting and connexion to dev domain</h3>
 <p>We now know what the cookie is made of. You can see a &ldquo;User&rdquo; object containing only &ldquo;nil&rdquo; (=null) fields. Makes sense since we don&rsquo;t have a user. But&hellip; Would it be possible to impersonate one with fake informations ?</p>
@@ -413,19 +413,19 @@ After many tests and attempts to decrypt a cookie locally (through the second sc
 <p>The modification of the User object is done like this :</p>
 <pre><code>cookie['user']['password'] = &quot;YouLostTheGame&quot;
 </code></pre><p>This way, you can modify all necessary attributes.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_19.png" alt="ECW2018_intrusion_19" class="imgSize"/></center>
 <p>Once the cookie has been crafted, you can try to modify your own session cookie by intercepting a request with Burp. Result&hellip;</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_20.png" alt="ECW2018_intrusion_20" class="imgSize"/></center>
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_21.png" alt="ECW2018_intrusion_21" class="imgSize"/></center>
 <p>Connected with admin privileges on the development domain ! Functional POC:)</p>
 <h3 id="getting-3rd-flag">Getting 3rd flag</h3>
 <p>We now know how to decrypt a cookie, modify it and then encrypt it again in order to use it to connect. But we still don&rsquo;t have any information about the location of flag 3&hellip;.</p>
 <p>However, we know that the purpose of the challenge is to connect to the production domain and the statement of challenge 3 indicates that the flag is located on a crossing point to the last challenge. From this, we suspect that it is necessary to find the encryption key of the production domain.</p>
 <p>Another remaining hint&hellip; This is the manual page of &ldquo;systemctl&rdquo;. After some research on systemctl, we learnt that &ldquo;units&rdquo; can be created for systemd. These &ldquo;units&rdquo; behave according to instructions written in a configuration file, located in the <code>/etc/systemd/system/</code> directory. Why don&rsquo;t we take a look around this ?</p>
 <p>[NOTE] I didn&rsquo;t saw it because I didn&rsquo;t solved this challenge before doing the hint, but it turns out that indications about using systemd are also available, especially in the file <code>web_console.rb</code></p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_22.png" alt="ECW2018_intrusion_22" class="imgSize"/></center>
 <p>There are two files <code>rails-dev.service</code> and <code>rails-prd.service</code>. Nothing very interesting on the dev file, however, on the production configuration file&hellip;.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_23.png" alt="ECW2018_intrusion_23" class="imgSize"/></center>
 <p>The key to production domain ! Which also serves as a flag for the 3rd challenge.</p>
 <p>Third flag : check !</p>
 <hr>
@@ -434,16 +434,16 @@ After many tests and attempts to decrypt a cookie locally (through the second sc
 Mais l'attraper est plus facile à dire qu'à faire ;)
 </code></pre><h3 id="crafting-a-cookie-for-production-domain">Crafting a cookie for production domain</h3>
 <p>Now we have all necessary elements. First, we decrypt the cookie we retrieve from the production domain. Cookie which seems to be much shorter than the previous ones.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_24.png" alt="ECW2018_intrusion_24" class="imgSize"/></center>
 <p>No user for this cookie&hellip; But can we add one?
 The same procedure as the development cookie is reproduced by simply changing the encryption key to <code>secret_key_base = &quot;A_cookie_of_course&quot;</code> and once the cookie is crafted, an attempt is made to inject it by intercepting a request.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_25.png" alt="ECW2018_intrusion_25" class="imgSize"/></center>
 <h3 id="connection-and-flag-4">Connection and Flag 4</h3>
 <p>New cookie results&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_26.png" alt="ECW2018_intrusion_26" class="imgSize"/></center>
 <p>We are connected as administrator on the production domain ! It is now enough to look for the last flag :).
 The <code>/admin/console</code> page is unavailable and redirects to the home page. However, when you search the application files, you will find an <code>/admin</code>.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_27.png" alt="ECW2018_intrusion_27" class="imgSize"/></center>
 <p>I don&rsquo;t have the screenshot anymore, but accessing <code>https://web150-smartstuff.challenge-ecw.fr/admin</code> return a page containing the flag !</p>
 <p>Flag 4 : check !!
 (For some reason, the flag was no longer present when I did the challenge again to take screenshots ¯_(ツ)_/¯).</p>

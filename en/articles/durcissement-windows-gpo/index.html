@@ -204,7 +204,7 @@
   </header>
   <div class="post">
     <p>Since the release of the Windows 10 operating system, many questions about user privacy have been raised. Indeed, even if our data were already collected before, Microsoft has opened their communication on the data collection with Windows 10. It allows mani people to open their eyes and become aware of things happenin.</p>
-<p>However, it is possible through various small manipulations and configurations to limit the personal data leak that are collected by Microsoft. This can be done through Group Policy Objects and we will discover them in this post. I will give you some examples so that you can have an idea of how they are used. I would like to take this opportunity to say a word about the <!-- raw HTML omitted -->ANSSI (French National Agency for System Security)<!-- raw HTML omitted --> which regularly publishes guides to good practice on digital good pratices. Configurations showed in this article are taken from their guide &ldquo;Concerns about privacy and data confidentiality in Windows 10&rdquo; and have been compiled by <!-- raw HTML omitted -->@Gouzou<!-- raw HTML omitted -->, many thanks for his help!</p>
+<p>However, it is possible through various small manipulations and configurations to limit the personal data leak that are collected by Microsoft. This can be done through Group Policy Objects and we will discover them in this post. I will give you some examples so that you can have an idea of how they are used. I would like to take this opportunity to say a word about the <a href="https://www.ssi.gouv.fr/" target="\_blank">ANSSI (French National Agency for System Security)</a> which regularly publishes guides to good practice on digital good pratices. Configurations showed in this article are taken from their guide &ldquo;Concerns about privacy and data confidentiality in Windows 10&rdquo; and have been compiled by <a href="https://twitter.com/Gouz0u" target="\_blank">@Gouzou</a>, many thanks for his help!</p>
 <p>[Preliminary Note 1] This article will be updated (more or less) regularly to add or remove some interesting parameters.</p>
 <p>[Preliminary Note 2] GPO management is only possible with a Pro, Enterprise or Integral version of Windows 7, 8.1 or 10. However, it seems possible to install the editor on more traditional versions (Home). I never tested it, so I just can&rsquo;t tell if it&rsquo;s true or not.</p>
 <h2 id="gpo-group-policy-objects">GPO (Group Policy Objects)</h2>
@@ -215,7 +215,7 @@
 <p>In case of a personal computer, no worries . I won&rsquo;t go deeper on GPOs because it could quickly become complex and the goal is not to go in depth.</p>
 <h3 id="how-does-it-work-">How does it work ?</h3>
 <p>In practice, all GPOs are managed in the same place, in the group policy editor. A significant number of parameters are available and to choose one value when we have the choice. For example, it is possible to activate or deactivate this account for the parameter &ldquo;Accounts : Guest account status&rdquo; . Below is a screenshot illustrating what the editor looks like.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_1.PNG" alt="gpo_1.PNG" class="imgSize"/></center>
 <p>Inside a company&rsquo;s IT system, group policies are managed in the Active Directory domain controllers. These are the servers used to rule the infrastructure.</p>
 <h3 id="what-about-my-computer-">What about my computer ?</h3>
 <p>As mentioned above, there is a local version of the policy editor. We are talking here about the local strategy editor. It looks exactly like the GPO editor on Windows servers, but the Setting  s you set are only applied to your computer. Pretty nice when you just want to protect your PC !</p>
@@ -224,17 +224,17 @@
 <li>Use the Windows search bar and type &ldquo;Group Policy&rdquo; or &ldquo;Group Strategies&rdquo;. It is necessary to run the program as an administrator (right click on it and then &ldquo;run as administrator&rdquo;);</li>
 <li>Use the Windows application to launch a program. To do this, use the &ldquo;Windows&rdquo; keys (the key with the Windows icon) + &ldquo;R&rdquo; then enter &ldquo;gpedit.msc&rdquo;.</li>
 </ul>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_2.PNG" alt="gpo_2.PNG" class="imgSize"/></center>
 <p>When done, you end up with the same editor. And we can start searching :).</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_3.PNG" alt="gpo_3.PNG" class="imgSize"/></center>
 <h2 id="application-case---gpo-configuration">Application Case - GPO Configuration</h2>
-<p>In accordance with ANSSI documents and the parameters that <!-- raw HTML omitted -->@Gouzou<!-- raw HTML omitted --> has extracted from their documents, there are several categories of parameters that are interesting to look at for personal protection purposes.
+<p>In accordance with ANSSI documents and the parameters that <a href="https://twitter.com/Gouz0u" target="\_blank">@Gouzou</a> has extracted from their documents, there are several categories of parameters that are interesting to look at for personal protection purposes.
 You should note, however, that everything shouldn&rsquo;t be taken as done. Indeed, recommendations presented here can guide you in the configuration of your system but it is up to you to define what you want to protect. I strongly encourage you to read the description of each parameter to find out what it is about.</p>
 <h3 id="path-explanations">Path explanations</h3>
 <p>During the post, each parameter will be accessible via a &ldquo;path&rdquo;. For example:</p>
 <pre><code>Local Computer Policy/Computer configuration/Administrative Templates/Windows Components/Data Collection and Preview Builds
 </code></pre><p>It corresponds to the different categories and sub-categories you can see in the editor.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_4.PNG" alt="gpo_4.PNG" class="imgSize"/></center>
 <p>Once you have reached a parameter, simply click on it and then choose whether to enable it, disable it and add any options.</p>
 <h3 id="telemetry-search-and-integrated-tools">Telemetry, Search and Integrated Tools</h3>
 <pre><code>Local Computer Policy/Computer configuration/Administrative Templates/Windows Components/Data Collection and Preview Builds
@@ -703,7 +703,7 @@ You should note, however, that everything shouldn&rsquo;t be taken as done. Inde
 <p>But it is still possible to delete some of them ! Unfortunately, it will not be possible to uninstall them all (Cortana, for example). Once again, it is up to you to judge what you&rsquo;ll need or not :).</p>
 <p>The next few lines may scare the least technicals among you. Nevertheless, don&rsquo;t panic, don&rsquo;t leave at the slightest line of code, everything is explained !</p>
 <p>We&rsquo;ll start by opening a Powershell interpreter. Roughly speaking, it is a terminal in which we can enter commands. Look for the &ldquo;Powershell&rdquo; program and launch it as administrator (right click &gt; Run as administrator). A blue terminal, like this one, should appear.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_5.PNG" alt="gpo_5.PNG" class="imgSize"/></center>
 <p>Thereafter, 3 commands will be necessary.</p>
 <p>First, we will list the installed applications. This is done using the following command. It will list applications and display a lot of information about them.</p>
 <pre><code>Get-AppxPackage
@@ -713,16 +713,16 @@ You should note, however, that everything shouldn&rsquo;t be taken as done. Inde
 <pre><code>Get-AppxPackage -allusers *3dbuilder* | Remove-AppxPackage
 </code></pre><p>Command description :</p>
 <ul>
-<li><!-- raw HTML omitted -->GetAppxPackage<!-- raw HTML omitted --> = List of installed applications ;</li>
-<li><!-- raw HTML omitted -->-allusers<!-- raw HTML omitted --> = Indicates that the command will cover all computer users;</li>
-<li><!-- raw HTML omitted -->*zunevideo*<!-- raw HTML omitted --> = Name of the application. We use two &ldquo;*&rdquo; to indicate that we are simply looking for the expression between the two symbols in the result of the list, in order to select the right application. In our case, we will uninstall all applications containing &ldquo;zunevideo&rdquo; in their name;</li>
-<li><!-- raw HTML omitted -->|<!-- raw HTML omitted --> = Allows to link the first command to a second one;</li>
-<li><!-- raw HTML omitted -->Remove-AppxPackage<!-- raw HTML omitted --> = Indicates that you want to delete the selected application.</li>
+<li><strong>GetAppxPackage</strong> = List of installed applications ;</li>
+<li><strong>-allusers</strong> = Indicates that the command will cover all computer users;</li>
+<li><strong>*zunevideo*</strong> = Name of the application. We use two &ldquo;*&rdquo; to indicate that we are simply looking for the expression between the two symbols in the result of the list, in order to select the right application. In our case, we will uninstall all applications containing &ldquo;zunevideo&rdquo; in their name;</li>
+<li><strong>|</strong> = Allows to link the first command to a second one;</li>
+<li><strong>Remove-AppxPackage</strong> = Indicates that you want to delete the selected application.</li>
 </ul>
-<p>Using that, you can delete many applications. I invite you to consult <!-- raw HTML omitted -->this link<!-- raw HTML omitted --> for more information and a list of applications that can be deleted.</p>
+<p>Using that, you can delete many applications. I invite you to consult <a href="https://www.askvg.com/guide-how-to-remove-all-built-in-apps-in-windows-10/" target="\_blank">this link</a> for more information and a list of applications that can be deleted.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>In conclusion of this post, I would like to remind you that many things are possible in order to personalize your computer and limit information leaks, but that you do not necessarily have to take everything like that. Indeed, more than implementing recommendations (even those in this article), it is important to be informed, aware and to try to understand at least the overall behavior. Each person or company has different security and privacy needs, leaving a multitude of possible configurations. It&rsquo;s up to you to find the right one!</p>
-<p>As always, if you have any questions, feel free to contact me on <!-- raw HTML omitted -->Twitter<!-- raw HTML omitted --> ! ;)</p>
+<p>As always, if you have any questions, feel free to contact me on <a href="https://twitter.com/Haax9_" target="\_blank">Twitter</a> ! ;)</p>
   </div>
   
 

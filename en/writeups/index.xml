@@ -23,7 +23,8 @@
       
       <guid>https://haax9.github.io/en/writeups/osint-geoint/yogoshesd-ctf-cluedosint/</guid>
       <description>[NO ENGLISH VERSION - Only French is available for this post]
-Le challenge &amp;ldquo;CLUEDOSINT&amp;rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKaliet Madame Httpset consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&amp;rsquo;investigation menée et la résolution des différents challenges. 1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé.</description>
+Le challenge &amp;ldquo;CLUEDOSINT&amp;rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&amp;rsquo;investigation menée et la résolution des différents challenges. 
+1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé.</description>
     </item>
     
     <item>
@@ -69,7 +70,7 @@ Le Yogosh-ESD CTF est un évènement en ligne proposé par l&amp;rsquo;école ES
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/en/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</guid>
-      <description>&lt;p&gt;The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with &lt;!-- raw HTML omitted --&gt;@AzrakelK (L0n3w0lf)&lt;!-- raw HTML omitted --&gt;, the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name.&lt;/p&gt;</description>
+      <description>&lt;p&gt;The NorzhCTF, organized in conjunction with the 2019 FIC, gave me the opportunity to create, in collaboration with &lt;a href=&#34;https://twitter.com/AzrakelK&#34; target=&#34;blank&#34;&gt;@AzrakelK (L0n3w0lf)&lt;/a&gt;, the attack scenario in relation to an Active Directory domain. This article gives details about this challenge and presents our solution. The challenge has been replayed during the RedHack CTF 2019 under the same name.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -79,7 +80,7 @@ Le Yogosh-ESD CTF est un évènement en ligne proposé par l&amp;rsquo;école ES
       
       <guid>https://haax9.github.io/en/writeups/santhacklausctf-2018/santhacklaus-ctf/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
-&lt;p&gt;Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&amp;rsquo;IMT Lille Douai &lt;!-- raw HTML omitted --&gt;@_nwodtuhs&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;@m3lsius&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;@Ch3n4p4N&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;@Deldel&lt;!-- raw HTML omitted --&gt;. Cet article traite des différents challenges que j&amp;rsquo;ai réussi et eu le temps de faire.&lt;/p&gt;</description>
+&lt;p&gt;Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&amp;rsquo;IMT Lille Douai &lt;a href=&#34;https://twitter.com/_nwodtuhs&#34; target=&#34;blank&#34;&gt;@_nwodtuhs&lt;/a&gt; &lt;a href=&#34;https://twitter.com/m3lsius&#34; target=&#34;blank&#34;&gt;@m3lsius&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Ch3n4p4N&#34; target=&#34;blank&#34;&gt;@Ch3n4p4N&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Th4cho&#34; target=&#34;blank&#34;&gt;@Deldel&lt;/a&gt;. Cet article traite des différents challenges que j&amp;rsquo;ai réussi et eu le temps de faire.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -133,7 +134,7 @@ Le Yogosh-ESD CTF est un évènement en ligne proposé par l&amp;rsquo;école ES
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/</guid>
-      <description>&lt;p&gt;The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &amp;ldquo;Musical Bits&amp;rdquo; challenge which is a Steganography challenge. &lt;!-- raw HTML omitted --&gt;I&lt;!-- raw HTML omitted --&gt; worked with &lt;!-- raw HTML omitted --&gt;Iptior&lt;!-- raw HTML omitted --&gt; on this one and it tooks severals hours of pain before success! Let&amp;rsquo;s go!&lt;/p&gt;</description>
+      <description>&lt;p&gt;The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &amp;ldquo;Musical Bits&amp;rdquo; challenge which is a Steganography challenge. &lt;a href=&#34;https://twitter.com/Haaxmax&#34; target=&#34;\_blank&#34; rel=&#34;noopener&#34;&gt;I&lt;/a&gt; worked with &lt;a href=&#34;https://twitter.com/ErwanFily&#34; target=&#34;\_blank&#34; rel=&#34;noopener&#34;&gt;Iptior&lt;/a&gt; on this one and it tooks severals hours of pain before success! Let&amp;rsquo;s go!&lt;/p&gt;</description>
     </item>
     
   </channel>

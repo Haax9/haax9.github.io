@@ -203,32 +203,37 @@
 
   </header>
   <div class="post">
-    <p>Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &ldquo;Musical Bits&rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de <!-- raw HTML omitted -->@Iptior<!-- raw HTML omitted -->, afin de résoudre ce challenge. C&rsquo;est parti !</p>
+    <p>Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &ldquo;Musical Bits&rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de <a href="https://twitter.com/erwanfily" target="blank">@Iptior</a>, afin de résoudre ce challenge. C&rsquo;est parti !</p>
 <h2 id="découverte">Découverte</h2>
-<p>Le challenge commence avec un texte disant qu&rsquo;un hacker dispose d&rsquo;un son étrange&hellip; Rien à tirer de ceci. On télécharge donc le fichier donné et on utilise la commande <!-- raw HTML omitted -->file<!-- raw HTML omitted --> afin de récupérer des informations sur ce dernier.</p>
+<p>Le challenge commence avec un texte disant qu&rsquo;un hacker dispose d&rsquo;un son étrange&hellip; Rien à tirer de ceci. On télécharge donc le fichier donné et on utilise la commande <strong>file</strong> afin de récupérer des informations sur ce dernier.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ file magical_bits
 magical_bits: RIFF <span style="color:#f92672">(</span>little-endian<span style="color:#f92672">)</span> data, WAVE audio, Microsoft PCM, <span style="color:#ae81ff">16</span> bit, mono <span style="color:#ae81ff">44100</span> Hz
 </code></pre></div><p>On se retrouve donc avec un fichier audio. On l&rsquo;ouvre tout d&rsquo;abord avec un lecteur audio classique, afin de voir si des choses sont audibles. Manque de chance, rien de bien intéressant d&rsquo;un point de vue élocution, on entend de petits sons pendant environ 20 minutes. Ces sons sont de petits &ldquo;bip&rdquo; de deux sortes. Aidés du titre du challenge, on pense à une représentation binaire de quelquechose.</p>
 <p>On cherche ensuite à savoir de quoi est composé le son, donc on ouvre le fichier avec Audacity. Après avoir pas mal zoomé et passé la partie &ldquo;Introduction&rdquo; du son, on remarque que des séquences se répètent de nombreuses fois. En voici un extrait.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_1.png" alt="musical_bits_1" class="imgSize"/></center>
 <p>On remarque la présence de paquets de 8 signaux, et on pense directement à des octets. En effet, on voit 3 signaux différents. 2 quasi-identiques, et un troisième, plus long. On suppose la signification suivante :</p>
-<!-- raw HTML omitted -->
+<ul>
+ 	<li>Le plus gros signal correspond à un bit "1"</li>
+ 	<li>Le petit signal correspond à un "0"</li>
+ 	<li>Le signal plus long correspond à la séparation de chaque octet</li>
+</ul>
+Suivant cette logique, on peut tester notre raisonnement en commençant à la main... Si on prend les 4 premiers paquets de signaux, on obtient la chaine binaire suivante :
 <p>11111111 11011000 11111111 1110000</p>
 <p>Puis on la convertit au format hexadécimal : FF 4D FF E0</p>
 <p>Hmmmm&hellip; Après quelques recherches, on se rend compte qu&rsquo;il s&rsquo;agit en réalité d&rsquo;un début d&rsquo;en-tête JPEG ! On peut maintenant être sûrs d&rsquo;avoir la bonne méthode et qu&rsquo;il faut extraire ces données pour former une image JPEG.</p>
 <h2 id="extraction---première-tentative">Extraction - Première tentative</h2>
 <p>J&rsquo;ai tout d&rsquo;abord cherché sur Internet des outils existant et permettant d&rsquo;extraire automatiquement ce type de données ou un moyen de l&rsquo;extraire avec Python. Mais à court d&rsquo;idées, j&rsquo;ai finalement décidé d&rsquo;exporter le son complet en format &ldquo;raw&rdquo;.</p>
-<p>Après avoir supprimé l&rsquo;introduction, nous disposons d&rsquo;un fichier brut exploitable. À l&rsquo;aide de <!-- raw HTML omitted -->hexedit<!-- raw HTML omitted -->, on peut afficher le contenu du fichier.</p>
-<!-- raw HTML omitted -->
+<p>Après avoir supprimé l&rsquo;introduction, nous disposons d&rsquo;un fichier brut exploitable. À l&rsquo;aide de <strong>hexedit</strong>, on peut afficher le contenu du fichier.</p>
+<center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_2.png" alt="musical_bits_2" class="imgSize"/></center>
 <p>Si on défile un peu, on peut remarquer que les données ressemblent souvent à celles de l&rsquo;image ci dessus. De plus, on distingue deux formes différentes.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_3.png" alt="musical_bits_3" class="imgSize"/></center>
 <p>Cela pourrait être nos &ldquo;0&rdquo; et &ldquo;1&rdquo; trouvés précédemment. Encore une fois, on défile manuellement afin de voir si les formes correspondent. Et&hellip; Oui ! On retrouve nos données. On dispose maintenant d&rsquo;un moyen d&rsquo;extraire nos bits.</p>
 <p>Il faut cependant trouver une séquence modèle (un patron) afin de savoir s&rsquo;il s&rsquo;agit d&rsquo;un 1 ou d&rsquo;un 0.</p>
 <p>Nous avons essayé un bon nombre de patrons et extrait beaucoup de bits, mais nous avions toujours un problème&hellip; Plusieurs mauvais bits. Étant donné que ce n&rsquo;était pas la bonne solution, les scripts ne seront pas montrés dans cette partie.</p>
 <h2 id="extraction---seconde-tentative">Extraction - Seconde tentative</h2>
-<p>Et c&rsquo;est le moment où <!-- raw HTML omitted -->Iptior<!-- raw HTML omitted --> rentre en jeu&hellip; :)</p>
+<p>Et c&rsquo;est le moment où <a href="https://twitter.com/ErwanFily" target="\_blank">Iptior</a> rentre en jeu&hellip; :)</p>
 <p>Je suis arrivé à court d&rsquo;idées et après avoir envoyé mes scripts Python aux membres de l&rsquo;équipe, il est revenu avec une idée. L&rsquo;idée d&rsquo;une séquence répétitive semblait bonne, mais abordée de la mauvaise manière.</p>
-<p>Nous avons alors fait quelquechose que nous avions oublié, mais qui aurait pû nous faire gagner beaucoup de temps. Nous nous sommes d&rsquo;abord servi de la commande <!-- raw HTML omitted -->strings<!-- raw HTML omitted -->. Voici un échantillon du résultat.</p>
+<p>Nous avons alors fait quelquechose que nous avions oublié, mais qui aurait pû nous faire gagner beaucoup de temps. Nous nous sommes d&rsquo;abord servi de la commande <strong>strings</strong>. Voici un échantillon du résultat.</p>
 <pre><code>$ strings magical_bits
 RIFF
 WAVEfmt
@@ -308,7 +313,11 @@ A c
 ...
 </code></pre><p>Et là encore&hellip; On retrouve souvent les mêmes caractères&hellip; Peut être peut on en sortir une correspondance ?</p>
 <p>Après quelques recherches et analyses, une correspondance semble avoir été trouvée !</p>
-<!-- raw HTML omitted -->
+<ul>
+ 	<li>"1" peut être extrait lorsque l'on trouve les caractères "&lt;" puis "B"</li>
+ 	<li>"0" peut être extrait avec la séquence "!", "F" puis "s"</li>
+</ul>
+À partir de là, il est possible d'écrire un petit script python afin d'extraire toutes les données.
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python</span>
 
 <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;essai.txt&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> fichier:
@@ -344,7 +353,7 @@ outHex <span style="color:#f92672">+=</span> str(hex(number)[<span style="color:
 <span style="color:#66d9ef">print</span>(outHex)
 </code></pre></div><h2 id="récupération-du-flag">Récupération du flag</h2>
 <p>On essaie ensuite d&rsquo;ouvrir l&rsquo;image générée avec le script.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_4.jpg" alt="musical_bits_4 class="imgSize""/></center>
 <p>Voilà le flag !! :)</p>
   </div>
   

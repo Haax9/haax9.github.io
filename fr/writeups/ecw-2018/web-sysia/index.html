@@ -204,7 +204,7 @@
   </header>
   <div class="post">
     <p>L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. SysIA est un challenge basé sur l&rsquo;exploitation d&rsquo;une LFI (Local File Inclusion) puis l&rsquo;utilisation du bash_history et de l&rsquo;utilitaire updatedb afin de trouver le flag.</p>
-<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <!-- raw HTML omitted -->l’European Cyber Week<!-- raw HTML omitted --> à Rennes.</p>
+<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <a href="https://www.european-cyber-week.eu/" target=\_blank>l’European Cyber Week</a> à Rennes.</p>
 <h2 id="découverte">Découverte</h2>
 <p>Le challenge démarre avec l&rsquo;énoncé suivant :</p>
 <pre><code>Notre jeune IA administrateur système continue de commettre des erreurs humaines.
@@ -212,41 +212,41 @@ Je suppose qu'il faut encore apprendre avant la production.
 Mais nous ne pouvons pas nous permettre de la retarder encodre une fois!
 </code></pre><p>De même, une première information donnée par les organisateurs : &ldquo;An easy good old PHP challenge ;)&rdquo; nous permet de fermer dès à présent certaines possibilités.</p>
 <p>On arrive donc sur un site web parlant de &ldquo;deep learning&rdquo;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_1.png" alt="ECW2018_sysia_1" class="imgSize"/></center>
 <p>Après une petite navigation sur les différentes pages, qui ne semblent être que des pages vitrine, on va faire un tour du côté du fichier &ldquo;robots.txt&rdquo; et on y trouve quelque chose de louche&hellip;</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/robots.txt
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_2.png" alt="ECW2018_sysia_2" class="imgSize"/></center>
 <p>Ni une ni deux, on file sur la page non-indexée et on y trouve ceci.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_3.png" alt="ECW2018_sysia_3" class="imgSize"/></center>
 <p>L&rsquo;expérience et les indications laissées par les organisateurs nous indiquent une route&hellip; Ca sent bon la LFI !</p>
 <h2 id="lfi---exploitation">LFI - Exploitation</h2>
 <p>Comme tout bon POC, on va tenter de prouver la présence d&rsquo;une vulnérabilité Local File Inclusion (LFI) en affichant le contenu du fichier &ldquo;/etc/passwd&rdquo; qui est normalement lisible.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../etc/passwd
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_4.png" alt="ECW2018_sysia_4" class="imgSize"/></center>
 <p>Bingo ! On a une jolie LFI. Maintenant&hellip; Qu&rsquo;est ce que nous cherchons ? Il est possible de lire certains fichiers sur le serveur, on va donc chercher à récupérer le maximum d&rsquo;informations.
 Après quelques tests, on s&rsquo;oriente du côté du fichier contenant l&rsquo;historique des commandes exécutées par l&rsquo;utilisateur, le fichier &ldquo;bash_history&rdquo;, pouvant contenir de précieuses informations.
 Etant dans un docker, on va aller fouiller du côté de l&rsquo;historique pour l&rsquo;utilisateur root.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../root/bash_history
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_5.png" alt="ECW2018_sysia_5" class="imgSize"/></center>
 <p>Afin de pouvoir lire correctement le contenu du fichier, on va directement dans les source de la page. Après un rapide coup d&rsquo;oeil sur le contenu de fichier, on remarque la présence d&rsquo;une séquence de 3 commandes intéressantes :</p>
 <ul>
 <li>locate flag.txt</li>
 <li>updatedb</li>
 <li>locate flag.txt</li>
 </ul>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_6.png" alt="ECW2018_sysia_6" class="imgSize"/></center>
 <p>Petite subtilité que je connaissais pas, l&rsquo;utilitaire &ldquo;updatedb&rdquo; permet de mettre à jour la base de chemins connus et utilisés par locate. Ainsi, après quelques recherches, on apprend que le contenu de cette base est stocké dans le fichier &ldquo;/var/lib/mlocate/mlocate.db&rdquo;. Par conséquent.. On devrait trouver le chemin vers le fichier flag.txt. Afin d&rsquo;éviter de chercher à la main, on va chercher directement la chaine &ldquo;ECW&rdquo;.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../var/lib/mlocate/mlocate.db
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_7.png" alt="ECW2018_sysia_7" class="imgSize"/></center>
 <p>Bingo, on a un chemin !</p>
 <h2 id="récupération-du-flag">Récupération du flag</h2>
 <p>On peut donc via notre LFI aller lire directement le contenu du fichier flag.txt, et ainsi récupérer le flag du challenge.</p>
 <pre><code>https://web075-sysia.challenge-ecw.fr/notinterestingfile.php?page=../../../../var/www/ECW/solution/web/lfi/flag.txt
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-sysia/ECW2018_sysia_8.png" alt="ECW2018_sysia_8" class="imgSize"/></center>
 <p>Au final, challenge assez simple présentant une LFI sans aucune restriction mais ayant la plus value d&rsquo;intégrer une exploitation un peu plus réaliste. Nice one ! :)</p>
 <h2 id="références">Références</h2>
 <ul>
-<li><!-- raw HTML omitted -->Where is updatedb database located ?<!-- raw HTML omitted --></li>
+<li><a href="https://serverfault.com/questions/454127/where-is-the-updatedb-database-located" target="blank">Where is updatedb database located ?</a></li>
 </ul>
   </div>
   

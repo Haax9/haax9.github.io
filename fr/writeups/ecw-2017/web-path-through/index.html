@@ -210,13 +210,13 @@
 <h2 id="tests-et-hypothèses">Tests et hypothèses</h2>
 <p>N’ayant que ce formulaire sous la main, tout l’intérêt du challenge réside dans le fait de réussir à bypass l’authentification afin d’accéder à la zone d’administration.</p>
 <p>On tente différentes injections et différentes tentatives de connexion. On remarque un message d’erreur lorsque que le couple identifiant/password est invalide.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2017/web-path-through/pt_1.png" alt="path_through_1" class="imgSize"/></center>
 <p>On a donc un retour “booléen”. Soit c’est valide, soit ça ne l’est pas. À partir de là, on pense à une Injection SQL en aveugle (blind SQLi).</p>
 <p>L’injection en aveugle se base sur l’utilisation de la fonction substring() et le fait de trouver les caractères du mot de passe un par un. En supposant que le champ contenant le mot de passe dans la base de données soit nommé “password”, on va chercher à tester chaque caractère du mot de passe.
 Le but est de rendre la requête vraie. On se basera pour cela sur le message affiché à l’utilisateur.</p>
 <p>En sachant que les 4 premiers caractères du flag (et donc probablement du mot de passe) sont “ECW{” on peut donc imaginer une injection de ce type :</p>
 <pre><code>username=admin&amp;password=' or substring(password,1,1)='E
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2017/web-path-through/pt_2.png" alt="path_through_2" class="imgSize"/></center>
 <p>On a donc effectivement une Injection SQL en aveugle ! Passons à l’exploitation.</p>
 <h2 id="exploitation-et-bypass">Exploitation et Bypass</h2>
 <p>Deux solutions s’offrent à nous pour réussir l’exploitation de la vulnérabilité.
@@ -293,12 +293,12 @@ password <span style="color:#f92672">=</span> password <span style="color:#f9267
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Password is </span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> password)
 </code></pre></div><h2 id="récupération-du-flag">Récupération du Flag</h2>
 <p>On exécute notre script et là..</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2017/web-path-through/pt_3.png" alt="path_through_3" class="imgSize"/></center>
 <p>Bingo ! Le flag est à nous.
 Challenge présentant donc une blind SQLi assez basique mais néanmoins intéressant pour apprendre ou rafraichir les connaissances.</p>
 <h2 id="références">Références</h2>
 <ul>
-<li><!-- raw HTML omitted -->SQL injection avancée: Blind SQL injection<!-- raw HTML omitted --></li>
+<li><a href="http://www.mcherifi.org/hacking/sql-injection-avancee-blind-sql-injection.html" target="blank">SQL injection avancée: Blind SQL injection</a></li>
 </ul>
   </div>
   

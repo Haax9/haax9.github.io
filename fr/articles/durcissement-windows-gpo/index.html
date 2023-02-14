@@ -204,7 +204,7 @@
   </header>
   <div class="post">
     <p>Depuis la sortie du système d&rsquo;exploitation Windows 10, de nombreuses questions sur la vie privée des utilisateurs sont soulevées. En effet, même si certaines de nos données étaient déjà récoltées auparavant, Microsoft a ouvert sa communication sur la récupération de données personnelles avec Windows 10. Ceci a notamment permis à un certain nombre de personnes d&rsquo;ouvrir les yeux et de prendre conscience des choses.</p>
-<p>Néanmoins, il est possible via différentes petites manipulations et configurations de limiter les données personnelles recueillies par Microsoft. Cela peut notamment passer par l&rsquo;utilisation des Group Policy Objetcs, que nous allons découvrir dans cet article. Je vous donnerai quelques exemples afin que vous puissez vous même vous faire une idée de leur utilisation. J&rsquo;en profite pour placer un mot au sujet de <!-- raw HTML omitted -->l&rsquo;ANSSI (Agence Nationale de la Sécurité des Systèmes d&rsquo;Information)<!-- raw HTML omitted --> qui publie régulièrement des guides de bonnes pratique au sujet de l&rsquo;hygiène numérique. Les configurations abordées dans cet article sont d&rsquo;ailleurs tirées de leur guide &ldquo;Préoccupations relatives au respect de la vie privée et à la confidentialité des données sous Windows 10&rdquo; et ont été compilées par <!-- raw HTML omitted -->@Gouzou<!-- raw HTML omitted -->, je le remercie pour l&rsquo;aide apportée !</p>
+<p>Néanmoins, il est possible via différentes petites manipulations et configurations de limiter les données personnelles recueillies par Microsoft. Cela peut notamment passer par l&rsquo;utilisation des Group Policy Objetcs, que nous allons découvrir dans cet article. Je vous donnerai quelques exemples afin que vous puissez vous même vous faire une idée de leur utilisation. J&rsquo;en profite pour placer un mot au sujet de <a href="https://www.ssi.gouv.fr/" target="\_blank">l&rsquo;ANSSI (Agence Nationale de la Sécurité des Systèmes d&rsquo;Information)</a> qui publie régulièrement des guides de bonnes pratique au sujet de l&rsquo;hygiène numérique. Les configurations abordées dans cet article sont d&rsquo;ailleurs tirées de leur guide &ldquo;Préoccupations relatives au respect de la vie privée et à la confidentialité des données sous Windows 10&rdquo; et ont été compilées par <a href="https://twitter.com/Gouz0u" target="\_blank">@Gouzou</a>, je le remercie pour l&rsquo;aide apportée !</p>
 <p>[Note préliminaire 1] Cet article sera mis à jour (plus ou moins) régulièrement afin d&rsquo;ajouter ou retirer certains paramètres intéressants.</p>
 <p>[Note préliminaire 2] L&rsquo;édition des GPO n&rsquo;est possible qu&rsquo;avec une version Pro, Enterprise ou Intégrale de Windows 7, 8.1 ou 10. Néanmoins il semble possible d&rsquo;installer l&rsquo;éditeur sur des versions plus classiques (Home). Ne l&rsquo;ayant pas testé, je ne peux affirmer ou non cela.</p>
 <h2 id="les-gpo-group-policy-objects">Les GPO (Group Policy Objects)</h2>
@@ -215,7 +215,7 @@
 <p>Dans le cas d&rsquo;un PC personnel, pas de soucis à se faire et c&rsquo;est d&rsquo;ailleurs ce qui est recherché dans cet article. Je n&rsquo;entrerai pas plus en détails sur les GPO car cela pourrait rapidement devenir complexe et le but n&rsquo;est pas d&rsquo;aller en profondeur là dessus.</p>
 <h3 id="comment-ça-marche-">Comment ça marche ?</h3>
 <p>Concrètement, l&rsquo;ensemble des GPO se gèrent au même endroit, dans l&rsquo;éditeur de stratégies de groupe. Un nombre conséquent de paramètres sont disponibles et il suffit de choisir une des valeurs proposées ou d&rsquo;entrer la valeur choisie quand cela est possible. Par exemple, pour le paramètre &ldquo;Comptes : Status du compte Invité&rdquo; il est possible soit d&rsquo;activer ce compte, soit de le désactiver. Ci-dessous une capture d&rsquo;écran illustrant à quoi ressemble l&rsquo;éditeur.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_1.PNG" alt="gpo_1.PNG" class="imgSize"/></center>
 <p>Au sein d&rsquo;un parc informatique d&rsquo;entreprise, les stratégies de groupe se gèrent au niveau des contrôleurs de domaine Active Directory. Il s&rsquo;agit des serveurs du parc.</p>
 <h3 id="et-sur-mon-ordinateur-">Et sur mon ordinateur ?</h3>
 <p>Comme dit précédemment, il existe une version locale de l&rsquo;éditeur de stratégies. On parle ici de l&rsquo;éditeur de stratégies locales. Il ressemble en tous points à l&rsquo;éditeur de GPO des serveurs Windows, mais les paramètres définis sont seulement appliqués sur l&rsquo;ordinateur en question. Plutôt pratique quand on veut simplement protéger son PC personnel !</p>
@@ -224,17 +224,17 @@
 <li>Utiliser la barre de recherche de Windows et taper &ldquo;Group Policy&rdquo; ou &ldquo;Stratégies de Groupe&rdquo;. Il est nécessaire d&rsquo;exécuter le programme en tant qu&rsquo;administrateur (clic droit dessus puis &ldquo;exécuter en tant qu&rsquo;administrateur&rdquo;) ;</li>
 <li>Utiliser l&rsquo;application Windows permettant de lancer un programme. Pour cela, utilisez les touches &ldquo;Windows&rdquo; (la touche avec l&rsquo;icône de Windows) + &ldquo;R&rdquo; puis entrez &ldquo;gpedit.msc&rdquo;.</li>
 </ul>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_2.PNG" alt="gpo_2.PNG" class="imgSize"/></center>
 <p>Une fois cela exécuté, on se retrouve avec le même éditeur. Et on peut commencer à fouiller :).</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_3.PNG" alt="gpo_3.PNG" class="imgSize"/></center>
 <h2 id="mise-en-application---modification-des-gpo">Mise en application - Modification des GPO</h2>
-<p>Conformément aux documents de l&rsquo;ANSSI et aux paramètres que <!-- raw HTML omitted -->@Gouzou<!-- raw HTML omitted --> a extrait de leur documents, on trouve plusieurs catégories de paramètres qu&rsquo;il est intéressant de regarder à des fins de protection personnelle.
+<p>Conformément aux documents de l&rsquo;ANSSI et aux paramètres que <a href="https://twitter.com/Gouz0u" target="\_blank">@Gouzou</a> a extrait de leur documents, on trouve plusieurs catégories de paramètres qu&rsquo;il est intéressant de regarder à des fins de protection personnelle.
 Il est cependant à noter que tout n&rsquo;est pas à prendre au pied de la lettre. En effet, les recommandations présentées ici permettent de vous guider dans la configuration de votre système mais c&rsquo;est à vous de définir ce que vous voulez protéger. Je vous invite fortement à lire le descriptif de chaque paramètre afin de savoir sur quoi cela porte.</p>
 <h3 id="notion-de-chemin">Notion de chemin</h3>
 <p>Dans la suite de l&rsquo;article, chaque paramètre sera accessible via un &ldquo;chemin&rdquo;. Par exemple :</p>
 <pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Collecte de données et versions d'évaluation Preview
 </code></pre><p>Cela correspond aux différentes catégories et sous-catégories visibles dans l&rsquo;éditeur.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_4.PNG" alt="gpo_4.PNG" class="imgSize"/></center>
 <p>Une fois arrivé sur un paramètre, il suffit de cliquer dessus pour ensuite choisir si on souhaite l&rsquo;activer, le désactiver et y ajouter d&rsquo;éventuelles options.</p>
 <h3 id="télémétrie-recherche-et-outils-intégrés">Télémétrie, Recherche et Outils intégrés</h3>
 <pre><code>Stratégie Ordinateur local/Configuration ordinateur/Modèles d'administration/Composants Windows/Collecte de données et versions d'évaluation Preview
@@ -703,7 +703,7 @@ Il est cependant à noter que tout n&rsquo;est pas à prendre au pied de la lett
 <p>Mais il est quand même possible d&rsquo;en supprimer certaines ! Malheureusement, il ne sera pas possible de toutes les désinstaller (Cortana, par exemple). Encore une fois, c&rsquo;est à vous de juger ce qu&rsquo;il sera bon de garder ou pas :).</p>
 <p>Les quelques lignes à venir pourraient faire peur aux moins bidouilleurs d&rsquo;entre vous. Néanmoins pas de panique, ne partez pas à la moindre ligne de code, tout est expliqué !</p>
 <p>On va commencer par ouvrir un interpréteur Powershell. Grossièrement, il s&rsquo;agit d&rsquo;un terminal dans lequel nous pouvons entrer des commandes. Recherchez le programme &ldquo;Powershell&rdquo; et lancez le en tant qu&rsquo;administrateur (clic droit &gt; Exécuter en tant qu&rsquo;administrateur). Un terminal bleu, comme celui ci, devrait apparaître.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/articles/durcissement-windows-gpo/gpo_5.PNG" alt="gpo_5.PNG" class="imgSize"/></center>
 <p>Par la suite, 3 commandes vont être nécessaires.</p>
 <p>Premièrement, on va lister les applications installées. Cela se fait à l&rsquo;aide de la commande suivante. Cette dernière va lister les applications et afficher un grand nombre d&rsquo;informations à leur sujet.</p>
 <pre><code>Get-AppxPackage
@@ -713,16 +713,16 @@ Il est cependant à noter que tout n&rsquo;est pas à prendre au pied de la lett
 <pre><code>Get-AppxPackage -allusers *3dbuilder* | Remove-AppxPackage
 </code></pre><p>Description de la commande :</p>
 <ul>
-<li><!-- raw HTML omitted -->GetAppxPackage<!-- raw HTML omitted --> = Liste les applications installées ;</li>
-<li><!-- raw HTML omitted -->-allusers<!-- raw HTML omitted --> = Indique que la commande va porter sur tous les utilisateur de l&rsquo;ordinateur ;</li>
-<li><!-- raw HTML omitted -->*zunevideo*<!-- raw HTML omitted --> = Nom de l&rsquo;application. On utilise deux &ldquo;*&rdquo; pour indiquer qu&rsquo;on cherche simplement l&rsquo;expression entre les deux symboles dans le résultat de la liste afin de sélectionner la bonne application. Dans notre cas, on va désinstaller toutes les applications contenant &ldquo;zunevideo&rdquo; dans leur nom ;</li>
-<li><!-- raw HTML omitted -->|<!-- raw HTML omitted --> = Permet de lier la première commande à une seconde ;</li>
-<li><!-- raw HTML omitted -->Remove-AppxPackage<!-- raw HTML omitted --> = Indique que l&rsquo;on souhaite supprimer l&rsquo;application sélectionnée.</li>
+<li><strong>GetAppxPackage</strong> = Liste les applications installées ;</li>
+<li><strong>-allusers</strong> = Indique que la commande va porter sur tous les utilisateur de l&rsquo;ordinateur ;</li>
+<li><strong>*zunevideo*</strong> = Nom de l&rsquo;application. On utilise deux &ldquo;*&rdquo; pour indiquer qu&rsquo;on cherche simplement l&rsquo;expression entre les deux symboles dans le résultat de la liste afin de sélectionner la bonne application. Dans notre cas, on va désinstaller toutes les applications contenant &ldquo;zunevideo&rdquo; dans leur nom ;</li>
+<li><strong>|</strong> = Permet de lier la première commande à une seconde ;</li>
+<li><strong>Remove-AppxPackage</strong> = Indique que l&rsquo;on souhaite supprimer l&rsquo;application sélectionnée.</li>
 </ul>
-<p>Il est ainsi possible de supprimer beaucoup d&rsquo;applications. Je vous invite à consulter <!-- raw HTML omitted -->ce lien<!-- raw HTML omitted --> afin d&rsquo;avoir de plus amples informations et une liste des applications qu&rsquo;il est possible de supprimer.</p>
+<p>Il est ainsi possible de supprimer beaucoup d&rsquo;applications. Je vous invite à consulter <a href="https://www.askvg.com/guide-how-to-remove-all-built-in-apps-in-windows-10/" target="\_blank">ce lien</a> afin d&rsquo;avoir de plus amples informations et une liste des applications qu&rsquo;il est possible de supprimer.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>En conclusion de cet article, je rappelerai que beaucoup de choses sont possibles afin de personnaliser son ordinateur et limiter les fuites d&rsquo;information, mais qu&rsquo;il ne faut pas forcément tout prendre au pied de la lettre. En effet, plus que d&rsquo;appliquer des recommandations (même celles de cet article), il est important de s&rsquo;informer et d&rsquo;essayer de comprendre au moins le fontionnement global. Chaque personne ou entreprise a des besoins différents en termes de sécurité et de confidentialité, ce qui laisse une multitude de configurations possibles. A vous de trouver le juste milieu qu&rsquo;il vous faut !</p>
-<p>Comme toujours, si vous avez la moindre question, n&rsquo;hésitez pas à me contacter par <!-- raw HTML omitted -->Twitter<!-- raw HTML omitted --> ! ;)</p>
+<p>Comme toujours, si vous avez la moindre question, n&rsquo;hésitez pas à me contacter par <a href="https://twitter.com/Haax9_" target="\_blank">Twitter</a> ! ;)</p>
   </div>
   
 

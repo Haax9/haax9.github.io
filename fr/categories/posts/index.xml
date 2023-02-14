@@ -102,7 +102,7 @@
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/fr/writeups/norzhctf-2019-redhack-2019/game-of-pwn/</guid>
-      <description>&lt;p&gt;Le NorzhCTF, organisé en marge du FIC 2019, m&amp;rsquo;a donné l&amp;rsquo;occasion de concevoir, en collaboration avec &lt;!-- raw HTML omitted --&gt;@AzrakelK (L0n3w0lf)&lt;!-- raw HTML omitted --&gt;, le scénario d&amp;rsquo;attaque en relation avec un domaine Active Directory. Cet article traite de ce challenge et présente notre solution. Le challenge a également été rejoué dans le cadre du RedHackCTF 2019, sous le même nom.&lt;/p&gt;</description>
+      <description>&lt;p&gt;Le NorzhCTF, organisé en marge du FIC 2019, m&amp;rsquo;a donné l&amp;rsquo;occasion de concevoir, en collaboration avec &lt;a href=&#34;https://twitter.com/AzrakelK&#34; target=&#34;blank&#34;&gt;@AzrakelK (L0n3w0lf)&lt;/a&gt;, le scénario d&amp;rsquo;attaque en relation avec un domaine Active Directory. Cet article traite de ce challenge et présente notre solution. Le challenge a également été rejoué dans le cadre du RedHackCTF 2019, sous le même nom.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -111,7 +111,7 @@
       <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/fr/writeups/santhacklausctf-2018/santhacklaus-ctf/</guid>
-      <description>&lt;p&gt;Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&amp;rsquo;IMT Lille Douai &lt;!-- raw HTML omitted --&gt;@_nwodtuhs&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;@m3lsius&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;@Ch3n4p4N&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;@Deldel&lt;!-- raw HTML omitted --&gt;. Cet article traite des différents challenges que j&amp;rsquo;ai réussi et eu le temps de faire.&lt;/p&gt;</description>
+      <description>&lt;p&gt;Le Santhacklaus CTF 2018 est un challenge Jeopardy en ligne, organisé par quatre étudiants de l&amp;rsquo;IMT Lille Douai &lt;a href=&#34;https://twitter.com/_nwodtuhs&#34; target=&#34;blank&#34;&gt;@_nwodtuhs&lt;/a&gt; &lt;a href=&#34;https://twitter.com/m3lsius&#34; target=&#34;blank&#34;&gt;@m3lsius&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Ch3n4p4N&#34; target=&#34;blank&#34;&gt;@Ch3n4p4N&lt;/a&gt; &lt;a href=&#34;https://twitter.com/Th4cho&#34; target=&#34;blank&#34;&gt;@Deldel&lt;/a&gt;. Cet article traite des différents challenges que j&amp;rsquo;ai réussi et eu le temps de faire.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -219,7 +219,7 @@
       <pubDate>Sun, 12 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>https://haax9.github.io/fr/writeups/tamuctf-2017/stegano-musical-bits/</guid>
-      <description>&lt;p&gt;Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &amp;ldquo;Musical Bits&amp;rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de &lt;!-- raw HTML omitted --&gt;@Iptior&lt;!-- raw HTML omitted --&gt;, afin de résoudre ce challenge. C&amp;rsquo;est parti !&lt;/p&gt;</description>
+      <description>&lt;p&gt;Le Tamu CTF est challenge CTF Jeopardy. Cet article explique la résolution du challenge de stéganographie &amp;ldquo;Musical Bits&amp;rdquo;. Quelques heures de prise de tête ont été nécessaires, accompagné de &lt;a href=&#34;https://twitter.com/erwanfily&#34; target=&#34;blank&#34;&gt;@Iptior&lt;/a&gt;, afin de résoudre ce challenge. C&amp;rsquo;est parti !&lt;/p&gt;</description>
     </item>
     
   </channel>

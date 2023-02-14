@@ -204,7 +204,7 @@
   </header>
   <div class="post">
     <p>L’ECW 2018 est un challenge Jeopardy français organisé par le Pôle d’Excellence Cyber en partenariat avec la Région Bretagne, Airbus et Thales. Intrusion est un scénario web en 4 challenges (+1 extra-challenge) se voulant réaliste. Il tourne principalement autour de Ruby on Rails et de la manipulation de cookies afin de passer administrateur sur le site de production.</p>
-<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <!-- raw HTML omitted -->l’European Cyber Week<!-- raw HTML omitted --> à Rennes.</p>
+<p>Du 06/10 au 21/10 2018, il sert de pré-sélection pour l’épreuve finale de type Capture The Flag qui débutera le 21 novembre 2018 lors de la conférence de <a href="https://www.european-cyber-week.eu/" target=\_blank>l’European Cyber Week</a> à Rennes.</p>
 <p>Challenge particulièrement intéressant sur plusieurs points. Il m&rsquo;a permis d&rsquo;apprendre plusieurs petits tricks. Qui plus est, j&rsquo;ai passé énormément de temps dessus. Let&rsquo;s go !</p>
 <p>Table des matières :</p>
 <ul>
@@ -248,16 +248,16 @@
 <pre><code>Cette startup est prometteuse!
 Ils proposent de collecter de nombreux identifiants dans un seul endroit...
 Peut-on s'introduire dans leur system?
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_1.png" alt="ECW2018_intrusion_1" class="imgSize"/></center>
 <p>Une page d&rsquo;authentification et une page &ldquo;Work in Progress&rdquo; sont disponibles. Quelques tests sur le formulaire d&rsquo;authentification ne révèlent pas de vulnérabilités à ce niveau. Qui plus, l&rsquo;indication &ldquo;support us with cookies :)&rdquo; de la page indique clairement que le challenge va tourner autour des cookies.</p>
 <p>Après quelques recherches on inspecte les fichiers qui sont utilisés au chargement du site web.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_2.png" alt="ECW2018_intrusion_2" class="imgSize"/></center>
 <h3 id="domaine-de-développement-et-flag-1">Domaine de développement et Flag 1</h3>
 <p>Rien d&rsquo;anormal&hellip; Sauf dans le fichier &ldquo;thor.css&rdquo; où un paragraphe semble avoir été rajouté manuellement.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_3.png" alt="ECW2018_intrusion_3" class="imgSize"/></center>
 <p>Un nouveau sous-domaine ! Il semblerait s&rsquo;agir du domaine de développement de l&rsquo;application.. Peut être des vulnérabilités à exploiter ?</p>
 <p>On file sur le sous-domaine et en observant les headers&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_4.png" alt="ECW2018_intrusion_4" class="imgSize"/></center>
 <p>Premier flag : check !</p>
 <hr>
 <h2 id="intrusion-2">Intrusion 2</h2>
@@ -266,29 +266,29 @@ Continuez de creuser!
 </code></pre><h3 id="manipulation-des-requêtes-http">Manipulation des requêtes HTTP</h3>
 <p>Nous sommes maintenant sur le domaine de développement et il faut trouver quoi faire. Une bonne première chose peut être de regarder de quoi les requêtes HTTP ont l&rsquo;air et s&rsquo;il est possible de les bidouiller un peu.
 Après quelques tentatives, on remarque un comportement étrange lorsqu&rsquo;on modifie la méthode HTTP utilisée.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_5.png" alt="ECW2018_intrusion_5" class="imgSize"/></center>
 <p>Ainsi, en utilisant la méthode &ldquo;OPTIONS&rdquo; on fait apparaître une étrange page d&rsquo;erreur, très verbeuse&hellip; On a par exemple accès à notre cookie déchiffré et à certaines variables côté serveur.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_6.png" alt="ECW2018_intrusion_6" class="imgSize"/></center>
 <h3 id="obtention-dune-web-console-cve-2015-3224">Obtention d&rsquo;une web console (CVE-2015-3224)</h3>
 <p>Ok, de nouvelles informations.. Que peut on en tirer ?
 Une chose doit nous sauter aux yeux (bon, dans la vraie vie, cela m&rsquo;a pris un peu de temps avant de le remarquer&hellip;) et il s&rsquo;agit de la ligne :<br>
 <code>HTTP_X_FORWARDED_FOR: &quot;176.187.238.160, 10.1.10.0, 127.0.0.1&quot;</code><br>
 Avec ça, il devrait être possible de spoofer une IP interne et ainsi se faire passer pour une machine interne au réseau !</p>
 <p>On intercepte donc une nouvelle requête à laquelle on ajoute un header <code>X-Forwarded-For: 127.0.0.1</code> et magie&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_7.png" alt="ECW2018_intrusion_7" class="imgSize"/></center>
 <p>Une console web ! Cela pourrait s&rsquo;avérer utile, car il s&rsquo;agit d&rsquo;une console qui va nous permettre d&rsquo;exécuter des commandes côté serveur. J&rsquo;ai appris après-coup qu&rsquo;il s&rsquo;agit d&rsquo;une vulnérabilité connue, la CVE-2015-3224.</p>
 <p>Bien ! Cependant, il a été nécessaire de modifier manuellement la requête afin d&rsquo;obtenir cette console. Pour des soucis de confort, on aimerait que toutes les requêtes soient modifiées avec le header précédemment utilisé. Pas de soucis ! On configure Burp en spécifiant le scope (web150_dev.challenge-ecw.fr) et en lui disant de rajouter un header pour chaque requête.
 Une fois cela fait, on peut tester le bon fonctionnement du dispositif.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_8.png" alt="ECW2018_intrusion_8" class="imgSize"/></center>
 <p>Parfait ! On passe à la suite</p>
 <h3 id="fouille-et-flag-2">Fouille et Flag 2</h3>
 <p>On dispose maintenant d&rsquo;un accès au serveur, via une sorte de shell. Que peut on faire ?
 Après quelques recherches au sujet de la console Rails, on découvre un moyen de lister le contenu d&rsquo;un répertoire :</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_9.png" alt="ECW2018_intrusion_9" class="imgSize"/></center>
 <p>Il faut maintenant fouiller le serveur à la recherche d&rsquo;informations intéressantes..
 A force de parcourir les répertoires on tombe sur un fichier &ldquo;web_console.rb&rdquo; situé dans un des répertoires de configuration. Il s&rsquo;agirait du point de départ logique étant donné que nous sommes dans cette console.
 Il est également possible de lire le contenu d&rsquo;un fichier de la manière suivante.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_10.png" alt="ECW2018_intrusion_10" class="imgSize"/></center>
 <p>Beaucoup d&rsquo;informations contenues là dedans, notamment une longue chaine en hexadécimal.
 Une fois décodée&hellip;</p>
 <pre><code>466c616732203d20274543577b35393438343632323131643030633963656334363866643139346537366335667d27 ==&gt; &quot;Flag2 = 'ECW{5948462211d00c9cec468fd194e76c5f}'&quot;&quot;
@@ -297,16 +297,16 @@ Une fois décodée&hellip;</p>
 <h2 id="intrusion-hint">Intrusion hint</h2>
 <h3 id="découverte-et-identification">Découverte et Identification</h3>
 <p>Ce challenge a été rajouté en cours de route, afin d&rsquo;aider les participants à avancer dans le scénario. A priori totalement décorrélé de l&rsquo;environnement du scénario, on tombe sur une page unique présentant une boîte de dialogue ainsi que certains inscriptions relativement claires.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_11.png" alt="ECW2018_intrusion_11" class="imgSize"/></center>
 <p>Il semble que nous soyions face à une injection SQL, étant donné les indications. On teste le comportement de l&rsquo;application avec des données légitimes.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_12.png" alt="ECW2018_intrusion_12" class="imgSize"/></center>
 <p>Les indications semblent orienter vers une Injection SQL utilisant la clause LIKE. En supposant que la requête utilisée par l&rsquo;application soit de la forme :</p>
 <pre><code>SELECT &lt;hint&gt; from &lt;table&gt; where &lt;message&gt; LIKE &quot;&lt;entree utilisateur&quot;;
 </code></pre><p>On peut tenter d&rsquo;injecter le caractère <code>%</code> dans la requête. Si injection il y a, l&rsquo;application devrait nous répondre avec le nombre de lignes à récupérer.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_13.png" alt="ECW2018_intrusion_13" class="imgSize"/></center>
 <h3 id="exploitation-et-résultats">Exploitation et Résultats</h3>
 <p>On a donc un POC fonctionnel. Afin de tester et encore une fois, en supposant qu&rsquo;un flag de la forme &ldquo;ECW{xxx}&rdquo; soit caché, on peut tenter l&rsquo;injection suivante <code>E%</code>.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_14.png" alt="ECW2018_intrusion_14" class="imgSize"/></center>
 <p>Parfait ! De cette façon, il va être possibilité d&rsquo;énumérer en aveugle l&rsquo;ensemble des indices cachés, en se basant sur le message retourné à l&rsquo;utilisateur.</p>
 <p>Exemple :</p>
 <pre><code>E%   ==&gt; &quot;1 hint found in database&quot;
@@ -364,7 +364,7 @@ charset <span style="color:#f92672">=</span>  string<span style="color:#f92672">
                         <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;result : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> result)
                         <span style="color:#66d9ef">break</span>;
 </code></pre></div><p>Et voici maintenant un exemple de récupération d&rsquo;un des indices.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_15.png" alt="ECW2018_intrusion_15" class="imgSize"/></center>
 <p>Une fois l&rsquo;ensemble des éléments ressortis, on obtient cela :</p>
 <pre><code>http://manpages.ubuntu.com/manpages/cosmic/en/man1/systemctl.1.html
 https://gist.github.com/mbyczkowski/34fb691b4d7a100c32148705f244d028
@@ -399,13 +399,13 @@ require <span style="color:#e6db74">&#39;active_support&#39;</span>
 <li>La clé permettant de chiffrer/déchiffrer le cookie.</li>
 </ul>
 <p>Il faut donc trouver ces éléments. Pour cela, on repart dans une phase de recherche sur les fichiers du serveur, en commençant par le second fichier récupéré en indice : <code>/home/web200/smart_stuff/config/secrets.yml</code></p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_16.png" alt="ECW2018_intrusion_16" class="imgSize"/></center>
 <p>Bien ! Il semble que nous ayons trouvé des clés de chiffrement. Une pour le domaine de dev, et une pour autre chose (utile ?). Il nous manque donc les sels.
 A force de recherche, on tombe sur un fichier intéressant.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_17.png" alt="ECW2018_intrusion_17" class="imgSize"/></center>
 <p>Deux variables <code>encrypted_cookie_salt='ECW-secret-salt'</code> et <code>encrypted_signed_cookie_salt='ECW-signature-secret-salt'</code> peuvent être ressorties. Parfait ! Nous avons tout ce dont nous avons besoin pour déchiffrer notre cookie.
 Après de nombreux essais, tests et tentatives afin de déchiffrer un cookie en local (via le second script donné), je me suis plutôt tourné vers un traitement directement depuis la console web. Il s&rsquo;avère que cela passe très bien avec le premier script donné.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_18.png" alt="ECW2018_intrusion_18" class="imgSize"/></center>
 <p>Il est également à noter que le script nous retourne par défaut des données formatées en JSON. Or, dans notre cas, il s&rsquo;agit de Marshal. Il m&rsquo;a fallu un peu de temps avant de trouver pourquoi le cookie était mal déchiffré et surtout pour trouver ce qu&rsquo;était du Marshal&hellip;</p>
 <h3 id="forge-et-connexion-au-domaine-de-développement">Forge et connexion au domaine de développement</h3>
 <p>On sait maintenant de quoi est fait le cookie. On peut y apercevoir un objet &ldquo;User&rdquo; ne contenant que des champs &ldquo;nil&rdquo; (=null). Logique étant donné que nous n&rsquo;avons pas d&rsquo;utilisateur. Mais&hellip; Serait il possible d&rsquo;en usurper un, avec des fausses informations ?</p>
@@ -413,19 +413,19 @@ Après de nombreux essais, tests et tentatives afin de déchiffrer un cookie en 
 <p>La modification de l&rsquo;objet User se fait de la façon suivante :</p>
 <pre><code>cookie['user']['password'] = &quot;YouLostTheGame&quot;
 </code></pre><p>De cette façon, on peut modifier tous les champs nécessaires.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_19.png" alt="ECW2018_intrusion_19" class="imgSize"/></center>
 <p>Une fois le cookie forgé, on peut tenter de modifier son propre cookie de session en interceptant une requête avec Burp. Résultat&hellip;</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_20.png" alt="ECW2018_intrusion_20" class="imgSize"/></center>
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_21.png" alt="ECW2018_intrusion_21" class="imgSize"/></center>
 <p>Connecté en admin sur le domaine de développement ! POC fonctionnel :)</p>
 <h3 id="récupération-du-flag-3">Récupération du Flag 3</h3>
 <p>On sait maintenant comment déchiffrer un cookie, le modifier puis le chiffrer à nouveau afin de l&rsquo;utiliser pour se connecter. Mais nous n&rsquo;avons toujours pas d&rsquo;information sur la localisation du flag 3&hellip;</p>
 <p>On sait néanmoins que le but du challenge est de se connecter au domaine de production et l&rsquo;énoncé du challenge 3 indique que le flag est placé sur un point de passage vers le dernier challenge. A partir de là, on se doute qu&rsquo;il faut retrouver la clé de chiffrement du domaine de production.</p>
 <p>Un indice n&rsquo;a pas encore été utilisé.. Il s&rsquo;agit de la page de manuel de &ldquo;systemctl&rdquo;. Peu de chances de pouvoir utiliser directement l&rsquo;utilitaire au travers de notre console web. Cependant, il est possible que certaines configurations soient stockés dans des fichiers. Après quelques recherche sur systemctl, on apprend que des &ldquo;units&rdquo; peuvent être créées pour systemd. Ces &ldquo;units&rdquo; se comportent selon des directives écrites dans un fichier de configuration, situé dans le répertoire <code>/etc/systemd/system/</code>. Et si nous allions faire un tour de ce côté ?</p>
 <p>[NOTE] Je ne l&rsquo;avais pas vu car je n&rsquo;avais pas débloqué ce challenge avant de faire le hint, mais il s&rsquo;avère que des indications sur l&rsquo;utilisation de systemd sont également trouvables, notamment dans le fichier <code>web_console.rb</code></p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_22.png" alt="ECW2018_intrusion_22" class="imgSize"/></center>
 <p>On y trouve deux fichiers <code>rails-dev.service</code> et <code>rails-prd.service</code>. Rien de bien intéressant côté dev, cependant, du côté du fichier de configuration de la production&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_23.png" alt="ECW2018_intrusion_23" class="imgSize"/></center>
 <p>La clé de la production ! Qui fait également office de flag pour le 3e challenge.</p>
 <p>Troisième flag : check !</p>
 <hr>
@@ -434,16 +434,16 @@ Après de nombreux essais, tests et tentatives afin de déchiffrer un cookie en 
 Mais l'attraper est plus facile à dire qu'à faire ;)
 </code></pre><h3 id="forge-dun-cookie-pour-le-domaine-de-production">Forge d&rsquo;un cookie pour le domaine de production</h3>
 <p>Disposant maintenant de tous les éléments nécessaires. On commence par déchiffer le cookie que l&rsquo;on récupère sur le domaine de production. Cookie qui semble d&rsquo;ailleurs bien plus court que les précédents.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_24.png" alt="ECW2018_intrusion_24" class="imgSize"/></center>
 <p>Pas d&rsquo;utilisateur pour ce cookie.. Mais qu&rsquo;est ce qui nous empêche d&rsquo;en ajouter un ?
 On reproduit la même procédure que pour le cookie de développement en modifiant simplement la clé de chiffrement par <code>secret_key_base = &quot;A_cookie_of_course&quot;</code> et une fois le cookie forgé, on tente de l&rsquo;injecter en interceptant une requête.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_25.png" alt="ECW2018_intrusion_25" class="imgSize"/></center>
 <h3 id="connexion-et-flag-4">Connexion et Flag 4</h3>
 <p>Résultat du nouveau cookie&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_26.png" alt="ECW2018_intrusion_26" class="imgSize"/></center>
 <p>Nous sommes connectés en administrateur sur le domaine de production ! Il suffit maintenant de chercher le dernier flag :).
 La page <code>/admin/console</code> est inaccessible et redirige vers l&rsquo;accueil. Cependant, en fouillant dans les fichiers de l&rsquo;application, on trouve un <code>/admin</code>.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_27.png" alt="ECW2018_intrusion_27" class="imgSize"/></center>
 <p>Je n&rsquo;ai plus la capture d&rsquo;écran sous la main, mais un accès à la page <code>https://web150-smartstuff.challenge-ecw.fr/admin</code> retourne une page contenant le flag !</p>
 <p>Flag 4 : check !!
 (Pour une raison que j&rsquo;ignore, le flag n&rsquo;était plus présent lorsque j&rsquo;ai refait le challenge pour prendre des screenshots ¯_(ツ)_/¯).</p>

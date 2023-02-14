@@ -22,10 +22,12 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="YogoshESD-CTF - OSINT Challenges"/>
-<meta name="twitter:description" content="Le Yogosh-ESD CTF est un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!). ESD Challenge (100 points) A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté une photo prise par un stagiaire."/>
+<meta name="twitter:description" content="Le Yogosh-ESD CTF est un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!). 
+ESD Challenge (100 points) A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté une photo prise par un stagiaire."/>
 
 <meta property="og:title" content="YogoshESD-CTF - OSINT Challenges" />
-<meta property="og:description" content="Le Yogosh-ESD CTF est un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!). ESD Challenge (100 points) A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté une photo prise par un stagiaire." />
+<meta property="og:description" content="Le Yogosh-ESD CTF est un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!). 
+ESD Challenge (100 points) A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté une photo prise par un stagiaire." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/writeups/osint-geoint/yogoshesd-ctf-osint-global/" />
 <meta property="article:published_time" content="2021-06-19T00:00:00+00:00" />
@@ -204,7 +206,7 @@
   </header>
   <div class="post">
     <p>Le Yogosh-ESD CTF est un évènement en ligne proposé par l&rsquo;école ESD en partenariat avec Yogosha et BZHack. Plusieurs catégories de challenges étaient présentes, comme pour la majorité des évènements de ce type. Arrivé 7e au classement, en m&rsquo;étant notamment concentré sur les challenges OSINT, ce billet détaille les solutions de quelques un de ces challenges (hors challenge CLUEDOSINT qui a droit à un articlé dédié!).
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="esd-challenge-100-points">ESD Challenge (100 points)</h2>
 <pre><code>A la fin du premier hiver de la vie du compte ESD academy, celui-ci a posté 
 une photo prise par un stagiaire. Trouvez le numéro de téléphone du batiment
@@ -214,16 +216,16 @@ une photo prise par un stagiaire. Trouvez le numéro de téléphone du batiment
 <li>Identifier la photo mentionnée dans l&rsquo;énoncé</li>
 <li>Localiser le lieu dont ce dernier fait référence</li>
 </ul>
-<p>Une recherche rapide sur Twitter nous amène vers le compte suivant : <!-- raw HTML omitted -->@esd_academy<!-- raw HTML omitted -->. La période mentionnée est plutôt vague, puisqu&rsquo;on nous parle de &ldquo;la fin du premier hiver de la vie du compte&rdquo;. Il va dônc être nécessaire non seulement d&rsquo;identifier la date de création du compte, mais plus important encore, de remonter l&rsquo;historique de tweets de ce dernier.</p>
-<p>Heureusement, il existe pour cela des outils en ligne très pratiques, tels que &ldquo;All My Tweets&rdquo; (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->). Grâce à ce dernier, on peut remonter jusqu&rsquo;au premier tweet du compte, le 23/11/2017 (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->). Suite à cela et en retraçant progressivement l&rsquo;historique de publication, on arrive logiquement autour du 21/03/2018, période de fin de l&rsquo;hiver.</p>
-<!-- raw HTML omitted -->
+<p>Une recherche rapide sur Twitter nous amène vers le compte suivant : <a href="https://twitter.com/esd_academy" target="_blank">@esd_academy</a>. La période mentionnée est plutôt vague, puisqu&rsquo;on nous parle de &ldquo;la fin du premier hiver de la vie du compte&rdquo;. Il va dônc être nécessaire non seulement d&rsquo;identifier la date de création du compte, mais plus important encore, de remonter l&rsquo;historique de tweets de ce dernier.</p>
+<p>Heureusement, il existe pour cela des outils en ligne très pratiques, tels que &ldquo;All My Tweets&rdquo; (<a href="https://www.allmytweets.net/" target="_blank">lien</a>). Grâce à ce dernier, on peut remonter jusqu&rsquo;au premier tweet du compte, le 23/11/2017 (<a href="https://twitter.com/esd_academy/status/933631657017561088" target="_blank">lien</a>). Suite à cela et en retraçant progressivement l&rsquo;historique de publication, on arrive logiquement autour du 21/03/2018, période de fin de l&rsquo;hiver.</p>
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_1.jpg" alt="OSINT_img_1" class="imgSize"/></center>
 <p>En réalité, deux tweets ont été postés le 20 Mars 2018 :</p>
 <ul>
 <li><a href="https://twitter.com/esd_academy/status/975968288659386368">https://twitter.com/esd_academy/status/975968288659386368</a></li>
 <li><a href="https://twitter.com/esd_academy/status/975997964039663616">https://twitter.com/esd_academy/status/975997964039663616</a></li>
 </ul>
 <p>Cependant, le premier des deux n&rsquo;affiche aucun batiment avec un alliage, comme celui mentionné dans l&rsquo;énoncé. Le second tweet correspond quant à lui à la description faite.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_2.jpg" alt="OSINT_img_2" class="imgSize"/></center>
 <p>Bien, il faut maintenant trouver quel est ce batiment, puis le numéro de téléphone associé.
 Première indication, on sait via le tweet que nous sommes à Singapour.</p>
 <p>Sans aller trop loin dans l&rsquo;analyse des éléments visuels, voici quelques informations utiles à relever :</p>
@@ -234,13 +236,14 @@ Première indication, on sait via le tweet que nous sommes à Singapour.</p>
 </ul>
 <p>Dans les faits, ces seules informations sont suffisantes pour trouver l&rsquo;endroit.
 En effet, en cherchant successivement les batiments Singtel, mais surtout HSBC à Singapour sur Maps, on trouve assez rapidement une correspondance, notamment grâce aux photos des différents batiments de HSBC sur place. Une tour comme celle ci, il n&rsquo;y en a pas 40 :).</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_3.jpg" alt="OSINT_img_3" class="imgSize"/></center>
 <p>Si on se déplace maintenant légèrement au Nord, on trouve un terrain ressemblant en tous points à notre image, nommé &ldquo;Padang&rdquo;. De fil en aiguille, en regardant les batiments situés à côté de ce dernier, on tombe rapidement sur la Galerie Nationale de Singapour, ainsi que sur son numéro, via la page Google. \o/</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Bonus : Les éléments sur ce challenge étant plutôt reconnaissables (du moins, pour notre cher Internet) il est possible de se passer de cette recherche manuelle au profit d&rsquo;une recherche par image. L&rsquo;outil Duplichecker (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->) permet notamment de comparer les résultats de plusieurs moteurs de recherches, dont Yandex et Bing, généralement pertinents pour ce type de recherche.</p>
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_4.jpg" alt="OSINT_img_4" class="imgSize"/></center>
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_5.jpg" alt="OSINT_img_5" class="imgSize"/></center>
+<p>Bonus : Les éléments sur ce challenge étant plutôt reconnaissables (du moins, pour notre cher Internet) il est possible de se passer de cette recherche manuelle au profit d&rsquo;une recherche par image. L&rsquo;outil Duplichecker (<a href="https://www.duplichecker.com/reverse-image-search.php" target="_blank">lien</a>) permet notamment de comparer les résultats de plusieurs moteurs de recherches, dont Yandex et Bing, généralement pertinents pour ce type de recherche.</p>
 <p>Et en effet.. ;-)</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_6.jpg" alt="OSINT_img_6" class="imgSize"/></center>
+<br/>
 <h2 id="email-investigation-150-points">Email Investigation (150 points)</h2>
 <pre><code>Il y a une personne qui s'appelle Alexandre ALBERT. Il est enquêteur forensic, et il a le flag.
 
@@ -250,13 +253,13 @@ il a récemment visité l'Espagne pour une tournée, et il a gardé le flag quel
 Le flag est enveloppé sous les services Google. Alors trouvez-le, je veux une enquête limpide.
 Prenez toutes les mesures que vous devez prendre. Nous avons reçu que son adresse e-mail 
 qu'il a utilisé pour réserver les billets. E-mail : alexandrea6nmm8@gmail.com
-</code></pre><p>Ce challenge se concentre sur la recherche d&rsquo;informations associées à un compte Gmail, en pivotant sur l&rsquo;adresse e-mail comme point de départ. J&rsquo;utiliserai comme base deux super articles de <!-- raw HTML omitted -->@Sector035<!-- raw HTML omitted --> sur le sujet :</p>
+</code></pre><p>Ce challenge se concentre sur la recherche d&rsquo;informations associées à un compte Gmail, en pivotant sur l&rsquo;adresse e-mail comme point de départ. J&rsquo;utiliserai comme base deux super articles de <a href="https://twitter.com/sector035" target="_blank">@Sector035</a> sur le sujet :</p>
 <ul>
 <li><a href="https://sector035.nl/articles/getting-a-grasp-on-google-ids">https://sector035.nl/articles/getting-a-grasp-on-google-ids</a></li>
 <li><a href="https://sector035.nl/articles/keeping-a-grip-on-google-ids">https://sector035.nl/articles/keeping-a-grip-on-google-ids</a></li>
 </ul>
 <p>Pour faire court, à chaque utilisateur possédant un compte Google est associé un identifiant de la forme &ldquo;11XXXXXXXXXXXXXXXXXXX&rdquo; qu&rsquo;il est possible d&rsquo;utiliser au travers des autres services de Google.</p>
-<p>Si le sujet vous intéresse je vous conseille vivement les deux articles ci-dessus. Non pas que je ne veuille pas expliquer et le faire manuellement, mais cela me permet de citer l&rsquo;excellent outil de (<!-- raw HTML omitted -->@Epieos<!-- raw HTML omitted -->, permettant d&rsquo;automatiser le tout : <!-- raw HTML omitted -->Email Lookup<!-- raw HTML omitted --></p>
+<p>Si le sujet vous intéresse je vous conseille vivement les deux articles ci-dessus. Non pas que je ne veuille pas expliquer et le faire manuellement, mais cela me permet de citer l&rsquo;excellent outil de (<a href="https://twitter.com/epieos" target="_blank">@Epieos</a>, permettant d&rsquo;automatiser le tout : <a href="https://tools.epieos.com/email.php" target="_blank">Email Lookup</a></p>
 <p>Voilà ce quue nous pouvons récupérer avec l&rsquo;adresse e-mail donnée dans l&rsquo;énoncé :</p>
 <ul>
 <li>Email : <a href="mailto:alexandrea6nmm8@gmail.com">alexandrea6nmm8@gmail.com</a></li>
@@ -269,9 +272,9 @@ qu'il a utilisé pour réserver les billets. E-mail : alexandrea6nmm8@gmail.com
 </ul>
 <p>L&rsquo;énoncé mentionne un voyage en Espagne où il aurait laissé un flag. Ce qu&rsquo;il faut comprendre ici, c&rsquo;est qu&rsquo;il est possible de retracer les différents messages ou photos postés par un utilisateur sur les lieux référencés dans Maps. Appelés contributions, ces messages peuvent par exemple être des avis laissés.</p>
 <p>L&rsquo;analyse ci-dessus permet notamment de récupérer les différentes contributions de l&rsquo;utilisateur et ainsi de voir que Alexandre a laissé un avis sur le stade Santiago Bernabéu, à Madrid.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_EMAIL_INVEST.jpg" alt="OSINT_img_7" class="imgSize"/></center>
 <p>Flag \o/
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="ph-nglui-mglw-nafh-200-points">Ph nglui mglw-nafh (200 points)</h2>
 <pre><code>Durant sa vie le créateur du mythe des grands anciens fut cité dans un journal d'une 
 université américaine ou il gagna un prix. Mais pouvez vous me donnez le nom du magasin
@@ -290,19 +293,19 @@ Une rapide recherche Google nous indique que le mythe des grands anciens fait r�
 Peut-être existe-t-il des écrits facilement accessibles à ce sujet sur Internet, mais les 2 heures passées ne m&rsquo;ont pas permis de récupérer ce fameux journal, ni même de l&rsquo;identifier.</p>
 <p>C&rsquo;est à ce moment qu&rsquo;intervient un indice MAJEUR donné sur le channel Discord du CTF :</p>
 <pre><code>prends une tisane éléphant pour te réchauffer sur cthulhu !D
-</code></pre><p>Kesako ? Ce n&rsquo;est que quelques recherches plus tard, croisant les éléments en notre possession que l&rsquo;on découvre l&rsquo;existant du Graal (du moins, pour ce challenge :D), j&rsquo;ai nommé <!-- raw HTML omitted -->Elephind<!-- raw HTML omitted -->, qui, comme le titre le dit si bien, permet de chercher dans les journaux historiques du monde entier !</p>
+</code></pre><p>Kesako ? Ce n&rsquo;est que quelques recherches plus tard, croisant les éléments en notre possession que l&rsquo;on découvre l&rsquo;existant du Graal (du moins, pour ce challenge :D), j&rsquo;ai nommé <a href="https://www.elephind.com/" target="_blank">Elephind</a>, qui, comme le titre le dit si bien, permet de chercher dans les journaux historiques du monde entier !</p>
 <p>On peut donc commencer notre recherche avec le terme &ldquo;Lovecraft&rdquo; puis en filtrant sur le pays : United States.
 Oui, mais pas que ! On sait également que cette citation a été réalisée de son vivant. On peut donc également se faciliter le travail en rajoutant un filtre sur la date.</p>
 <p>Lovecraft est né en 1890 et est décédé en 1937. En supposant qu&rsquo;il avait au moins 10 ans au moment de cette parution, on filtre sur 1900-1937.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_LOVECRAFT_1.jpg" alt="OSINT_img_8" class="imgSize"/></center>
 <p>Seulement 5 résultats à traiter, et inutile d&rsquo;aller bien loin. Le premier journal, &ldquo;The Cambridge Tribune&rdquo; du 03/07/1920 cite notamment Lovecraft avec la phrase suivante :</p>
 <pre><code>It is interesting to note that the first award went to Howard Phillips Lovecraft, of Providence...
 </code></pre><p>C&rsquo;est donc cohérent avec l&rsquo;énoncé. Mais l&rsquo;élément qui nous permet de confirmer que nous sommes sur le bon document est également sur la page, puisque dans le coin supérieur droit, une publicité est faite pour &ldquo;Cambridge Electric Light Co.&rdquo;, un vendeur de ventilateurs !</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_LOVECRAFT_2.jpg" alt="OSINT_img_9" class="imgSize"/></center>
 <p>Situé à l&rsquo;époque au 8 Brattle Street à Harvard Square, il ne nous reste plus qu&rsquo;à chercher quel commerce y est actuellement installé.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_LOVECRAFT_3.jpg" alt="OSINT_img_10" class="imgSize"/></center>
 <p>Et c&rsquo;est donc Origins !
-<!-- raw HTML omitted --></p>
+<br/></p>
 <h2 id="sound2teuf-200-points">Sound2teuf (200 points)</h2>
 <pre><code>frédéric Thouin a fait une vidéo sur son jeu préféré publique sur internet.
 Il a utilisé un son. Trouvez l'artiste de ce son, il a appartenu a 2 sound
@@ -322,7 +325,8 @@ exemple : FLAG{taTayoyo Hardcore Mix 25.12.06 by bibi.}
 <li>Enfin, aller chercher le mix publié sur une plateforme de son en ligne.</li>
 </ul>
 <p>Ok.
-Première chose, une rapide recherche sur le nom &ldquo;Frédéric Thouin&rdquo; nous amène à son pseudo, plus utile dans le cadre de ce challenge : penthium2 ! (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->)</p>
+Première chose, une rapide recherche sur le nom &ldquo;Frédéric Thouin&rdquo; nous amène à son pseudo, plus utile dans le cadre de ce challenge : penthium2 ! (<a href="https://blog.fredericbezies-ep.fr/2013/01/17/les-libristes-sont-aussi-des-humains-le-retour/
+" target="_blank">lien</a>)</p>
 <pre><code>Bonjour, pourrais-tu te présenter en deux ou trois phrases ? Quatre seront acceptées aussi.
 
 Je m’appelle Frédéric Thouin, 37 ans. Je fais de l’informatique ludique depuis 1982
@@ -335,15 +339,15 @@ Quel est l’origine de ton pseudo, si tu en utilises un ?
 Pseudo : penthium2 ! L’explication est une longue histoire personnelle, la seule
 chose que je puisse dire c’est qu’il y a un H comme dans thouin.
 </code></pre><p>A partir de là, une nouvelle recherche toute simple permet d&rsquo;identifier une chaine Dailymotion associée à notre ami.</p>
-<!-- raw HTML omitted -->
-<p>La chaine en question ne convient qu&rsquo;une vidéo, publiée il y a 9 ans sur le jeu Minecraft (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->).</p>
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_SOUND_1.jpg" alt="OSINT_img_11" class="imgSize"/></center>
+<p>La chaine en question ne convient qu&rsquo;une vidéo, publiée il y a 9 ans sur le jeu Minecraft (<a href="https://www.dailymotion.com/video/xrafnw" target="_blank">lien</a>).</p>
 <p>Premier point : check =)</p>
 <p>La description de la vidéo est tout autant intéressante :</p>
 <pre><code>un trip de 10000block environ en train
 music : pedro l'ane aka kankrelune
 http://soundcloud.com/kankrelune
 </code></pre><p>Je crois bien que le second point est également : check !</p>
-<p>Passons maintenant aux Sound System (associations) ainsi qu&rsquo;à la personne sur Radio-G. Dans la continuité des précédentes collectes d&rsquo;information, une recherche sur &ldquo;kankrelune&rdquo; nous amène directement sur le site &ldquo;son2teuf&rdquo; (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->), visiblement en lien direct avec le nom de notre challenge&hellip; Et notamment sur le message suivant :</p>
+<p>Passons maintenant aux Sound System (associations) ainsi qu&rsquo;à la personne sur Radio-G. Dans la continuité des précédentes collectes d&rsquo;information, une recherche sur &ldquo;kankrelune&rdquo; nous amène directement sur le site &ldquo;son2teuf&rdquo; (<a href="https://www.son2teuf.org/kankrelune/" target="_blank">lien</a>), visiblement en lien direct avec le nom de notre challenge&hellip; Et notamment sur le message suivant :</p>
 <pre><code>Pédro l'Âne aka Kankrelune... Mixouilleur bidouilleur compositeur emmerdeur depuis le
 milieu des années 90... membres d'USF jusqu'en 2001 puis de Cir-K-Son et de Kohort...
 co organisateur de divers évènements (pour les) petits et grands... blabla bla bla...
@@ -356,8 +360,8 @@ http://www.mixcloud.com/Kankrelune
 http://www.soundcloud.com/kankrelune
 </code></pre><p>Passons les liens vers diverses plateformes, on obtient deux éléments intéressants : Cir-k-son et Kohort, qui pourraient être les deux associations dont parle l&rsquo;énoncé.</p>
 <p>On avance, on avance ! On continue les pivots en cherchant un lien entre Radio-G et l&rsquo;un des deux termes précédents, et on trouve ça.</p>
-<!-- raw HTML omitted -->
-<p>Un <!-- raw HTML omitted -->thread<!-- raw HTML omitted -->, d&rsquo;un certain &ldquo;kohort&rdquo;, régulièrement alimenté d&rsquo;une programmation radio pour l&rsquo;émission &ldquo;MIAOUMIX&rdquo; sur Radio-G !
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_SOUND_2.jpg" alt="OSINT_img_12" class="imgSize"/></center>
+<p>Un <a href="https://ilovehardtechno.editboard.com/t362-emission-miaoumix-sur-radio-g" target="_blank">thread</a>, d&rsquo;un certain &ldquo;kohort&rdquo;, régulièrement alimenté d&rsquo;une programmation radio pour l&rsquo;émission &ldquo;MIAOUMIX&rdquo; sur Radio-G !
 Cerise sur le gateau, on nous donne le nom de trois animateurs : Aliocha, Scratchy et Itchy.</p>
 <p>Troisième point, check !</p>
 <p>Dernière ligne droite, retrouver le mix.
@@ -368,14 +372,14 @@ La plateforme de prédilection pour ce type de contenu étant SoundCloud, c&rsqu
 <li>Itchy : +500 utilisateurs</li>
 </ul>
 <p>Hors de question de tous se les faire. On va donc utiliser la dernière partie de l&rsquo;énoncé nous disant que notre cher penthium2 a commencé le mix recherché, avec son pseudo.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_SOUND_3.jpg" alt="OSINT_img_13" class="imgSize"/></center>
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_SOUND_4.jpg" alt="OSINT_img_14" class="imgSize"/></center>
 <p>C&rsquo;est déjà mieux ! :)</p>
 <p>On file dans les commentaires voir qu&rsquo;un unique post a été effectué sur un mix de &ldquo;DJ Scratchy&rdquo; nommé &ldquo;RADIKAL IMPRO MiX D&amp;Bass 27.07.07 By Dj Scratchy.&rdquo; (Le point, c&rsquo;est important pour flag!)</p>
 <p>Quatrième et dernier point, check. Et flag, on a notre mix ! \o/</p>
 <p>Bonus :
 Mais&hellip; Au fait, il se passe quoi si après la toute première recherche visant à trouver le pseudo de notre compère, on fouille un peu en détails les résultats Google ?</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/osint_geoint/yogoshesd-ctf-osint-global/OSINT_SOUND_5.jpg" alt="OSINT_img_15" class="imgSize"/></center>
 <p>Réponse : On bypass tout le challenge et on s&rsquo;épargne des tonnes de recherches :D</p>
 <p>Petite remarque/pensée personnelle : Bien que le challenge ait été intéressant à résoudre, j&rsquo;ai trouvé l&rsquo;énoncé quelque peu hasardeux ou flou dans les tournures, ne facilitant pas la chose !</p>
 <p>Fin des challenges OSINT pour ce CTF !

@@ -210,12 +210,12 @@
 <h2 id="tests--hypothesis">Tests &amp; hypothesis</h2>
 <p>As long as we only have this form, all the challenge goal remains in the ability to bypass the authentication form in order to access the administration zone.</p>
 <p>We try different kind of injections and we make several connexion attempts. We can notice an error message when the credentials couple is invalid.</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2017/web-path-through/pt_1.png" alt="path_through_1" class="imgSize"/></center>
 <p>So, we have a boolean result. Either it&rsquo;s valid or not. From there, we think about a blind SQL Injection.</p>
 <p>The blind SQL Injection is based on the substring() function utilization and the capacity to find the password characters one by one. Let&rsquo;s suppose that the database column is called &ldquo;password&rdquo;, we will test each possible character for it. We want the request to return a true value. To achieve that, we will use the displayed message.</p>
 <p>We know that the 4 first flag characters (and so, probably for the password too) are &ldquo;ECW{&rdquo; we can imagine that kind of injection :</p>
 <pre><code>username=admin&amp;password=' or substring(password,1,1)='E
-</code></pre><!-- raw HTML omitted -->
+</code></pre><center><img src="/img/writeups/ecw-2017/web-path-through/pt_2.png" alt="path_through_2" class="imgSize"/></center>
 <p>Ok, that&rsquo;s now sure, we have a blind SQL Injection. Let&rsquo;s exploit it !</p>
 <h2 id="exploitation-and-bypass">Exploitation and bypass</h2>
 <p>In order to succeed in this exploitation, we have 2 solutions. Manual exploitation by trying to guess each character like this :</p>
@@ -288,12 +288,12 @@ password <span style="color:#f92672">=</span> password <span style="color:#f9267
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Password is </span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> password)
 </code></pre></div><h2 id="getting-the-flag">Getting the flag</h2>
 <p>We execute the previous script and&hellip;</p>
-<!-- raw HTML omitted -->
+<center><img src="/img/writeups/ecw-2017/web-path-through/pt_3.png" alt="path_through_3" class="imgSize"/></center>
 <p>Great ! We have the flag !</p>
 <p>So, challenge presenting a basic blind SQL Injection but nevertheless interesting to learn or refresh knowledge !</p>
 <h2 id="references">References</h2>
 <ul>
-<li><!-- raw HTML omitted -->SQL injection avancée: Blind SQL injection<!-- raw HTML omitted --></li>
+<li><a href="http://www.mcherifi.org/hacking/sql-injection-avancee-blind-sql-injection.html" target="blank">SQL injection avancée: Blind SQL injection</a></li>
 </ul>
   </div>
   
