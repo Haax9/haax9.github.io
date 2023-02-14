@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/writeups/ecw-2018/web-troll-jsp/" />
-<meta property="article:published_time" content="2018-10-21T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-10-21T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2018-10-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-10-21T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/fr/writeups/ecw-2018/web-troll-jsp/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,116 +230,68 @@
   </header>
   <div class="post">
     <p>ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales. &ldquo;Troll.JSP&rdquo; is challenge based on the CVE-2017-5638 exploitation, executing code to change a session variable and then display the flag.</p>
-
-<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <a href="https://www.european-cyber-week.eu/" target=\_blank>European Cyber Week</a> conference in Rennes.</p>
-
+<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <!-- raw HTML omitted -->European Cyber Week<!-- raw HTML omitted --> conference in Rennes.</p>
 <h2 id="discovery">Discovery</h2>
-
 <p>No statement for this challenge, since the following image was displayed as a statement guide. But no worries, look at the name of the challenge&hellip;</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_1.png" alt="ECW2018_troll_1" class="imgSize" width="60%"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>We land on a page, very clear, containing almost no information.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_2.png" alt="ECW2018_troll_2" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h2 id="information-gatherig-and-vulnerability-identification">Information gatherig and vulnerability identification</h2>
-
 <p>First thing, we just go chek sources and we can see a &ldquo;debug.jsp&rdquo; file.</p>
-
-<p>​<code>
-https://web125-trolljsp.challenge-ecw.fr/debug.jsp
-​</code></p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_3.png" alt="ECW2018_troll_3" class="imgSize"/></center></p>
-
+<p>​<code>https://web125-trolljsp.challenge-ecw.fr/debug.jsp ​</code></p>
+<!-- raw HTML omitted -->
 <p>Accessing this page offer more features. There is a &ldquo;flag&rdquo; tab, with a gift&hellip;</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_4.png" alt="ECW2018_troll_4"  class="imgSize"/></center></p>
-
-<p>Needless to say, knowing the goal of this challenge, that this &ldquo;flag&rdquo; is a troll. Nevertheless, it allows us go ahead in the challenge because the MD5 gives us the following information : <strong>&ldquo;swp&rdquo;</strong>.
+<!-- raw HTML omitted -->
+<p>Needless to say, knowing the goal of this challenge, that this &ldquo;flag&rdquo; is a troll. Nevertheless, it allows us go ahead in the challenge because the MD5 gives us the following information : <!-- raw HTML omitted -->&ldquo;swp&rdquo;<!-- raw HTML omitted -->.
 Some research on &ldquo;.swp&rdquo; extensions lead us to believe that an important swap file for the challenge is available.
-Some tests are therefore performed and quite quickly we find the file <strong>&rdquo;.flag.jsp.swp&rdquo;</strong>.</p>
-
-<p>​<code>
-https://web125-trolljsp.challenge-ecw.fr/.flag.jsp.swp
-​</code></p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_5.png" alt="ECW2018_troll_5" class="imgSize" width="60%"/></center></p>
-
+Some tests are therefore performed and quite quickly we find the file <!-- raw HTML omitted -->&quot;.flag.jsp.swp&quot;<!-- raw HTML omitted -->.</p>
+<p>​<code>https://web125-trolljsp.challenge-ecw.fr/.flag.jsp.swp ​</code></p>
+<!-- raw HTML omitted -->
 <p>Three interesting points here:</p>
-
 <ul>
 <li>the comment &ldquo;TODO change the flag&rdquo; ;</li>
 <li>A new MD5 hash ;</li>
 <li>A session variable, &ldquo;flag&rdquo; is displayed.</li>
 </ul>
-
-<p>First, the MD5 hash. If it is the same as the first one, it could also give us information&hellip;. And indeed, once broken, we obtain the string <strong>&ldquo;equifax&rdquo;</strong>.
-Some research about this term lead us to discover a story about Equifax, a company that was hacked in 2017. The cause? A vulnerability in the <strong>Apache Struts (CVE-2017-5638) framework</strong>. So it seems that we know how we will solve this challenge&hellip;.
+<p>First, the MD5 hash. If it is the same as the first one, it could also give us information&hellip;. And indeed, once broken, we obtain the string <!-- raw HTML omitted -->&ldquo;equifax&rdquo;<!-- raw HTML omitted -->.
+Some research about this term lead us to discover a story about Equifax, a company that was hacked in 2017. The cause? A vulnerability in the <!-- raw HTML omitted -->Apache Struts (CVE-2017-5638) framework<!-- raw HTML omitted -->. So it seems that we know how we will solve this challenge&hellip;.
 Before going to exploitation, a quick word on the two other elements.</p>
-
-<p>It seems that the page displays the value of the variable <strong>&ldquo;flag&rdquo;</strong> if the value of <strong>session.flag</strong> is not null. Otherwise, we receive the display of trollFlag, which we already know.
+<p>It seems that the page displays the value of the variable <!-- raw HTML omitted -->&ldquo;flag&rdquo;<!-- raw HTML omitted --> if the value of <!-- raw HTML omitted -->session.flag<!-- raw HTML omitted --> is not null. Otherwise, we receive the display of trollFlag, which we already know.
 Moreover, since this file is a swap file and there is a comment &ldquo;TODO change the flag&rdquo;, we can assume that in the real file, the flag has been changed by the real flag.
-So we have a guideline ! A way must be found to modify the value of <strong>session.flag</strong>.</p>
-
-<h2 id="exploication-cve-2017-5638">Exploication - CVE-2017-5638</h2>
-
+So we have a guideline ! A way must be found to modify the value of <!-- raw HTML omitted -->session.flag<!-- raw HTML omitted -->.</p>
+<h2 id="exploication---cve-2017-5638">Exploication - CVE-2017-5638</h2>
 <p>Some research around this vulnerability leads us to the following two articles, detailing very well the vulnerability :</p>
-
 <ul>
 <li><a href="https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2">https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2</a></li>
 <li><a href="https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/">https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/</a></li>
 </ul>
-
-<p>Very quickly, the exploitation involves the use of the header <strong>&ldquo;Content-Type&rdquo;</strong> of HTTP requests.</p>
-
+<p>Very quickly, the exploitation involves the use of the header <!-- raw HTML omitted -->&ldquo;Content-Type&rdquo;<!-- raw HTML omitted --> of HTTP requests.</p>
 <ul>
 <li>A &ldquo;multipart&rdquo; type HTTP request will be detected by Struts ;</li>
 <li>This one will be sent to the Jakarta parser ;</li>
 <li>If an error occurs during processing (for example, an invalid Content-Type) the error message generated will contain the invalid element ;</li>
 <li>In order to display the error to the user, an unsafe function, findText() is used. This one will evaluate the string generated. Thus, if a malicious payload is ut there, it will be executed.</li>
 </ul>
-
 <p>This vulnerability allows in theory to execute commands directly on the server.
 The malicious payload used in many examples on the Internet is :</p>
-
-<p>​<code>
-Content-Type: %{(#_='multipart/form-data').(#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(@java.lang.Runtime@getRuntime().exec('curl localhost:8000'))}
-​</code></p>
-
-<p>Some tests have shown that this type of payload does not work on the server. Indeed, it seems that we are facing a <strong>WAF (Web Application Firewall)</strong> that will prevent the request from being processed if it detects special elements (parentheses or dots, for example).</p>
-
+<p>​<code>Content-Type: %{(#_='multipart/form-data').(#_memberAccess=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(@java.lang.Runtime@getRuntime().exec('curl localhost:8000'))} ​</code></p>
+<p>Some tests have shown that this type of payload does not work on the server. Indeed, it seems that we are facing a <!-- raw HTML omitted -->WAF (Web Application Firewall)<!-- raw HTML omitted --> that will prevent the request from being processed if it detects special elements (parentheses or dots, for example).</p>
 <p>Moreover, in our case, we are trying to modify the value of a session variable. No need to execute code with <code>@java.lang.Runtime@getRuntime()</code>.</p>
-
 <p>Note that in the payload, the first expression <code>(#_='multipart/form-data')</code> is only used to pass the condition necessary to trigger the vulnerability. This is the assignment of a string to a variable. Isn&rsquo;t that exactly what we need?</p>
-
 <p>Some additional research and tests allow us to build this payload :</p>
-
-<p>​<code>
-Content-Type: %{#session[&quot;flag&quot;]=&quot;multipart/form-data&quot;}
-​</code></p>
-
+<p>​<code>Content-Type: %{#session[&quot;flag&quot;]=&quot;multipart/form-data&quot;} ​</code></p>
 <p>In this way, we satisfy the server side condition, indicating that the &ldquo;multipart/form-data&rdquo; string must be present and we satisfy the application side condition saying that the session.flag value must not be null. In addition, no prohibited characters are used, so the firewall is not triggered.</p>
-
 <h2 id="getting-the-flag">Getting the flag</h2>
-
-<p>In order to pass our exploit, we intercept a classic request to the page <strong>/flag.jsp</strong> using Burp, to which we add our malicious header.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-troll-jsp/ECW2018_troll_6.png" alt="ECW2018_troll_6" class="imgSize"/></center></p>
-
+<p>In order to pass our exploit, we intercept a classic request to the page <!-- raw HTML omitted -->/flag.jsp<!-- raw HTML omitted --> using Burp, to which we add our malicious header.</p>
+<!-- raw HTML omitted -->
 <p>We see that the request has been processed and that the returned flag is different&hellip; Solved challenge ;)</p>
-
 <h2 id="references">References</h2>
-
 <ul>
-<li><a href="https://www.immun.io/blog/will-it-pwn-cve-2017-5638-remote-code-execution-in-apache-struts-2" target="\_blank">Will it pwn CVE-2017-5638 RCE in Apache Struts 2</a></li>
-
-<li><p><a href="https://blog.xmco.fr/12-questions-pour-mieux-comprendre-la-derniere-faille-struts/" target="\_blank">12 questions pour mieux comprendre la dernière faille Struts</a></p>
-
-<pre><code>
-</code></pre></li>
+<li><!-- raw HTML omitted -->Will it pwn CVE-2017-5638 RCE in Apache Struts 2<!-- raw HTML omitted --></li>
+<li><!-- raw HTML omitted -->12 questions pour mieux comprendre la dernière faille Struts<!-- raw HTML omitted --></li>
 </ul>
+<pre><code>
+</code></pre>
   </div>
   
 
@@ -351,7 +329,7 @@ Content-Type: %{#session[&quot;flag&quot;]=&quot;multipart/form-data&quot;}
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

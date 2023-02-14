@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Il y a de cela quelques jours, un bon ami m&rsquo;a envoyé une photo, visiblement prise depuis un avion, en guise de challenge OSINT/GEOINT. Le but est ici de retrouver le point de départ du vol, l&rsquo;arrivée, mais également, de manière plus ou moins précise, à quel endroit a été prise la photo. Le sujet étant plutôt fun et compte tenu de la multitude d&rsquo;informations et compétences nécessaires pour résoudre le challenge, je me suis dit qu&rsquo;il serait intéressant d&rsquo;écrire à ce sujet." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/" />
-<meta property="article:published_time" content="2020-09-08T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-09-08T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-09-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-08T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/writeups/osint-geoint/osint-flight-volume1-tracking-challenge/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -197,18 +223,15 @@
     
     
     <br/>
-    <i class="fas fa-clock"></i> 15 min read
+    <i class="fas fa-clock"></i> 14 min read
 </div>
 
 
   </header>
   <div class="post">
     <p>Il y a de cela quelques jours, un bon ami m&rsquo;a envoyé une photo, visiblement prise depuis un avion, en guise de challenge OSINT/GEOINT. Le but est ici de retrouver le point de départ du vol, l&rsquo;arrivée, mais également, de manière plus ou moins précise, à quel endroit a été prise la photo. Le sujet étant plutôt fun et compte tenu de la multitude d&rsquo;informations et compétences nécessaires pour résoudre le challenge, je me suis dit qu&rsquo;il serait intéressant d&rsquo;écrire à ce sujet.</p>
-
 <h2 id="préambule">Préambule</h2>
-
 <p>Si les termes OSINT/GEOINT ne vous sont pas familiers ou que vous êtes arrivé sur cet article par simple curiosité, alors ce paragraphe est fait pour vous :).</p>
-
 <pre><code>OSINT (Open Source Intelligence) ou Renseignement d'Origine en Sources Ouvertes (ROSO).
 Concrètement et de manière assez globale, cela correspond à l'ensemble des informations 
 accessibles de manière publique ou semi-publique et que vous pouvez récupérer sur une cible donnée.
@@ -216,127 +239,72 @@ accessibles de manière publique ou semi-publique et que vous pouvez récupérer
 GEOINT (Geospatial Intelligence) ou Renseignement Géospatial.
 &quot;Le GEOINT est une discipline du renseignement qui permet de tirer profit du potentiel 
 des données géographiques, géolocalisées et/ou potentiellement géolocalisables&quot;.
-</code></pre>
-
-<p>L&rsquo;idée de ce billet est d&rsquo;aborder différents sujets et méthodes de recherche d&rsquo;informations, qu&rsquo;elles soient d&rsquo;ordre géographique ou physique afin de résoudre un petit cas réel d&rsquo;investigation en sources ouvertes. Pour les moins sensibilisés, cela montre également les possibilités en matière d&rsquo;identification et de recherche d&rsquo;informations&hellip;</p>
-
+</code></pre><p>L&rsquo;idée de ce billet est d&rsquo;aborder différents sujets et méthodes de recherche d&rsquo;informations, qu&rsquo;elles soient d&rsquo;ordre géographique ou physique afin de résoudre un petit cas réel d&rsquo;investigation en sources ouvertes. Pour les moins sensibilisés, cela montre également les possibilités en matière d&rsquo;identification et de recherche d&rsquo;informations&hellip;</p>
 <h2 id="contexte-et-premiers-éléments">Contexte et premiers éléments</h2>
-
 <p>Dimanche 30 Août 2020. Nous recevons la photo suivante sur le canal de discussion de groupe que nous utilisons régulièrement, accompagné du message &ldquo;Où la photo a-t-elle été prise. D&rsquo;où suis-je parti et vers où ? :)&rdquo;</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_1.jpg" alt="Challenge picture" class="imgSize"/></center>
-<em class="imageCaption">Fig. 1 : Photo originale reçue</em></p>
-
+<!-- raw HTML omitted -->
 <p>À partir de cet instant, même si j&rsquo;ai quelques jours devant moi, le temps restant pour résoudre le challenge est compté. Vous comprendrez pourquoi au fil de l&rsquo;investigation.</p>
-
 <p>La personne résidant en France, je fais l&rsquo;hypothèse d&rsquo;un départ depuis un aéroport français. De plus, grâce à des informations contextuelles, je sais que cette personne se trouve probablement à ce moment dans la zone Nord/Ouest de France.</p>
-
 <p>Première chose à remarquer, avant même de passer à l&rsquo;observation de l&rsquo;image, le nom original du fichier a été conservé : <code>IMG_20200830_180055091_HDR.jpg</code>. L&rsquo;information intéressante ici est le fait que lorsqu&rsquo;un téléphone prend une photo, il se sert d&rsquo;un <strong>timestamp</strong> (horodatage) pour nommer le fichier. De cette façon, impossible d&rsquo;avoir un doublon. Dans notre cas, cela nous donne une information cruciale, la date ainsi que l&rsquo;heure probable à laquelle a été prise la photo : <strong>Le 30/08/2020 à 18:00</strong>.</p>
-
 <p>Il est aussi possible de vérifier cette information au niveau des metadonnées de la photo.</p>
-
-<pre><code class="language-bash">$ exiftool IMG_20200830_180055091_HDR.jpg
-[...]
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ exiftool IMG_20200830_180055091_HDR.jpg
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
 Create Date                     : 2020:08:30 18:00:59.210329
 Date/Time Original              : 2020:08:30 18:00:59.210329
 Modify Date                     : 2020:08:30 18:00:59.210329
-[...]
-</code></pre>
-
-<p>Passons maintenant à l&rsquo;analyse de la photo et des éléments remarquables. À première vue, à minima quatre éléments sont à noter.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/CHALL_PICTURE_2.jpg" alt="Challenge picture 2" class="imgSize"/></center>
-<em class="imageCaption">Fig. 2 : Éléments remarquables à analyser</em></p>
-
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>Passons maintenant à l&rsquo;analyse de la photo et des éléments remarquables. À première vue, à minima quatre éléments sont à noter.</p>
+<!-- raw HTML omitted -->
 <ul>
 <li><strong>Rouge</strong> : L&rsquo;ailette de l&rsquo;avion (terme officiel anglais : winglet) et plus précisément sa forme et sa couleur sont des éléments intéressants. Ils peuvent permettre d&rsquo;identifier le modèle de l&rsquo;avion ainsi que la compagnie de vol ;</li>
-<li><strong>Jaune</strong> : La partie basse des volets hypersustentateurs (Si comme pour moi, ce mot est nouveau, c&rsquo;est ici : <a href="https://www.lavionnaire.fr/CelluleHyperVolets.php" target="_blank">lien</a>), apparemment appelés rails de glissement des volets (ou carénages) peut, au même titre que les winglets, donner des indications sur le modèle d&rsquo;avion ;</li>
+<li><strong>Jaune</strong> : La partie basse des volets hypersustentateurs (Si comme pour moi, ce mot est nouveau, c&rsquo;est ici : <!-- raw HTML omitted -->lien<!-- raw HTML omitted -->), apparemment appelés rails de glissement des volets (ou carénages) peut, au même titre que les winglets, donner des indications sur le modèle d&rsquo;avion ;</li>
 <li><strong>Vert</strong> : Le paysage global et notamment les reliefs indique une région montagneuse. D&rsquo;autres éléments équivalents sont présents sur la photo, mais à des fins de clarté, seules 2 montagnes ont été encadrées ;</li>
 <li><strong>Bleu</strong> : L&rsquo;ombre du soleil sur l&rsquo;avion, ainsi que les ombres sur les reliefs en contrebas sont également des éléments visuels très intéressant car, connaissant l&rsquo;heure de prise de la photo, ils vont permettre de savoir où était situé le soleil et trouver la trajectoire de l&rsquo;avion.</li>
 </ul>
-
 <p>Bien ! Maintenant que nous avons ces quelques premiers éléments, il va être temps de passer à la phase de recherche. Mais avant cela&hellip; Que cherche-t-on ?</p>
-
-<p>1/ Quel est le modèle d&rsquo;appareil utilisé ?<br />
-2/ Quelle compagnie, opérant en France, utilise de type d&rsquo;appareil ?<br />
-3/ Dans quelle direction se dirige-t-il ?<br />
-4/ Quel est le numéro de vol ?<br />
+<p>1/ Quel est le modèle d&rsquo;appareil utilisé ?<br>
+2/ Quelle compagnie, opérant en France, utilise de type d&rsquo;appareil ?<br>
+3/ Dans quelle direction se dirige-t-il ?<br>
+4/ Quel est le numéro de vol ?<br>
 5/ Où a été prise, de manière plus ou moins précise, la photo ?</p>
-
-<h2 id="identification-du-type-d-appareil">Identification du type d&rsquo;appareil</h2>
-
+<h2 id="identification-du-type-dappareil">Identification du type d&rsquo;appareil</h2>
 <p>Pour cette tâche, je me suis basé sur les éléments identifiés ci-dessus, mais également sur le fait de ne connaître que très peu le monde de l&rsquo;aviation.. Ce qui dans ce cas m&rsquo;a permis d&rsquo;éviter de longues recherches. En effet, n&rsquo;ayant que peu d&rsquo;informations à ma disposition sur les différents types d&rsquo;appareils utilisés, je me tourne naturellement vers les deux plus grosses entreprises (ou du moins, les plus connues en Europe) produisant des avions, Airbus et Boeing.</p>
-
 <p>Je vous passe les détails et certaines phases de recherche, mais côté Boeing, rien ne semble correspondre aux éléments de la photo.</p>
-
-<p>Côté Airbus (<a href="https://www.airbus.com/aircraft.html" target="_blank">lien</a> et <a href="https://en.wikipedia.org/wiki/Airbus#Products" target="_blank">lien</a>) je pense en premier lieu au modèle A380, mais écarte rapidement cette option, car ce modèle, propulsé par quatre réacteurs, dispose de 5 rails de glissements des volets par aile. Or, notre appareil n&rsquo;en a que 4.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/AIRBUS_A380.jpg" alt="Airbus A380" class="imgSize"/></center>
-<em class="imageCaption">Fig. 3 : Airbus A380</em></p>
-
-<p>Du côté de la famille des A320 (et dérivés), c&rsquo;est plus prometteur ! L&rsquo;article suivant (<a href="https://www.dataero.fr/differencier-famille-a320/" target="_blank">lien</a>) nous explique quelques différences entre les modèles et notamment vis-à-vis de la gamme &ldquo;NEO&rdquo;. La totalité des modèles de cette gamme possède des winglets en forme de &ldquo;sharklets&rdquo; (ailerons uniques vers le haut). Notre avion n&rsquo;est donc pas un NEO.</p>
-
+<p>Côté Airbus (<!-- raw HTML omitted -->lien<!-- raw HTML omitted --> et <!-- raw HTML omitted -->lien<!-- raw HTML omitted -->) je pense en premier lieu au modèle A380, mais écarte rapidement cette option, car ce modèle, propulsé par quatre réacteurs, dispose de 5 rails de glissements des volets par aile. Or, notre appareil n&rsquo;en a que 4.</p>
+<!-- raw HTML omitted -->
+<p>Du côté de la famille des A320 (et dérivés), c&rsquo;est plus prometteur ! L&rsquo;article suivant (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->) nous explique quelques différences entre les modèles et notamment vis-à-vis de la gamme &ldquo;NEO&rdquo;. La totalité des modèles de cette gamme possède des winglets en forme de &ldquo;sharklets&rdquo; (ailerons uniques vers le haut). Notre avion n&rsquo;est donc pas un NEO.</p>
 <p>En ce qui concerne l&rsquo;Airbus A318, seulement 80 appareils ont été construits, et 59 sont aujourd&rsquo;hui en circulation. En Europe, seuls AirFrance et TAROM (compagnie roumaine) en exploitent. Ainsi, même si les caractéristiques peuvent correspondre, il est peu probable que cet avion soit un A318.</p>
-
 <p>Les modèles A319 et A320 sont très proches, notamment au niveau des ailes. L&rsquo;une des grosses différences étant la présence de 2 portes de secours au niveau des ailes sur les modèles A320. Dans la continuité de ces éléments, la grande différence de l&rsquo;Airbus A321 par rapport à ses congénères est sa taille, le modèle est en effet beaucoup plus grand.</p>
-
 <p>De plus, le schéma ci-dessous montre une porte latérale située juste derrière l&rsquo;aile des Airbus A321, située sensiblement au même niveau que la place passagère d&rsquo;où a été prise la photo. Ainsi, cela écarte ce modèle d&rsquo;appareil.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SCHEMA_AIRBUS.png" alt="A320 family schema" class="imgSize"/></center>
-<em class="imageCaption">Fig. 4 : Airbus A32X Family</em></p>
-
+<!-- raw HTML omitted -->
 <p>Cette première phase de recherche nous permet donc d&rsquo;avoir une liste de modèles potentiels :</p>
-
 <ul>
 <li>Airbus A319</li>
 <li>Airbus A320</li>
 <li>Autre ?</li>
 </ul>
-
 <p>N&rsquo;ayant pas le moyen d&rsquo;assurer à 100% le modèle à ce niveau, mais ayant une liste réduite, cette dernière sera à corréler avec les autres informations identifiées par la suite.</p>
-
 <h2 id="analyse-pour-déterminer-la-trajectoire">Analyse pour déterminer la trajectoire</h2>
-
 <p>Afin d&rsquo;orienter la future recherche de la compagnie utilisée, j&rsquo;ai préféré commencer par l&rsquo;analyse de la trajectoire de l&rsquo;avion. Ainsi, cela pourrait éliminer certaines compagnies.</p>
-
 <p>Il est possible d&rsquo;avoir une idée, plus ou moins précise, de la trajectoire de l&rsquo;avion en tenant compte de l&rsquo;ombre que le soleil laisse, à la fois sur la carlingue de ce dernier, mais également sur les montagnes en contrebas. De plus, connaissant l&rsquo;heure à laquelle a été prise la photo, cela facilite la recherche.</p>
-
-<p>L&rsquo;outil en ligne <a href="http://suncalc.net" target="_blank">SunCalc</a> offre la possibilité de connaître la position du soleil pour un point géographique et une date donnée. Ainsi, en prenant comme point de référence Paris (départ éventuel de CDG ou Orly) pour la date donnée, on obtient le résultat suivant.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUNCALC_1.jpg" alt="Suncalc Paris" class="imgSize"/></center>
-<em class="imageCaption">Fig. 5 : Position du soleil le 30/08/2020 à 18:00</em></p>
-
+<p>L&rsquo;outil en ligne <!-- raw HTML omitted -->SunCalc<!-- raw HTML omitted --> offre la possibilité de connaître la position du soleil pour un point géographique et une date donnée. Ainsi, en prenant comme point de référence Paris (départ éventuel de CDG ou Orly) pour la date donnée, on obtient le résultat suivant.</p>
+<!-- raw HTML omitted -->
 <p>L&rsquo;ombre sur l&rsquo;aile de l&rsquo;avion indique que le soleil était situé à sa droite. L&rsquo;aligement, non-parallèle, de l&rsquo;ombre avec la forme de l&rsquo;avion indique également que le soleil était situé légèrement en retrait par rapport à l&rsquo;appareil.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_1.jpg" alt="Sun position on airplane" class="imgSize"/></center>
-<em class="imageCaption">Fig. 6 : Projection de l&rsquo;ombre de l&rsquo;appareil</em></p>
-
+<!-- raw HTML omitted -->
 <p>D&rsquo;un autre côté, les ombres portées sur les éléments en contrebas (montagnes et nuages) permettent de préciser la position du soleil, en retrait.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
-<em class="imageCaption">Fig. 7 : Projection de l&rsquo;ombre des montagnes et nuages</em></p>
-
+<!-- raw HTML omitted -->
 <p>Ayant toujours en tête un départ hypothétique depuis la France (position du soleil calculée depuis Paris) et avec l&rsquo;aide de ces éléments, il est possible de tracer grossièrement la trajectoire supposée de l&rsquo;appareil, direction Sud-Est. La ligne rouge ci-dessous correspond à la projection du soelil tandis que la flèche correspond à la trajectoire.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/PLANE_DIRECTION.jpg" alt="Plane direction" class="imgSize"/></center>
-<em class="imageCaption">Fig. 8 : Trajectoire potentielle de l&rsquo;appareil</em></p>
-
+<!-- raw HTML omitted -->
 <p>Ainsi, cela réduit les destinations possibles à la Méditérrannée, nord de l&rsquo;Afrique ou Ouest du Moyen-Orient.</p>
-
 <h2 id="identification-de-la-compagnie-de-vol">Identification de la compagnie de vol</h2>
-
 <p>Supposant un départ de France en direction du Sud-Est, les recherches de compagnie s&rsquo;orientent naturellement en premier lieu vers des compagnies européennes. Peu d&rsquo;éléments sont à notre disposition ici, en effet on cherche une compagnie :</p>
-
 <ul>
 <li>Possédant des A319 ou A320 (voire A318) ;</li>
 <li>Volant depuis la France en direction du Sud-Est ;</li>
 <li>Utilisant les couleurs rouge et blanc, à minima pour les winglets et les ailes.</li>
 </ul>
-
-<p>Deux axes possibles de recherche à partir d&rsquo;ici. La première idée est de regarder l&rsquo;ensemble des compagnies volant en Europe à la recherche de rouge/blanc et de filtrer sur ces dernières. C&rsquo;est notamment par là que j&rsquo;ai commencé mes recherches. Cependant, après réflexion, une autre approche, plus méthodologique, est préférable. En effet, commencer par filtrer sur les compagnies desservant la France, semble plus efficace. Plusieurs ressources en ligne proposent des listes de compagnies, c&rsquo;est notamment le cas de Wikipedia avec la liste des plus grandes compagnies en Europe (<a href="https://en.wikipedia.org/wiki/List_of_largest_airlines_in_Europe" target="_blank">lien</a>). Même s&rsquo;il s&rsquo;agit d&rsquo;un bon point de départ, cela ne permet pas un filtre sur la France. Le site <a href="https://www.skyscanner.fr/vols-a/fr/compagnies-qui-proposent-des-vols-a-france.html" target="_blank">Skyscanner</a> propose ce niveau de filtre. Sans savoir si cette liste est exhaustive, on dispose donc de 32 compagnies potentielles. Supposant un départ depuis le Nord ou l&rsquo;Ouest de la France, il est possible de filtrer sur les régions ou d&rsquo;utiliser la liste des aéroports les plus fréquentés en France (<a href="https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9roports_les_plus_fr%C3%A9quent%C3%A9s_en_France" target="_blank">lien</a>) mais cela augmente le risque de passer à côté de quelque chose d&rsquo;important.</p>
-
+<p>Deux axes possibles de recherche à partir d&rsquo;ici. La première idée est de regarder l&rsquo;ensemble des compagnies volant en Europe à la recherche de rouge/blanc et de filtrer sur ces dernières. C&rsquo;est notamment par là que j&rsquo;ai commencé mes recherches. Cependant, après réflexion, une autre approche, plus méthodologique, est préférable. En effet, commencer par filtrer sur les compagnies desservant la France, semble plus efficace. Plusieurs ressources en ligne proposent des listes de compagnies, c&rsquo;est notamment le cas de Wikipedia avec la liste des plus grandes compagnies en Europe (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->). Même s&rsquo;il s&rsquo;agit d&rsquo;un bon point de départ, cela ne permet pas un filtre sur la France. Le site <!-- raw HTML omitted -->Skyscanner<!-- raw HTML omitted --> propose ce niveau de filtre. Sans savoir si cette liste est exhaustive, on dispose donc de 32 compagnies potentielles. Supposant un départ depuis le Nord ou l&rsquo;Ouest de la France, il est possible de filtrer sur les régions ou d&rsquo;utiliser la liste des aéroports les plus fréquentés en France (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->) mais cela augmente le risque de passer à côté de quelque chose d&rsquo;important.</p>
 <p>Via Google Images, on peut assez rapidement parcourir les 32 compagnies potentielles et éliminer la plupart de ces dernières. Après une rapide recherche, 6 compagnies correspondent à la photo en termes de couleurs :</p>
-
 <ul>
 <li>Volotea</li>
 <li>Iberia</li>
@@ -345,9 +313,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <li>Air Algérie</li>
 <li>Czech Airlines</li>
 </ul>
-
 <p>L&rsquo;analyse de la flotte de chacune des compagnies (informations publiques, disponibles sur les sites web de celles-ci) révele qu&rsquo;aucune d&rsquo;entre elleS n&rsquo;utilise d&rsquo;A318. De plus, Air Algerie ne dispose ni d&rsquo;Airbus A319, ni d&rsquo;A320. Par conséquent, 5 compagnies restent en liste :</p>
-
 <ul>
 <li>Volotea</li>
 <li>Iberia</li>
@@ -356,9 +322,7 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <li><strong><del>Air Algérie</del></strong></li>
 <li>Czech Airlines</li>
 </ul>
-
 <p>Après une analyse plus approfondie de chacune des compagnies et des appareils de chaque flotte, plusieurs faux positifs apparaissent, notamment à cause des winglet (ailettes latérales) blanches :</p>
-
 <ul>
 <li>Volotea</li>
 <li><strong><del>Iberia</del></strong></li>
@@ -367,124 +331,60 @@ Modify Date                     : 2020:08:30 18:00:59.210329
 <li><strong><del>Air Algérie</del></strong></li>
 <li>Czech Airlines</li>
 </ul>
-
 <p>Les compagnies restantes correspondent toutes les trois aux critères en matière de couleur et d&rsquo;appareils, mais qu&rsquo;en est-il des lignes de vol ?</p>
-
-<p>L&rsquo;excellent outil de tracking aérien <a href="https://www.flightradar24.com" target="_blank">FlightRadar24</a> propose notamment de visualiser, pour une compagnie aérienne donnée, l&rsquo;ensemble des lignes desservies. Ainsi, en affichant les routes existantes pour les 3 sociétés, il devient possible d&rsquo;éliminer <strong>Czech Airlines</strong> ainsi que <strong>Austrian Airlines</strong> qui ne proposent aucun vol partant de France et en direction du Sud-Est.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/AUSTRIAN_ROUTES.jpg" alt="Austrian Airlines routes" class="imgSize"/></center>
-<em class="imageCaption">Fig. 9 : Voies aériennes de Austrian Airlines</em></p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/CZECH_ROUTES.jpg" alt="Czech Airlines routes" class="imgSize"/></center>
-<em class="imageCaption">Fig. 10 : Voies aériennes de Czech Airlines</em></p>
-
+<p>L&rsquo;excellent outil de tracking aérien <!-- raw HTML omitted -->FlightRadar24<!-- raw HTML omitted --> propose notamment de visualiser, pour une compagnie aérienne donnée, l&rsquo;ensemble des lignes desservies. Ainsi, en affichant les routes existantes pour les 3 sociétés, il devient possible d&rsquo;éliminer <strong>Czech Airlines</strong> ainsi que <strong>Austrian Airlines</strong> qui ne proposent aucun vol partant de France et en direction du Sud-Est.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Le réseau aérien de la compagnie Volotea semble proposer bien plus d&rsquo;itinéraires, dont certains pouvant correspondre aux recherches.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLOTEA_ROUTES.jpg" alt="Volotea routes" class="imgSize"/></center>
-<em class="imageCaption">Fig. 10 : Voies aériennes de Volotea</em></p>
-
-<p>Compte tenu des éléments recueillis et analysés, nous sommes maintenant quasiment certains que la compagnie aérienne empruntée est VOLOTEA ! Petite précision, en regardant la flotte d&rsquo;appareils en service pour cette compagnie (<a href="https://www.volotea.com/fr/a-propos-de-volotea/" target="_blank">lien</a>) on s&rsquo;aperçoit qu&rsquo;elle n&rsquo;opère qu&rsquo;avec deux types d&rsquo;avion, les Airbus A319 et les Boeing 717. On a donc également confirmation de l&rsquo;appareil utilisé, un <strong>Airbus A319</strong> !</p>
-
+<!-- raw HTML omitted -->
+<p>Compte tenu des éléments recueillis et analysés, nous sommes maintenant quasiment certains que la compagnie aérienne empruntée est VOLOTEA ! Petite précision, en regardant la flotte d&rsquo;appareils en service pour cette compagnie (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->) on s&rsquo;aperçoit qu&rsquo;elle n&rsquo;opère qu&rsquo;avec deux types d&rsquo;avion, les Airbus A319 et les Boeing 717. On a donc également confirmation de l&rsquo;appareil utilisé, un <strong>Airbus A319</strong> !</p>
 <h2 id="recherche-du-vol">Recherche du vol</h2>
-
 <p>Vous souvenez vous quand, au début de ce billet, j&rsquo;ai mentionné l&rsquo;aspect rapidité dont nous devons faire preuve pour résoudre le problème ? C&rsquo;est dans la recherche précise du vol, et, plus tard, dans la localisation du lieu de la photo, que cela prend tout son sens.</p>
-
 <p>En effet, plusieurs sources en ligne référencent et historisent les vols passés, ainsi que toutes les informations à leur sujet (par exemple, l&rsquo;heure exacte de décollage et d&rsquo;atterrissage). Ces informations sont disponibles gratuitement pour une durée relativement courte, en général autour de 7 jours. En effet, il est souvent possible de remonter plus loin dans le temps, mais ces services ne sont pas gratuits et peuvent être assez onéreux.</p>
-
-<p>Là encore, le service en ligne <a href="https://www.flightradar24.com/" target="_blank">FlightRadar24</a> peut s&rsquo;avérer utile, notamment pour chercher les vols, aéroport par aéroport. Cependant, n&rsquo;ayant pas connaissance des lieux de départ et d&rsquo;arrivée, je me suis tourné vers un autre service, <a href="https://www.airportia.com" target="_blank">Airportia</a> qui a l&rsquo;avantage de proposer un historique gratuit des vols par compagnie aérienne.</p>
-
+<p>Là encore, le service en ligne <!-- raw HTML omitted -->FlightRadar24<!-- raw HTML omitted --> peut s&rsquo;avérer utile, notamment pour chercher les vols, aéroport par aéroport. Cependant, n&rsquo;ayant pas connaissance des lieux de départ et d&rsquo;arrivée, je me suis tourné vers un autre service, <!-- raw HTML omitted -->Airportia<!-- raw HTML omitted --> qui a l&rsquo;avantage de proposer un historique gratuit des vols par compagnie aérienne.</p>
 <p>Ainsi, grâce à la fonction de recherche par date et horaire, on peut filtrer sur le 30/08/2020. Il faut cependant être vigilant sur le choix de l&rsquo;heure. En effet, il s&rsquo;agit d&rsquo;un format GMT (ou UTC). Étant sur un fuseau horaire UTC+2 à ce moment en France, il est nécessaire de prendre cela en compte (ajouter deux heures pour avoir l&rsquo;heure réelle).</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_SUNDAY_VOLOTEA.png" alt="Sunday Flights Volotea" class="imgSize"/></center>
-<em class="imageCaption">Fig. 11 : Historique des vols de la compagnie Volotea</em></p>
-
+<!-- raw HTML omitted -->
 <p>D&rsquo;après les données récupérées, seuls deux vols peuvent correspondre aux caractéristiques recherchées (départ de France, probablement Nord/Ouest, en direction du Sud-Est).</p>
-
 <ul>
 <li>Le vol <strong>V72606</strong> au départ de Nantes (17:05) et à destination de Bastia, en Corse (18:55) ;</li>
 <li>Le vol <strong>V72581</strong> au départ de Caen (17:15) et à destination de Marseille (18:50).</li>
 </ul>
-
 <p>Il est également possible de constater l&rsquo;historique de chaque vol sur une durée de 7 jours via le service de FlightRadar24.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_NANTES.png" alt="Nantes flights" class="imgSize"/></center>
-<em class="imageCaption">Fig. 12 : Historique du vol V72606</em></p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/VOLS_CAEN.png" alt="Caen flights" class="imgSize"/></center>
-<em class="imageCaption">Fig. 13 : Historique du vol V72581</em></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Les deux vols étant cohérents en termes d&rsquo;horaire et de trajectoire, il semble difficile à première vue de les départager afin d&rsquo;identifier celui recherché. Compte tenu de la distance et des paysages légèrement différents, la dernière étape d&rsquo;analyse va permettre de lever le doute.</p>
-
 <h2 id="geolocalisation-de-la-photo">Geolocalisation de la photo</h2>
-
 <p>Bien ! N&rsquo;ayant pas toutes les réponses, mais une liste très réduite, la recherche de l&rsquo;endroit où a été prise la photo pourrait bien éliminer l&rsquo;une des deux possibilités, et révéler le bon itinéraire. Pour cela, deux méthodes peuvent être utilisées.</p>
-
 <p>Premièrement, si on trace la trajectoire, certes de manière un peu grossière, entre les points de départ et d&rsquo;arrivée de chaque vol, on remarque une légère différence.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/FLIGHTS_DIRECTION.jpg" alt="Nantes & Caen directions" class="imgSize"/></center>
-<em class="imageCaption">Fig. 14 : Trajectoire des deux vols</em></p>
-
+<!-- raw HTML omitted -->
 <p>Si on reprend maintenant le calcul de la position du soleil, le 30/08/2020 à 18:00 et qu&rsquo;on l&rsquo;applique sur les trajectoires potentielles des appareils, on obtient le résultat suivant.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_FLIGHTS.jpg" alt="Sun position over flights" class="imgSize"/></center>
-<em class="imageCaption">Fig. 15 : Position du soleil par rapport aux vols</em></p>
-
+<!-- raw HTML omitted -->
 <p>En prenant maintenant en compte les ombres portées sur les reliefs en contrebas, exactement de la même façon que lors de la première analyse précédente et compte tenu de l&rsquo;angle que prennent ces dernières par rapport aux éléments sur lesquels elles portent (notamment visibles pour les nuages, ou la montagne encadrée en vert ci-dessous), on peut grandement supposer que le soleil, bien que donnant sur le côté droit de l&rsquo;avion, n&rsquo;est pas perpendiculaire et s&rsquo;aligne légèrement avec ce dernier.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/SUN_POSITION_2.jpg" alt="Sun position on clouds" class="imgSize"/></center>
-<em class="imageCaption">Fig. 16 : Projection de l&rsquo;ombre des montagnes et nuages</em></p>
-
+<!-- raw HTML omitted -->
 <p>Ainsi, la trajectoire correspondant le plus aux caractéristiques ci-dessus serait celle entre les villes de Nantes et Bastia, soit le vol <strong>V72606</strong>.</p>
-
 <p>Cependant, une autre méthode permet de s&rsquo;en assurer, ou au contraire, de rectifier. Là encore, il s&rsquo;agit d&rsquo;informations accessibles de manière limitée dans le temps, puisqu&rsquo;elles proviennent du même ensemble que les données de vol étudiées ci-dessus. Une fois encore, le site FlightRadar24 est très utile, car il permet de retracer et visualiser, minute par minute, la position de l&rsquo;appareil pour un vol donné.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_CAEN.jpg" alt="Live replay Caen" class="imgSize"/></center>
-<em class="imageCaption">Fig. 17 : Rejeu du vol V72581</em></p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LIVE_NANTES.jpg" alt="Live replay Nantes" class="imgSize"/></center>
-<em class="imageCaption">Fig. 18 : Rejeu du vol V72606</em></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Ainsi, sur le vol V72581 entre Caen et Marseille, à 18:00 (16:00 UTC+2), l&rsquo;appareil se situait non loin de Clermont-Ferrand, au-dessus de la commune de Trézioux.
 En ce qui concerne le vol V72606, entre Nantes et Bastia, l&rsquo;appareil se situait à la même heure à la frontière entre le département des Hautes-Alpes et celui des Alpes de Haute Provence, proche de la commune de Upaix.</p>
-
-<p>À partir de là, un rapide tour d&rsquo;horizon sur les paysages de chaque zone peut être fait. L&rsquo;outil suivant offre la possibilité de combiner les vues de Google Maps (carte et satellite) et de Google Street View (<a href="http://data.mashedworld.com" target="_blank">lien</a>).</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_TREZIOUX.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
-<em class="imageCaption">Fig. 19 : Paysage proche de Trézioux</em></p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/LANDSCAPE_EYGUIANS.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
-<em class="imageCaption">Fig. 20 : Paysage proche de Upaix</em></p>
-
+<p>À partir de là, un rapide tour d&rsquo;horizon sur les paysages de chaque zone peut être fait. L&rsquo;outil suivant offre la possibilité de combiner les vues de Google Maps (carte et satellite) et de Google Street View (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->).</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>D&rsquo;un autre côté, la carte proposée par FlightRadar24 est également intéressante car plus précise en ce qui concerne la visualisation des reliefs.</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_CAEN.jpg" alt="Paysage Trézioux" class="imgSize"/></center>
-<em class="imageCaption">Fig. 21 : Carte du relief proche de Trézioux</em></p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/MAP_NANTES.jpg" alt="Paysage Eyguians" class="imgSize"/></center>
-<em class="imageCaption">Fig. 22 : Carte du relief proche de Upaix</em></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>L&rsquo;observation des paysages montre bien que la zone géographique autour de Trézioux, où est passé le vol Caen-Marseille, est relativement plate tandis que la zone proche de Upaix, où est passé le vol Nantes-Bastia, est beaucoup plus montagneuse, notamment sur la gauche de la trajectoire de l&rsquo;appareil. Or, plusieurs reliefs montagneux peuvent être aperçus sur la photo originale, ce qui semble éliminer le vol V72581 (Caen-Marseille).</p>
-
 <h2 id="conclusion">Conclusion</h2>
-
 <p>En conclusion, nous pouvons affirmer, avec relativement peu de doutes, que cette personne est partie le Dimanche 30 Août 2020, à bord du vol V72606 au départ de Nantes et à destination de Bastia (Corse). De plus, la photo a été prise aux alentours de Upaix, à la frontière entre les Hautes-Alpes et les Alpes de Haute Provence.</p>
-
 <p>Cette affirmation a par la suite été validée par la personne en question, qui m&rsquo;a fourni cette capture d&rsquo;écran, réalisée au moment de la prise de la photo, au travers de l&rsquo;application de mobile de la compagnie. C&rsquo;est gagné !</p>
-
-<p><center><img src="/img/writeups/osint_geoint/flight-challenge/RESULT.jpg" alt="Result" class="imgSize"/></center>
-<em class="imageCaption">Fig. 23 : Capture d&rsquo;écran prise au même moment que la photo</em></p>
-
+<!-- raw HTML omitted -->
 <p>Bien que n&rsquo;étant absolument pas expert dans ce domaine, j&rsquo;ai tenté au travers de ce billet à la fois d&rsquo;expliquer la méthodologie et les recherches effectuées pour arriver à ce résultat, mais également de montrer qu&rsquo;il est possible, au travers de certains outils, de mener ce type d&rsquo;investigations et qu&rsquo;en plus de ça, il s&rsquo;agit d&rsquo;un exercice relativement prenant et amusant !</p>
-
 <p>PS : Il est également intéressant de noter la différence entre la première tentative de résolution et l&rsquo;écriture de ce billet. En effet, à tête reposée, certains éléments de méthodologie ont évolué et m&rsquo;auraient probablement évité quelques erreurs lors de mes premières recherches. C&rsquo;est ainsi que l&rsquo;on apprend !</p>
-
-<h2 id="ressources-outils">Ressources &amp; Outils</h2>
-
-<p>Avant toute chose, je recommande vivement l&rsquo;article de Bellingcat au sujet de la recherche et du suivi sur l&rsquo;aviation (<a href="https://www.bellingcat.com/resources/how-tos/2019/10/15/a-beginners-guide-to-flight-tracking/" target="_blank">lien</a>).</p>
-
+<h2 id="ressources--outils">Ressources &amp; Outils</h2>
+<p>Avant toute chose, je recommande vivement l&rsquo;article de Bellingcat au sujet de la recherche et du suivi sur l&rsquo;aviation (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->).</p>
 <ul>
-<li><p>Informations sur l&rsquo;aviation</p>
-
+<li>
+<p>Informations sur l&rsquo;aviation</p>
 <ul>
 <li><a href="https://www.dataero.fr/reconnaitre-les-elements-exterieurs-avion/">https://www.dataero.fr/reconnaitre-les-elements-exterieurs-avion/</a></li>
 <li><a href="https://www.lavionnaire.fr/CelluleHyperVolets.php">https://www.lavionnaire.fr/CelluleHyperVolets.php</a></li>
@@ -492,22 +392,23 @@ En ce qui concerne le vol V72606, entre Nantes et Bastia, l&rsquo;appareil se si
 <li><a href="https://fr.wikipedia.org/wiki/Dispositif_hypersustentateur">https://fr.wikipedia.org/wiki/Dispositif_hypersustentateur</a></li>
 <li><a href="https://www.dataero.fr/differencier-famille-a320/">https://www.dataero.fr/differencier-famille-a320/</a></li>
 <li><a href="https://upload.wikimedia.org/wikipedia/commons/9/92/A32XFAMILYv1.0.jpg">https://upload.wikimedia.org/wikipedia/commons/9/92/A32XFAMILYv1.0.jpg</a></li>
-</ul></li>
-
-<li><p>Outils de tracking / recherche en lien avec l&rsquo;aviation</p>
-
+</ul>
+</li>
+<li>
+<p>Outils de tracking / recherche en lien avec l&rsquo;aviation</p>
 <ul>
 <li><a href="https://www.skyscanner.fr/vols-a/fr/compagnies-qui-proposent-des-vols-a-france.html">https://www.skyscanner.fr/vols-a/fr/compagnies-qui-proposent-des-vols-a-france.html</a></li>
 <li><a href="https://www.airportia.com/">https://www.airportia.com/</a></li>
 <li><a href="https://www.flightradar24.com">https://www.flightradar24.com</a></li>
-</ul></li>
-
-<li><p>Outil de visualisation</p>
-
+</ul>
+</li>
+<li>
+<p>Outil de visualisation</p>
 <ul>
 <li><a href="http://data.mashedworld.com">http://data.mashedworld.com</a></li>
 <li><a href="http://suncalc.net">http://suncalc.net</a></li>
-</ul></li>
+</ul>
+</li>
 </ul>
   </div>
   
@@ -546,7 +447,7 @@ En ce qui concerne le vol V72606, entre Nantes et Bastia, l&rsquo;appareil se si
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

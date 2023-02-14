@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Walkthroughs on Haax - Personal Blog</title>
     <link>https://haax9.github.io/en/walkthroughs/</link>
     <description>Recent content in Walkthroughs on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://haax9.github.io/en/walkthroughs/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://haax9.github.io/en/walkthroughs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hack The Box - Remote</title>
       <link>https://haax9.github.io/en/walkthroughs/hackthebox/remote/</link>
@@ -80,7 +76,6 @@
       
       <guid>https://haax9.github.io/en/walkthroughs/hackthebox/jarvis/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
-
 &lt;p&gt;Jarvis est une machine Linux catégorisée comme facile/moyenne. L&amp;rsquo;exploitation d&amp;rsquo;un injection SQL sur le site web permet de récupérer un accès limité. Une première phase d&amp;rsquo;escalade de privilège est réalisée grâce à une injection de commande dans un script. Enfin, la compromission de la machine peut être faite grâce à un binaire SUID (systemctl) en construisant un service.&lt;/p&gt;</description>
     </item>
     
@@ -91,7 +86,6 @@
       
       <guid>https://haax9.github.io/en/walkthroughs/hackthebox/haystack/</guid>
       <description>&lt;p&gt;[NO ENGLISH VERSION - Only French is available for this post]&lt;/p&gt;
-
 &lt;p&gt;Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&amp;rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&amp;rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&amp;rsquo;exploitation d&amp;rsquo;un Logstash mal configuré permet d&amp;rsquo;élever ses privilèges.&lt;/p&gt;</description>
     </item>
     

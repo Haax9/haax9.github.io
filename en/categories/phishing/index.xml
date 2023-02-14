@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Phishing on Haax - Personal Blog</title>
     <link>https://haax9.github.io/en/categories/phishing/</link>
     <description>Recent content in Phishing on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 29 Nov 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://haax9.github.io/en/categories/phishing/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 29 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://haax9.github.io/en/categories/phishing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CTF InterIUT 2020 - OSINT &amp; SE (aka the world worst phishing)</title>
       <link>https://haax9.github.io/en/writeups/inter-iut-2020/osint_se_challenge/</link>

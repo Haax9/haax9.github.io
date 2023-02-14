@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="&ldquo;Quaoar&rdquo; is a &ldquo;Boot2Root&rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/walkthroughs/vulnhub/quaoar-virtual-machine/" />
-<meta property="article:published_time" content="2017-11-20T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2017-11-20T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2017-11-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-11-20T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/fr/walkthroughs/vulnhub/quaoar-virtual-machine/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,9 +230,7 @@
   </header>
   <div class="post">
     <p>&ldquo;Quaoar&rdquo; is a &ldquo;Boot2Root&rdquo; VM originally created for the Hackfest 2016 CTF. It aims to train your computer security skills. You just have to launch the Virtual Machine, and then find a way to get root ! This VM is in free access on Vulnhub.</p>
-
 <p>We just ping the IP adress given by the VM to ensure everything is alright.</p>
-
 <pre><code>$ ping -c 3 192.168.56.101
 PING 192.168.56.101 (192.168.56.101) 56(84) bytes of data.
 64 bytes from 192.168.56.101: icmp_seq=1 ttl=64 time=0.275 ms
@@ -216,14 +240,9 @@ PING 192.168.56.101 (192.168.56.101) 56(84) bytes of data.
 +++ 192.168.56.101 ping statistics +++
 3 packets transmitted, 3 received, 0% packet loss, time 2039ms
 rtt min/avg/max/mdev = 0.265/0.326/0.438/0.079 ms
-</code></pre>
-
-<p>And.. Let&rsquo;s go!</p>
-
+</code></pre><p>And.. Let&rsquo;s go!</p>
 <h2 id="discovery">Discovery</h2>
-
-<p>We first want to know what is running on the system and what we can access remotely, so, we start by scanning ports using <strong>Nmap</strong>.</p>
-
+<p>We first want to know what is running on the system and what we can access remotely, so, we start by scanning ports using <!-- raw HTML omitted -->Nmap<!-- raw HTML omitted -->.</p>
 <pre><code>$ sudo nmap -sS -O -sV -p- 192.168.56.101
 
 Starting Nmap 7.31 ( https://nmap.org ) at 2017-04-10 12:23 CEST
@@ -250,20 +269,12 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 21.15 seconds
-</code></pre>
-
-<p>Several open ports, let&rsquo;s go deeper !</p>
-
+</code></pre><p>Several open ports, let&rsquo;s go deeper !</p>
 <p>As long as there are often many possibilities concerning the web part, we will start our investigation on the HTTP service, running on the port 80. Let&rsquo;s check what we have if we try to access the IP address on a browser.</p>
-
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_1.png" alt="quaoar_1.png" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>The nmap scan revealed we can access a robots.txt, let&rsquo;s see how much information we can get!</p>
-
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_2.png" alt="quaoar_2.png" class="imgSize"/></center></p>
-
-<p>Hmm hmm.. It seems we have a wordpress running on that site! We use <strong>WPScan</strong> to check the wordpress version, possible vulnerabilites and enumerate users.</p>
-
+<!-- raw HTML omitted -->
+<p>Hmm hmm.. It seems we have a wordpress running on that site! We use <!-- raw HTML omitted -->WPScan<!-- raw HTML omitted --> to check the wordpress version, possible vulnerabilites and enumerate users.</p>
 <pre><code>$ sudo wpscan --url http://192.168.56.101/wordpress --enumerate u
 _______________________________________________________________
         __          _______   _____                  
@@ -320,28 +331,16 @@ _______________________________________________________________
 [+] Requests Done: 61
 [+] Memory used: 17.465 MB
 [+] Elapsed time: 00:00:05
-</code></pre>
-
-<p>Old version.. Many vulns found! We will see later if one of these can be exploited, but for now, the most interesting thing is that the default user &ldquo;admin&rdquo; is still used!</p>
-
+</code></pre><p>Old version.. Many vulns found! We will see later if one of these can be exploited, but for now, the most interesting thing is that the default user &ldquo;admin&rdquo; is still used!</p>
 <h2 id="getting-a-web-access-and-a-shell">Getting a web access and a Shell</h2>
-
 <p>Let&rsquo;s try the connect on the /wp-admin/ using the default credentials, admin/admin.</p>
-
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_3.png" alt="quaoar_3.png" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>It works! Not sure if this is great or sad.. Anyway! WPScan didn&rsquo;t find any plugins, let&rsquo;s see manually if some plugins are installed.</p>
-
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_4.png" alt="quaoar_4.png" class="imgSize"/></center></p>
-
-<p>&ldquo;Mail Masta&rdquo; version 1.0.. After a quick search on Big Brother, we find out that this plug-in contains several vulnerabilities, like SQL Injection or Local File Inclusion. We will try to exploit <a href="https://www.exploit-db.com/exploits/40290/" target="\_blank" rel="noopener">this LFI</a> and try to get the /etc/passwd file.</p>
-
-<p><center><img src="/img/walkthrough/quaoar-virtual-machine/quaoar_5.png" alt="quaoar_5.png" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
+<p>&ldquo;Mail Masta&rdquo; version 1.0.. After a quick search on Big Brother, we find out that this plug-in contains several vulnerabilities, like SQL Injection or Local File Inclusion. We will try to exploit <!-- raw HTML omitted -->this LFI<!-- raw HTML omitted --> and try to get the /etc/passwd file.</p>
+<!-- raw HTML omitted -->
 <p>Ok, nice, now we have a list of users on the target system. Many users are quite common on servers like this, but the last one can be quite interesting. We have a &ldquo;wpadmin&rdquo; user. If we think the same way as before, the wordpress administrator used the default password for his website, so why would he change his password on the machine ?</p>
-
-<p>We saw in the previous scan that SSH service available on the port 22. Let&rsquo;s try to connect in <strong>SSH</strong> using the wpadmin user.. and &ldquo;wpadmin&rdquo; as password!</p>
-
+<p>We saw in the previous scan that SSH service available on the port 22. Let&rsquo;s try to connect in <!-- raw HTML omitted -->SSH<!-- raw HTML omitted --> using the wpadmin user.. and &ldquo;wpadmin&rdquo; as password!</p>
 <pre><code>$ ssh wpadmin@192.168.56.101
 wpadmin@192.168.56.101's password:
 Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-23-generic-pae i686)
@@ -372,41 +371,25 @@ Last login: Mon Apr 10 08:02:43 2017 from 192.168.56.1
 $ whoami
 wpadmin
 $
-</code></pre>
-
-<p>Once again, it works..!</p>
-
+</code></pre><p>Once again, it works..!</p>
 <p>We can grab the first flag 🙂</p>
-
 <pre><code>$ ls
 flag.txt
 $ cat flag.txt
 2bafe61f03117ac66a73c3c514de796e
-</code></pre>
-
-<h2 id="rooting-time">Rooting time !</h2>
-
+</code></pre><h2 id="rooting-time-">Rooting time !</h2>
 <p>From now, we are connected to the target system and we can start to collect more information. What&rsquo;s the OS ? What is running on the system ?</p>
-
 <pre><code>$ uname -a
 Linux Quaoar 3.2.0-23-generic-pae #36-Ubuntu SMP Tue Apr 10 22:19:09 UTC 2012 i686 i686 i386 GNU/Linux
-</code></pre>
-
-<p>Kernel 3.2.0.. Pretty old, let&rsquo;s look for an exploit on internet..</p>
-
-<p>We found several possible exploits, including the famous <a href="https://dirtycow.ninja/" target="\_blank" rel="noopener">Dirtyc0w</a>. Unfortunately, gcc is not installed on the system. We tried to cross compile exploits and then upload them on the system using the &ldquo;scp&rdquo; command, but no one worked. We have to find another way, maybe easier.. ?</p>
-
+</code></pre><p>Kernel 3.2.0.. Pretty old, let&rsquo;s look for an exploit on internet..</p>
+<p>We found several possible exploits, including the famous <!-- raw HTML omitted -->Dirtyc0w<!-- raw HTML omitted -->. Unfortunately, gcc is not installed on the system. We tried to cross compile exploits and then upload them on the system using the &ldquo;scp&rdquo; command, but no one worked. We have to find another way, maybe easier.. ?</p>
 <p>One simple thing we didn&rsquo;t check at the beginning was the usual files used by WordPress. Indeed, we know that CMS like WordPress use configuration files (e.g wp-config.php for WordPress). So let&rsquo;s navigate to WordPress installation folder.</p>
-
-<pre><code class="language-$">$ ls
-index.php    wp-activate.php     wp-comments-post.php  wp-content   wp-links-opml.php  wp-mail.php  wp-trackback.php
-license.txt  wp-admin        wp-config.php         wp-cron.php  wp-load.php        wp-settings.php  xmlrpc.php
+<pre><code class="language-$" data-lang="$">$ ls
+index.php    wp-activate.php	 wp-comments-post.php  wp-content   wp-links-opml.php  wp-mail.php	wp-trackback.php
+license.txt  wp-admin		 wp-config.php	       wp-cron.php  wp-load.php        wp-settings.php	xmlrpc.php
 readme.html  wp-blog-header.php  wp-config-sample.php  wp-includes  wp-login.php       wp-signup.php
 $
-</code></pre>
-
-<p>And then, we try to diplay the content of the wp-config.php file.</p>
-
+</code></pre><p>And then, we try to diplay the content of the wp-config.php file.</p>
 <pre><code>$ cat wp-config.php
 &lt;?php
 /**
@@ -447,10 +430,7 @@ define('WP_HOME','/wordpress/');
 define('WP_SITEURL','/wordpress/');
 
 ...
-</code></pre>
-
-<p>Ok, another interesting thing, the WordPress MySQL database credentials, root/rootpassword! The username is root.. Maybe we could try these credentials to log in as root on the system ? we would be very lucky if it works.. But it already worked 2 times, why not a 3rd time ? Let&rsquo;s try this !</p>
-
+</code></pre><p>Ok, another interesting thing, the WordPress MySQL database credentials, root/rootpassword! The username is root.. Maybe we could try these credentials to log in as root on the system ? we would be very lucky if it works.. But it already worked 2 times, why not a 3rd time ? Let&rsquo;s try this !</p>
 <pre><code>$ whoami
 wpadmin
 $ su root
@@ -458,16 +438,10 @@ Password:
 root@Quaoar:/home/wpadmin## whoami
 root
 root@Quaoar:/home/wpadmin#
-</code></pre>
-
-<p>w00t ! It works !</p>
-
+</code></pre><p>w00t ! It works !</p>
 <p>Now, we have the second flag !</p>
-
-<h2 id="conclusion-last-word">Conclusion - Last word</h2>
-
-<p>Even if this Boot2Root VM was not very hard to root, and even if the technical part was not that hard, Quaoar teaches us important things.. Mistakes usually done in the real world.. So please, <strong>DON&rsquo;T USE DEFAULT PASSWORDS AND CHANGE IT!</strong> 😉</p>
-
+<h2 id="conclusion---last-word">Conclusion - Last word</h2>
+<p>Even if this Boot2Root VM was not very hard to root, and even if the technical part was not that hard, Quaoar teaches us important things.. Mistakes usually done in the real world.. So please, <!-- raw HTML omitted -->DON&rsquo;T USE DEFAULT PASSWORDS AND CHANGE IT!<!-- raw HTML omitted --> 😉</p>
 <p>It can really give free access to bad people!</p>
   </div>
   
@@ -501,7 +475,7 @@ root@Quaoar:/home/wpadmin#
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

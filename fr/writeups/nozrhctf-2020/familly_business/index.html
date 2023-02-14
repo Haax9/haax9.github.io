@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Nouvelle édition du NorzhCTF, organisé en marge du FIC 2020, et nouveau succès pour le challenge. N&rsquo;étant plus étudiant à l&rsquo;ENSIBS, j&rsquo;ai eu l&rsquo;occasion de participer à l&rsquo;évènement. Cet article traite de la résolution de &ldquo;Familly Business&rdquo;, un challenge d&rsquo;OSINT/SOCMINT divisé en 2 parties." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/writeups/nozrhctf-2020/familly_business/" />
-<meta property="article:published_time" content="2020-02-02T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-02-02T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-02-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-02T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/writeups/nozrhctf-2020/familly_business/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,11 +230,8 @@
   </header>
   <div class="post">
     <p>Nouvelle édition du NorzhCTF, organisé en marge du FIC 2020, et nouveau succès pour le challenge. N&rsquo;étant plus étudiant à l&rsquo;ENSIBS, j&rsquo;ai eu l&rsquo;occasion de participer à l&rsquo;évènement. Cet article traite de la résolution de &ldquo;Familly Business&rdquo;, un challenge d&rsquo;OSINT/SOCMINT divisé en 2 parties.</p>
-
 <p>Le challenge tourne principalement autour des réseaux sociaux, mais aborde également une partie plus technique. Néanmoins il est à noter que certains éléments sortent du cadre purement OSINT puisque deux intrusions sont nécessaires.</p>
-
 <h2 id="sommaire">Sommaire</h2>
-
 <ul>
 <li><a href="#sommaire">Sommaire</a></li>
 <li><a href="#-nonc-">Énoncé</a></li>
@@ -216,152 +239,87 @@
 <li><a href="#familly-business-2">Familly Business 2</a></li>
 <li><a href="#retex-et-mot-de-la-fin">RETEX et mot de la fin</a></li>
 </ul>
-
 <h2 id="énoncé">Énoncé</h2>
-
 <pre><code>Nous avons des doutes sur le fait que M. Lukas DUMMAS, l'ancien RSSI de Norzh Nuclea ait vendu des informations protégées de l’entreprise à un membre de sa famille et représentant d’une puissance étrangère. Nous vous demandons de mener l’enquête !
 Le premier flag se trouvera sur un serveur appartenant à Lukas. Le second se trouvera dans les fichiers échangés avec la puissance étrangère.
-</code></pre>
-
-<h2 id="familly-business-1">Familly Business 1</h2>
-
+</code></pre><h2 id="familly-business-1">Familly Business 1</h2>
 <p>Indication sur l&rsquo;emplacement du premier flag, sur un serveur appartenant à M.DUMMAS. Un peu flou.. Mais ok, c&rsquo;est parti !</p>
-
-<p>N&rsquo;ayant que très peu d&rsquo;informations sur cette personne, le premier réflexe est d&rsquo;aller faire un tour sur Google. Une requête simple, en premier lieu, permet de récupérer un lien vers un profil <a href="https://es.linkedin.com/in/lukas-dummas/en" target="blank">LinkedIn</a>.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Linkedin_1.PNG" alt="Profil LinkedIn" class="imgSize"/></center></p>
-
+<p>N&rsquo;ayant que très peu d&rsquo;informations sur cette personne, le premier réflexe est d&rsquo;aller faire un tour sur Google. Une requête simple, en premier lieu, permet de récupérer un lien vers un profil <!-- raw HTML omitted -->LinkedIn<!-- raw HTML omitted -->.</p>
+<!-- raw HTML omitted -->
 <p>Cela nous permet d&rsquo;en apprendre plus sur la vie de Lukas DUMMAS, mais permet également de mettre un visage potentiel sur cette identité. D&rsquo;un autre côté, on peut aussi récupérer une adresse e-mail lui appartenant. À ce stade, il n&rsquo;est pas possible de savoir si cette dernière aura une utilité.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Linkedin_2.PNG" alt="Adresse e-mail LinkedIn" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Après quelques recherches sur les autres éléments donnés par Google (par exemple, un lien apollo.io), on s&rsquo;oriente vers les Google Dorks, afin de filtrer les résultats. Le premier dork, tout simple, donne déjà des résultats intéressants.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Google_Dorks.PNG" alt="Google Dorks" class="imgSize"/></center></p>
-
-<p>On récupère ainsi un profil <a href="https://bigsta.net/account/luk_dummas/" target="blank">Instagram</a>, qui au vu de la photo, semble être le profil de M.DUMMAS. L&rsquo;analyse du profil révèle deux éléments intéressants :</p>
-
+<!-- raw HTML omitted -->
+<p>On récupère ainsi un profil <!-- raw HTML omitted -->Instagram<!-- raw HTML omitted -->, qui au vu de la photo, semble être le profil de M.DUMMAS. L&rsquo;analyse du profil révèle deux éléments intéressants :</p>
 <ul>
 <li>Un username, qui va pouvoir être rejoué ailleurs ;</li>
 <li>La photo d&rsquo;une femme, qui, si l&rsquo;ont en croit la description du post, est la belle-soeur de Lukas (utile pour la suite!).</li>
 </ul>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Instagram_1.PNG" alt="Profil Instagram" class="imgSize"/></center></p>
-
-<p>Une simple recherche sur Google à l&rsquo;aide du username ressort un <a href="https://twitter.com/luk_dummas" target="blank">profil Twitter</a>. Même pseudo, éléments visuels liés à une personne espagnole, il semble bien que ce profil lui appartienne.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_1.PNG" alt="Profil Twitter" class="imgSize"/></center></p>
-
-<p>Une rapide analyse du compte permet de trouver un <a href="https://twitter.com/luk_dummas/status/1152897108464361472" target="blank">tweet intéressant</a>, destiné à la société OVH et contenant des logs réseaux. Parmi ces logs, un ensemble d&rsquo;adresses IP peuvent être aperçues.
+<!-- raw HTML omitted -->
+<p>Une simple recherche sur Google à l&rsquo;aide du username ressort un <!-- raw HTML omitted -->profil Twitter<!-- raw HTML omitted -->. Même pseudo, éléments visuels liés à une personne espagnole, il semble bien que ce profil lui appartienne.</p>
+<!-- raw HTML omitted -->
+<p>Une rapide analyse du compte permet de trouver un <!-- raw HTML omitted -->tweet intéressant<!-- raw HTML omitted -->, destiné à la société OVH et contenant des logs réseaux. Parmi ces logs, un ensemble d&rsquo;adresses IP peuvent être aperçues.
 Tenant compte du fait que M.DUMMAS est un ancien RSSI, peut être que ces adresses IP peuvent mettre sur la piste d&rsquo;un serveur lui appartenant ?</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_2.PNG" alt="Tweet logs" class="imgSize"/></center></p>
-
-<p>On extrait donc l&rsquo;ensemble des adresses IP potentielles et à l&rsquo;aide par exemple de Shodan, on commence à investiguer. Rien d&rsquo;intéressant jusqu&rsquo;à celle ci : <a href="https://www.shodan.io/host/51.91.251.53" target="blank">51.91.251.53</a></p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Shodan.PNG" alt="Shodan" class="imgSize"/></center></p>
-
-<p>Il semble en effet, que cette dernière corresponde à un serveur hébergé par OVH. De plus, 4 ports semblent être ouverts, dont les ports 80 et 443.<br/>
-On file donc voir si une application web est présente et on tombe sur un certificat SSL délivré par &ldquo;Let&rsquo;s Encrypt&rdquo;. Dans le cas de sites personnels, il n&rsquo;est pas rare d&rsquo;utiliser ce type de certificat car ces derniers sont facile à déployer et peu couteux. Suite à cela, l&rsquo;utilisateur est redirigé sur le site <a href="https://wordpress.ldummas.website/" target="blank">Wordpress de Lukas</a>.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Wordpress_1.PNG" alt="Site Wordpress" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
+<p>On extrait donc l&rsquo;ensemble des adresses IP potentielles et à l&rsquo;aide par exemple de Shodan, on commence à investiguer. Rien d&rsquo;intéressant jusqu&rsquo;à celle ci : <!-- raw HTML omitted -->51.91.251.53<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<p>Il semble en effet, que cette dernière corresponde à un serveur hébergé par OVH. De plus, 4 ports semblent être ouverts, dont les ports 80 et 443.<!-- raw HTML omitted -->
+On file donc voir si une application web est présente et on tombe sur un certificat SSL délivré par &ldquo;Let&rsquo;s Encrypt&rdquo;. Dans le cas de sites personnels, il n&rsquo;est pas rare d&rsquo;utiliser ce type de certificat car ces derniers sont facile à déployer et peu couteux. Suite à cela, l&rsquo;utilisateur est redirigé sur le site <!-- raw HTML omitted -->Wordpress de Lukas<!-- raw HTML omitted -->.</p>
+<!-- raw HTML omitted -->
 <p>Un message intéressant avertit les utilisateurs :</p>
-
 <pre><code>&quot;And do not digging into the “secrets” folder, it you are not allowed&quot;
-</code></pre>
-
-<p>Ainsi, on tente d&rsquo;accéder au répertoire &ldquo;/secrets&rdquo;, sans succès. À partir de là, mon expérience me dit de faire de la recherche de ressource en passant par du fuzzing. C&rsquo;est après quelques essais que l&rsquo;ont se rend compte que la solution était bien plus simple&hellip;</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Wordpress_2.PNG" alt="Flag 1" class="imgSize"/></center></p>
-
+</code></pre><p>Ainsi, on tente d&rsquo;accéder au répertoire &ldquo;/secrets&rdquo;, sans succès. À partir de là, mon expérience me dit de faire de la recherche de ressource en passant par du fuzzing. C&rsquo;est après quelques essais que l&rsquo;ont se rend compte que la solution était bien plus simple&hellip;</p>
+<!-- raw HTML omitted -->
 <p>Une simple recherche et on obtient le premier flag !
-<br/></p>
-
+<!-- raw HTML omitted --></p>
 <h2 id="familly-business-2">Familly Business 2</h2>
-
 <p>Pour le second challenge, l&rsquo;énoncé indique que le flag se trouve &ldquo;dans les fichiers échangés avec la puissance étrangère&rdquo;. Sur le coup, je ne voyais pas bien comment nous pouvions accéder à ce type de fichier.</p>
-
-<p>Bien.<br/>
-En se raccrochant à l&rsquo;énoncé, on part sur la piste du membre de sa famille. Nous avons précédemment identifié &ldquo;Maria Gutorova&rdquo;, qui semble être la belle soeur de notre cible. Au travers du compte Instagram précédemment identifié, notre cible indique que sa belle soeur devrait avoir plus d&rsquo;abonnés sur Twitter, accompagné d&rsquo;un username (<a href="https://twitter.com/gutorova_maria" target="blank">lien</a>).</p>
-
+<p>Bien.<!-- raw HTML omitted -->
+En se raccrochant à l&rsquo;énoncé, on part sur la piste du membre de sa famille. Nous avons précédemment identifié &ldquo;Maria Gutorova&rdquo;, qui semble être la belle soeur de notre cible. Au travers du compte Instagram précédemment identifié, notre cible indique que sa belle soeur devrait avoir plus d&rsquo;abonnés sur Twitter, accompagné d&rsquo;un username (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->).</p>
 <p>Note : Le compte existe également sur Instagram, mais il s&rsquo;agit d&rsquo;une personne réelle, ce qui m&rsquo;a valu quelques minutes de fausse piste lors du challenge&hellip; :(</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Instagram_1.PNG" alt="Profil Instagram" class="imgSize"/></center></p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_3.PNG" alt="Profil Twitter" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>À partir de là s&rsquo;est écoulé un peu de temps avant d&rsquo;avancer sur le challenge. Car en effet, les nouvelles informations semblent nous manquer. Pas de soucis, on retourne sur nos pas afin d&rsquo;analyser les choses précédemment vues.
 En l&rsquo;occurence, on s&rsquo;attarde sur le compte Twitter de notre 1e cible, Lukas DUMMAS.</p>
-
-<p>Après quelques recherches, on tombe sur deux tweets de ce dernier (<a href="https://twitter.com/luk_dummas/status/1154080401465458688?s=20" target="blank">ici</a> et <a href="https://twitter.com/luk_dummas/status/1155152323997577218?s=20" target="blank">ici</a>).</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_4.PNG" alt="Tweet" class="imgSize"/></center></p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_5.PNG" alt="Tweet" class="imgSize"/></center></p>
-
+<p>Après quelques recherches, on tombe sur deux tweets de ce dernier (<!-- raw HTML omitted -->ici<!-- raw HTML omitted --> et <!-- raw HTML omitted -->ici<!-- raw HTML omitted -->).</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Le premier pointe vers un classement des mots de passe les plus utilisés, accompagné d&rsquo;un message de Lukas expliquant que 290.000 personnes utilisent le même mot de passe que sa belle soeur. Le second tweet quand à lui indique que Maria aurait mis à jour son mot de passe mais que, la connaissant, cette dernière ne pourrait avoir qu&rsquo;ajouté son année de naissance.</p>
-
 <p>Ok, même si l&rsquo;ont sort d&rsquo;un contexte purement OSINT, les instructions sont plutôt claires : on doit retrouver le mot de passe du compte Twitter de Maria.</p>
-
 <p>Si l&rsquo;on s&rsquo;en tient au classement, le mot de passe utilisé par 290.000 personnes est : FQRG7CS493</p>
-
 <p>Reste une inconnue, la date de naissance de Maria.
 Le compte Twitter de cette dernière indique une naissance le &ldquo;28 Novembre&rdquo;, mais l&rsquo;année n&rsquo;est pas affichée..</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_6.PNG" alt="Tweet" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>C&rsquo;est ici que se trouve un petit trick de Twitter permettant de paramétrer le dégré d&rsquo;information affiché aux différents types d&rsquo;utilisateurs. Ainsi, pour une personne lambda, disposant d&rsquo;un compte, ou non, seulement le jour et le mois de naissance seront affichés. Par contre, si l&rsquo;on s&rsquo;abonne au compte, alors la date complète s&rsquo;affiche. À l&rsquo;aide d&rsquo;un compte lambda, on récupère donc l&rsquo;année de naissance de cette seconde cible, 1980.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_7.PNG" alt="Tweet" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Nous ne disposons pas de l&rsquo;adresse e-mail de cette dernière mais Twitter propose aux utilisateurs de se connecter avec leur nom d&rsquo;utilisateur.
 Ainsi, on peut reformer son mot de passe (FQRG7CS4931980) et se connecter au compte.</p>
-
 <p>Une fois connecté, on file fouiller les &ldquo;DM&rdquo; (Direct Messages) afin de voir ce qu&rsquo;ils contiennent.</p>
-
 <p>On y trouve ainsi un échange entre Maria et Lukas, spécifiant que certaines &ldquo;informations&rdquo; sont situées sur le serveur privé de Lukas. De plus, un mot de passe est échangé.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Twitter_8.PNG" alt="Messages privés Twitter" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Retour en arrière, le seul serveur identifié comme appartenant à Lukas était basé sur l&rsquo;IP 51.91.251.53. Et nous avions trouvé 4 potentiels services, dont un serveur FTP !</p>
-
 <p>L&rsquo;une des misconfigurations courantes sur ces serveurs étant la possibilité de se connecter en anonyme, on dégaine FileZilla et on file tenter ça.</p>
-
-<p><center><img src="/img/writeups/norzhctf-2020/FB_Filezilla.PNG" alt="FileZilla" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>B00m ! Ca passe. On se retrouve en présence de dizaines de fichiers apparemment zippés. Dans le doute, on dump la totalité du serveur pour une analyse en mode offline.</p>
-
 <p>On se rend rapidement compte que les archives ZIP sont chiffrées. Par conséquent, il est nécessaire de disposer du mot de passe. Compte tenu des informations précédemment recueillie, notamment dans la boite de messagerie Twitter de notre seconde cible, il semble que nous disposions de cette information.</p>
-
 <p>Une rapide boucle bash permet de se rendre compte que seule une archive peut être ouverte à l&rsquo;aide du mot de passe en question.</p>
-
-<pre><code class="language-bash">$ for i in {0..100}; do unzip -P 'BSG7,6xD?pt!37h' secret_folder.$i.zip; done
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ <span style="color:#66d9ef">for</span> i in <span style="color:#f92672">{</span>0..100<span style="color:#f92672">}</span>; <span style="color:#66d9ef">do</span> unzip -P <span style="color:#e6db74">&#39;BSG7,6xD?pt!37h&#39;</span> secret_folder.$i.zip; <span style="color:#66d9ef">done</span>
 unzip:  cannot find or open secret_folder.0.zip, secret_folder.0.zip.zip or secret_folder.0.zip.ZIP.
-[...]
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
 Archive:  secret_folder.81.zip
    skipping: secret_file.81          incorrect password
 Archive:  secret_folder.82.zip
   inflating: secret_file.82          
 Archive:  secret_folder.83.zip
    skipping: secret_file.83          incorrect password
-[...]
-</code></pre>
-
-<p>On récupère ainsi un fichier ASCII de 193Mo, affichant des milliers de fois la même chaine de caractères. Cette dernière, encodée en base64, laisse apparaître le second flag !</p>
-
-<pre><code class="language-bash">$ echo &quot;RU5TSUJTe28waEJ1dEhvV2QxZF95b3VGaW5kbTN9&quot; | base64 -d
-ENSIBS{o0hButHoWd1d_youFindm3}%
-</code></pre>
-
-<h2 id="retex-et-mot-de-la-fin">RETEX et mot de la fin</h2>
-
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>On récupère ainsi un fichier ASCII de 193Mo, affichant des milliers de fois la même chaine de caractères. Cette dernière, encodée en base64, laisse apparaître le second flag !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo <span style="color:#e6db74">&#34;RU5TSUJTe28waEJ1dEhvV2QxZF95b3VGaW5kbTN9&#34;</span> | base64 -d
+ENSIBS<span style="color:#f92672">{</span>o0hButHoWd1d_youFindm3<span style="color:#f92672">}</span>%
+</code></pre></div><h2 id="retex-et-mot-de-la-fin">RETEX et mot de la fin</h2>
 <p>Challenge amusant dans sa globalité, merci au concepteur ainsi qu&rsquo;à l&rsquo;équipe d&rsquo;organisation du NorzhCTF !</p>
-
 <p>La solution est présentée dans un ordre logique. Cependant, lors de l&rsquo;évènements j&rsquo;ai trouvé certains éléments avant d&rsquo;autres qui ne me permettaient pas d&rsquo;avancer directement dessus. Par exemple, le serveur FTP avait été téléchargé bien avant d&rsquo;avoir le mot de passe nécessaire.</p>
-
 <p>Même si certains éléments dans l&rsquo;énoncé n&rsquo;étaient pas vraiment précis (&ldquo;sur un serveur&rdquo;, &ldquo;dans les échanges&rdquo;) j&rsquo;ai apprécié le challenge et l&rsquo;ensemble de l&rsquo;investigation.</p>
-
 <p>o/</p>
   </div>
   
@@ -400,7 +358,7 @@ ENSIBS{o0hButHoWd1d_youFindm3}%
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

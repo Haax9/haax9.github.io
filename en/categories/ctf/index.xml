@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CTF on Haax - Personal Blog</title>
     <link>https://haax9.github.io/en/categories/ctf/</link>
     <description>Recent content in CTF on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://haax9.github.io/en/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 19 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://haax9.github.io/en/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>YogoshESD-CTF - CLUDEOSINT</title>
       <link>https://haax9.github.io/en/writeups/osint-geoint/yogoshesd-ctf-cluedosint/</link>
@@ -17,8 +13,7 @@
       
       <guid>https://haax9.github.io/en/writeups/osint-geoint/yogoshesd-ctf-cluedosint/</guid>
       <description>[NO ENGLISH VERSION - Only French is available for this post]
-Le challenge &amp;ldquo;CLUEDOSINT&amp;rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKali et Madame Https et consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&amp;rsquo;investigation menée et la résolution des différents challenges. 
-1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé.</description>
+Le challenge &amp;ldquo;CLUEDOSINT&amp;rdquo; a été joué dans le cadre du YogoshESD-CTF, un évènement en ligne proposé par l&amp;rsquo;école ESD en partenariat avec Yogosha et BZHack. Ce challenge a été spécialement créé par DocKaliet Madame Httpset consiste en un scénario de 15 challenges OSINT. Ce billet détaille l&amp;rsquo;investigation menée et la résolution des différents challenges. 1/ Cognomen (10 points) Contexte: Vous êtes enquêteur privé.</description>
     </item>
     
     <item>

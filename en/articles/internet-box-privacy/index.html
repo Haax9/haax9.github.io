@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="A little lighter post this time, dealing with connected internet boxes, and specifically the Miami Bboxes (which is a French ISP). Indeed, having one of these boxes, I wondered what I could find from a privacy point of view and what a basic and curious user could do with parameters. We will therefore see here that a certain number of default parameters are activated and that it is possible to act on them. I should point out that no box was mistreated in the context of these experiments : D." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/articles/internet-box-privacy/" />
-<meta property="article:published_time" content="2018-09-13T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-09-13T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2018-09-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-09-13T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/fr/articles/box-connectees-et-vie-privee/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,83 +230,44 @@
   </header>
   <div class="post">
     <p>A little lighter post this time, dealing with connected internet boxes, and specifically the Miami Bboxes (which is a French ISP). Indeed, having one of these boxes, I wondered what I could find from a privacy point of view and what a basic and curious user could do with parameters. We will therefore see here that a certain number of default parameters are activated and that it is possible to act on them. I should point out that no box was mistreated in the context of these experiments : D.</p>
-
 <p>Even if I didn&rsquo;t get the opportunity to test on other devices, I suppose that the same type of parameters exist. Furthermore, it is important to note that this is only an overview. More things are probably possible. In the context of this post, the purpose is simply to give information that this exists. But if like me, you only use a few advanced features of these boxes, then taking a look at the following lines can be interesting&hellip;</p>
-
 <h2 id="remote-tracking">Remote Tracking</h2>
-
 <h3 id="tracking">Tracking</h3>
-
 <p>The first element I focused on was tracking as it is called in the parameters. To access the this one, go to the &ldquo;Settings&rdquo; and then in the &ldquo;Preferences&rdquo; section go to the &ldquo;Suggestions&rdquo; section.</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_1.jpg" alt="box_hardening_1.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Two parameters are available here, including the famous &ldquo;Tracking&rdquo;. This setting, enabled by default, seems to be used to provide information to your ISP (&ldquo;track&rdquo; you) about the programs viewed and actions performed on the device in order to customize the offer and thus provide potentially more appropriate content. Problem, we don&rsquo;t know what is actually collected. So, if you are not interested in this feature, disabling this tracking allows you to start limiting the information leak from your life.</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_2.jpg" alt="box_hardening_2.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="user-history">User history</h3>
-
 <p>Other officially used element to provide you with more personalized content, history of programs viewed, applications used, etc. This data is used in the same way as the tracking described above. So, again, if you don&rsquo;t want to be influenced on which programs you should watch or if the recommendations are not used, in a privacy concern, you can regularly delete the history.</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_3.jpg" alt="box_hardening_3.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="casted-data">Casted data</h3>
-
 <p>It is possible with this type of device to &ldquo;cast&rdquo; content. It consists in broadcasting content from another device to the Bbox. For example, you can stream a YouTube video from your phone directly to your TV. Very practical functionality! Nevertheless, looking through the options related to this, we notice that it is possible to choose if we want some of these data to be sent to Google as well! The functionality is also used to send error reports, which can be useful. This parameter is accessible via the complete device settings, accessible from the application selection menu.</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_4.jpg" alt="box_hardening_4.jpg" class="imgSize"/></center></p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_5.jpg" alt="box_hardening_5.jpg" class="imgSize"/></center></p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_6.jpg" alt="box_hardening_6.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Nevertheless, is it worth it? It&rsquo;s up to you to judge! In any case, it is also possible to limit this by disabling sharing with Google.</p>
-
 <h3 id="voice-control">Voice control</h3>
-
 <p>A major technological progress in recent years, highlighted by all media, the voice control. As technological equipment, the connected boxes are also equipped with it. It is possible to configure it in the box settings. When activating it, you must be aware that the microphones used are likely to be listening at any time, in order to be able to detect an &ldquo;Ok Google&rdquo;. Therefore, it is also possible that the sound of the piece is recorded.</p>
-
 <p>From that moment on, two ways of thinking. If this feature, which remains convenient, is used, then it is necessary to leave this setting enabled. However, if you don&rsquo;t use the it and I think most people are in this situation, then why let one more device record your conversations all day long?</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_7.jpg" alt="box_hardening_7.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h2 id="application">Application</h2>
-
 <p>Like any system running with an Android version, it is possible to use a multitude of applications directly on a connected box, downloadable via the Play Store. The applications installed on the box are accessible from the general settings in the &ldquo;Applications&rdquo; tab.</p>
-
 <h3 id="default-installed-applications">Default installed applications</h3>
-
 <p>But like any Android system, many (useless?) applications are present and installed by default. It will be possible to uninstall some of them completely, while others will simply be deactivatable. Better than nothing, because it will prevent them from acting and restrict their access (this point will be explained in the next section). So, you are free to choose which applications you want to disable.</p>
-
 <p>Story of the day: The &ldquo;Dorcel Store&rdquo; application is for example installed by default on Miami Bboxes&hellip; :D</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_8.jpg" alt="box_hardening_8.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="right-management">Right management</h3>
-
 <p>One thing that is one of the most sensitive point concerning applications. This applies to all systems running Android and more broadly, to most computer systems. We&rsquo;re talking about right management.</p>
-
 <p>Under Android, application permissions are divided into 8 or 9 categories (see list below for Miami Bbox). This includes, for example, the right to access SMS, camera, microphone, contacts, etc.</p>
-
 <p>Some applications need some permissions, of course, but some applications do not hesitate to ask for permissions that they would not normally need. For example, why would the Netflix application need to access your camera?</p>
-
 <p>All permissions for each application are adjustable according to your wishes and it is IMPERATIVE to check them for each application you use or install (this also applies to smartphones, but a more detailed article will come in a few weeks).</p>
-
 <p>A message indicating that an application may no longer work if some permissions are removed may appear and this is true. However, if you leave the appropriate authorisations in a logical and rational way, you should not have any problems.</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_9.jpg" alt="box_hardening_9.jpg" class="imgSize"/></center></p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_10.jpg" alt="box_hardening_10.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="quick-word-about-wifi">Quick word about WiFi</h2>
-
 <p>By default, in most houses, the connected box will be installed next to the &ldquo;classic&rdquo; box (the router). Thus, these two devices will be connected by Ethernet cable. Therefore, and unless you have special needs, it is not necessary to enable WiFi on the Miami Bbox (device settings (settings) &gt; connectivity).</p>
-
-<p><center><img src="/img/articles/box-connectee-et-vie-privee/box_hardening_11.jpg" alt="box_hardening_11.jpg" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h2 id="conclusion">Conclusion</h2>
-
 <p>This article only scratches the surface of the problem and it is clear that the few examples seen will not revolutionize anonymity and privacy. Nevertheless, these are small steps that may interest some people and may lead others to learn more about the subject or to further research. Thus, these few points present very simple measures to implement, since the functionalities are not used, in order to limit as much as possible leak of your consumption data to the outside world, in order to prevent these data from being used for other purposes, for example&hellip;</p>
   </div>
   
@@ -319,7 +306,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

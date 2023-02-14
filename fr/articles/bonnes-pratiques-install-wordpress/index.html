@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Si vous souhaitez monter votre propre site web mais que vous n’êtes pas expert dans le domaine, vous avez sûrement dû voir passer le mot “Wordpress”. Il s’agit d’un CMS (Content Management System, ou Système de Gestion de Contenu) permettant de faciliter la création d’un site web. En gros, il facilite la création puis la gestion en fournissant une interface prête à l’emploi. Il n’y a plus qu’à personnaliser votre site et écrire vos articles ! Pas besoin d’écrire du code (même s’il est possible d’aller fouiller et modifier manuellement) !" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/articles/bonnes-pratiques-install-wordpress/" />
-<meta property="article:published_time" content="2018-03-31T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-03-31T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2018-03-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-03-31T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/articles/best-security-practice-wordpress-installation/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,13 +230,9 @@
   </header>
   <div class="post">
     <p>Si vous souhaitez monter votre propre site web mais que vous n’êtes pas expert dans le domaine, vous avez sûrement dû voir passer le mot “Wordpress”. Il s’agit d’un CMS (Content Management System, ou Système de Gestion de Contenu) permettant de faciliter la création d’un site web. En gros, il facilite la création puis la gestion en fournissant une interface prête à l’emploi. Il n’y a plus qu’à personnaliser votre site et écrire vos articles ! Pas besoin d’écrire du code (même s’il est possible d’aller fouiller et modifier manuellement) !</p>
-
 <p>Cependant, certaines fonctionnalités pouvant être dangereuses pour la sécurité de votre site web sont par défaut laissées activées… Il existe des moyens simples d’y remédier et ainsi améliorer la sécurité d’un site sous WordPress. Ce qui va suivre n’est pas purement technique, mais il peut être nécessaire d’effectuer certaines recherches complémentaires afin de comprendre la totalité des choses. Le but de cet article est de regrouper les différentes choses à modifier, les différentes techniques que j’ai pu trouver sur Internet afin d’apprendre en quoi cela est dangereux, mais surtout comment s’en protéger par de simples modifications !</p>
-
-<h2 id="contexte-et-etat-de-l-art">Contexte et Etat de l&rsquo;art</h2>
-
+<h2 id="contexte-et-etat-de-lart">Contexte et Etat de l&rsquo;art</h2>
 <p>Tout d’abord, remettons un cadre à cet article, par quelques chiffres. WordPress, c’est :</p>
-
 <ul>
 <li>Environ 25% des sites web et blog que vous visitez quotidiennement</li>
 <li>Plus de 70.000.000 de blogs</li>
@@ -218,203 +240,115 @@
 <li>Disponible en 56 langues</li>
 <li>82.000.000 de nouveaux articles chaque mois !</li>
 </ul>
-
 <p>Autant dire qu’il s’agit à l’heure actuelle d’une part importante du web connu. Indéniablement, c’est également le type de site qui est le plus visé par les personnes malveillantes, souhaitant voler des informations, s’introduire, casser… Et malheureusement, afin d’être le plus polyvalent possible, une installation de WordPress laisse des fonctionnalités activées…</p>
-
-<h2 id="limiter-les-fuites-d-information">Limiter les fuites d&rsquo;information</h2>
-
+<h2 id="limiter-les-fuites-dinformation">Limiter les fuites d&rsquo;information</h2>
 <p>Une des choses les plus importantes en tant qu’attaquant est de récupérer le plus d’informations possible sur sa cible.  Différents moyens simples existent afin de récupérer toute sorte d’information et il s’avère que WordPress laisse passer certaines choses à ce niveau. Il est donc important de connaître ces méthodes ainsi que les moyens de corriger ces problèmes.</p>
-
 <h3 id="version-de-wordpress">Version de Wordpress</h3>
-
-<p>Lors de la recherche d’informations à des fins malveillantes sur un site web, l’une des premières informations cherchée est la version du site. En effet, il n’est pas rare de trouver des vulnérabilités dans les versions anciennes, ce qui explique les mises à jour régulières. Ainsi, le fait de trouver la version du site WordPress va permettre d’aiguiller un attaquant sur ce dont il dispose pour attaquer le site. Par défaut, il est possible de trouver la version d’un site web WordPress. L’une des façons les plus simples d’obtenir la version d’un site sous WordPress est d’utiliser les <strong>flux RSS</strong>, accessibles directement à l’URL <a href="https://monsite.com/feed">https://monsite.com/feed</a>. Un petit tour dans le code source de la page nous révèle l’information convoitée.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_version_1.png" alt="wpharden_version_1" class="imgSize"/></center></p>
-
-<p>Retirer cette information est quelque chose d’important. Une solution efficace pour cela est de modifier un des fichiers PHP de WordPress afin d’y ajouter un petit morceau de code. Il s’agit du fichier <strong>functions.php</strong> disponible dans le répertoire <a href="https://monsite.com/wp-includes/">https://monsite.com/wp-includes/</a>. On va y ajouter le code suivant.</p>
-
-<pre><code class="language-php">// Remove WP version from feed
-function remove_wp_version() {
-return '';
+<p>Lors de la recherche d’informations à des fins malveillantes sur un site web, l’une des premières informations cherchée est la version du site. En effet, il n’est pas rare de trouver des vulnérabilités dans les versions anciennes, ce qui explique les mises à jour régulières. Ainsi, le fait de trouver la version du site WordPress va permettre d’aiguiller un attaquant sur ce dont il dispose pour attaquer le site. Par défaut, il est possible de trouver la version d’un site web WordPress. L’une des façons les plus simples d’obtenir la version d’un site sous WordPress est d’utiliser les <!-- raw HTML omitted -->flux RSS<!-- raw HTML omitted -->, accessibles directement à l’URL <a href="https://monsite.com/feed">https://monsite.com/feed</a>. Un petit tour dans le code source de la page nous révèle l’information convoitée.</p>
+<!-- raw HTML omitted -->
+<p>Retirer cette information est quelque chose d’important. Une solution efficace pour cela est de modifier un des fichiers PHP de WordPress afin d’y ajouter un petit morceau de code. Il s’agit du fichier <!-- raw HTML omitted -->functions.php<!-- raw HTML omitted --> disponible dans le répertoire <a href="https://monsite.com/wp-includes/">https://monsite.com/wp-includes/</a>. On va y ajouter le code suivant.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">// Remove WP version from feed
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">remove_wp_version</span>() {
+<span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;&#39;</span>;
 }
-add_filter('the_generator', 'remove_wp_version');
-</code></pre>
-
-<p>Ainsi, plus de problème de version qui fuite ! Cependant, j’aimerai ajouter un point, lié à ceci. Il est important, voire impératif, de se pencher sur les mises à jours régulières et de les faire si le contexte vous le permet. Ces mises à jours permettent d’ajouter du contenu, mais aussi et surtout de corriger des vulnérabilités et donc de renforcer la protection des sites sous WordPress.</p>
-
-<h3 id="fichier-robots-txt">Fichier robots.txt</h3>
-
-<p>Le fichier <strong>robots.txt</strong> est un fichier public utilisé par les différents robots qui parcourent internet afin de référencer votre site. Étant un fichier public, il est important de ne pas y mettre trop d’informations, et surtout pas d’informations inutiles, car celles-ci peuvent être vues par n’importe quel utilisateur en se rendant sur la page <a href="http://monsite.com/robots.xt">http://monsite.com/robots.xt</a>. Ce fichier permet de spécifier aux robots ce qu’ils doivent indexer et référencer et ce qu’ils ne doivent pas.</p>
-
-<p>À titre d’exemple, voici le contenu du fichier <strong>robots.txt</strong> pour le site <a href="https://haax.fr">https://haax.fr</a>.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_robots_1.png" alt="wpharden_robots_1" class="imgSize"/></center></p>
-
-<p>Les clauses “<strong>Disallow</strong>” spécifient aux robots de ne pas indexer ce qui se trouve derrière. Ainsi, je demande aux robots de ne pas <strong>indexer</strong> mon interface d’administration (wp-admin), les différents fichiers PHP de configuration du site, etc..</p>
-
+<span style="color:#a6e22e">add_filter</span>(<span style="color:#e6db74">&#39;the_generator&#39;</span>, <span style="color:#e6db74">&#39;remove_wp_version&#39;</span>);
+</code></pre></div><p>Ainsi, plus de problème de version qui fuite ! Cependant, j’aimerai ajouter un point, lié à ceci. Il est important, voire impératif, de se pencher sur les mises à jours régulières et de les faire si le contexte vous le permet. Ces mises à jours permettent d’ajouter du contenu, mais aussi et surtout de corriger des vulnérabilités et donc de renforcer la protection des sites sous WordPress.</p>
+<h3 id="fichier-robotstxt">Fichier robots.txt</h3>
+<p>Le fichier <!-- raw HTML omitted -->robots.txt<!-- raw HTML omitted --> est un fichier public utilisé par les différents robots qui parcourent internet afin de référencer votre site. Étant un fichier public, il est important de ne pas y mettre trop d’informations, et surtout pas d’informations inutiles, car celles-ci peuvent être vues par n’importe quel utilisateur en se rendant sur la page <a href="http://monsite.com/robots.xt">http://monsite.com/robots.xt</a>. Ce fichier permet de spécifier aux robots ce qu’ils doivent indexer et référencer et ce qu’ils ne doivent pas.</p>
+<p>À titre d’exemple, voici le contenu du fichier <!-- raw HTML omitted -->robots.txt<!-- raw HTML omitted --> pour le site <a href="https://haax.fr">https://haax.fr</a>.</p>
+<!-- raw HTML omitted -->
+<p>Les clauses “<!-- raw HTML omitted -->Disallow<!-- raw HTML omitted -->” spécifient aux robots de ne pas indexer ce qui se trouve derrière. Ainsi, je demande aux robots de ne pas <!-- raw HTML omitted -->indexer<!-- raw HTML omitted --> mon interface d’administration (wp-admin), les différents fichiers PHP de configuration du site, etc..</p>
 <p>Cependant, je lui demande d’indexer le contenu de /wp-content/uploads car il s’agit du répertoire contenant les images des différents articles. Ainsi, les images seront référencées sur les différents moteurs de recherche et ce blog pourra être trouvé par les internautes.</p>
-
 <p>L’intérêt de spécifier explicitement aux robots de ne pas indexer certaines parties de votre site est d’empêcher que n’importe qui puisse tomber sur des pages non-souhaitées (par exemple, la page de connexion à la zone d’administration) simplement avec les moteurs de recherche…</p>
-
 <p>Afin d’illustrer mon propos, voici un exemple de sites qui ont laissé Google indexer leur page de connexion à la zone d’administration. Cela ne semble pas être grand-chose, mais c’est simplement faciliter la tâche à des personnes mal intentionnées…</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_hidelogin_2.png" alt="wpharden_hidelogin_2" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="fichier-htaccess">Fichier .htaccess</h3>
-
-<p>Le fichier <strong>.htaccess</strong> est un fichier très important dans la gestion de la <strong>sécurité</strong> de votre site web. Il est situé à la racine de votre site et permet de mettre en place différentes <strong>règles</strong> de navigation qui seront appliquées à chaque utilisateur qui visitera votre site.</p>
-
-<p>Il est par exemple possible de forcer une redirection vers une page, afin <strong>d’empêcher</strong> quelqu’un d’accéder à une zone du site, ou encore simplement refuser l’accès à certains fichiers sensibles.</p>
-
+<p>Le fichier <!-- raw HTML omitted -->.htaccess<!-- raw HTML omitted --> est un fichier très important dans la gestion de la <!-- raw HTML omitted -->sécurité<!-- raw HTML omitted --> de votre site web. Il est situé à la racine de votre site et permet de mettre en place différentes <!-- raw HTML omitted -->règles<!-- raw HTML omitted --> de navigation qui seront appliquées à chaque utilisateur qui visitera votre site.</p>
+<p>Il est par exemple possible de forcer une redirection vers une page, afin <!-- raw HTML omitted -->d’empêcher<!-- raw HTML omitted --> quelqu’un d’accéder à une zone du site, ou encore simplement refuser l’accès à certains fichiers sensibles.</p>
 <p>Il est donc extrêmement important d’empêcher quiconque de pouvoir accéder à ce fichier. Vous pouvez pour cela écrire une règle dans ce même fichier qui permettra d’interdire à tout internaute d’accéder à votre fichier. La règle suivante permet de faire cela.</p>
-
 <pre><code>##Deny access to all .htaccess files
 &lt;files ~ &quot;^.*\.([Hh][Tt][Aa])&quot;&gt;
 order allow,deny
 deny from all
 satisfy all
 &lt;/files&gt;
-</code></pre>
-
-<p>Ainsi, si quelqu’un tent d’accéder au fichier, il aura le résultat suivant.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_htaccess_1.png" alt="wpharden_htaccess_1" class="imgSize"/></center></p>
-
+</code></pre><p>Ainsi, si quelqu’un tent d’accéder au fichier, il aura le résultat suivant.</p>
+<!-- raw HTML omitted -->
 <h3 id="enumération-des-utilisateurs">Enumération des utilisateurs</h3>
-
 <p>WordPress fonctionne avec un système d’auteurs. Il est en effet possible de voir tous les articles publiés par un auteur en allant sur la page /author/nomdelapersonne. Cependant, par défaut, nous ne connaissons pas le nom de l’utilisateur.</p>
-
-<p>Il faut savoir que comme dans la plupart des bases de données, WordPress fonctionne avec un système de numéros uniques appelés “<strong>id</strong>“, identifiant chaque utilisateur. Ainsi, le premier utilisateur créé (et souvent l’administrateur..) possède l’id 1. Le second utilisateur possède l’id 2, etc.</p>
-
-<p>Il est possible <strong>d’énumérer</strong> les utilisateurs en demandant par exemple <a href="https://monsite.com?author=1">https://monsite.com?author=1</a>. Ainsi, l’utilisateur sera redirigé vers le /author/personne correspondant. Différents outils existent afin d’automatiser le processus d’énumération, mais ce n’est pas le sujet de cet article.</p>
-
-<p>Il est donc important d’empêcher une attaquant potentiel de pouvoir <strong>énumérer</strong> les utilisateurs de son site, car si cela arrive, cela veut dire que l’attaquant dispose déjà d’une information de connexion. Il ne lui reste plus qu’à trouver le mot de passe…</p>
-
-<p>Une solution facile à mettre en œuvre est de <strong>rediriger</strong> vers la page d’accueil chaque utilisateur qui tente d’énumérer. Les redirections peuvent être faites par des règles placées dans le fichier <strong>.htaccess</strong> de votre site internet. Les règles suivantes correspondent à ce besoin :</p>
-
+<p>Il faut savoir que comme dans la plupart des bases de données, WordPress fonctionne avec un système de numéros uniques appelés “<!-- raw HTML omitted -->id<!-- raw HTML omitted -->“, identifiant chaque utilisateur. Ainsi, le premier utilisateur créé (et souvent l’administrateur..) possède l’id 1. Le second utilisateur possède l’id 2, etc.</p>
+<p>Il est possible <!-- raw HTML omitted -->d’énumérer<!-- raw HTML omitted --> les utilisateurs en demandant par exemple <a href="https://monsite.com?author=1">https://monsite.com?author=1</a>. Ainsi, l’utilisateur sera redirigé vers le /author/personne correspondant. Différents outils existent afin d’automatiser le processus d’énumération, mais ce n’est pas le sujet de cet article.</p>
+<p>Il est donc important d’empêcher une attaquant potentiel de pouvoir <!-- raw HTML omitted -->énumérer<!-- raw HTML omitted --> les utilisateurs de son site, car si cela arrive, cela veut dire que l’attaquant dispose déjà d’une information de connexion. Il ne lui reste plus qu’à trouver le mot de passe…</p>
+<p>Une solution facile à mettre en œuvre est de <!-- raw HTML omitted -->rediriger<!-- raw HTML omitted --> vers la page d’accueil chaque utilisateur qui tente d’énumérer. Les redirections peuvent être faites par des règles placées dans le fichier <!-- raw HTML omitted -->.htaccess<!-- raw HTML omitted --> de votre site internet. Les règles suivantes correspondent à ce besoin :</p>
 <pre><code>##Avoid users enumeration and redirect to index
-RewriteCond %{REQUEST_URI}  !^/wp-admin [NC]
-RewriteCond %{QUERY_STRING} author=\d
-RewriteRule (.*)        $1? [L,R=301]
+RewriteCond	%{REQUEST_URI}	!^/wp-admin [NC]
+RewriteCond	%{QUERY_STRING}	author=\d
+RewriteRule	(.*)		$1? [L,R=301]
 
 ##Redirect /author/
 RedirectMatch 301 ^/author/ https://haax.fr/?
-</code></pre>
-
-<p>Ainsi, si quelqu’un tente d’énumérer les utilisateurs du site, il sera automatiquement redirigé vers la page d’accueil et n’aura pas accès à l’information.</p>
-
-<h3 id="fichiers-d-installation-inutiles">Fichiers d&rsquo;installation inutiles</h3>
-
-<p>Une fois votre site WordPress installé, certains fichiers inutiles restent disponibles sur le site. Il est important d’identifier les fichiers à supprimer, car pouvant <strong>révéler</strong> des informations à un attaquant. Le fichier <strong>readme.html</strong> fait partie de ces fichiers. Il s’agit d’un fichier présent à la racine de votre site internet expliquant la procédure d’installation d’un site WordPress, ainsi que d’autres choses peu utiles. Rien d’alarmant à priori. Cependant, ce fichier peut également révéler la version de WordPress que vous utilisez. Ainsi, si votre site n’est pas à jour, il est possible qu’il présente des vulnérabilités connues. Si un attaquant prend connaissance de ces informations, il peut très bien utiliser une de ces vulnérabilités contre votre site.</p>
-
+</code></pre><p>Ainsi, si quelqu’un tente d’énumérer les utilisateurs du site, il sera automatiquement redirigé vers la page d’accueil et n’aura pas accès à l’information.</p>
+<h3 id="fichiers-dinstallation-inutiles">Fichiers d&rsquo;installation inutiles</h3>
+<p>Une fois votre site WordPress installé, certains fichiers inutiles restent disponibles sur le site. Il est important d’identifier les fichiers à supprimer, car pouvant <!-- raw HTML omitted -->révéler<!-- raw HTML omitted --> des informations à un attaquant. Le fichier <!-- raw HTML omitted -->readme.html<!-- raw HTML omitted --> fait partie de ces fichiers. Il s’agit d’un fichier présent à la racine de votre site internet expliquant la procédure d’installation d’un site WordPress, ainsi que d’autres choses peu utiles. Rien d’alarmant à priori. Cependant, ce fichier peut également révéler la version de WordPress que vous utilisez. Ainsi, si votre site n’est pas à jour, il est possible qu’il présente des vulnérabilités connues. Si un attaquant prend connaissance de ces informations, il peut très bien utiliser une de ces vulnérabilités contre votre site.</p>
 <p>Voici un exemple de site internet n’ayant pas supprimé le fichier readme.html.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_readme_1.png" alt="wpharden_readme_1" class="imgSize"/></center></p>
-
-<p>On voit qu’il s’agit d’un site WordPress en version 3.0… Une version très ancienne, et donc probablement bourée de <strong>vulnérabilités</strong>. Il est donc important de supprimer ce fichier et bien entendu, de mettre à jour votre site s’il ne l’est pas. Une fois fait, si quelqu’un tente d’accéder au fichier <a href="https://monsite.com/readme.html">https://monsite.com/readme.html</a>, il obtiendra le résultat suivant.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_readme_2.png" alt="wpharden_readme_2" class="imgSize"/></center></p>
-
-<h3 id="directory-listing-accès-au-réperoire-wp-includes">Directory Listing - Accès au réperoire wp-includes</h3>
-
-<p>Toujours dans un souci de limiter au maximum la fuite d’informations vers l’extérieur, il est important de <strong>contrôler</strong> ce qui est accessible. Nous avons vu grâce au fichier “robots.txt” qu’il est possible d’interdire aux robots de référencer certaines parties de d’un site internet. Cependant, ces zones restent totalement <strong>accessibles</strong> pour quiconque va les chercher à la main… Par exemple, le répertoire /wp-includes/ contient tout un tas de fichiers de configuration.</p>
-
+<!-- raw HTML omitted -->
+<p>On voit qu’il s’agit d’un site WordPress en version 3.0… Une version très ancienne, et donc probablement bourée de <!-- raw HTML omitted -->vulnérabilités<!-- raw HTML omitted -->. Il est donc important de supprimer ce fichier et bien entendu, de mettre à jour votre site s’il ne l’est pas. Une fois fait, si quelqu’un tente d’accéder au fichier <a href="https://monsite.com/readme.html,">https://monsite.com/readme.html,</a> il obtiendra le résultat suivant.</p>
+<!-- raw HTML omitted -->
+<h3 id="directory-listing---accès-au-réperoire-wp-includes">Directory Listing - Accès au réperoire wp-includes</h3>
+<p>Toujours dans un souci de limiter au maximum la fuite d’informations vers l’extérieur, il est important de <!-- raw HTML omitted -->contrôler<!-- raw HTML omitted --> ce qui est accessible. Nous avons vu grâce au fichier “robots.txt” qu’il est possible d’interdire aux robots de référencer certaines parties de d’un site internet. Cependant, ces zones restent totalement <!-- raw HTML omitted -->accessibles<!-- raw HTML omitted --> pour quiconque va les chercher à la main… Par exemple, le répertoire /wp-includes/ contient tout un tas de fichiers de configuration.</p>
 <p>Ainsi, si on tente d’y accéder manuellement et que l’accès n’est pas restreint, on obtient la liste complète des fichiers présents.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_includes_2.png" alt="wpharden_includes_2" class="imgSize"/></center></p>
-
-<p>Là encore, il est possible de restreindre cet accès à l’aide d’une règle placée dans le fichier <strong>.htaccess</strong>. On va simplement interdire à tout utilisateur d’accéder au répertoire /wp-includes/ ainsi qu’aux fichiers présents ici.</p>
-
+<!-- raw HTML omitted -->
+<p>Là encore, il est possible de restreindre cet accès à l’aide d’une règle placée dans le fichier <!-- raw HTML omitted -->.htaccess<!-- raw HTML omitted -->. On va simplement interdire à tout utilisateur d’accéder au répertoire /wp-includes/ ainsi qu’aux fichiers présents ici.</p>
 <pre><code>##Block wp-includes folder and files
 RewriteRule ^wp-admin/includes/ - [F,L]
 RewriteRule !^wp-includes/ - [S=3]
 RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
 RewriteRule ^wp-includes/js/tinymce/langs/.+\.php$ - [F,L]
 RewriteRule ^wp-includes/theme-compat/ - [F,L]
-</code></pre>
-
-<p>Ainsi, une tentative d’accès à ce répertoire se solde maintenant par un échec.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_includes_3.png" alt="wpharden_includes_3" class="imgSize"/></center></p>
-
-<h3 id="wp-config-php">WP-config.php</h3>
-
-<p>Le fichier <strong>wp-config.php</strong> est l’un des fichiers de configuration les plus importants pour votre site internet. Il contient notamment les <strong>informations de connexion</strong> à votre base de données. Il est donc impératif de bloquer l’accès à ce fichier pour tout utilisateur venant de l’extérieur. Quelques recherches sur internet et on trouve ce genre de fichier en libre accès sur certains sites internet…</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_config_1.png" alt="wpharden_config_1" class="imgSize"/></center></p>
-
-<p>Une fois n’est pas coutume, l’interdiction d’accès à ce fichier peut se faire par l’intermédiaire d’une règle <strong>HTACCESS</strong>. On va simplement spécifier que l’accès au fichier est interdit, pour tout le monde.</p>
-
+</code></pre><p>Ainsi, une tentative d’accès à ce répertoire se solde maintenant par un échec.</p>
+<!-- raw HTML omitted -->
+<h3 id="wp-configphp">WP-config.php</h3>
+<p>Le fichier <!-- raw HTML omitted -->wp-config.php<!-- raw HTML omitted --> est l’un des fichiers de configuration les plus importants pour votre site internet. Il contient notamment les <!-- raw HTML omitted -->informations de connexion<!-- raw HTML omitted --> à votre base de données. Il est donc impératif de bloquer l’accès à ce fichier pour tout utilisateur venant de l’extérieur. Quelques recherches sur internet et on trouve ce genre de fichier en libre accès sur certains sites internet…</p>
+<!-- raw HTML omitted -->
+<p>Une fois n’est pas coutume, l’interdiction d’accès à ce fichier peut se faire par l’intermédiaire d’une règle <!-- raw HTML omitted -->HTACCESS<!-- raw HTML omitted -->. On va simplement spécifier que l’accès au fichier est interdit, pour tout le monde.</p>
 <pre><code>&lt;files wp-config.php&gt;
 order allow,deny
 deny from all
 &lt;/files&gt;
-</code></pre>
-
-<p>Résultat… Plus rien !</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_config_2.png" alt="wpharden_config_2" class="imgSize"/></center></p>
-
-<h2 id="limiter-les-risques-d-intrusion">Limiter les risques d&rsquo;intrusion</h2>
-
-<h3 id="cacher-la-page-d-authentification-à-la-zone-d-administration">Cacher la page d&rsquo;authentification à la zone d&rsquo;administration</h3>
-
+</code></pre><p>Résultat… Plus rien !</p>
+<!-- raw HTML omitted -->
+<h2 id="limiter-les-risques-dintrusion">Limiter les risques d&rsquo;intrusion</h2>
+<h3 id="cacher-la-page-dauthentification-à-la-zone-dadministration">Cacher la page d&rsquo;authentification à la zone d&rsquo;administration</h3>
 <p>Par défaut, la page de connexion à la zone d’administration de wordpress peut s’obtenir via l’URL suivante <a href="https://monsite.com/wp-admin">https://monsite.com/wp-admin</a></p>
-
 <p>Concrètement, cela veut dire que n’importe qui peut tenter de se connecter à votre site web avec différents identifiants et mots de passe. Une interface d’administration exposée, c’est prendre des risques inutiles. Voilà pourquoi il est important de changer le chemin d’accès par défaut à cette interface.</p>
-
-<p>Plusieurs solutions existent pour cela, mais la solution la plus simple à mettre en place est l’utilisation d’un plugin. Des plugins tels que <strong>WPS Hide Login</strong> permettent de modifier l’URL d’accès à la zone d’administration très simplement.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_hidelogin_1.png" alt="wpharden_hidelogin_2" class="imgSize"/></center></p>
-
-<h3 id="fichier-xmlrpc-php">Fichier XMLRPC.php</h3>
-
-<p>Les attaques de type bruteforce sont très répandues sur Internet. Le principe est on ne peut plus simple : on tente de se connecter à un service en essayant des dizaines des millions de combinaisons identifiant/mot de passe possible et en espérant tomber sur une bonne combinaison. L’attaque dite par <strong>XMLRPC</strong> est une attaque connue permettant à un attaquant de tester plusieurs centaines de combinaison identifiant/mot de passe sur un site WordPress en une seule requête. En envoyant un nombre important de requêtes, l’attaquant a la possibilité de tester un très grand nombre de combinaisons.</p>
-
-<p>Par défaut, tout site wordpress récent est vulnérable à cette attaque, car le fichier <strong>xmlrpc.php</strong> est accessible à n’importe quel utilisateur. Afin de tester si votre site est vulnérable, rien de plus simple ! Il suffit de tenter d’accéder au fichier dans votre navigateur.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_xmlrpc_1.png" alt="wpharden_xmlrpc_2" class="imgSize"/></center></p>
-
-<p>Si le résultat est une page blanche avec le texte “<strong>XML-RPC server accepts POST requests only.</strong>” alors vous êtes vulnérable. Il faut savoir que XMLRPC n’est pas là pour rien, il est possible que votre site utilise cette fonctionnalité. Il est conseillé d’aller se renseigner sur l’utilité de cette fonctionnalité avant de vouloir tout désactiver.</p>
-
-<p>Néanmoins, si vous ne l’utilisez pas, il est important d’empêcher l’accès à ce fichier. Plusieurs solutions existent pour cela. Une solution simple est d’ajouter une règle dans le fichier <strong>.htaccess</strong> de votre site afin d’interdire aux visiteurs l’accès au fichier.</p>
-
+<p>Plusieurs solutions existent pour cela, mais la solution la plus simple à mettre en place est l’utilisation d’un plugin. Des plugins tels que <!-- raw HTML omitted -->WPS Hide Login<!-- raw HTML omitted --> permettent de modifier l’URL d’accès à la zone d’administration très simplement.</p>
+<!-- raw HTML omitted -->
+<h3 id="fichier-xmlrpcphp">Fichier XMLRPC.php</h3>
+<p>Les attaques de type bruteforce sont très répandues sur Internet. Le principe est on ne peut plus simple : on tente de se connecter à un service en essayant des dizaines des millions de combinaisons identifiant/mot de passe possible et en espérant tomber sur une bonne combinaison. L’attaque dite par <!-- raw HTML omitted -->XMLRPC<!-- raw HTML omitted --> est une attaque connue permettant à un attaquant de tester plusieurs centaines de combinaison identifiant/mot de passe sur un site WordPress en une seule requête. En envoyant un nombre important de requêtes, l’attaquant a la possibilité de tester un très grand nombre de combinaisons.</p>
+<p>Par défaut, tout site wordpress récent est vulnérable à cette attaque, car le fichier <!-- raw HTML omitted -->xmlrpc.php<!-- raw HTML omitted --> est accessible à n’importe quel utilisateur. Afin de tester si votre site est vulnérable, rien de plus simple ! Il suffit de tenter d’accéder au fichier dans votre navigateur.</p>
+<!-- raw HTML omitted -->
+<p>Si le résultat est une page blanche avec le texte “<!-- raw HTML omitted -->XML-RPC server accepts POST requests only.<!-- raw HTML omitted -->” alors vous êtes vulnérable. Il faut savoir que XMLRPC n’est pas là pour rien, il est possible que votre site utilise cette fonctionnalité. Il est conseillé d’aller se renseigner sur l’utilité de cette fonctionnalité avant de vouloir tout désactiver.</p>
+<p>Néanmoins, si vous ne l’utilisez pas, il est important d’empêcher l’accès à ce fichier. Plusieurs solutions existent pour cela. Une solution simple est d’ajouter une règle dans le fichier <!-- raw HTML omitted -->.htaccess<!-- raw HTML omitted --> de votre site afin d’interdire aux visiteurs l’accès au fichier.</p>
 <p>La règle suivante peut être ajoutée :</p>
-
 <pre><code>##Block WordPress xmlrpc.php requests
 &lt;Files xmlrpc.php&gt;
 order deny,allow
 deny from all
 &lt;/Files&gt;
-</code></pre>
-
-<p>Une fois modifié, une requête sur le fichier <strong>xmlrpc.php</strong> devrait renvoyer ceci :</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_xmlrpc_2.png" alt="wpharden_xmlrpc_2" class="imgSize"/></center></p>
-
+</code></pre><p>Une fois modifié, une requête sur le fichier <!-- raw HTML omitted -->xmlrpc.php<!-- raw HTML omitted --> devrait renvoyer ceci :</p>
+<!-- raw HTML omitted -->
 <p>Si c’est le cas, le fichier n’est plus accessible, et donc un attaquant ne pourra plus exploiter cette vulnérabilité !</p>
-
 <h3 id="limiter-le-nombre-de-tentatives-de-connexion">Limiter le nombre de tentatives de connexion</h3>
-
 <p>Par défaut, WordPress autorise un utilisateur à tenter de se connecter avec un nombre infini d’identifiants et mots de passe. On retrouve le même problème qu’au paragraphe précédent, le site est vulnérable aux attaques de type bruteforce. Même si le site n’est plus vulnérable via XMLRPC, l’interface de connexion reste accessible et une personne mal intentionnée pourrait essayer d’attaquer votre site web par cette voie.</p>
-
-<p>Il est donc important de <strong>limiter</strong> le nombre de tentatives de connexion par utilisateur. Ici encore, une bonne solution peut être d’utiliser un <strong>plugin</strong>. Il en existe plusieurs permettant d’effectuer cette tâche. Il est ensuite possible de personnaliser le nombre de tentatives maximales souhaitées.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_limitlogin_1.png" alt="wpharden_limitlogin_1" class="imgSize"/></center></p>
-
+<p>Il est donc important de <!-- raw HTML omitted -->limiter<!-- raw HTML omitted --> le nombre de tentatives de connexion par utilisateur. Ici encore, une bonne solution peut être d’utiliser un <!-- raw HTML omitted -->plugin<!-- raw HTML omitted -->. Il en existe plusieurs permettant d’effectuer cette tâche. Il est ensuite possible de personnaliser le nombre de tentatives maximales souhaitées.</p>
+<!-- raw HTML omitted -->
 <h3 id="différencier-les-noms-des-utilisateurs-des-noms-publics">Différencier les noms des utilisateurs des noms publics</h3>
-
 <p>Par défaut, lorsque vous publiez un article avec WordPress, le nom de l’auteur s’affiche sur ce dernier. Et par défaut, l’auteur avec lequel vous publiez est également le nom d’utilisateur du compte WordPress. Par conséquent, publier un article révèle votre nom d’utilisateur, ce qui donne donc une information à un potentiel attaquant. Heureusement, il est possible d’utiliser pour chaque compte un pseudonyme, permettant de modifier le nom affiché publiquement sur vos articles.</p>
-
-<p><center><img src="/img/articles/bonnes-pratiques-install-wordpress/wpharden_username_1.png" alt="wpharden_username_1" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Il s’agit donc d’une mesure simple permettant de limiter les informations sensiles retournées aux internautes.</p>
-
 <h2 id="le-mot-de-la-fin">Le mot de la fin</h2>
-
 <p>WordPress est un CMS très intéressant, facile à prendre en main et offrant une multitude de fonctionnalités et de possibilités. Indéniablement, d’un autre côté, le système nécessite d’être le plus polyvalent possible afin de convenir à toutes les utilisations. Cela implique des paramètres par défaut, des valeurs, des fichiers… Choses qui peuvent mettre en danger votre site internet.</p>
-
-<p>Pris individuellement, la plupart des points de cet article ne sont pas extrêmement graves ni compromettants, mais mis bout à bout, ils peuvent <strong>fragiliser</strong> de manière importante la <strong>sécurité</strong> de votre site. Il est donc important de <strong>connaître</strong> ce genre de chose mais également de rester actif et à l’écoute de ce qui nous entoure, comme la découverte de vulnérabilités.</p>
+<p>Pris individuellement, la plupart des points de cet article ne sont pas extrêmement graves ni compromettants, mais mis bout à bout, ils peuvent <!-- raw HTML omitted -->fragiliser<!-- raw HTML omitted --> de manière importante la <!-- raw HTML omitted -->sécurité<!-- raw HTML omitted --> de votre site. Il est donc important de <!-- raw HTML omitted -->connaître<!-- raw HTML omitted --> ce genre de chose mais également de rester actif et à l’écoute de ce qui nous entoure, comme la découverte de vulnérabilités.</p>
   </div>
   
 
@@ -452,7 +386,7 @@ deny from all
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

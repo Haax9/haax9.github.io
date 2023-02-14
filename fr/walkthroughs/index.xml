@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Walkthroughs on Haax - Personal Blog</title>
     <link>https://haax9.github.io/fr/walkthroughs/</link>
     <description>Recent content in Walkthroughs on Haax - Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://haax9.github.io/fr/walkthroughs/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://haax9.github.io/fr/walkthroughs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hack The Box - Remote</title>
       <link>https://haax9.github.io/fr/walkthroughs/hackthebox/remote/</link>

